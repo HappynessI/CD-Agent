@@ -17,7 +17,8 @@
 | --- | --- | --- |
 | LEVIR-CD | 有 | `datasets/LEVIR-CD`。`test_original/{A,B,label}` 128 对 1024×1024；`test_256/{A,B,label_cvt}` 为 2048 个 256×256 非重叠切块（标签已二值化 >127→255） |
 | WHU-CD | 有 | `datasets/lim1/WHU-CD`，软链接到 `haoxiangyu/rs_datasets/WHU-CD`（2026-10-16 新建，方式同 SYSU-CD/SECOND）。来自官方整图 train/test 分区，切成 512×512：train 1260、test 690（`test/{A,B,label}`，标签 0/255）。另有 `slabel1/slabel2` 两期建筑语义标签，可以直接区分新建和拆除。690×4=2760，与 SChanger 使用的 WHU-CD256-HANet 测试切块数一致，测试区域相同、和训练区不重叠 |
-| SYSU-CD、SECOND | 有（不在任务范围） | `datasets/lim1/`，Vlm_vs_OneJev 项目使用 |
+| SYSU-CD | 有（2026-10-16 按用户要求加入） | `datasets/lim1/SYSU-CD`，test 4000 张 256²（`img1/img2/label_unch0chi255`，文件名 `test_*`），通用变化，二值标签 |
+| SECOND | 有（2026-10-16 按用户要求加入） | `datasets/lim1/SECOND`，test 1694 张 512²，两期 6 类地物标签（`slabel1/slabel2`，0 = 未变化）加二值变化标签 |
 
 ## 检测器
 
@@ -27,9 +28,9 @@
 | --- | --- | --- | --- |
 | SChanger-small | HuggingFace `Zy-Zhou/schanger` 官方权重，已下载到 `models/SChanger/schanger_small_{levir,whu}.pth`；源码 `Vlm_vs_OneJev/vendor/SChanger` | sigmoid 概率图 | 92.44 / 93.51（官方 92.44 / 93.51） |
 | SChanger-base | 同上，`schanger_base_{levir,whu}.pth` | sigmoid 概率图 | 92.88 / 93.20（官方 92.88 / 93.20） |
-| SAM3 + OmniOVCD | 旧原型初态：SAM3 "building" 两期分割 + overlap-presence 匹配 | **仅二值**，阈值扫描与实验 3 不使用 | 73.13 / 56.37 |
-
-服务器上已有、但不在本任务范围内的：SChanger-small SYSU 权重、MambaSCD SECOND 权重（`Vlm_vs_OneJev/checkpoints/`）。
+| SAM3 + OmniOVCD | 旧原型初态：SAM3 "building" 两期分割 + overlap-presence 匹配 | **仅二值**，阈值扫描与实验 3 不使用；只用于 LEVIR/WHU | 73.13 / 56.37 |
+| SChanger-small / base（SYSU） | 官方 SYSU 权重 `models/SChanger/schanger_{small,base}_sysu.pth` | sigmoid 概率图 | SYSU 84.58 / 84.17（与官方一致） |
+| MambaSCD-Base（SECOND） | 官方权重 `Vlm_vs_OneJev/checkpoints/MambaSCD_Base_SECOND_SeK_0.2292.pth`，二值变化头概率取自 Vlm_vs_OneJev 已有的正式推理（`probe/import_mambascd.py`） | softmax 变化概率 | SECOND 74.17（与参考 micro F1 一致） |
 
 ## 模型（MLLM）
 
@@ -45,8 +46,8 @@
 ## 已确认的决定（2026-10-16）
 
 - 检测器：SChanger-small 和 SChanger-base 的官方 LEVIR/WHU 权重（从 HuggingFace 下载）加上 SAM3+OmniOVCD 零样本基线，共 3 个。
-- 数据：LEVIR-CD 和 WHU-CD 的 test 集；WHU-CD 按用户要求从 `haoxiangyu/rs_datasets` 软链接，未下载新数据。
-- MLLM：本地 Qwen3.5-4B（两个数据集）；用户随后要求补充百炼，已用 qwen3.7-plus 跑 LEVIR 和 WHU（WHU 经用户 2026-10-16 授权；节点 gpu44，direct 模式）。GPT（gpt-6.1-sol，本地转发）已获授权，运行时通道断开，待恢复。
+- 数据：LEVIR-CD 和 WHU-CD 的 test 集；WHU-CD 按用户要求从 `haoxiangyu/rs_datasets` 软链接，未下载新数据。随后按用户要求加入 SYSU-CD 和 SECOND（实验 1/2 用全部 test，实验 3 抽样；SECOND 目标按变化类型拆分）。
+- MLLM：本地 Qwen3.5-4B（两个数据集）；用户随后要求补充百炼，已用 qwen3.7-plus 跑 LEVIR 和 WHU（WHU 经用户 2026-10-16 授权；节点 gpu44，direct 模式）。GPT（gpt-6.1-sol，本地转发）获授权用于 LEVIR/WHU，通道间歇断开，正在逐条续跑。SYSU/SECOND 授权百炼，不发 GPT。
 
 ## 运行环境
 
