@@ -47,7 +47,7 @@
 
 - 检测器：SChanger-small 和 SChanger-base 的官方 LEVIR/WHU 权重（从 HuggingFace 下载）加上 SAM3+OmniOVCD 零样本基线，共 3 个。
 - 数据：LEVIR-CD 和 WHU-CD 的 test 集；WHU-CD 按用户要求从 `haoxiangyu/rs_datasets` 软链接，未下载新数据。随后按用户要求加入 SYSU-CD 和 SECOND（实验 1/2 用全部 test，实验 3 抽样；SECOND 目标按变化类型拆分）。
-- MLLM：本地 Qwen3.5-4B（两个数据集）；用户随后要求补充百炼，已用 qwen3.7-plus 跑 LEVIR 和 WHU（WHU 经用户 2026-10-16 授权；节点 gpu44，direct 模式）。GPT（gpt-6.1-sol，本地转发）获授权用于 LEVIR/WHU，通道间歇断开，正在逐条续跑。SYSU/SECOND 授权百炼，不发 GPT。
+- MLLM：本地 Qwen3.5-4B（两个数据集）；用户随后要求补充百炼，已用 qwen3.7-plus 跑 LEVIR 和 WHU（WHU 经用户 2026-10-16 授权；节点 gpu44，direct 模式）。GPT（gpt-6.1-sol，本地转发）获授权用于 LEVIR/WHU，图像请求最终被通道持续断开，补测未完成（见 exp3_mllm_verify.md）。SYSU/SECOND 授权百炼，不发 GPT。
 
 ## 运行环境
 

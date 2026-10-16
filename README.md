@@ -2,7 +2,7 @@
 
 目的：在决定变化检测 agent 的主攻方向（召回侧还是精度侧）之前，用三个实验量出现有检测器的改进空间。任务说明见 [`doc/change_dection_agent.md`](doc/change_dection_agent.md)。
 
-截至 2026-10-16 的状态：**四个数据集（LEVIR-CD、WHU-CD、SYSU-CD、SECOND）的三个实验都已完成，结论写在 `results/`**。唯一在运行的是 LEVIR/WHU 上的 GPT（gpt-6.1-sol）补测（转发通道间歇断开，较慢），完成后会更新 `results/exp3_mllm_verify.md`。
+截至 2026-10-16 的状态：**四个数据集（LEVIR-CD、WHU-CD、SYSU-CD、SECOND）的三个实验都已完成，结论写在 `results/`**。LEVIR/WHU 上的 GPT（gpt-6.1-sol）补测未完成：本地转发通道对图像请求持续断开，只拿到 122 条，不足以计算 AUC，详见 `results/exp3_mllm_verify.md`。
 
 ## 从哪里读
 
