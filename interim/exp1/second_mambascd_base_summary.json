@@ -1,0 +1,309 @@
+{
+  "pixel": {
+    "tp": 63309639,
+    "fp": 18306205,
+    "fn": 25803753,
+    "precision": 0.7757028034899695,
+    "recall": 0.7104391111046474,
+    "f1": 0.7416379348174439,
+    "iou": 0.589367683068109
+  },
+  "error_pixels": {
+    "miss": 15766784,
+    "partial": 13817494,
+    "fp": 7924320,
+    "boundary": 6601360,
+    "boundary_fn": 3242693,
+    "boundary_fp": 3358667,
+    "partial_fn": 6794276,
+    "partial_fp": 7023218
+  },
+  "total_error_pixels": 44109958,
+  "error_share": {
+    "miss": 0.35744273435943874,
+    "partial": 0.3132511257435339,
+    "fp": 0.179649230225973,
+    "boundary": 0.14965690967105433
+  },
+  "gt_objects": 77623,
+  "gt_object_counts": {
+    "hit": 5688,
+    "partial": 7854,
+    "miss": 64081
+  },
+  "gt_object_counts_area_ge20": {
+    "hit": 5688,
+    "partial": 7850,
+    "miss": 27235
+  },
+  "pred_objects": 26299,
+  "fp_objects": 15743,
+  "partial_pred_objects": 4868,
+  "area_buckets": {
+    "<100": {
+      "gt_objects": 42494,
+      "hit_rate": 0.00025886007436343953,
+      "partial_rate": 0.002212076999105756,
+      "miss_rate": 0.9975290629265308
+    },
+    "100-1000": {
+      "gt_objects": 19881,
+      "hit_rate": 0.07233036567577084,
+      "partial_rate": 0.13947990543735225,
+      "miss_rate": 0.7881897288868769
+    },
+    ">1000": {
+      "gt_objects": 15248,
+      "hit_rate": 0.2780036726128017,
+      "partial_rate": 0.3270592864637985,
+      "miss_rate": 0.39493704092339976
+    }
+  },
+  "partial_gt_coverage_ge_0.5": 0.6986249045072574,
+  "miss_without_any_overlap": 0.4816872395873972,
+  "no_signal_miss": {
+    "objects": 33405,
+    "objects_area_ge20": 14885,
+    "pixel_share_of_gt": 0.14914502412835998,
+    "iou_misses_with_coverage_ge_0.5": 28105,
+    "rate_by_area": {
+      "<100": 0.5095778227514473,
+      "100-1000": 0.44358935667219956,
+      ">1000": 0.1922875131164743
+    }
+  },
+  "by_transition": {
+    "low vegetation -> non-vegetated surface": {
+      "gt_objects": 9694,
+      "pixels": 13008235,
+      "miss": 8456,
+      "partial": 812,
+      "miss_pixels": 4863076,
+      "no_signal_pixels": 2815237
+    },
+    "low vegetation -> tree": {
+      "gt_objects": 2343,
+      "pixels": 2124084,
+      "miss": 2111,
+      "partial": 186,
+      "miss_pixels": 1075084,
+      "no_signal_pixels": 666107
+    },
+    "low vegetation -> building": {
+      "gt_objects": 7901,
+      "pixels": 10324433,
+      "miss": 6491,
+      "partial": 917,
+      "miss_pixels": 2243189,
+      "no_signal_pixels": 184598
+    },
+    "non-vegetated surface -> low vegetation": {
+      "gt_objects": 7234,
+      "pixels": 10990006,
+      "miss": 5880,
+      "partial": 856,
+      "miss_pixels": 3686010,
+      "no_signal_pixels": 2840566
+    },
+    "non-vegetated surface -> tree": {
+      "gt_objects": 7610,
+      "pixels": 3081498,
+      "miss": 6913,
+      "partial": 484,
+      "miss_pixels": 1342746,
+      "no_signal_pixels": 770454
+    },
+    "non-vegetated surface -> building": {
+      "gt_objects": 18093,
+      "pixels": 28521199,
+      "miss": 13824,
+      "partial": 1847,
+      "miss_pixels": 3522400,
+      "no_signal_pixels": 1539388
+    },
+    "tree -> non-vegetated surface": {
+      "gt_objects": 3935,
+      "pixels": 2582693,
+      "miss": 3371,
+      "partial": 401,
+      "miss_pixels": 999343,
+      "no_signal_pixels": 516692
+    },
+    "building -> tree": {
+      "gt_objects": 1286,
+      "pixels": 485122,
+      "miss": 1136,
+      "partial": 122,
+      "miss_pixels": 242961,
+      "no_signal_pixels": 114936
+    },
+    "tree -> building": {
+      "gt_objects": 1657,
+      "pixels": 1105840,
+      "miss": 1448,
+      "partial": 163,
+      "miss_pixels": 465261,
+      "no_signal_pixels": 53533
+    },
+    "water -> low vegetation": {
+      "gt_objects": 299,
+      "pixels": 361652,
+      "miss": 249,
+      "partial": 31,
+      "miss_pixels": 180503,
+      "no_signal_pixels": 133971
+    },
+    "water -> non-vegetated surface": {
+      "gt_objects": 344,
+      "pixels": 549358,
+      "miss": 263,
+      "partial": 58,
+      "miss_pixels": 209573,
+      "no_signal_pixels": 78787
+    },
+    "water -> tree": {
+      "gt_objects": 114,
+      "pixels": 62241,
+      "miss": 107,
+      "partial": 6,
+      "miss_pixels": 46954,
+      "no_signal_pixels": 20977
+    },
+    "building -> non-vegetated surface": {
+      "gt_objects": 8583,
+      "pixels": 6630839,
+      "miss": 6749,
+      "partial": 969,
+      "miss_pixels": 1841767,
+      "no_signal_pixels": 1161997
+    },
+    "building -> building": {
+      "gt_objects": 3952,
+      "pixels": 3838393,
+      "miss": 3488,
+      "partial": 378,
+      "miss_pixels": 2292307,
+      "no_signal_pixels": 1520444
+    },
+    "building -> low vegetation": {
+      "gt_objects": 2164,
+      "pixels": 1974971,
+      "miss": 1585,
+      "partial": 356,
+      "miss_pixels": 522579,
+      "no_signal_pixels": 130991
+    },
+    "tree -> low vegetation": {
+      "gt_objects": 1200,
+      "pixels": 1110477,
+      "miss": 1080,
+      "partial": 91,
+      "miss_pixels": 711564,
+      "no_signal_pixels": 481357
+    },
+    "non-vegetated surface -> water": {
+      "gt_objects": 319,
+      "pixels": 520890,
+      "miss": 228,
+      "partial": 53,
+      "miss_pixels": 132086,
+      "no_signal_pixels": 64832
+    },
+    "tree -> water": {
+      "gt_objects": 98,
+      "pixels": 22393,
+      "miss": 94,
+      "partial": 4,
+      "miss_pixels": 18309,
+      "no_signal_pixels": 9491
+    },
+    "water -> building": {
+      "gt_objects": 183,
+      "pixels": 244077,
+      "miss": 163,
+      "partial": 19,
+      "miss_pixels": 171932,
+      "no_signal_pixels": 17099
+    },
+    "non-vegetated surface -> playground": {
+      "gt_objects": 70,
+      "pixels": 597791,
+      "miss": 29,
+      "partial": 17,
+      "miss_pixels": 50669,
+      "no_signal_pixels": 24676
+    },
+    "low vegetation -> water": {
+      "gt_objects": 264,
+      "pixels": 393318,
+      "miss": 207,
+      "partial": 40,
+      "miss_pixels": 221978,
+      "no_signal_pixels": 129106
+    },
+    "playground -> non-vegetated surface": {
+      "gt_objects": 52,
+      "pixels": 200422,
+      "miss": 25,
+      "partial": 8,
+      "miss_pixels": 24788,
+      "no_signal_pixels": 8896
+    },
+    "playground -> building": {
+      "gt_objects": 29,
+      "pixels": 41743,
+      "miss": 23,
+      "partial": 5,
+      "miss_pixels": 9577,
+      "no_signal_pixels": 2
+    },
+    "building -> playground": {
+      "gt_objects": 21,
+      "pixels": 48586,
+      "miss": 14,
+      "partial": 7,
+      "miss_pixels": 7914,
+      "no_signal_pixels": 0
+    },
+    "playground -> low vegetation": {
+      "gt_objects": 22,
+      "pixels": 39933,
+      "miss": 16,
+      "partial": 3,
+      "miss_pixels": 6232,
+      "no_signal_pixels": 1227
+    },
+    "playground -> tree": {
+      "gt_objects": 8,
+      "pixels": 15999,
+      "miss": 7,
+      "partial": 1,
+      "miss_pixels": 5534,
+      "no_signal_pixels": 1441
+    },
+    "low vegetation -> playground": {
+      "gt_objects": 52,
+      "pixels": 169031,
+      "miss": 41,
+      "partial": 8,
+      "miss_pixels": 41670,
+      "no_signal_pixels": 2155
+    },
+    "building -> water": {
+      "gt_objects": 83,
+      "pixels": 61102,
+      "miss": 70,
+      "partial": 12,
+      "miss_pixels": 18935,
+      "no_signal_pixels": 1799
+    },
+    "tree -> playground": {
+      "gt_objects": 13,
+      "pixels": 7066,
+      "miss": 13,
+      "partial": 0,
+      "miss_pixels": 7066,
+      "no_signal_pixels": 60
+    }
+  }
+}
