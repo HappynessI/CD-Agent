@@ -1,0 +1,300 @@
+{
+  "schema_version": "ca0723_fixed_action_manifest_v1",
+  "description": "Frozen three-sample Qwen3.7 non-thinking actions and accept/rollback schedule from CA_0723(5).",
+  "source": {
+    "run_name": "CA_0723(5)-bailian-proposal-atomic-v11-5sample",
+    "arm": "qwen37-no-thinking",
+    "git_commit": "381ac3a3941b498447baa7c780beecd410b2c2ef",
+    "git_worktree_sha256": "<hash omitted>",
+    "selection_policy": "conservative_best",
+    "matching_mode": "overlap_presence",
+    "overlap_threshold": 0.25,
+    "t12_min_instance_area": 0,
+    "cd_min_instance_area": 0,
+    "rollout_complete_sha256": "<hash omitted>"
+  },
+  "replay": {
+    "samples": [
+      "test_20_15",
+      "test_78_13",
+      "test_85_16"
+    ],
+    "action_count": 9,
+    "simpleclick_call_count": 18,
+    "seed": 42,
+    "legacy_point_roi_fraction": 0.125,
+    "legacy_point_roi_min_radius": 2,
+    "acceptance_source": "source_trajectory_candidate_accepted",
+    "qwen_enabled": false,
+    "ratio_gate_enabled": false,
+    "arms": [
+      {
+        "name": "legacy_session_legacy_write",
+        "model_input": "archived_initial_target_mask_plus_source_accepted_click_history",
+        "write_scope": "inclusive_legacy_point_roi",
+        "raw_family": "legacy_shared"
+      },
+      {
+        "name": "component_input_component_write",
+        "model_input": "live_clicked_component_within_frozen_source_proposal_plus_source_accepted_click_history",
+        "write_scope": "same_live_clicked_component",
+        "raw_family": "component_input"
+      },
+      {
+        "name": "legacy_session_component_write",
+        "model_input": "archived_initial_target_mask_plus_source_accepted_click_history",
+        "write_scope": "live_clicked_component_within_frozen_source_proposal",
+        "raw_family": "legacy_shared"
+      }
+    ]
+  },
+  "evaluation": {
+    "baseline_name": "CA_0723(5)_same_three_samples_fixed_schedule",
+    "baseline_arm": "legacy_session_legacy_write",
+    "absolute_iou_drop_tolerance": 0.01,
+    "relative_iou_drop_tolerance": 0.01,
+    "secondary_quality_metrics": ["precision", "recall", "f1"],
+    "load_policy": "source metrics and label_cvt are decoded only after replay_complete.json"
+  },
+  "samples": {
+    "test_20_15": {
+      "trajectory_sha256": "<hash omitted>",
+      "source_best_step": 1,
+      "source_verifier_best_step": 1,
+      "initial_hashes": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>",
+        "change": "<hash omitted>"
+      },
+      "archived_image_file_sha256": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>"
+      },
+      "actions": [
+        {
+          "step_index": 1,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [7, 108],
+          "accepted": true,
+          "accepted_click_history": [],
+          "source_region_id": "r7",
+          "source_proposal_box_xyxy": [3, 104, 12, 113],
+          "source_proposal_component_area": 3,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 32,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        },
+        {
+          "step_index": 2,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [135, 250],
+          "accepted": false,
+          "accepted_click_history": [
+            {"coordinate": [7, 108], "is_positive": false}
+          ],
+          "source_region_id": "r6",
+          "source_proposal_box_xyxy": [98, 234, 155, 255],
+          "source_proposal_component_area": 278,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 223,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        },
+        {
+          "step_index": 3,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [29, 153],
+          "accepted": false,
+          "accepted_click_history": [
+            {"coordinate": [7, 108], "is_positive": false}
+          ],
+          "source_region_id": "r0",
+          "source_proposal_box_xyxy": [0, 124, 76, 187],
+          "source_proposal_component_area": 1380,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 336,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        }
+      ]
+    },
+    "test_78_13": {
+      "trajectory_sha256": "<hash omitted>",
+      "source_best_step": 3,
+      "source_verifier_best_step": 3,
+      "initial_hashes": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>",
+        "change": "<hash omitted>"
+      },
+      "archived_image_file_sha256": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>"
+      },
+      "actions": [
+        {
+          "step_index": 1,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [22, 74],
+          "accepted": true,
+          "accepted_click_history": [],
+          "source_region_id": "r7",
+          "source_proposal_box_xyxy": [11, 66, 33, 85],
+          "source_proposal_component_area": 127,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 137,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        },
+        {
+          "step_index": 2,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t1",
+          "coordinate_space": "pixel",
+          "coordinate": [18, 35],
+          "accepted": true,
+          "accepted_click_history": [],
+          "source_region_id": "r6",
+          "source_proposal_box_xyxy": [8, 23, 30, 45],
+          "source_proposal_component_area": 135,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 135,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        },
+        {
+          "step_index": 3,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t1",
+          "coordinate_space": "pixel",
+          "coordinate": [237, 113],
+          "accepted": true,
+          "accepted_click_history": [
+            {"coordinate": [18, 35], "is_positive": false}
+          ],
+          "source_region_id": "r5",
+          "source_proposal_box_xyxy": [228, 105, 253, 123],
+          "source_proposal_component_area": 177,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 197,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        }
+      ]
+    },
+    "test_85_16": {
+      "trajectory_sha256": "<hash omitted>",
+      "source_best_step": 3,
+      "source_verifier_best_step": 3,
+      "initial_hashes": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>",
+        "change": "<hash omitted>"
+      },
+      "archived_image_file_sha256": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>"
+      },
+      "actions": [
+        {
+          "step_index": 1,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [250, 140],
+          "accepted": true,
+          "accepted_click_history": [],
+          "source_region_id": "r12",
+          "source_proposal_box_xyxy": [240, 128, 255, 152],
+          "source_proposal_component_area": 160,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 169,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        },
+        {
+          "step_index": 2,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [227, 252],
+          "accepted": true,
+          "accepted_click_history": [
+            {"coordinate": [250, 140], "is_positive": false}
+          ],
+          "source_region_id": "r17",
+          "source_proposal_box_xyxy": [218, 244, 238, 255],
+          "source_proposal_component_area": 83,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 103,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        },
+        {
+          "step_index": 3,
+          "tool": "simpleclick",
+          "action": "negative_point",
+          "target_view": "t2",
+          "coordinate_space": "pixel",
+          "coordinate": [105, 203],
+          "accepted": true,
+          "accepted_click_history": [
+            {"coordinate": [250, 140], "is_positive": false},
+            {"coordinate": [227, 252], "is_positive": false}
+          ],
+          "source_region_id": "r15",
+          "source_proposal_box_xyxy": [96, 195, 125, 218],
+          "source_proposal_component_area": 146,
+          "source_raw_sha256": "<hash omitted>",
+          "source_removed_pixels": 195,
+          "candidate_hashes": {
+            "t1": "<hash omitted>",
+            "t2": "<hash omitted>",
+            "change": "<hash omitted>"
+          }
+        }
+      ]
+    }
+  }
+}

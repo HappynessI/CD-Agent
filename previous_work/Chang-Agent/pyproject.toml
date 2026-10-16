@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "change-agent"
+version = "0.1.0"
+description = "GT-free iterative change detection agent research framework"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24,<2",
+  "Pillow>=10",
+]
+
+[project.optional-dependencies]
+qwen3vl = [
+  "accelerate>=0.26",
+  "transformers>=4.57.0",
+  "qwen-vl-utils>=0.0.8",
+]
+train = ["torch>=2.1"]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+include = ["change_agent*"]

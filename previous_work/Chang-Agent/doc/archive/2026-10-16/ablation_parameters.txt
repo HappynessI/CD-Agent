@@ -1,0 +1,143 @@
+Change-Agent 参数消融与有效配置记录
+====================================
+
+一、CA_0723(5) 已验证有效配置（历史基线）
+
+架构: Verifier 负责诊断和动作规划，Environment 校验，Executor 确定性执行
+Verifier: Qwen3.7 非思考（qwen3.7-plus-2026-05-26）
+proposal_mode: proposal
+max_steps: 3
+sam3_resolution: 1008
+matching_mode: overlap_presence
+overlap_threshold: 0.25
+verifier_region_padding_ratio: 0.25
+staged_verifier_max_total_regions: 32
+verifier_max_selected_regions: 3
+verifier_retries: 2
+verifier_max_new_tokens: 1536
+verifier_repetition_penalty: 1.05
+selection_policy: conservative_best
+max_selection_area_delta: 0.25
+max_locality_outside_ratio: 0.10
+max_target_mask_change_ratio: 0.25
+max_component_count_delta: 4
+seed: 42
+
+CA_0723(5) 运行时还没有双空掩码全图 fallback。下列 v11.1 hardening 是下一轮
+默认值，不得反写成 CA_0723(5) 的已验证结论：
+
+empty_mask_scan_grid_size: 3
+bailian_network_retries: 2
+bailian_network_backoff_seconds: 1.0
+max_point_proposal_change_ratio: 0.25
+max_point_proposal_change_pixels: 256
+max_point_image_change_ratio: 0.004
+point_proposal_change_gate_enabled: true
+authorized_negative_point_input_scope: full_session
+
+point proposal hard gate 仅在 ratio、absolute pixels、full-image ratio 三项同时
+超限时触发；`--disable-point-proposal-change-gate` 只用于不经过 Environment 的
+固定动作诊断对照，不是生产默认。负点输入范围可消融，但写入范围始终是 live
+proposal ROI 中的点击 component。
+
+二、优先消融参数
+
+1. 最大动作步数
+   --max-steps: 1 / 3 / 5
+   目的：观察性能是否受三步上限限制。
+
+2. SAM3 初始化分辨率
+   --sam3-resolution: 756 / 1008 / 1344
+   目的：观察小目标和边界目标的初始检出能力。
+
+3. 双空掩码全图扫描
+   --empty-mask-scan-grid-size: 0 / 2 / 3 / 4
+   目的：仅在 T1/T2 对象掩码均为空时，对比关闭 fallback 与不同网格成本/
+   召回；重点关注 test_50_8。网格由 Environment 生成，Verifier 只能选择
+   region ID，漏检恢复使用该网格的 SAM3 box。
+
+4. Verifier 区域上下文
+   --verifier-region-padding-ratio: 0.10 / 0.25 / 0.50
+   目的：研究局部上下文对跨时相语义判断的影响。
+
+5. 跨时相实例匹配阈值
+   --overlap-threshold: 0.10 / 0.25 / 0.50
+
+6. 跨时相实例匹配方式
+   --matching-mode: overlap_presence / greedy_one_to_one
+
+7. Verifier 最大选择区域数
+   --verifier-max-selected-regions: 1 / 3 / 5
+   目的：研究筛选批次大小对调用成本和判断稳定性的影响。
+
+8. Verifier 协议重试次数
+   --verifier-retries: 1 / 2 / 3
+   目的：只研究 JSON/协议修复；不包含网络层重试。
+
+三、第二优先级参数
+
+--t12-min-instance-area: 0 / 16 / 64
+--cd-min-instance-area: 0 / 16 / 64
+--max-selection-area-delta: 0.10 / 0.25 / 0.50
+--max-locality-outside-ratio: 0.05 / 0.10 / 0.20
+--max-target-mask-change-ratio: 0.10 / 0.25 / 0.50
+--max-component-count-delta: 1 / 4 / 8
+--max-point-proposal-change-ratio: 0.10 / 0.25 / 0.50
+--max-point-proposal-change-pixels: 128 / 256 / 384
+--max-point-image-change-ratio: 0.002 / 0.004 / 0.006
+--authorized-negative-point-input-scope: full_session / proposal_roi / clicked_component
+--verifier-max-new-tokens: 768 / 1536 / 2048
+--verifier-repetition-penalty: 1.00 / 1.05 / 1.10
+
+四、v11 Proposal 路径的无效或兼容参数
+
+以下参数不应出现在新的 Proposal v11 launcher 中。为保证旧命令仍可解析，
+runner 暂时保留兼容入口，但它们不属于有效实验配置：
+
+--agent-backend：生产 runner 没有独立 Agent 动作生成器。
+--max-new-tokens：旧 Agent 生成预算；Verifier 使用 --verifier-max-new-tokens。
+--action-retries：旧 Agent JSON 重试；当前动作来自已校验的 Verifier 计划。
+--verifier-min-visual-confidence：v11 使用离散 evidence_quality。
+--verifier-accept-threshold：v11 Proposal 原子 pairwise 路径不使用；Direct、
+  qwen_zero_shot 和 rule 仍可能使用。
+--verifier-min-region-area：v11 完整覆盖不会丢弃小组件，包括单像素组件。
+--verifier-max-regions / --verifier-max-delta-regions-per-batch：v10 批次元数据；
+  v11 每个初始区域原子审查、候选使用完整 action-scoped delta。
+--bailian-model：显式给出 --verifier-bailian-model 后只是旧别名。
+--selection-epsilon：v11 better/worse 离散比较中通常不生效。
+
+configs/default.json、configs/runtime_cpu.json 和 configs/runtime_gpu_l20.json 是
+文档/环境档案，不会被 tools/run_levir_change_agent.py 自动加载，不能把它们
+当作正式作业的 effective config。
+
+五、2026-07-23 谨慎清理记录
+
+1. 新建 tools/submit_ca0723_atomic_v11_1_5sample.sh，并只在新 launcher 中
+   删除上述无效参数；历史 v11 launcher 改为指向稳定 tag 的保护入口。
+   旧 CLI 参数仍可解析。
+2. runner manifest 只记录当前路径的有效配置，并明确记录
+   controller_architecture=verifier_planner_environment_executor。
+3. Bailian 协议修复次数与网络重试次数分开记录。
+4. 如需回滚，恢复该 launcher 的删除行即可；核心兼容入口仍保留。
+5. 不修改 CA_0723(5) 已有产物，也不把新 fallback 的结果归因给旧实验。
+
+六、已登记但本轮不改
+
+同一 action scope 内的同极性断开 delta 仍聚合为一个审查单元，以控制模型
+调用成本。该设计可能隐藏少数局部伤害，后续如扩大样本集，应同时报告
+precision/recall、TP/FP/FN，并考虑按 component 或 tile 抽查。
+
+tools/replay_verifier_challenge.py 使用旧的“删除整个点击连通分量”语义，与当前
+ROI-clipped SimpleClick Executor 不一致；它仅用于历史研究，不得作为 v11
+在线轨迹的复现或验收工具。
+
+七、每组实验需要记录
+
+1. Initial 和 Selected 的 IoU、Precision、Recall、F1、TP、FP、FN。
+2. 每个样本的逐项指标；GT 为空样本单独报告 FP。
+3. execution_status 与 episode_outcome 分开；报告收敛率和停止原因分布。
+4. 动作数、接受/拒绝数、有害动作接受率和 box fallback 使用次数。
+5. Verifier invalid、无动作、空 proposal、网络重试、耗时和 token。
+6. 每次只改变一个参数，其余配置、样本和 seed 保持一致。
+
+建议先用 5 个样本筛选参数，再在独立、更大的样本集上验证。

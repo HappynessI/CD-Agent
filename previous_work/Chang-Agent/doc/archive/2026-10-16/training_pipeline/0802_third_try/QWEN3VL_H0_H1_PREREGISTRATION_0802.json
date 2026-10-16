@@ -1,0 +1,724 @@
+{
+  "schema_id": "qwen3vl_harness_preregistration_v1",
+  "design_status": "frozen",
+  "execution_readiness": "not_execution_ready",
+  "state_interpretation": "Readiness and pending values describe the immutable design-freeze moment; later observations live in separate receipts and amendments and never backfill this manifest.",
+  "created_utc": "2026-08-02",
+  "p0_acceptance_receipt": {
+    "status_at_design_freeze": "pending",
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_ACCEPTANCE_RECEIPT_0802.json",
+    "sha256_at_design_freeze": null,
+    "observation_results_are_not_backfilled": true,
+    "final_receipt_hash_is_bound_by_p1_amendment": true
+  },
+  "p1_execution_authorized": false,
+  "not_execution_ready_reasons": [
+    "p0_acceptance_receipt_is_pending",
+    "h1_code_is_unimplemented",
+    "cpu_fixture_manifest_is_not_created",
+    "summary_v2_validator_is_in_implementation",
+    "receipt_v2_definition_and_validator_are_not_implemented",
+    "p1_amendment_is_not_frozen",
+    "p1_user_approval_is_not_recorded"
+  ],
+  "scope": {
+    "purpose": "Freeze the H0 legacy control and H1 GT-free terminal-review treatment before implementation.",
+    "p0_design_only": true,
+    "h1_code_implemented": false,
+    "cpu_fixture_execution_authorized": false,
+    "gpu_job_authorized": false
+  },
+  "anchors": {
+    "design_base_commit": "1277e88c9f2c1de34c1c8e9b881a979a17cce96d",
+    "frozen_runtime_commit": "491532f4622667e9fbf299c71aac228fa37f6a04",
+    "implementation_commit": null,
+    "model_io_protocol": "v12.1",
+    "summary_schema_id": "qwen3vl_e2e_summary_v2",
+    "receipt_schema_id": "qwen3vl_evaluation_receipt_v2"
+  },
+  "schema_implementation_contract": {
+    "artifact_policy": {
+      "independent_harness_protocol_per_arm": true,
+      "independent_experiment_arm_id_per_arm": true,
+      "independent_summary_artifact_per_arm": true,
+      "independent_receipt_artifact_per_arm": true,
+      "shared_summary_schema_id": "qwen3vl_e2e_summary_v2",
+      "shared_receipt_schema_id": "qwen3vl_evaluation_receipt_v2"
+    },
+    "summary": {
+      "schema_id": "qwen3vl_e2e_summary_v2",
+      "definition_status": "implementation_in_progress",
+      "validator_status": "implementation_in_progress",
+      "execution_blocker_until_validator_passes": true
+    },
+    "receipt": {
+      "schema_id": "qwen3vl_evaluation_receipt_v2",
+      "definition_status": "not_implemented",
+      "validator_status": "not_implemented",
+      "execution_blocker_until_definition_and_validator_pass": true
+    }
+  },
+  "pinned_paths": {
+    "base_model": "/guisongxia01/pangchao/wangyihan/models/Qwen3-VL-2B-Instruct",
+    "input_root": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256",
+    "simpleclick_checkpoint": "/guisongxia01/pangchao/wangyihan/models/SimpleClick/cocolvis_vit_large.pth",
+    "sam3_checkpoint": "/guisongxia01/pangchao/wangyihan/models/sam3/sam3.pt",
+    "sam3_bpe": "/guisongxia01/pangchao/wangyihan/Chang-Agent/third_party/OmniOVCD/sam3/assets/bpe_simple_vocab_16e6.txt.gz",
+    "omniovcd_python": "/guisongxia01/pangchao/wangyihan/omniovcd-env/bin/python",
+    "segagent_python": "/guisongxia01/pangchao/wangyihan/segagent-env/bin/python",
+    "output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs"
+  },
+  "input_manifest": {
+    "schema_id": "qwen3vl_evaluation_input_manifest_v1",
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_EVALUATION_INPUT_MANIFEST_0802.json",
+    "canonicalization": "UTF-8 encoding of json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False) with no trailing newline.",
+    "canonical_sha256": "<hash omitted>",
+    "label_cvt_access": "offline_scorer_only_after_rollout_complete"
+  },
+  "cpu_fixture_manifest": {
+    "schema_id": "qwen3vl_h0_h1_cpu_fixture_manifest_v1",
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_CPU_FIXTURE_MANIFEST_0802.json",
+    "status": "p1_blocker_not_created",
+    "canonical_sha256": null,
+    "required_before_cpu_fixture_submission": true,
+    "required_before_any_gpu_submission": true
+  },
+  "treatment_factor": {
+    "factor_id": "terminal_review_scheduler_v1",
+    "name": "terminal_review_scheduler",
+    "is_unique_causal_variable": true,
+    "h0_value": "legacy_single_round_terminal_policy",
+    "h1_value": "one_gtfree_independent_terminal_review_round",
+    "allowed_arm_differences": [
+      "harness_protocol_id",
+      "experiment_arm_id",
+      "max_verifier_rounds",
+      "terminal_review",
+      "round_two_trigger_selection_and_decision_fields"
+    ],
+    "all_other_runtime_variables_must_be_identical": true
+  },
+  "controlled_variables": [
+    {
+      "name": "model_weights_and_model_io_protocol",
+      "relation": "identical_h0_h1",
+      "sources": [
+        "/pinned_paths/base_model",
+        "/anchors/model_io_protocol"
+      ],
+      "hash_binding": "required_in_p1_amendment"
+    },
+    {
+      "name": "tools_and_safety_boundaries",
+      "relation": "identical_h0_h1",
+      "sources": [
+        "/pinned_paths/simpleclick_checkpoint",
+        "/pinned_paths/sam3_checkpoint",
+        "/shared_invariants/unchanged_safety_boundaries"
+      ],
+      "hash_binding": "required_in_p1_amendment"
+    },
+    {
+      "name": "ordered_inputs",
+      "relation": "identical_h0_h1_within_each_evaluation_profile",
+      "source": "/input_manifest/canonical_sha256"
+    },
+    {
+      "name": "generation_and_seed",
+      "relation": "identical_h0_h1",
+      "source": "/shared_invariants/generation"
+    },
+    {
+      "name": "accepted_environment_initial_state_and_nonround_budgets",
+      "relation": "identical_h0_h1",
+      "sources": [
+        "/shared_invariants/accepted_environment_initial_state",
+        "/arms/h0/budgets/max_stage_attempts_per_round",
+        "/arms/h1/budgets/max_stage_attempts_per_round",
+        "/arms/h0/budgets/max_environment_steps",
+        "/arms/h1/budgets/max_environment_steps"
+      ]
+    }
+  ],
+  "shared_invariants": {
+    "target_class": "building",
+    "online_gt_free": true,
+    "gt_allowed_only_after_rollout_complete": true,
+    "accepted_environment_initial_state": "fresh_identical_initialization_per_arm",
+    "generation": {
+      "do_sample": false,
+      "inference_seed": 42,
+      "max_new_tokens": 1536,
+      "repetition_penalty": 1.05
+    },
+    "matching_mode": "overlap_presence",
+    "overlap_threshold": 0.25,
+    "empty_mask_scan_grid_size": 3,
+    "selection_policy": "conservative_best",
+    "unchanged_safety_boundaries": [
+      "parser",
+      "geometry_authorization",
+      "locality_hard_gate",
+      "candidate_benefit_without_harm",
+      "rollback"
+    ]
+  },
+  "arms": {
+    "h0": {
+      "harness_protocol_id": "qwen3vl_harness_h0_legacy_single_round_v1",
+      "experiment_arm_id": "v12_1-h0-legacy-single-round-base-0802",
+      "budgets": {
+        "max_verifier_rounds": 1,
+        "max_stage_attempts_per_round": 2,
+        "max_environment_steps": 3
+      },
+      "terminal_review": false,
+      "required_behavior": "Behavior-preserving control for the frozen v12.1 scheduler."
+    },
+    "h1": {
+      "harness_protocol_id": "qwen3vl_harness_h1_gtfree_terminal_review_v1",
+      "experiment_arm_id": "v12_1-h1-gtfree-terminal-review-base-0802",
+      "budgets": {
+        "max_verifier_rounds": 2,
+        "max_stage_attempts_per_round": 2,
+        "max_environment_steps": 3
+      },
+      "terminal_review": true,
+      "round_two_triggers": [
+        "provisional_finish",
+        "plan_null_after_allowed_repair"
+      ],
+      "round_two_outcomes": [
+        "finish",
+        "unique_safe_plan",
+        "plan_null",
+        "unresolved",
+        "unsafe_or_nonunique_plan",
+        "schema_invalid_after_allowed_repair",
+        "budget_exhausted"
+      ],
+      "round_two_kinds": [
+        "finish_confirmation",
+        "plan_null_alternative"
+      ],
+      "independence_contract": {
+        "fresh_backend_context": true,
+        "inherits_hidden_state": false,
+        "copies_round_one_raw_response": false,
+        "round_index": 2,
+        "nonduplicate_prompt_or_region_required": true,
+        "deterministic_replay_required": true,
+        "third_round_allowed": false
+      },
+      "forbidden_trigger_inputs": [
+        "gt_mask",
+        "offline_tp_fp_fn",
+        "offline_iou_f1",
+        "manual_failure_label",
+        "historical_false_finish_identity"
+      ],
+      "transition_table_complete_cross_product": true,
+      "round_transition_table": [
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "finish",
+          "review_decision": "confirmed_finish",
+          "next_state": "terminate_confirmed_finish",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "unique_safe_plan",
+          "review_decision": "safe_plan_enters_existing_flow",
+          "next_state": "existing_environment_action_and_candidate_flow",
+          "tool_action_authorization": "not_yet_authorized_existing_safety_flow_required"
+        },
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "plan_null",
+          "review_decision": "round_conflict_no_action",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "unresolved",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "unsafe_or_nonunique_plan",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "schema_invalid_after_allowed_repair",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "provisional_finish",
+          "round_two_outcome": "budget_exhausted",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "finish",
+          "review_decision": "round_conflict_no_action",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "unique_safe_plan",
+          "review_decision": "safe_plan_enters_existing_flow",
+          "next_state": "existing_environment_action_and_candidate_flow",
+          "tool_action_authorization": "not_yet_authorized_existing_safety_flow_required"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "plan_null",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "unresolved",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "unsafe_or_nonunique_plan",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "schema_invalid_after_allowed_repair",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        },
+        {
+          "round_one_trigger": "plan_null_after_allowed_repair",
+          "round_two_outcome": "budget_exhausted",
+          "review_decision": "no_executable_action_after_review",
+          "next_state": "terminate_no_executable_action_after_review",
+          "tool_action_authorization": "forbidden"
+        }
+      ],
+      "decision_contract": {
+        "both_rounds_finish": "confirmed_finish",
+        "round_two_unique_safe_plan": "enter_existing_environment_action_and_candidate_flow",
+        "plan_null_then_finish": "round_conflict_no_action",
+        "unresolved_conflict_invalid_or_budget_exhausted": "no_executable_action_after_review",
+        "force_action_to_meet_candidate_quota": false
+      }
+    }
+  },
+  "evaluation_order": [
+    {
+      "phase": "cpu_fixtures",
+      "gpu": 0,
+      "fixture_manifest_path": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_CPU_FIXTURE_MANIFEST_0802.json",
+      "fixture_manifest_sha256": null,
+      "status": "p1_blocker_not_created",
+      "required_cases": [
+        "legacy_finish_parity",
+        "legacy_plan_null_parity",
+        "round_two_safe_plan",
+        "round_two_uncertain",
+        "round_conflict",
+        "repair_exhausted",
+        "budget_exhausted",
+        "safety_gate_rejection"
+      ]
+    },
+    {
+      "phase": "smoke1",
+      "gpu": 1,
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "input_manifest_profile": "smoke1",
+      "samples": [
+        "test_1_1"
+      ],
+      "arm_order": [
+        "h0",
+        "h1"
+      ]
+    },
+    {
+      "phase": "core3",
+      "gpu": 1,
+      "evaluation_id": "DEV-CORE-3-V1",
+      "input_manifest_profile": "core3",
+      "samples": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ],
+      "arm_order": [
+        "h0",
+        "h1"
+      ]
+    }
+  ],
+  "metric_contract": {
+    "comparison_epsilon": 1e-12,
+    "comparison_occurs_before_rounding": true,
+    "empty_gt_and_empty_prediction": {
+      "iou": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "empty_prediction_nonempty_gt": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "iou": 0.0,
+      "f1": 0.0
+    },
+    "empty_gt_nonempty_prediction": {
+      "precision": 0.0,
+      "recall": 1.0,
+      "iou": 0.0,
+      "f1": 0.0
+    },
+    "degraded_if": [
+      "delta_iou_below_negative_epsilon",
+      "delta_f1_below_negative_epsilon",
+      "metric_tie_and_tp_decreases",
+      "metric_tie_and_fp_increases",
+      "metric_tie_and_fn_increases"
+    ],
+    "oracle_beneficial_if": "delta_iou_above_epsilon_and_delta_f1_above_epsilon",
+    "oracle_harmful_if": "either_metric_decreases_or_metric_tie_with_worse_counts",
+    "unclassifiable_candidates": "indeterminate"
+  },
+  "candidate_confusion_contract": {
+    "leaf_classes_are_mutually_exclusive": true,
+    "oracle_labels": [
+      "beneficial",
+      "harmful",
+      "indeterminate"
+    ],
+    "decision_paths": [
+      "accepted_after_qwen",
+      "rejected_after_qwen",
+      "rejected_by_hard_gate_before_qwen"
+    ],
+    "mapping": [
+      {
+        "oracle_label": "beneficial",
+        "decision_path": "accepted_after_qwen",
+        "leaf_class": "true_accept"
+      },
+      {
+        "oracle_label": "beneficial",
+        "decision_path": "rejected_after_qwen",
+        "leaf_class": "qwen_false_reject"
+      },
+      {
+        "oracle_label": "beneficial",
+        "decision_path": "rejected_by_hard_gate_before_qwen",
+        "leaf_class": "hard_gate_false_reject"
+      },
+      {
+        "oracle_label": "harmful",
+        "decision_path": "accepted_after_qwen",
+        "leaf_class": "false_accept"
+      },
+      {
+        "oracle_label": "harmful",
+        "decision_path": "rejected_after_qwen",
+        "leaf_class": "true_reject"
+      },
+      {
+        "oracle_label": "harmful",
+        "decision_path": "rejected_by_hard_gate_before_qwen",
+        "leaf_class": "hard_gate_correct_reject"
+      },
+      {
+        "oracle_label": "indeterminate",
+        "decision_path": "accepted_after_qwen",
+        "leaf_class": "indeterminate_accepted"
+      },
+      {
+        "oracle_label": "indeterminate",
+        "decision_path": "rejected_after_qwen",
+        "leaf_class": "indeterminate_qwen_rejected"
+      },
+      {
+        "oracle_label": "indeterminate",
+        "decision_path": "rejected_by_hard_gate_before_qwen",
+        "leaf_class": "indeterminate_hard_gate_rejected"
+      }
+    ],
+    "rollups_and_denominators": {
+      "false_accept_rate": {
+        "numerator": "false_accept_count",
+        "denominator": "all_oracle_harmful_candidates"
+      },
+      "qwen_false_reject_rate": {
+        "numerator": "qwen_false_reject_count",
+        "denominator": "oracle_beneficial_candidates_reaching_qwen"
+      },
+      "hard_gate_false_reject_rate": {
+        "numerator": "hard_gate_false_reject_count",
+        "denominator": "all_oracle_beneficial_candidates"
+      },
+      "all_false_reject_rate": {
+        "numerator": "qwen_false_reject_count_plus_hard_gate_false_reject_count",
+        "denominator": "all_oracle_beneficial_candidates"
+      },
+      "hard_gate_before_qwen_rate": {
+        "numerator": "all_hard_gate_before_qwen_rejection_count",
+        "denominator": "all_candidates_with_complete_offline_oracle_metrics"
+      }
+    },
+    "indeterminate_never_forced_into_binary_confusion": true
+  },
+  "retry_accounting_contract": {
+    "max_stage_attempts_per_round_includes_initial": true,
+    "max_schema_repairs_per_stage_per_round": 1,
+    "effective_network_retry_limit_for_local_backend": 0,
+    "effective_tool_action_attempts_per_authorized_action": 1,
+    "action_retries_cli": {
+      "deprecated_compatibility_option": true,
+      "default_cli_value": 3,
+      "changes_effective_tool_attempt_limit": false
+    },
+    "required_separate_counters": [
+      "verifier_round_count",
+      "stage_initial_attempt_count",
+      "schema_repair_attempt_count",
+      "network_retry_attempt_count",
+      "tool_action_attempt_count",
+      "tool_failure_count"
+    ]
+  },
+  "primary_endpoint_contract": {
+    "purpose": "Protocol and safety freeze only; all endpoints are hard gates.",
+    "all_endpoints_must_pass": true,
+    "endpoints": [
+      {
+        "endpoint_id": "h0_behavior_parity_rate",
+        "numerator": "H0 parity fixture cases matching every frozen legacy behavior field",
+        "denominator": "all requested H0 parity fixture cases",
+        "comparator": "frozen_v12_1_golden_fixture_receipt",
+        "operator": "==",
+        "threshold": 1.0
+      },
+      {
+        "endpoint_id": "eligible_trigger_exactly_one_round_two_rate",
+        "numerator": "eligible terminal-trigger fixture cases entering exactly one independent round two",
+        "denominator": "all eligible terminal-trigger fixture cases",
+        "comparator": "preregistered_expected_behavior",
+        "operator": "==",
+        "threshold": 1.0
+      },
+      {
+        "endpoint_id": "h1_final_region_protocol_validity_delta_vs_h0",
+        "numerator": "H1 requested samples with schema-valid final-region result minus paired H0 requested samples with schema-valid final-region result",
+        "denominator": "requested samples in the same evaluation profile",
+        "comparator": "paired_h0_same_model_input_order_seed_and_profile",
+        "operator": ">=",
+        "threshold": 0.0
+      },
+      {
+        "endpoint_id": "pre_rollout_gt_boundary_violation_rate",
+        "numerator": "requested rollouts with any forbidden pre-completion GT or offline-metric access",
+        "denominator": "all requested rollouts",
+        "comparator": "absolute_safety_boundary",
+        "operator": "==",
+        "threshold": 0.0
+      },
+      {
+        "endpoint_id": "safety_boundary_relaxation_rate",
+        "numerator": "frozen safety boundaries relaxed bypassed or behaviorally changed",
+        "denominator": "all frozen safety boundaries",
+        "comparator": "frozen_runtime_and_h0_parity_receipt",
+        "operator": "==",
+        "threshold": 0.0
+      },
+      {
+        "endpoint_id": "requested_scored_mismatch_rate",
+        "numerator": "requested samples not scored exactly once",
+        "denominator": "all requested samples",
+        "comparator": "absolute_completion_contract",
+        "operator": "==",
+        "threshold": 0.0
+      },
+      {
+        "endpoint_id": "tool_failure_rate",
+        "numerator": "tool failures",
+        "denominator": "all tool action attempts",
+        "zero_denominator_value": 0.0,
+        "comparator": "absolute_infrastructure_gate",
+        "operator": "==",
+        "threshold": 0.0
+      }
+    ]
+  },
+  "diagnostic_and_promotion_metrics": {
+    "not_harness_freeze_primary": true,
+    "metrics": [
+      "per_sample_micro_macro_iou_f1",
+      "tp_fp_fn_and_deltas",
+      "candidate_oracle_gain",
+      "candidate_novelty",
+      "false_accept_false_reject_and_hard_gate_subclasses"
+    ],
+    "candidate_novelty_required_for_harness_safety_freeze": false,
+    "may_be_used_only_for_diagnosis_or_later_promotion": true,
+    "may_drive_online_trigger_region_or_action_selection": false,
+    "force_action_to_meet_candidate_quota": false
+  },
+  "h1_freeze_gate_contract": {
+    "all_gates_required": true,
+    "gates": [
+      "p0_acceptance_receipt_complete_and_hash_bound",
+      "cpu_fixture_manifest_present_hash_bound_and_validator_passed",
+      "h0_behavior_parity_endpoint_passed",
+      "exactly_one_round_two_endpoint_passed",
+      "round_two_independence_and_determinism_passed",
+      "complete_round_transition_table_covered",
+      "pre_rollout_gt_boundary_endpoint_passed",
+      "safety_boundary_relaxation_endpoint_passed",
+      "all_budget_counts_present_separate_and_within_limits",
+      "safe_plan_and_dangerous_action_rejection_both_covered",
+      "live_smoke_enters_schema_valid_round_two",
+      "h1_final_region_protocol_validity_endpoint_passed",
+      "requested_scored_endpoint_passed",
+      "tool_failure_endpoint_passed",
+      "summary_v2_validator_passed",
+      "receipt_v2_definition_and_validator_passed",
+      "exact_commit_clean_worktree_and_hashes_bound",
+      "all_reserved_output_paths_absent_before_submission",
+      "p1_user_approval_recorded"
+    ]
+  },
+  "resource_contract": {
+    "max_total_gpus_for_ca0802": 3,
+    "p0_contract_validation_gpus": 0,
+    "p1_cpu_fixture_gpus": 0,
+    "p1_job_gpus": 1,
+    "h0_h1_concurrent": false,
+    "gpu_model": "NVIDIA A800",
+    "slurm_user": "guisongxia"
+  },
+  "notification_contract": {
+    "channel": "QQ",
+    "notify_on_terminal_states": [
+      "success",
+      "failed",
+      "cancelled",
+      "timeout",
+      "out_of_memory",
+      "node_fail"
+    ],
+    "required_body_fields": [
+      "job_name",
+      "job_id",
+      "terminal_status",
+      "elapsed_seconds",
+      "key_result_or_error",
+      "artifact_path"
+    ],
+    "credentials_or_proxy_values_forbidden": true
+  },
+  "reserved_run_allocations": [
+    {
+      "phase": "p0_contract_validation",
+      "arm": "p0_contract",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1)-qwen3vl-p0-contract-validation",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1)-qwen3vl-p0-contract-validation/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1)-qwen3vl-p0-contract-validation/logs/slurm-%j.err",
+      "qq_title": "CA0802 P0 contract validation",
+      "must_not_exist_before_submission": true,
+      "reservation_status": "reserved_absent_at_design_freeze"
+    },
+    {
+      "phase": "p1_cpu_fixtures",
+      "arm": "h0_h1",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H0-H1 CPU fixtures",
+      "must_not_exist_before_submission": true,
+      "reservation_status": "reserved_absent_at_design_freeze"
+    },
+    {
+      "phase": "p1_smoke1",
+      "arm": "h0",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H0 base smoke1",
+      "must_not_exist_before_submission": true,
+      "reservation_status": "reserved_absent_at_design_freeze"
+    },
+    {
+      "phase": "p1_smoke1",
+      "arm": "h1",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H1 base smoke1",
+      "must_not_exist_before_submission": true,
+      "reservation_status": "reserved_absent_at_design_freeze"
+    },
+    {
+      "phase": "p1_core3",
+      "arm": "h0",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H0 base CORE3",
+      "must_not_exist_before_submission": true,
+      "reservation_status": "reserved_absent_at_design_freeze"
+    },
+    {
+      "phase": "p1_core3",
+      "arm": "h1",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H1 base CORE3",
+      "must_not_exist_before_submission": true,
+      "reservation_status": "reserved_absent_at_design_freeze"
+    }
+  ],
+  "required_p1_amendment_fields": [
+    "amends_preregistration_path",
+    "amends_preregistration_canonical_sha256",
+    "implementation_commit",
+    "clean_run_worktree",
+    "p0_acceptance_receipt_sha256",
+    "cpu_fixture_manifest_sha256",
+    "worker_sha256",
+    "model_hash",
+    "tool_hashes",
+    "input_manifest_canonical_sha256",
+    "resolved_run_config_sha256",
+    "summary_schema_definition_and_validator_hashes",
+    "receipt_schema_definition_and_validator_hashes",
+    "unique_output_paths",
+    "slurm_node_partition_cpu_memory_time",
+    "submission_script_path_and_sha256",
+    "qq_notification_titles_verified",
+    "user_approval_reference",
+    "p1_execution_authorized"
+  ]
+}

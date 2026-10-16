@@ -1,0 +1,260 @@
+{
+  "schema_id": "qwen3vl_gt_direct_teacher_preregistration_v1",
+  "status": "frozen_preregistration",
+  "preregistered_date_utc": "2026-08-04",
+  "title": "Qwen3-VL GT-direct teacher-only real-tool reachability pilot",
+  "teacher_only": true,
+  "training_authorized": false,
+  "purpose": "On the four non-trivial 0803 episodes, hold the fresh SAM3 initial state, real SAM3/SimpleClick executors, max_steps=3 and endpoint fixed, then replace production proposal geometry with GT-derived error-component geometry to separate proposal coverage from the bounded tool/gate ceiling.",
+  "result_fields_intentionally_absent": true,
+  "base_config_0803": {
+    "path": "configs/qwen3vl_oracle_trajectory_pilot_0803.json",
+    "sha256": "<hash omitted>",
+    "schema_id": "qwen3vl_oracle_trajectory_pilot_preregistration_v1"
+  },
+  "production_baseline_0803": {
+    "validation_report_path": "outputs/CA_0803_archive/CA_0803(2)-qwen3vl-oracle-trajectory-pilot/attempt-0002/validation/validation_report.json",
+    "validation_report_sha256": "<hash omitted>",
+    "scientific_status": "scientific_no_go",
+    "nontrivial_endpoint_successes": 0,
+    "nontrivial_denominator": 4
+  },
+  "scope_and_access_audit": {
+    "teacher_only": true,
+    "change_only_teacher_upper_bound": true,
+    "raw_label_pixels_passed_to_environment": false,
+    "raw_label_pixels_passed_to_tools": false,
+    "raw_label_path_passed_to_runtime": false,
+    "gt_derived_geometry_passed_to_environment": true,
+    "gt_derived_geometry_passed_to_tools": true,
+    "gt_derived_metadata_passed_to_environment": true,
+    "executor_receipt_contains_teacher_encoded_region_id": true,
+    "runtime_boundary_layers": {
+      "environment": {
+        "complete_gt_derived_proposal_metadata_present": true,
+        "raw_label_pixels_or_path_present": false
+      },
+      "executor_and_receipt": {
+        "gt_derived_fields": [
+          "point_coordinate_or_box",
+          "proposal_box",
+          "component_area",
+          "authorized_region_id_encoding_teacher_route"
+        ],
+        "raw_label_pixels_or_path_present": false
+      },
+      "sam3_backend": {
+        "gt_derived_fields": ["box"],
+        "raw_label_pixels_or_path_present": false
+      },
+      "simpleclick_backend": {
+        "gt_derived_fields": [
+          "point_coordinate",
+          "proposal_localized_current_mask_context"
+        ],
+        "raw_label_pixels_or_path_present": false
+      }
+    },
+    "qwen_invoked": false,
+    "training_authorized": false,
+    "test_split_used": false,
+    "generalization_claim_allowed": false,
+    "limitation": "LEVIR-CD supplies change GT but no T1/T2 building GT. This pilot can test change-mask controllability only. The full teacher proposal, including GT-derived error metadata, is stored in Environment evidence. The Executor and receipt also see geometry, ROI/area and a teacher-encoded authorized region ID; the SAM3/SimpleClick backends see only real-call geometry and localized current-mask context, never the raw GT mask or path. These artifacts are not deployable trajectories or SFT data."
+  },
+  "ordered_samples": [
+    "train_407_r3c2",
+    "train_364_r0c2",
+    "val_43_r1c1",
+    "val_41_r3c2"
+  ],
+  "expected_initial_state_mask_sha256": {
+    "train_407_r3c2": {
+      "t1": "<hash omitted>",
+      "t2": "<hash omitted>",
+      "change": "<hash omitted>"
+    },
+    "train_364_r0c2": {
+      "t1": "<hash omitted>",
+      "t2": "<hash omitted>",
+      "change": "<hash omitted>"
+    },
+    "val_43_r1c1": {
+      "t1": "<hash omitted>",
+      "t2": "<hash omitted>",
+      "change": "<hash omitted>"
+    },
+    "val_41_r3c2": {
+      "t1": "<hash omitted>",
+      "t2": "<hash omitted>",
+      "change": "<hash omitted>"
+    }
+  },
+  "production_episode_evidence": {
+    "train_407_r3c2": {
+      "path": "outputs/CA_0803_archive/CA_0803(2)-qwen3vl-oracle-trajectory-pilot/attempt-0002/shards/shard-0/episodes/train_407_r3c2/episode.json",
+      "sha256": "<hash omitted>",
+      "termination": "no_beneficial"
+    },
+    "train_364_r0c2": {
+      "path": "outputs/CA_0803_archive/CA_0803(2)-qwen3vl-oracle-trajectory-pilot/attempt-0002/shards/shard-2/episodes/train_364_r0c2/episode.json",
+      "sha256": "<hash omitted>",
+      "termination": "max_steps"
+    },
+    "val_43_r1c1": {
+      "path": "outputs/CA_0803_archive/CA_0803(2)-qwen3vl-oracle-trajectory-pilot/attempt-0002/shards/shard-0/episodes/val_43_r1c1/episode.json",
+      "sha256": "<hash omitted>",
+      "termination": "no_beneficial"
+    },
+    "val_41_r3c2": {
+      "path": "outputs/CA_0803_archive/CA_0803(2)-qwen3vl-oracle-trajectory-pilot/attempt-0002/shards/shard-1/episodes/val_41_r3c2/episode.json",
+      "sha256": "<hash omitted>",
+      "termination": "no_beneficial"
+    }
+  },
+  "execution_protocol": {
+    "seed": 42,
+    "query": "building",
+    "max_steps": 3,
+    "one_action_per_step": true,
+    "fresh_sam3_initializer": true,
+    "change_composition": {
+      "implementation": "MaskPairProcessor",
+      "mode": "overlap_presence",
+      "overlap_threshold": 0.25,
+      "t12_min_instance_area": 0,
+      "cd_min_instance_area": 0
+    },
+    "state_continuity_required": true,
+    "selected_action_canonical_replay_required": true,
+    "authorized_teacher_region_id_required": true,
+    "qwen_loads_and_calls_allowed": 0,
+    "track_start_policy": "Every executed track starts from a fresh SAM3 Environment and must match the preregistered T1/T2/change mask hashes.",
+    "selection_policy": "Execute the frozen candidate batch without raw GT pixels in any tool call; offline GT then selects the eligible result with greatest pixel-error reduction, breaking ties by candidate_id.",
+    "strict_metric_improvement": {
+      "all_gt_types": "pixel_error must strictly decrease",
+      "nonempty_gt": "IoU and F1 must both strictly increase",
+      "empty_gt": "false-positive pixels must strictly decrease"
+    }
+  },
+  "teacher_geometry": {
+    "error_masks": {
+      "false_negative": "GT_change AND NOT current_change",
+      "false_positive": "current_change AND NOT GT_change"
+    },
+    "component_connectivity": 8,
+    "component_order": "pixel_count descending, then error kind FN before FP, then top/left coordinate",
+    "point_policy": "Choose the component interior pixel with maximum distance to its boundary; break ties by y then x. Match the frozen production executor surface: enumerate a SimpleClick positive point on either live polarity (add or refine), and additionally enumerate a negative point when the live target pixel is foreground.",
+    "box_policy": "Use the inclusive component bounding box, clip deterministic proportional padding to the 256x256 crop, and enumerate SAM3 box on both target views.",
+    "matched": {
+      "max_error_components": 4,
+      "padding_ratio": 0.25,
+      "max_candidates_per_step": 4
+    },
+    "wide": {
+      "max_error_components": 4,
+      "padding_ratios": [0.0, 0.1, 0.25, 0.5],
+      "max_candidates_per_step": 96
+    }
+  },
+  "tracks": [
+    {
+      "track_id": "matched_safe",
+      "geometry": "matched",
+      "production_hard_gate_required": true,
+      "frozen_rgb_semantic_gate_required": true,
+      "run_condition": "always"
+    },
+    {
+      "track_id": "wide_safe",
+      "geometry": "wide",
+      "production_hard_gate_required": true,
+      "frozen_rgb_semantic_gate_required": true,
+      "run_condition": "matched_safe_endpoint_failed"
+    },
+    {
+      "track_id": "wide_hard",
+      "geometry": "wide",
+      "production_hard_gate_required": true,
+      "frozen_rgb_semantic_gate_required": false,
+      "run_condition": "wide_safe_endpoint_failed"
+    },
+    {
+      "track_id": "wide_raw",
+      "geometry": "wide",
+      "production_hard_gate_required": false,
+      "frozen_rgb_semantic_gate_required": false,
+      "run_condition": "wide_hard_endpoint_failed"
+    }
+  ],
+  "endpoint": {
+    "stop_at_first_endpoint": true,
+    "nonempty_gt_minimum_iou": 0.9,
+    "nonempty_gt_minimum_f1": 0.9473684210526315,
+    "empty_gt_maximum_fp": 64
+  },
+  "metric_and_success_contract": {
+    "comparison_epsilon": 1e-12,
+    "endpoint_success": {
+      "nonempty_gt_minimum_final_iou": 0.9,
+      "nonempty_gt_minimum_final_f1": 0.9473684210526315,
+      "empty_gt_maximum_final_fp": 64
+    }
+  },
+  "interpretation_rule": {
+    "matched_safe_endpoint_4_of_4": "The matched GT geometry rescues all four production failures under the same tool, hard gate, RGB gate and step budget; production Proposal/geometry/shortlist is a demonstrated primary pilot bottleneck, though not necessarily the only bottleneck.",
+    "wide_safe_only_rescue": "Tool plus production safety gates can reach the endpoint, but a wider geometry search is needed; Proposal geometry or candidate coverage is a demonstrated bottleneck.",
+    "wide_hard_only_rescue": "The real tools and production hard gate can reach the endpoint; the frozen RGB routing/gate blocks the safe track.",
+    "wide_raw_only_rescue": "The real tools can produce a three-step improving trajectory, but the production hard gate blocks it.",
+    "wide_raw_failure": "The bounded greedy teacher search did not find an endpoint under the current real tools, frozen MaskPairProcessor composition, four GT error components, frozen geometry family and max_steps=3; this does not isolate a tool-only ceiling and must not be attributed solely to Proposal.",
+    "mixed_samples": "Report mixed bottlenecks per sample and do not force a binary global label."
+  },
+  "resource_plan": {
+    "slurm_required": true,
+    "partition": "gre",
+    "maximum_total_gpus": 4,
+    "diagnostic_smoke": {
+      "required_before_formal_pilot": true,
+      "sample_id": "train_407_r3c2",
+      "shard_index": 0,
+      "num_shards": 4,
+      "gpus": 1,
+      "time_limit": "12:00:00",
+      "output_scope": "diagnostics_only",
+      "scientific_result_authoritative": false,
+      "geometry_modes_executed": ["matched"],
+      "step_indices_executed": [1],
+      "max_real_candidates": 2,
+      "required_tool_action_pairs": [
+        ["sam3", "box"],
+        ["simpleclick", "positive_point"]
+      ],
+      "endpoint_search_performed": false
+    },
+    "planned_generation_shards": 4,
+    "gpus_per_shard": 1,
+    "time_per_shard": "12:00:00",
+    "peak_gpu_concurrency": 4,
+    "shards": [
+      {"shard_id": 0, "samples": ["train_407_r3c2"]},
+      {"shard_id": 1, "samples": ["train_364_r0c2"]},
+      {"shard_id": 2, "samples": ["val_43_r1c1"]},
+      {"shard_id": 3, "samples": ["val_41_r3c2"]}
+    ],
+    "independent_validation_gpus": 0,
+    "qq_completion_notification_required": true
+  },
+  "artifact_plan": {
+    "output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CA_0804(1)-qwen3vl-gt-direct-teacher",
+    "attempt_policy": "append-only first absent attempt-NNNN; never overwrite or merge partial attempts",
+    "training_authorized": false,
+    "formal_c_iso_or_t_traj_allowed": false
+  },
+  "formal_execution": {
+    "status": "external_append_only_receipts_are_authoritative",
+    "freeze_revision": 2,
+    "supersedes_freeze_commit": "ef119d205f5efb509ea7f6c09fc92935ee4991c8",
+    "revision_scope": "test-only contract assertion regex; scientific protocol unchanged",
+    "authorized_only_after_clean_detached_exact_freeze_zero_gpu_contract": true,
+    "self_reference_policy": "Job IDs and observed results are intentionally absent from this frozen preregistration and are recorded only in append-only submission, worker and validation receipts."
+  }
+}

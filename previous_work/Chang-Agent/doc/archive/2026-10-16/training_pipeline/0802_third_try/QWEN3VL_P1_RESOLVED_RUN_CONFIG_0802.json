@@ -1,0 +1,660 @@
+{
+  "schema_id": "qwen3vl_p1_resolved_run_config_v1",
+  "configuration_status": "frozen",
+  "execution_readiness": "execution_ready",
+  "p1_execution_authorized": true,
+  "validation_status": "retry3_precommit_validated_job_53151_hashes_job_53152",
+  "created_utc": "2026-08-02",
+  "scope": "P1 CPU fixtures plus local-base H0/H1 smoke1 and CORE3 harness comparison only",
+  "attempt": {
+    "attempt_id": "P1-retry3",
+    "retry_of_freeze_commit": "64871db9f03d19d6ddb9ab3edf502c3ecb698ee5",
+    "retry_of_job_ids": [
+      "53141",
+      "53142",
+      "53143",
+      "53144",
+      "53145"
+    ],
+    "retry_of_dependency_guard_job_id": "53146",
+    "previous_outputs_are_append_only_and_must_not_be_modified": true,
+    "scientific_treatment_unchanged": true,
+    "retry_changes_only_h1_nonterminal_passthrough_evidence_copy_and_regression": true
+  },
+  "retry3_failure_evidence": {
+    "previous_implementation_commit": "e31fcb01d34cc28924e9c4189f319d7f44af4911",
+    "previous_freeze_commit": "64871db9f03d19d6ddb9ab3edf502c3ecb698ee5",
+    "formal_cpu_job": "53141_completed_receipt_valid",
+    "smoke_h0_job": "53142_completed_receipt_valid",
+    "smoke_h1_job": "53143_completed_receipt_and_smoke_pair_valid",
+    "core_h0_job": "53144_completed_standalone_receipt_valid",
+    "core_h1_job": "53145_failed_during_test_20_15_reset_trajectory_serialization",
+    "core_h1_error_type": "RecursionError",
+    "core_h1_exact_error": "maximum recursion depth exceeded",
+    "dependency_guard_job": "53146_completed_unresolved_none",
+    "core_pair_receipt": null,
+    "scientific_outcome": "not_evaluated",
+    "previous_outputs_are_append_only": true,
+    "cross_attempt_pair_composition_forbidden": true
+  },
+  "authorization_boundary": {
+    "p1_only": true,
+    "training_authorized": false,
+    "post_p1_iterative_training_authorized_by_user": true,
+    "post_p1_training_requires_separate_versioned_data_and_run_contract": true,
+    "post_p1_training_authorization_effective_after": "P1 comparison receipts, independent validation, registry/workbook, result report and result commit are complete",
+    "post_sft_authorized": false,
+    "extended5_authorized": false,
+    "locked_final_authorized": false,
+    "execution_requires_frozen_authorized_amendment": true
+  },
+  "paths": {
+    "workspace_root": "/guisongxia01/pangchao/wangyihan",
+    "clean_run_worktree": "/guisongxia01/pangchao/wangyihan/Chang-Agent-baseline-0802-run",
+    "artifact_repository": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl",
+    "output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs",
+    "input_root": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256",
+    "base_model": "/guisongxia01/pangchao/wangyihan/models/Qwen3-VL-2B-Instruct",
+    "simpleclick_checkpoint": "/guisongxia01/pangchao/wangyihan/models/SimpleClick/cocolvis_vit_large.pth",
+    "sam3_checkpoint": "/guisongxia01/pangchao/wangyihan/models/sam3/sam3.pt",
+    "sam3_bpe": "/guisongxia01/pangchao/wangyihan/Chang-Agent/third_party/OmniOVCD/sam3/assets/bpe_simple_vocab_16e6.txt.gz",
+    "omniovcd_python": "/guisongxia01/pangchao/wangyihan/omniovcd-env/bin/python",
+    "segagent_python": "/guisongxia01/pangchao/wangyihan/segagent-env/bin/python",
+    "evaluation_input_manifest": "doc/training_pipeline/0802_third_try/QWEN3VL_EVALUATION_INPUT_MANIFEST_0802.json",
+    "cpu_fixture_manifest": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_CPU_FIXTURE_MANIFEST_0802.json",
+    "h0_golden_fixture_receipt": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_V12_1_GOLDEN_FIXTURE_RECEIPT_0802.json",
+    "h0_golden_fixture_validator": "tools/validate_qwen3vl_h0_golden_fixture.py",
+    "p1_amendment": "doc/training_pipeline/0802_third_try/QWEN3VL_P1_EXECUTION_AMENDMENT_0802.json"
+  },
+  "frozen_identity": {
+    "factor_id": "terminal_review_scheduler_v1",
+    "model_state": "base",
+    "model_io_protocol": "v12.1",
+    "seed": 42,
+    "h0": {
+      "terminal_review_arm": "h0",
+      "experiment_arm_id": "v12_1-h0-legacy-single-round-base-0802",
+      "harness_protocol_id": "qwen3vl_harness_h0_legacy_single_round_v1",
+      "max_verifier_rounds": 1
+    },
+    "h1": {
+      "terminal_review_arm": "h1",
+      "experiment_arm_id": "v12_1-h1-gtfree-terminal-review-base-0802",
+      "harness_protocol_id": "qwen3vl_harness_h1_gtfree_terminal_review_v1",
+      "max_verifier_rounds": 2
+    },
+    "plan_null_review_contract": {
+      "selection_policy_version": "environment_ordered_terminal_review_v1",
+      "next_unreviewed_prompt_version": "qwen3vl_plan_null_next_unreviewed_region_v1",
+      "alternative_diagnosis_prompt_version": "qwen3vl_plan_null_alternative_diagnosis_v1",
+      "selection_order": "next_unreviewed_then_first_unresolved",
+      "selected_region_count": 1,
+      "prompt_version_region_and_raw_call_identity_must_be_replayable": true
+    },
+    "allowed_arm_differences": [
+      "terminal_review_arm",
+      "experiment_arm_id",
+      "harness_protocol_id",
+      "max_verifier_rounds",
+      "terminal_review_trigger_selection_and_decision_fields"
+    ]
+  },
+  "freeze_commit_hash_bindings": {
+    "status": "frozen",
+    "implementation_commit_source": "P1 amendment implementation_commit records implementation commit A",
+    "freeze_commit_source": "submission and evaluation receipt record freeze commit B; excluded from freeze files to avoid self-reference",
+    "model_files_sha256": {
+      "model.safetensors": "<hash omitted>"
+    },
+    "tool_files_sha256": {
+      "simpleclick_checkpoint": "<hash omitted>",
+      "sam3_checkpoint": "<hash omitted>",
+      "sam3_bpe": "<hash omitted>",
+      "runner": "<hash omitted>",
+      "summarizer": "<hash omitted>",
+      "analyzer": "<hash omitted>",
+      "summary_validator": "<hash omitted>",
+      "receipt_builder": "<hash omitted>",
+      "receipt_validator": "<hash omitted>",
+      "pair_builder": "<hash omitted>",
+      "pair_validator": "<hash omitted>",
+      "runtime_manifest_builder": "<hash omitted>",
+      "harness_worker": "<hash omitted>",
+      "terminal_review_scheduler": "<hash omitted>",
+      "terminal_review_verifier": "<hash omitted>",
+      "staged_verifier": "<hash omitted>",
+      "stage_backends": "<hash omitted>",
+      "environment": "<hash omitted>",
+      "verifier_regions": "<hash omitted>",
+      "h0_golden_fixture_validator": "<hash omitted>",
+      "submitter": "<hash omitted>"
+    },
+    "worker_sha256": {
+      "cpu_fixtures": "<hash omitted>",
+      "evaluation": "<hash omitted>",
+      "dependency_guard": "<hash omitted>"
+    },
+    "retry1_hash_job_evidence": {
+      "job_id": "53106",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "implementation_commit": "15cdca7ddc4611ad773576dd582e5b4513188d8e",
+      "entry_count": 25,
+      "manifest_sha256": "<hash omitted>",
+      "scope": "previous_retry1_freeze_only",
+      "validates_retry2": false
+    },
+    "retry2_hash_job_evidence": {
+      "job_id": "53140",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "implementation_commit": "e31fcb01d34cc28924e9c4189f319d7f44af4911",
+      "entry_count": 25,
+      "manifest_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_precommit_0802/hash-job-53140/freeze-input-sha256.tsv",
+      "manifest_sha256": "<hash omitted>"
+    },
+    "retry3_hash_job_evidence": {
+      "job_id": "53152",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "implementation_commit": "a88404ac6a014f42692d1119d54de42c980fb310",
+      "entry_count": 25,
+      "manifest_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_precommit_0802/hash-retry3-job-53152/freeze-input-sha256.tsv",
+      "manifest_sha256": "<hash omitted>"
+    },
+    "all_null_hashes_must_be_resolved_before_configuration_status_is_frozen": true
+  },
+  "implementation_and_freeze_commit_contract": {
+    "separate_commits_required": true,
+    "implementation_commit_symbol": "A",
+    "freeze_commit_symbol": "B",
+    "implementation_commit_contains_complete_implementation_tests_and_docs": true,
+    "freeze_commit_is_direct_child_of_implementation_commit": true,
+    "required_parent_relation": "B^ == A",
+    "freeze_commit_records_real_hash_resource_and_authorization_bindings": true,
+    "freeze_files_must_not_self_reference_their_own_commit_hash": true,
+    "run_worktree_and_runtime_commit_must_equal": "B",
+    "submission_and_evaluation_receipt_record_both": [
+      "implementation_commit=A",
+      "freeze_commit=B"
+    ],
+    "required_cpu_fixture_proofs": [
+      "builder_rejects_equal_or_nonparent_implementation_commit",
+      "amendment_submission_and_receipt_provenance_A_B_tamper_closure",
+      "pair_and_dependency_guard_preserve_distinct_A_and_B"
+    ],
+    "submission_requires_all_authorization_layers": [
+      "resolved_config_frozen_execution_ready_and_authorized",
+      "execution_amendment_frozen_execution_ready_and_authorized",
+      "cpu_fixture_manifest_frozen_execution_ready_and_authorized"
+    ]
+  },
+  "profiles": {
+    "p1_smoke1": {
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "ordered_samples": [
+        "test_1_1"
+      ]
+    },
+    "e2e3": {
+      "evaluation_id": "DEV-CORE-3-V1",
+      "ordered_samples": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ]
+    }
+  },
+  "common_runtime": {
+    "entrypoint": "tools/run_levir_change_agent.py",
+    "environment": {
+      "TRANSFORMERS_OFFLINE": "1",
+      "HF_DATASETS_OFFLINE": "1",
+      "HF_HUB_OFFLINE": "1",
+      "TOKENIZERS_PARALLELISM": "false",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "42",
+      "CHANGE_AGENT_STAGED_PROTOCOL_VERSION": "v12.1"
+    },
+    "arguments": [
+      [
+        "--query",
+        "building"
+      ],
+      [
+        "--max-steps",
+        "3"
+      ],
+      [
+        "--selection-policy",
+        "conservative_best"
+      ],
+      [
+        "--proposal-mode",
+        "proposal"
+      ],
+      [
+        "--staged-verifier-max-total-regions",
+        "32"
+      ],
+      [
+        "--verifier-max-selected-regions",
+        "3"
+      ],
+      [
+        "--verifier-region-padding-ratio",
+        "0.25"
+      ],
+      [
+        "--empty-mask-scan-grid-size",
+        "3"
+      ],
+      [
+        "--matching-mode",
+        "overlap_presence"
+      ],
+      [
+        "--overlap-threshold",
+        "0.25"
+      ],
+      [
+        "--t12-min-instance-area",
+        "0"
+      ],
+      [
+        "--cd-min-instance-area",
+        "0"
+      ],
+      [
+        "--authorized-negative-point-input-scope",
+        "full_session"
+      ],
+      [
+        "--max-point-proposal-change-ratio",
+        "0.25"
+      ],
+      [
+        "--max-point-proposal-change-pixels",
+        "256"
+      ],
+      [
+        "--max-point-image-change-ratio",
+        "0.004"
+      ],
+      [
+        "--agent-backend",
+        "local"
+      ],
+      [
+        "--verifier",
+        "qwen_staged"
+      ],
+      [
+        "--staged-verifier-backend",
+        "local"
+      ],
+      [
+        "--verifier-max-new-tokens",
+        "1536"
+      ],
+      [
+        "--verifier-accept-threshold",
+        "0.82"
+      ],
+      [
+        "--verifier-retries",
+        "2"
+      ],
+      [
+        "--verifier-repetition-penalty",
+        "1.05"
+      ],
+      [
+        "--device-map",
+        "auto"
+      ],
+      [
+        "--tool-device",
+        "cuda"
+      ],
+      [
+        "--seed",
+        "42"
+      ],
+      [
+        "--action-retries",
+        "3"
+      ],
+      [
+        "--sam3-resolution",
+        "1008"
+      ]
+    ],
+    "effective_budgets": {
+      "max_stage_attempts_per_round_including_initial": 2,
+      "max_environment_steps": 3,
+      "effective_network_retry_limit": 0,
+      "effective_tool_attempts_per_authorized_action": 1
+    },
+    "frozen_safety_boundaries": [
+      "parser",
+      "geometry_authorization",
+      "locality_hard_gate",
+      "candidate_benefit_without_harm",
+      "rollback"
+    ]
+  },
+  "cpu_fixture_suite": {
+    "targeted_unittest_patterns": [
+      "test_terminal_review.py",
+      "test_terminal_review_integration.py",
+      "test_stage_backends.py",
+      "test_local_verifier_analysis.py",
+      "test_qwen3vl_h0_golden_fixture.py",
+      "test_staged_verifier.py",
+      "test_environment.py",
+      "test_runner_action_protocol.py",
+      "test_qwen3vl_e2e_summary_v2.py",
+      "test_qwen3vl_evaluation_receipt_v2.py",
+      "test_qwen3vl_p1_execution.py"
+    ],
+    "full_regression_pattern": "test_*.py",
+    "required_test_ids_source": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_CPU_FIXTURE_MANIFEST_0802.json",
+    "required_contracts_include": [
+      "pre_rollout_no_label_stat_or_content_access",
+      "independent_h0_golden_receipt_parity_and_tamper_closure",
+      "strict_plan_null_trigger_selection_prompt_and_raw_call_replay",
+      "round_two_prompt_identity_cannot_reuse_round_one_initial_or_repair_prompt",
+      "backend_parsed_output_requires_full_typed_parser_success_and_records_atomic_merge",
+      "real_h1_empty_dual_mask_terminal_review",
+      "explicit_network_retry_accounting",
+      "independent_final_region_protocol_reconstruction_from_raw_trajectory",
+      "production_shaped_initial_and_candidate_trace_decisions_rebuild_the_derived_provisional_finish_output",
+      "h1_nonterminal_passthrough_evidence_is_structurally_acyclic_and_trajectory_serializable",
+      "evaluation_receipt_A_B_parent_relation_and_amendment_submission_tamper_closure",
+      "all_three_submission_authorization_layers_are_explicitly_required",
+      "submitter_and_workers_bind_config_resolved_realpaths_and_python_executable_identities",
+      "evaluation_device_probe_and_guard_sbatch_blocks_are_statically_well_formed",
+      "auxiliary_dependency_guard_fail_closed_status_and_notification_evidence",
+      "submission_receipt_arm_and_protocol_identity_is_exact_and_non_concatenating",
+      "missing_sacct_reason_requires_uniquely_parsed_live_scontrol_job_state_reason_and_exact_direct_afterok_edge"
+    ],
+    "required_tests_have_not_run": false,
+    "previous_precommit_slurm_validation": {
+      "job_id": "53037",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "targeted_pattern_count": 11,
+      "full_regression_tests": 466,
+      "full_regression_skipped": 3,
+      "scope": "original_70_id_pre_retry1_suite_only",
+      "validates_retry1_suite": false
+    },
+    "retry1_precommit_slurm_validation": {
+      "job_id": "53103",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "required_test_id_count": 72,
+      "targeted_pattern_count": 11,
+      "targeted_tests": 298,
+      "full_regression_tests": 468,
+      "full_regression_skipped": 3,
+      "failed_attempts": [
+        {
+          "job_id": "53102",
+          "implementation_candidate_commit": "25eaa5982ce03d40cf18bb14ed804c7f59c24f4e",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:14",
+          "failure_scope": "test_fixture_only",
+          "failure": "submitter_identity_receipt_writer_fixture_omitted_PARTITION_and_NODE_shell_variables"
+        }
+      ]
+    },
+    "retry2_precommit_slurm_validation": {
+      "job_id": "53135",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "required_test_id_count": 73,
+      "targeted_pattern_count": 11,
+      "targeted_tests": 299,
+      "full_regression_tests": 469,
+      "full_regression_skipped": 3,
+      "failed_attempts": [
+        {
+          "job_id": "53134",
+          "implementation_candidate_commit": "47d67d45be5011eb91008fbd46c1692cef86e00c",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:15",
+          "failure_scope": "test_fixture_only",
+          "failure": "submitter_identity_fixture_inherited_retry2_null_summarizer_and_summary_validator_hashes"
+        }
+      ]
+    },
+    "retry3_precommit_slurm_validation": {
+      "job_id": "53151",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "required_test_id_count": 74,
+      "targeted_pattern_count": 11,
+      "targeted_tests": 300,
+      "full_regression_tests": 470,
+      "full_regression_skipped": 3
+    },
+    "zero_discovered_tests_is_failure": true,
+    "shell_syntax_targets": [
+      "tools/run_qwen3vl_p1_cpu_fixtures.slurm",
+      "tools/run_qwen3vl_p1_evaluation.slurm",
+      "tools/run_qwen3vl_p1_dependency_guard.slurm",
+      "tools/submit_qwen3vl_p1.sh"
+    ]
+  },
+  "slurm": {
+    "user": "guisongxia",
+    "partition": "gre",
+    "fixed_node": "gpu48",
+    "gpu_model_runtime_substring": "A800",
+    "maximum_ca0802_concurrent_gpus": 3,
+    "maximum_p1_concurrent_gpus_by_dependency_design": 1,
+    "gpu_jobs_strictly_serial": true,
+    "submit_held_then_release_after_complete_chain_receipts": true,
+    "auxiliary_dependency_guard_is_zero_gpu": true,
+    "auxiliary_dependency_guard_afterany_all_five_formal_jobs": true,
+    "signal_before_timeout": "B:TERM@60",
+    "kill_on_invalid_dependency": true
+  },
+  "allocations": [
+    {
+      "allocation_id": "CA_0802(2)",
+      "phase": "cpu_fixtures",
+      "arm": "h0_h1",
+      "job_name": "CA0802P1CPUFixtures",
+      "evaluation_profile": "cpu_fixtures",
+      "evaluation_id": "P1-H0-H1-CPU-FIXTURES-V1",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3",
+      "qq_title": "CA0802 P1 H0-H1 CPU fixtures",
+      "resources": {
+        "gpus": 0,
+        "cpus_per_task": 2,
+        "memory": "16G",
+        "time_limit": "00:45:00"
+      },
+      "dependency": null
+    },
+    {
+      "allocation_id": "CA_0802(3)",
+      "phase": "evaluation",
+      "arm": "h0",
+      "job_name": "CA0802P1SmokeH0",
+      "evaluation_profile": "p1_smoke1",
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "ordered_samples": [
+        "test_1_1"
+      ],
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1-retry3",
+      "qq_title": "CA0802 P1 H0 base smoke1",
+      "resources": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "01:00:00"
+      },
+      "dependency": "afterok:CA_0802(2)"
+    },
+    {
+      "allocation_id": "CA_0802(4)",
+      "phase": "evaluation_and_pair_gate",
+      "arm": "h1",
+      "job_name": "CA0802P1SmokeH1",
+      "evaluation_profile": "p1_smoke1",
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "ordered_samples": [
+        "test_1_1"
+      ],
+      "paired_h0_allocation": "CA_0802(3)",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1-retry3",
+      "qq_title": "CA0802 P1 H1 base smoke1",
+      "resources": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "01:00:00"
+      },
+      "dependency": "afterok:CA_0802(3)"
+    },
+    {
+      "allocation_id": "CA_0802(5)",
+      "phase": "evaluation",
+      "arm": "h0",
+      "job_name": "CA0802P1CoreH0",
+      "evaluation_profile": "e2e3",
+      "evaluation_id": "DEV-CORE-3-V1",
+      "ordered_samples": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ],
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3",
+      "qq_title": "CA0802 P1 H0 base CORE3",
+      "resources": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "03:00:00"
+      },
+      "dependency": "afterok:CA_0802(4)"
+    },
+    {
+      "allocation_id": "CA_0802(6)",
+      "phase": "evaluation_and_pair_gate",
+      "arm": "h1",
+      "job_name": "CA0802P1CoreH1",
+      "evaluation_profile": "e2e3",
+      "evaluation_id": "DEV-CORE-3-V1",
+      "ordered_samples": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ],
+      "paired_h0_allocation": "CA_0802(5)",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3",
+      "qq_title": "CA0802 P1 H1 base CORE3",
+      "resources": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "03:00:00"
+      },
+      "dependency": "afterok:CA_0802(5)"
+    }
+  ],
+  "dependency_guard": {
+    "role": "auxiliary_terminal_status_and_notification_guard",
+    "included_in_formal_allocations": false,
+    "job_name": "CA0802P1DependencyGuard",
+    "worker_path": "tools/run_qwen3vl_p1_dependency_guard.slurm",
+    "resources": {
+      "gpus": 0,
+      "cpus_per_task": 1,
+      "memory": "1G",
+      "time_limit": "00:10:00"
+    },
+    "partition": "gre",
+    "node_constraint": null,
+    "dependency": "afterany:<all_five_formal_job_ids>",
+    "formal_afterok_chain_unchanged": true,
+    "status_synthesis": {
+      "target_scope": "downstream formal jobs CA_0802(3) through CA_0802(6)",
+      "worker_status_must_be_absent": true,
+      "slurm_state_must_be_cancelled": true,
+      "slurm_start_must_prove_never_started": true,
+      "slurm_reason_must_identify_dependency": true,
+      "sacct_missing_reason_requires_unique_live_scontrol_fields_dependency_never_satisfied_and_exact_single_afterok_edge": true,
+      "synthetic_status_persists_live_controller_job_state_reason_and_dependency": true,
+      "direct_predecessor_must_not_be_completed": true,
+      "started_job_with_missing_status_fails_closed": true,
+      "status_publish": "same-filesystem atomic no-replace hard link"
+    }
+  },
+  "artifact_contract": {
+    "run_child_must_be_absent_before_worker": true,
+    "logs_child_required": true,
+    "runtime_input_manifest": "input_manifest.json",
+    "evaluation_summary": "baseline_summary.json",
+    "protocol_summary": "protocol_summary.json",
+    "summary_validation": "summary_validation.txt",
+    "evaluation_receipt": "evaluation_receipt.json",
+    "p1_amendment": "doc/training_pipeline/0802_third_try/QWEN3VL_P1_EXECUTION_AMENDMENT_0802.json",
+    "pair_comparison_receipt": "pair_comparison_receipt.json",
+    "submission_receipt": "submission.txt",
+    "status_receipt": "logs/status-<job_id>.txt",
+    "dependency_guard_submission_receipt": "CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3/dependency_guard_submission.txt",
+    "dependency_guard_terminal_receipt": "CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3/dependency_guard_receipt.txt",
+    "dependency_guard_qq_attempt_receipt": "logs/qq-attempt-<cancelled-job-id>.txt",
+    "success_status_written_once_before_receipt_build": true,
+    "successful_exit_trap_must_not_rewrite_bound_status": true,
+    "failure_after_receipt_build_overwrites_status_and_invalidates_complete_receipt": true,
+    "evaluation_receipt_binds_p1_amendment": true,
+    "submission_receipt_binds_p1_amendment_canonical_sha256": true,
+    "provenance_records_implementation_commit_A_and_freeze_commit_B": true
+  },
+  "stage_order": [
+    "CA_0802(2)",
+    "CA_0802(3)",
+    "CA_0802(4)",
+    "CA_0802(5)",
+    "CA_0802(6)"
+  ],
+  "dependency_type": "afterok",
+  "auxiliary_dependency_guard_type": "afterany_all_five_formal_jobs",
+  "notification_contract": {
+    "best_effort_on_every_worker_terminal_state": true,
+    "dependency_cancelled_before_worker_start_is_attempted_by_guard": true,
+    "qq_attempt_receipt_records_notifier_exit_code": true,
+    "qq_attempt_receipt_never_claims_delivery": true,
+    "required_fields": [
+      "job_name",
+      "job_id",
+      "terminal_status",
+      "elapsed_seconds",
+      "key_result_or_error",
+      "artifact_path"
+    ],
+    "credentials_and_proxy_values_forbidden": true
+  }
+}

@@ -4,6 +4,10 @@
 
 截至 2026-10-16 的状态：**四个数据集（LEVIR-CD、WHU-CD、SYSU-CD、SECOND）的三个实验都已完成，结论写在 `results/`**。LEVIR/WHU 上的 GPT（gpt-6.1-sol）补测未完成：本地转发通道对图像请求持续断开，只拿到 122 条，不足以计算 AUC，详见 `results/exp3_mllm_verify.md`。
 
+## 之前的工作
+
+[`previous_work/`](previous_work/README.md)：本次摸底实验之前的 Chang-Agent 项目（SAM3 分割 + 实例匹配 + Qwen Verifier + SimpleClick/SAM3 修补的闭环原型），包括代码与文档快照、按时间整理的尝试过程、主要问题，以及它与本次实验的关系。**建议先读 `previous_work/README.md`，再读 `results/summary.md`。**
+
 ## 从哪里读
 
 | 路径 | 内容 |

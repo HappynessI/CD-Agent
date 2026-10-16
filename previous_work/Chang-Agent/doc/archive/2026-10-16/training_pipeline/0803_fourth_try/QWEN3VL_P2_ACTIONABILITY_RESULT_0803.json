@@ -1,0 +1,240 @@
+{
+  "schema_id": "qwen3vl_p2_actionability_result_v1",
+  "created_at_utc": "2026-08-03",
+  "result_status": "complete",
+  "engineering_outcome": "pass",
+  "scientific_outcome": "negative",
+  "interpretation": "The frozen finite single-step CORE3 inventory was generated and scored successfully, but test_1_1 had no primary beneficial candidate, so the preregistered P2 gate failed and C-ISO/T-TRAJ construction is prohibited.",
+  "git_lineage": {
+    "p1_execution_freeze_b4": "5210f89f5ca13ee1e636f5aa6a44631206a80123",
+    "p1_closeout_acceptance_commit": "17e9bb9914266691aee0c3d2b5e78b6bf64d7a00",
+    "implementation_commit_a": "8252a57b191a2a7c4aa176a3f82cca5218119533",
+    "freeze_commit_b": "cda314ce9caeb6e9dd69ba0d08fe5254a8689fdd",
+    "a_parent_is_p1_closeout_acceptance": true,
+    "b_parent_is_a": true,
+    "freeze_b_two_manifest_add_only": true,
+    "detached_run_worktree": "/guisongxia01/pangchao/wangyihan/wyh/Chang-Agent-qwen3vl-p2-b-0803-run",
+    "detached_run_worktree_exact_b_clean_detached": true,
+    "p1_b4_worktree_preserved": true
+  },
+  "frozen_manifests": {
+    "preregistration": {
+      "path": "doc/training_pipeline/0803_fourth_try/QWEN3VL_P2_ACTIONABILITY_PREREGISTRATION_0803.json",
+      "raw_sha256": "<hash omitted>",
+      "canonical_sha256": "<hash omitted>"
+    },
+    "execution": {
+      "path": "doc/training_pipeline/0803_fourth_try/QWEN3VL_P2_ORACLE_EXECUTION_MANIFEST_0803.json",
+      "raw_sha256": "<hash omitted>",
+      "canonical_sha256": "<hash omitted>",
+      "gt_free_generator_input": true
+    }
+  },
+  "manifest_materialization": {
+    "job_id": "53268",
+    "job_name": "CA0803P2Manifest",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:00:24",
+    "node": "gpu48",
+    "partition": "gre",
+    "resources": "0GPU/2CPU/16G",
+    "label_file_accessed": false,
+    "receipt": {
+      "path": "/guisongxia01/pangchao/wangyihan/diagnostics/qwen3vl_p2_manifest_materialization_0803/implementation-8252a57b191a2a7c4aa176a3f82cca5218119533/attempt-0001/materialization_receipt.json",
+      "sha256": "<hash omitted>",
+      "size_bytes": 4169
+    },
+    "worker_sha256": "<hash omitted>"
+  },
+  "contract_validation": {
+    "job_id": "53269",
+    "job_name": "CA0803P2Contract",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:01:18",
+    "node": "gpu48",
+    "partition": "gre",
+    "resources": "0GPU/2CPU/16G",
+    "p2_targeted_tests": "37/37",
+    "registry_targeted_tests": "15/15",
+    "full_regression": "508/508 passed; 3 skipped",
+    "receipt": {
+      "path": "/guisongxia01/pangchao/wangyihan/diagnostics/qwen3vl_p2_contract_validation_0803/freeze-cda314ce9caeb6e9dd69ba0d08fe5254a8689fdd/attempt-0001/job-53269/contract_validation_receipt.json",
+      "sha256": "<hash omitted>",
+      "size_bytes": 2808
+    },
+    "worker_sha256": "<hash omitted>"
+  },
+  "formal_submission": {
+    "attempt_id": "attempt-0001",
+    "attempt_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0803(1)-qwen3vl-p2-oracle-actionability/attempt-0001",
+    "submission_intent_sha256": "<hash omitted>",
+    "submission_receipt_sha256": "<hash omitted>",
+    "dependency": "afterok:53272",
+    "cross_attempt_composition": false
+  },
+  "formal_jobs": [
+    {
+      "role": "candidate_generation",
+      "job_id": "53272",
+      "job_name": "CA0803P2Generate",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:19:45",
+      "node": "gpu48",
+      "partition": "gre",
+      "resources": "1xA800/4CPU/48G",
+      "worker_sha256": "<hash omitted>",
+      "receipt_sha256": "<hash omitted>",
+      "complete_marker_sha256": "<hash omitted>",
+      "candidate_index_sha256": "<hash omitted>"
+    },
+    {
+      "role": "offline_scoring",
+      "job_id": "53273",
+      "job_name": "CA0803P2Score",
+      "depends_on": "afterok:53272",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:00:15",
+      "node": "gpu48",
+      "partition": "gre",
+      "resources": "0GPU/2CPU/16G",
+      "worker_sha256": "<hash omitted>",
+      "receipt_sha256": "<hash omitted>",
+      "runtime_scoring_manifest_sha256": "<hash omitted>",
+      "score_report_sha256": "<hash omitted>",
+      "actionability_decision_sha256": "<hash omitted>"
+    }
+  ],
+  "candidate_generation": {
+    "ordered_samples": [
+      "test_20_15",
+      "test_1_1",
+      "test_50_8"
+    ],
+    "requested": 36,
+    "generated": 36,
+    "tool_success": 36,
+    "primary": 27,
+    "diagnostic_executor_only": 9,
+    "gt_loaded": false
+  },
+  "oracle_scoring": {
+    "candidate_count": 36,
+    "action_spec_count": 36,
+    "unique_candidate_state_count": 36,
+    "candidate_state_duplicate_count": 0,
+    "qwen_invoked": false,
+    "all_tiers_oracle_counts": {
+      "beneficial": 4,
+      "harmful": 31,
+      "indeterminate": 1
+    },
+    "primary_oracle_counts": {
+      "beneficial": 3,
+      "harmful": 23,
+      "indeterminate": 1
+    },
+    "diagnostic_executor_only_oracle_counts": {
+      "beneficial": 1,
+      "harmful": 8,
+      "indeterminate": 0
+    },
+    "all_tiers_gate_leaf_counts": {
+      "harmful_gate_pass": 15,
+      "hard_gate_correct_reject": 16,
+      "beneficial_gate_pass": 2,
+      "indeterminate_gate_pass": 1,
+      "hard_gate_false_reject": 2
+    }
+  },
+  "target_results": {
+    "test_1_1": {
+      "initial_metrics": {
+        "iou": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 626,
+        "fn": 0
+      },
+      "primary_candidate_count": 1,
+      "primary_beneficial_count": 0,
+      "primary_beneficial_gate_pass_count": 0,
+      "best_primary_candidate_id": "test_1_1--primary--r0--negative_point--t2",
+      "best_primary_candidate_oracle_label": "indeterminate",
+      "best_primary_candidate_gate_passed": true,
+      "best_primary_candidate_deltas": {
+        "iou": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": -60,
+        "fn": 0
+      },
+      "diagnostic_beneficial_candidate_excluded_from_primary_decision": "test_1_1--diagnostic_executor_only--r0--positive_point--t1",
+      "diagnostic_candidate_hard_gate_rejection_reason": "point_proposal_combined_change_gate_exceeded",
+      "decision": "no_primary_beneficial_candidate_in_frozen_enumeration"
+    },
+    "test_50_8": {
+      "initial_metrics": {
+        "iou": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 166
+      },
+      "primary_candidate_count": 18,
+      "primary_beneficial_count": 2,
+      "primary_beneficial_gate_pass_count": 1,
+      "best_primary_beneficial_candidate_id": "test_50_8--primary--s8--box--t2",
+      "best_primary_beneficial_deltas": {
+        "iou": 0.09965337954939342,
+        "f1": 0.18124507486209615,
+        "tp": 115,
+        "fp": 988,
+        "fn": -115
+      },
+      "beneficial_but_hard_gated_candidate_id": "test_50_8--primary--s8--box--t1",
+      "beneficial_but_hard_gated_rejection_reason": "component_count_delta_exceeded",
+      "decision": "primary_actionable_and_gate_pass"
+    }
+  },
+  "gt_access_boundary": {
+    "generation_gt_loaded": false,
+    "candidate_generation_complete_verified_before_label_access": true,
+    "all_candidate_records_and_hashes_verified_before_label_access": true,
+    "runtime_scoring_manifest_not_available_to_generator": true,
+    "offline_labels_used_only_for_scoring": true
+  },
+  "decision": {
+    "decision_basis": "primary_candidates_only",
+    "diagnostic_candidates_excluded": true,
+    "gate_modification_authorized": false,
+    "no_primary_beneficial_candidate_samples": [
+      "test_1_1"
+    ],
+    "proceed_to_c_iso_and_t_traj_data_construction": false,
+    "next_action": "stop_training_and_review_frozen_action_space"
+  },
+  "training_data_hypothesis": {
+    "status": "registered_but_not_tested",
+    "statement": "Isolated single-stage snapshots may be insufficient for learning the full task; same-episode audit-to-action-to-candidate-to-next-state trajectory supervision may better teach recovery and consequences.",
+    "p2_implication": "P2 did not compare training datasets or train a model, so it neither confirms nor rejects this hypothesis. Because the actionability gate failed, the planned C-ISO versus T-TRAJ data construction and controlled training comparison must not begin from this frozen inventory."
+  },
+  "interpretation_limits": [
+    "The decision applies only to the frozen finite single-step CORE3 inventory.",
+    "Failure to observe a primary beneficial action for test_1_1 does not prove that a larger, multi-step or modified action space has no solution.",
+    "DEV-CORE-3-V1 is a repeatedly inspected diagnostic set and this result is not evidence of LEVIR-CD generalization.",
+    "The oracle did not invoke Qwen and does not measure whether Qwen can select the observed beneficial action.",
+    "No training data, adapter, checkpoint, EXTENDED5 run or locked-final result was created by P2."
+  ],
+  "registry_closeout_target": {
+    "experiment_rows": 15,
+    "field_dictionary_rows": 52,
+    "data_rows": 21,
+    "attempt_rows": 40
+  },
+  "closeout_status": "pending_exact_candidate_validation",
+  "attempts": []
+}

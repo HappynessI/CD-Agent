@@ -1,0 +1,707 @@
+{
+  "schema_id": "qwen3vl_oracle_trajectory_pilot_preregistration_v1",
+  "status": "frozen_pending_exact_commit_validation",
+  "preregistered_date_utc": "2026-08-03",
+  "title": "Qwen3-VL production-tool oracle trajectory reachability pilot",
+  "purpose": "Before constructing a new training iteration, test whether unchanged production tools and hard gates can realize replayable trajectories that reach a preregistered change-mask endpoint within the production max_steps=3 budget on parent-isolated LEVIR train/validation crops.",
+  "result_fields_intentionally_absent": true,
+  "anchors": {
+    "proposal_parent_commit": "a094cc59d9104471b70b0624b4e10cbacfefe2e5",
+    "p1_runtime_freeze_b4": "5210f89f5ca13ee1e636f5aa6a44631206a80123",
+    "p2_actionability_freeze_b": "cda314ce9caeb6e9dd69ba0d08fe5254a8689fdd",
+    "p2_acceptance_d": "a094cc59d9104471b70b0624b4e10cbacfefe2e5",
+    "pilot_implementation_commit": "9b4754dedb163119dc6ab4f2ce03f84b67b8b70f",
+    "pilot_freeze_commit": null,
+    "freeze_commit_recording_policy": "The in-commit config records implementation A only and keeps pilot_freeze_commit null to avoid self-reference. The external append-only manifest and receipts record both A and exact freeze B. B must be A's direct child and must change exactly this config plus the 0803 oracle-trajectory document.",
+    "pending_anchor_policy": "Pilot implementation A and freeze B must be materialized and bound by an exact-B zero-GPU validation receipt before any formal pilot submission."
+  },
+  "scope_and_interpretation": {
+    "phase": "trajectory_reachability_pilot_before_data_construction",
+    "p2_artifacts_are_immutable": true,
+    "test_split_used": false,
+    "qwen_invoked": false,
+    "production_tools_only": true,
+    "production_hard_gates_unchanged": true,
+    "provisional": true,
+    "blinded": false,
+    "generalization_claim_allowed": false,
+    "limitation": "All six crops were already manually inspected during 0801 curation. This is a non-blinded feasibility pilot, not an unbiased LEVIR-CD estimate and not evidence that Qwen can choose the oracle actions."
+  },
+  "provenance": {
+    "manual_semantic_config": {
+      "path": "configs/qwen3vl_v121_curation_0801.json",
+      "sha256": "<hash omitted>",
+      "schema": "qwen3vl_v121_manual_curation_v1"
+    },
+    "curation_manifest": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CA_0801_archive/CA_0801(8)-qwen3vl-v121-baseline-data-v1-rerun1/curation/curation_manifest.json",
+      "sha256": "<hash omitted>",
+      "schema": "qwen3vl_v121_curation_candidates_v1",
+      "curation_seed": 801
+    },
+    "semantic_policy": "Reuse only the physical RGB descriptions recorded in 0801. The descriptions may establish broad building/background temporal semantics, but they are not pixel-perfect labels and may not replace offline GT scoring.",
+    "selection_bias": "The six samples were deliberately selected from previously reviewed 0801 cases to cover changed/unchanged and both temporal directions; selection is therefore provisional and non-blinded."
+  },
+  "dataset_contract": {
+    "dataset_root": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD",
+    "allowed_source_splits": [
+      "train_original",
+      "val_original"
+    ],
+    "forbidden_source_splits": [
+      "test",
+      "test_256"
+    ],
+    "source_authority": "original parent A/B/label PNG triplets",
+    "parent_shape": [
+      1024,
+      1024
+    ],
+    "crop_shape": [
+      256,
+      256
+    ],
+    "crop_coordinates": "xyxy_exclusive_in_parent_pixels",
+    "parent_split_isolation": {
+      "required": true,
+      "train_parent_ids": [
+        "train_407",
+        "train_114",
+        "train_364"
+      ],
+      "validation_parent_ids": [
+        "val_43",
+        "val_41",
+        "val_60"
+      ],
+      "intersection_must_be_empty": true,
+      "derivation_policy": "Train episodes may only produce train C-ISO/T-TRAJ records; validation episodes remain held out and may only produce validation records."
+    }
+  },
+  "ordered_samples": [
+    "train_407_r3c2",
+    "train_114_r3c1",
+    "train_364_r0c2",
+    "val_43_r1c1",
+    "val_41_r3c2",
+    "val_60_r3c0"
+  ],
+  "samples": {
+    "train_407_r3c2": {
+      "legacy_candidate_id": "train_train_407_r3c2_changed",
+      "split": "train",
+      "split_role": "train_data_derivation_candidate",
+      "parent_id": "train_407",
+      "kind": "changed",
+      "semantic": {
+        "t1_state": "background",
+        "t2_state": "building",
+        "rgb_evidence": "T1 shows cultivated ground while T2 shows a newly built roofed house at the same location.",
+        "source": "0801 manual RGB review",
+        "status": "provisional_non_blinded"
+      },
+      "source_parent": {
+        "t1": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_407.png",
+          "sha256": "<hash omitted>"
+        },
+        "t2": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_407.png",
+          "sha256": "<hash omitted>"
+        },
+        "label": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_407.png",
+          "sha256": "<hash omitted>"
+        }
+      },
+      "crop": {
+        "row": 3,
+        "column": 2,
+        "xyxy_exclusive": [
+          512,
+          768,
+          768,
+          1024
+        ],
+        "shape": [
+          256,
+          256
+        ],
+        "gt_pixels": 6564,
+        "largest_curated_component_pixels": 763,
+        "prior_curation_png_sha256": {
+          "t1": "<hash omitted>",
+          "t2": "<hash omitted>",
+          "label": "<hash omitted>"
+        }
+      }
+    },
+    "train_114_r3c1": {
+      "legacy_candidate_id": "train_train_114_r3c1_changed",
+      "split": "train",
+      "split_role": "train_data_derivation_candidate",
+      "parent_id": "train_114",
+      "kind": "changed",
+      "semantic": {
+        "t1_state": "background",
+        "t2_state": "building",
+        "rgb_evidence": "T1 shows trees and bare ground while T2 shows roofed buildings in the same area.",
+        "source": "0801 manual RGB review",
+        "status": "provisional_non_blinded"
+      },
+      "source_parent": {
+        "t1": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_114.png",
+          "sha256": "<hash omitted>"
+        },
+        "t2": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_114.png",
+          "sha256": "<hash omitted>"
+        },
+        "label": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_114.png",
+          "sha256": "<hash omitted>"
+        }
+      },
+      "crop": {
+        "row": 3,
+        "column": 1,
+        "xyxy_exclusive": [
+          256,
+          768,
+          512,
+          1024
+        ],
+        "shape": [
+          256,
+          256
+        ],
+        "gt_pixels": 1906,
+        "largest_curated_component_pixels": 1906,
+        "prior_curation_png_sha256": {
+          "t1": "<hash omitted>",
+          "t2": "<hash omitted>",
+          "label": "<hash omitted>"
+        }
+      }
+    },
+    "train_364_r0c2": {
+      "legacy_candidate_id": "train_train_364_r0c2_unchanged",
+      "split": "train",
+      "split_role": "train_data_derivation_candidate",
+      "parent_id": "train_364",
+      "kind": "unchanged",
+      "semantic": {
+        "t1_state": "building",
+        "t2_state": "building",
+        "rgb_evidence": "The same roofed residential buildings remain visible in both T1 and T2.",
+        "source": "0801 manual RGB review",
+        "status": "provisional_non_blinded"
+      },
+      "source_parent": {
+        "t1": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_364.png",
+          "sha256": "<hash omitted>"
+        },
+        "t2": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_364.png",
+          "sha256": "<hash omitted>"
+        },
+        "label": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_364.png",
+          "sha256": "<hash omitted>"
+        }
+      },
+      "crop": {
+        "row": 0,
+        "column": 2,
+        "xyxy_exclusive": [
+          512,
+          0,
+          768,
+          256
+        ],
+        "shape": [
+          256,
+          256
+        ],
+        "gt_pixels": 0,
+        "largest_curated_component_pixels": 0,
+        "prior_curation_png_sha256": {
+          "t1": "<hash omitted>",
+          "t2": "<hash omitted>",
+          "label": "<hash omitted>"
+        }
+      }
+    },
+    "val_43_r1c1": {
+      "legacy_candidate_id": "val_val_43_r1c1_changed",
+      "split": "val",
+      "split_role": "heldout_validation_only",
+      "parent_id": "val_43",
+      "kind": "changed",
+      "semantic": {
+        "t1_state": "background",
+        "t2_state": "building",
+        "rgb_evidence": "T1 shows grass and trees while T2 shows a roofed house at the same location.",
+        "source": "0801 manual RGB review",
+        "status": "provisional_non_blinded"
+      },
+      "source_parent": {
+        "t1": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/A/val_43.png",
+          "sha256": "<hash omitted>"
+        },
+        "t2": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/B/val_43.png",
+          "sha256": "<hash omitted>"
+        },
+        "label": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/label/val_43.png",
+          "sha256": "<hash omitted>"
+        }
+      },
+      "crop": {
+        "row": 1,
+        "column": 1,
+        "xyxy_exclusive": [
+          256,
+          256,
+          512,
+          512
+        ],
+        "shape": [
+          256,
+          256
+        ],
+        "gt_pixels": 4883,
+        "largest_curated_component_pixels": 921,
+        "prior_curation_png_sha256": {
+          "t1": "<hash omitted>",
+          "t2": "<hash omitted>",
+          "label": "<hash omitted>"
+        }
+      }
+    },
+    "val_41_r3c2": {
+      "legacy_candidate_id": "val_val_41_r3c2_changed",
+      "split": "val",
+      "split_role": "heldout_validation_only",
+      "parent_id": "val_41",
+      "kind": "changed",
+      "semantic": {
+        "t1_state": "building",
+        "t2_state": "background",
+        "rgb_evidence": "T1 shows a small light-roofed building while T2 shows grass at the same location.",
+        "source": "0801 manual RGB review",
+        "status": "provisional_non_blinded"
+      },
+      "source_parent": {
+        "t1": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/A/val_41.png",
+          "sha256": "<hash omitted>"
+        },
+        "t2": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/B/val_41.png",
+          "sha256": "<hash omitted>"
+        },
+        "label": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/label/val_41.png",
+          "sha256": "<hash omitted>"
+        }
+      },
+      "crop": {
+        "row": 3,
+        "column": 2,
+        "xyxy_exclusive": [
+          512,
+          768,
+          768,
+          1024
+        ],
+        "shape": [
+          256,
+          256
+        ],
+        "gt_pixels": 864,
+        "largest_curated_component_pixels": 682,
+        "prior_curation_png_sha256": {
+          "t1": "<hash omitted>",
+          "t2": "<hash omitted>",
+          "label": "<hash omitted>"
+        }
+      }
+    },
+    "val_60_r3c0": {
+      "legacy_candidate_id": "val_val_60_r3c0_unchanged",
+      "split": "val",
+      "split_role": "heldout_validation_only",
+      "parent_id": "val_60",
+      "kind": "unchanged",
+      "semantic": {
+        "t1_state": "background",
+        "t2_state": "background",
+        "rgb_evidence": "Both T1 and T2 show open fields without a roofed building in the inspected area.",
+        "source": "0801 manual RGB review",
+        "status": "provisional_non_blinded"
+      },
+      "source_parent": {
+        "t1": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/A/val_60.png",
+          "sha256": "<hash omitted>"
+        },
+        "t2": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/B/val_60.png",
+          "sha256": "<hash omitted>"
+        },
+        "label": {
+          "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/val_original/label/val_60.png",
+          "sha256": "<hash omitted>"
+        }
+      },
+      "crop": {
+        "row": 3,
+        "column": 0,
+        "xyxy_exclusive": [
+          0,
+          768,
+          256,
+          1024
+        ],
+        "shape": [
+          256,
+          256
+        ],
+        "gt_pixels": 0,
+        "largest_curated_component_pixels": 0,
+        "prior_curation_png_sha256": {
+          "t1": "<hash omitted>",
+          "t2": "<hash omitted>",
+          "label": "<hash omitted>"
+        }
+      }
+    }
+  },
+  "execution_protocol": {
+    "seed": 42,
+    "query": "building",
+    "sam3_resolution": 1008,
+    "tool_device": "cuda",
+    "tool_timeout_seconds": 900,
+    "max_steps": 3,
+    "accepted_actions_per_step": 1,
+    "qwen_policy": {
+      "enabled": false,
+      "model_loaded": false,
+      "allowed_call_count": 0
+    },
+    "initialization": "fresh production SAM3 initialization from each 256x256 A/B crop",
+    "point_tool": "real SimpleClick through the production subprocess adapter",
+    "box_tool": "real SAM3 box segmentation through the production OmniOVCD path",
+    "pair_rebuild": "production MaskPairProcessor/OmniOVCDAdapter",
+    "accepted_state_carryover": true,
+    "selected_action_replay": "Every oracle-selected branch action is immediately executed again by the single canonical max_steps=3 Environment from its current accepted state; branch and canonical T1/T2/change mask hashes must match before state carryover.",
+    "live_proposals": "After every accepted candidate, use the Environment-refreshed full live proposal catalog; candidate delta d* proposals are evidence-only and cannot authorize the next action.",
+    "manual_geometry_forbidden": true,
+    "finish_action_in_search": false
+  },
+  "matching": {
+    "mode": "overlap_presence",
+    "overlap_threshold": 0.25,
+    "t12_min_instance_area": 0,
+    "cd_min_instance_area": 0
+  },
+  "proposal_config": {
+    "max_regions": 1,
+    "max_delta_regions": 1,
+    "min_component_area": 4,
+    "padding_ratio": 0.25,
+    "empty_mask_scan_grid_size": 3
+  },
+  "authorized_negative_point_input_scope": "full_session",
+  "production_action_mapping": {
+    "scope": "Frozen useful executor-reachable policy over Environment-owned geometry; this is broader than the current deterministic StagedQwenVerifier planner and is not claimed to be every mathematically possible tool call.",
+    "non_delta_proposal": {
+      "positive_point": "At component_seed_pixels on both target views; this can add a black-seed object or refine/expand an already-white object.",
+      "negative_point": "At component_seed_pixels only on target views whose live seed is white; the production Executor rejects a black clicked component.",
+      "box": "At the exact proposal box on both target views.",
+      "rgb_filter_before_top4": "The provisional RGB direction gate removes physically inconsistent action/target pairs before ranking the execution shortlist."
+    },
+    "scan": "Enumerate positive_point at the scan seed and box at box_pixels on t1 then t2; negative_point is unavailable because both live scan seeds are black.",
+    "delta_added_or_removed": "candidate-verification evidence only; never a next-live action source",
+    "executor_reachable_nonplanner_actions_affect_decision": true,
+    "p2_bias_correction": "Frozen P2 counted only the white-side negative point as planner-primary. This independent tool-reachability gate also evaluates black-side positive, same-side positive refinement, proposal boxes, and scan positive points without rewriting P2.",
+    "enumeration_order": "Environment proposal order, then the action/target order defined above"
+  },
+  "candidate_and_replay_budget": {
+    "catalog_policy": "Enumerate the complete frozen useful-executor policy over the current live Environment proposal catalog before opening GT; this excludes artificial geometry and candidate-delta proposals and is not claimed to exhaust every mathematically callable tool input.",
+    "offline_shortlist_policy": "After catalog completion, discard RGB-incompatible actions and rank the remainder by descending current change-error pixels inside the Environment proposal box, then lexicographic action identity; execute the first four.",
+    "max_candidate_actions_per_step": 4,
+    "max_steps_per_sample": 3,
+    "max_distinct_candidate_actions_per_sample": 12,
+    "max_total_tool_executions_including_selected_action_replay_per_sample": 24,
+    "budget_scope": "per_sample",
+    "budget_hit_definition": "A catalog action selected into the frozen top-four oracle shortlist, a selected candidate execution, or a selected-action replay cannot be executed because the corresponding cap would be exceeded. Catalog actions outside the frozen shortlist are a declared policy limitation, not a runtime budget hit.",
+    "budget_hit_outcome": "inconclusive_budget_exhausted",
+    "partial_results_may_authorize_data": false
+  },
+  "gt_boundary": {
+    "gt_role": [
+      "offline candidate selection",
+      "offline per-step and final scoring"
+    ],
+    "gt_visible_to_sam3_initializer": false,
+    "gt_visible_to_simpleclick": false,
+    "gt_visible_to_sam3_box_tool": false,
+    "gt_visible_to_environment_proposal_enumeration": false,
+    "gt_visible_to_hard_gates": false,
+    "gt_visible_to_qwen": false,
+    "action_catalog_complete_before_gt_shortlisting": true,
+    "shortlisted_candidate_batch_complete_before_final_gt_selection": true,
+    "selector_input": "Candidate-mask metrics recomputed against the frozen crop label, unchanged hard-gate decisions, and the provisional RGB semantic contract only. Candidate-state hashes bind the evidence but are not ranking signals. Canonical replay occurs only after selection and is not a selector input.",
+    "selection_order": "Among executed shortlisted candidates: lowest pixel error, then highest IoU, then highest F1, then lexicographically smallest action identity.",
+    "selected_state_handoff": "Only the canonical Environment state produced by replaying the selected action is carried into the next step; the label, metrics, and GT-derived hints are never passed to proposals, tools, hard gates, or a model."
+  },
+  "hard_gate_config": {
+    "source": "unchanged P2 production hard-gate contract",
+    "max_selection_area_delta": 0.25,
+    "max_locality_outside_ratio": 0.1,
+    "max_target_mask_change_ratio": 0.25,
+    "max_component_count_delta": 4,
+    "max_point_proposal_change_ratio": 0.25,
+    "max_point_proposal_change_pixels": 256,
+    "max_point_image_change_ratio": 0.004,
+    "point_proposal_change_gate_enabled": true,
+    "modification_or_retuning_authorized": false
+  },
+  "metric_and_success_contract": {
+    "pixel_error": "fp + fn",
+    "comparison_epsilon": 1e-12,
+    "comparison_before_rounding": true,
+    "already_exact": {
+      "definition": "initial pixel_error == 0",
+      "episode_status": "already_exact",
+      "generate_c_iso_or_t_traj": false,
+      "affects_endpoint_denominator": false,
+      "affects_trajectory_exact_recovery_denominator": false
+    },
+    "already_endpoint": {
+      "definition": "initial mask is not exact but already satisfies the absolute endpoint",
+      "episode_status": "already_endpoint",
+      "generate_c_iso_or_t_traj": false,
+      "affects_endpoint_denominator": false,
+      "historical_initialization_check": "All six frozen 0801 initial masks are below the endpoint, so this status is only a fail-closed guard against runtime drift."
+    },
+    "per_step_requirements": {
+      "candidate_accepted_by_oracle_selector": true,
+      "original_hard_gate_passed": true,
+      "production_rgb_semantic_check_passed": true,
+      "selected_action_replay_passed": true,
+      "pixel_error_strictly_decreases": true,
+      "nonempty_gt": "IoU and F1 must each strictly increase at every accepted step.",
+      "empty_gt": "FP must strictly decrease at every accepted step."
+    },
+    "locally_reachable": {
+      "minimum_accepted_steps": 1,
+      "maximum_accepted_steps": 3,
+      "final_error_reduction_ratio": "(initial_pixel_error - final_pixel_error) / initial_pixel_error",
+      "minimum_final_error_reduction_ratio": 0.05,
+      "all_per_step_requirements_must_pass": true,
+      "no_budget_hit": true,
+      "episode_status_if_endpoint_not_reached": "locally_reachable_only",
+      "may_generate_c_iso_or_t_traj": false
+    },
+    "endpoint_success": {
+      "episode_status": "endpoint_success",
+      "minimum_accepted_steps": 1,
+      "maximum_accepted_steps": 3,
+      "stop_at_first_endpoint": true,
+      "nonempty_gt_minimum_final_iou": 0.9,
+      "nonempty_gt_minimum_final_f1": 0.9473684210526315,
+      "nonempty_f1_role": "Redundant consistency check: for one binary mask F1=2*IoU/(1+IoU), so IoU>=0.90 implies F1>=18/19.",
+      "empty_gt_maximum_final_fp": 64,
+      "empty_gt_residual_fraction_of_256x256": 0.0009765625,
+      "empty_gt_iou_f1_note": "For an empty GT, IoU/F1 remain zero until exact empty and therefore cannot define a useful near-endpoint; use the preregistered FP residual instead.",
+      "all_per_step_requirements_must_pass": true,
+      "no_budget_hit": true,
+      "may_generate_matched_candidate_data": true
+    },
+    "unsuccessful_complete_search": "not_reachable_within_frozen_pilot",
+    "infrastructure_or_evidence_failure": "not_evaluated",
+    "global_pilot_release_gate": {
+      "required_endpoint_successes": 6,
+      "required_evaluated_episodes": 6,
+      "maximum_inconclusive_or_not_evaluated": 0,
+      "minimum_nontrivial_accepted_trajectories": 6,
+      "proceed_to_next_training_data_iteration_only_if_passed": true
+    },
+    "scientific_scope": "Change-mask endpoint reachability within three steps under this six-crop, frozen top-4 greedy oracle policy only. Failure does not prove that the full action space or a longer max_steps budget is unreachable."
+  },
+  "data_derivation_contract": {
+    "enabled_only_for_endpoint_success_episodes": true,
+    "same_source_episode_required": true,
+    "t_traj": "One linked audit -> action -> candidate -> accepted next-state sequence containing every accepted step from the endpoint-success episode.",
+    "c_iso": "One isolated stage record per accepted transition, mechanically derived from the exact same T-TRAJ episode and state hashes.",
+    "cross_episode_splicing_forbidden": true,
+    "already_exact_generates_data": false,
+    "already_endpoint_generates_data": false,
+    "locally_reachable_only_generates_data": false,
+    "inconclusive_generates_data": false,
+    "failed_episode_generates_data": false,
+    "split_inheritance": "Derived records inherit the source parent split and are written to physically separate train/ and val/ JSONL paths; validation records cannot enter training.",
+    "artifact_level": "Canonical replayable trajectory-source corpus with RGB parent/crop, state-mask, proposal, tool, gate, metric, and lineage references. It is not yet a Qwen ShareGPT conversation and requires a later deterministic formatting stage before SFT.",
+    "matched_comparison_requirement": "C-ISO and T-TRAJ must share source parents and accepted transitions; later training must match base checkpoint, token exposure or optimizer steps, and evaluation protocol."
+  },
+  "tools_and_models": {
+    "workspace_root": "/guisongxia01/pangchao/wangyihan",
+    "repository": "/guisongxia01/pangchao/wangyihan/Chang-Agent",
+    "segagent_python": {
+      "path": "/guisongxia01/pangchao/wangyihan/conda_envs/segagent-env/bin/python3.10",
+      "sha256": "<hash omitted>"
+    },
+    "omniovcd_python": {
+      "path": "/guisongxia01/pangchao/wangyihan/conda_envs/omniovcd-env/bin/python3.12",
+      "sha256": "<hash omitted>"
+    },
+    "simpleclick_checkpoint": {
+      "path": "/guisongxia01/pangchao/wangyihan/models/SimpleClick/cocolvis_vit_large.pth",
+      "sha256": "<hash omitted>"
+    },
+    "sam3_checkpoint": {
+      "path": "/guisongxia01/pangchao/wangyihan/models/sam3/sam3.pt",
+      "sha256": "<hash omitted>"
+    },
+    "sam3_bpe": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent/third_party/OmniOVCD/sam3/assets/bpe_simple_vocab_16e6.txt.gz",
+      "sha256": "<hash omitted>"
+    },
+    "qwen_base_model_disabled": {
+      "path": "/guisongxia01/pangchao/wangyihan/models/Qwen3-VL-2B-Instruct",
+      "load_for_pilot": false,
+      "runtime_validation": "Confirm zero model loads and zero Qwen calls from receipts."
+    },
+    "external_source_repositories": [
+      {
+        "name": "SegAgent_with_bundled_SimpleClick",
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent/third_party/SegAgent",
+        "commit": "21eca0a76a800440f3e4d8a8300b65f59f8dc782",
+        "tracked_worktree_must_be_clean": true
+      },
+      {
+        "name": "OmniOVCD_SAM3",
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent/third_party/OmniOVCD",
+        "commit": "46957e47805eaa273f4aa7bbbd25a88bca9108ce",
+        "tracked_worktree_must_be_clean": true
+      }
+    ],
+    "runtime_sources": [
+      {
+        "path": "change_agent/environment.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/executor.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/subprocess_adapters.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/omniovcd_adapter.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/verifier_regions.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "tools/seeded_segmentation_worker.py",
+        "sha256": "<hash omitted>"
+      }
+    ]
+  },
+  "resource_plan": {
+    "slurm_required": true,
+    "partition": "gre",
+    "maximum_total_gpus": 3,
+    "planned_generation_shards": 3,
+    "maximum_generate_select_rounds": 3,
+    "gpus_per_shard": 1,
+    "accelerator": "A800",
+    "cpus_per_shard": 4,
+    "memory_per_shard": "48G",
+    "time_per_shard": "02:00:00",
+    "shards": [
+      {
+        "shard_id": 0,
+        "samples": [
+          "train_407_r3c2",
+          "val_43_r1c1"
+        ]
+      },
+      {
+        "shard_id": 1,
+        "samples": [
+          "train_114_r3c1",
+          "val_41_r3c2"
+        ]
+      },
+      {
+        "shard_id": 2,
+        "samples": [
+          "train_364_r0c2",
+          "val_60_r3c0"
+        ]
+      }
+    ],
+    "independent_post_generation_validation": {
+      "gpus": 0,
+      "cpus": 2,
+      "memory": "16G",
+      "dependency": "afterany on all three end-to-end generation shards so the finalizer always emits a terminal status and QQ notification; scientific validation proceeds only if all three completion markers pass."
+    },
+    "round_dag": "Three one-GPU shard jobs each process two samples end-to-end. Within each step: freeze the complete GT-free catalog; use GT offline only to select the top-4 execution shortlist; run all shortlisted real-tool candidates without GT; use GT offline only to rank the completed candidates; replay the selected action in the canonical Environment. One dependent zero-GPU job independently recomputes metrics, validates receipts, and derives matched data.",
+    "peak_gpu_concurrency": 3,
+    "qq_completion_notification_required": true
+  },
+  "artifact_plan": {
+    "output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CA_0803(2)-qwen3vl-oracle-trajectory-pilot",
+    "attempt_policy": "append-only first-absent attempt-NNNN; never overwrite or combine partial attempts; contract and submission failures remain in diagnostics, while an unsubmitted formal reservation is atomically relocated out of formal outputs",
+    "required_per_step_evidence": [
+      "parent state T1/T2/change raw and semantic hashes",
+      "live proposal catalog and deterministic action inventory",
+      "all generated candidate masks and tool evidence",
+      "original hard-gate decision",
+      "complete live action-catalog marker written before first GT access",
+      "complete shortlisted real-tool candidate batch and offline selection receipt",
+      "accepted state hash and deterministic selected-action replay receipt"
+    ],
+    "required_final_evidence": [
+      "per-sample trajectory index",
+      "budget counters",
+      "GT/Qwen access audit",
+      "per-step and final metrics",
+      "scientific status",
+      "Slurm status and resource receipt",
+      "source/config/code/commit bindings"
+    ]
+  },
+  "runtime_validation_pending": [
+    "Materialize and bind the pilot implementation and exact freeze commits.",
+    "Verify every original A/B/label path and copied source SHA256.",
+    "Regenerate each 256x256 crop from its original parent and compare the prior curation PNG SHA256 where byte-equivalent encoding is used.",
+    "Verify all tool, checkpoint, interpreter, and runtime-source identities.",
+    "Prove train/validation parent and content-hash isolation and prove no test path or hash is present.",
+    "Instrument the single offline-construction worker so first GT access occurs only after the live action catalog is frozen; prove no label array/path/metric is passed into proposals, SAM3, SimpleClick, hard gates, or any model, and prove Qwen is never loaded or called.",
+    "Validate the deterministic candidate-order, budget, offline-selection, hard-gate, and selected-action-replay contracts.",
+    "Run zero-GPU contract/full regression from a clean detached exact-freeze worktree.",
+    "Confirm the first-run output root is absent, or on retry contains only managed append-only attempt-NNNN directories; atomically reserve the first absent attempt and prove no campaign Slurm job is active before formal submission.",
+    "Record the probed node, GPU visibility, environment, source hashes, Job IDs, receipts, and terminal QQ notifications."
+  ],
+  "formal_execution": {
+    "status": "not_started",
+    "authorized_only_after_all_runtime_validation_pending_items_pass": true,
+    "job_ids": []
+  }
+}

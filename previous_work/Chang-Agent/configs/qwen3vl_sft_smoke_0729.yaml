@@ -1,0 +1,80 @@
+### Qwen3-VL-2B / LLaMA-Factory SFT overfit smoke (0729)
+###
+### The worker overrides output_dir to a job-local directory. The 32 rows are
+### deliberately used for both train and predict to test the complete
+### multimodal data -> LoRA -> generation path; this is not a generalization
+### score. See tools/run_qwen3vl_sft_smoke.slurm.
+
+### model
+model_name_or_path: /guisongxia01/pangchao/wangyihan/models/Qwen3-VL-2B-Instruct
+trust_remote_code: false
+image_max_pixels: 262144
+image_min_pixels: 1024
+video_max_pixels: 16384
+
+### method
+stage: sft
+do_train: true
+do_eval: true
+do_predict: true
+predict_with_generate: true
+finetuning_type: lora
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target: all
+freeze_vision_tower: true
+freeze_multi_modal_projector: true
+
+### dataset
+dataset: levir_qwen3vl_sft32_train
+eval_dataset: levir_qwen3vl_sft32_eval
+dataset_dir: /guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CA_0729(1)-qwen3vl-sft32-smoke/data
+media_dir: /guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CA_0729(1)-qwen3vl-sft32-smoke/data
+template: qwen3_vl_nothink
+cutoff_len: 4096
+train_on_prompt: false
+packing: false
+max_samples: 32
+preprocessing_num_workers: 1
+dataloader_num_workers: 0
+data_shared_file_system: true
+
+### output (the worker always overrides output_dir to job-local scratch)
+output_dir: /tmp/qwen3vl_sft_smoke_0729
+logging_steps: 1
+logging_first_step: true
+save_strategy: "no"
+save_only_model: true
+save_safetensors: true
+overwrite_output_dir: true
+report_to: none
+plot_loss: false
+
+### train
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 4
+learning_rate: 1.0e-4
+num_train_epochs: 3.0
+max_steps: 32
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+tf32: true
+gradient_checkpointing: true
+use_reentrant_gc: false
+seed: 42
+data_seed: 42
+ddp_timeout: 1800
+remove_unused_columns: false
+resume_from_checkpoint: null
+
+### generation/evaluation
+do_sample: false
+temperature: 1.0
+top_p: 1.0
+top_k: 50
+max_new_tokens: 256
+skip_special_tokens: true
+eval_strategy: "no"

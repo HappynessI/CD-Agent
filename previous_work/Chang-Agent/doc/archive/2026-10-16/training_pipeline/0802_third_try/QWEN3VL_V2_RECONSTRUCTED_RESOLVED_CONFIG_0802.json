@@ -1,0 +1,172 @@
+{
+  "schema_id": "qwen3vl_reconstructed_resolved_training_config_evidence_map_v1",
+  "record_type": "reconstructed_resolved_config",
+  "record_status": "reconstructed_read_only_evidence_not_original_runtime_receipt",
+  "created_utc": "2026-08-02",
+  "historical_experiment": {
+    "name": "Qwen3-VL v12.1 hardcase SFT v2",
+    "job_id": "52011",
+    "data_job_id": "52009",
+    "code_commit": "e67692b3cdc65821b369b3228e1fef3e9a9fc91e",
+    "llamafactory_commit": "9ce6b663e9d87cd3c0cb42a1d3ff5cdfe292426d",
+    "historical_run_dir": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2",
+    "current_archive_evidence_dir": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2"
+  },
+  "warning": {
+    "original_config_used_is_not_resolved": true,
+    "reason": "The historical worker copied the template YAML before applying command-line overrides. The copied file therefore retained max_samples=39, learning_rate=1e-4, num_train_epochs=4 and placeholder paths even though Job 52011 trained 48 examples for 2 epochs and 12 optimizer steps with a 3e-5 peak learning rate.",
+    "allowed_use": "Audit and interpretation of the completed historical run only.",
+    "forbidden_use": "Do not present this reconstruction as an original runtime-emitted receipt and do not use archived data paths to rerun training."
+  },
+  "reconstructed_resolved_config": {
+    "model_name_or_path": "/guisongxia01/pangchao/wangyihan/models/Qwen3-VL-2B-Instruct",
+    "trust_remote_code": false,
+    "image_max_pixels": 262144,
+    "image_min_pixels": 1024,
+    "stage": "sft",
+    "do_train": true,
+    "do_eval": false,
+    "do_predict": false,
+    "finetuning_type": "lora",
+    "lora_rank": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "lora_target": "all",
+    "freeze_vision_tower": true,
+    "freeze_multi_modal_projector": true,
+    "dataset": "levir_qwen3vl_v121_train_v1",
+    "dataset_dir_at_execution": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801(12)-qwen3vl-v121-hardcase-data-v2-rerun1/data",
+    "dataset_dir_current_archive_evidence": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801_archive/CA_0801(12)-qwen3vl-v121-hardcase-data-v2-rerun1/data",
+    "media_dir_at_execution": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801(12)-qwen3vl-v121-hardcase-data-v2-rerun1/data",
+    "output_dir_at_execution_transient": "/tmp/v121_sft_52011.VWep/adapter",
+    "output_dir_current_archive_evidence": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2/adapter",
+    "template": "qwen3_vl_nothink",
+    "cutoff_len": 4096,
+    "train_on_prompt": false,
+    "packing": false,
+    "max_samples": 48,
+    "preprocessing_num_workers": 1,
+    "dataloader_num_workers": 0,
+    "data_shared_file_system": true,
+    "logging_steps": 1,
+    "logging_first_step": true,
+    "save_strategy": "no",
+    "save_only_model": true,
+    "save_safetensors": true,
+    "overwrite_output_dir": true,
+    "report_to": "none",
+    "plot_loss": false,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "world_size": 2,
+    "effective_train_batch_size": 8,
+    "learning_rate": 0.00003,
+    "num_train_epochs": 2.0,
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0.1,
+    "bf16": true,
+    "tf32": true,
+    "gradient_checkpointing": true,
+    "use_reentrant_gc": false,
+    "seed": 801,
+    "data_seed": 801,
+    "ddp_timeout": 1800,
+    "ddp_find_unused_parameters": false,
+    "remove_unused_columns": false,
+    "resume_from_checkpoint": null
+  },
+  "observed_training_outcome": {
+    "data_round": "v2-hardcase",
+    "train_examples": 48,
+    "validation_examples_not_used_by_trainer": 24,
+    "optimizer_steps": 12,
+    "actual_epochs": 2.0,
+    "trainable_parameters": 17432576,
+    "all_parameters": 2144964608,
+    "train_loss": 0.47358429928620654,
+    "trainer_runtime_seconds": 19.804,
+    "job_elapsed_seconds_including_setup_and_merge": 71,
+    "gpus": 2,
+    "gpu_model": "NVIDIA A800-SXM4-80GB",
+    "dataset_manifest_sha256": "<hash omitted>",
+    "adapter_sha256": "<hash omitted>",
+    "merged_model_sha256": "<hash omitted>"
+  },
+  "field_evidence": {
+    "template_and_non_overridden_fields": {
+      "confidence": "direct",
+      "evidence": "The template at the recorded code commit plus the archived byte-identical config_used.yaml.",
+      "git_object": "e67692b3cdc65821b369b3228e1fef3e9a9fc91e:configs/qwen3vl_v121_baseline_sft_0801.yaml",
+      "git_blob": "1bd99ecd0e4d352b6d5e6c52a9e479deeffa011d",
+      "content_sha256": "<hash omitted>"
+    },
+    "launch_override_contract": {
+      "confidence": "direct_code_contract",
+      "evidence": "The historical worker passed output_dir, model_name_or_path, dataset_dir, media_dir, max_samples, learning_rate and num_train_epochs after the template YAML on the LLaMA-Factory command line.",
+      "git_object": "e67692b3cdc65821b369b3228e1fef3e9a9fc91e:tools/run_qwen3vl_v121_baseline_sft.slurm",
+      "git_blob": "db66cf4971d3499ca5caba7a9e192612f9ee1cc0",
+      "content_sha256": "<hash omitted>"
+    },
+    "dataset_and_run_paths": {
+      "confidence": "direct",
+      "evidence_files": [
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2/submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2/logs/train-52011.log",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    },
+    "max_samples_batch_and_steps": {
+      "confidence": "direct",
+      "evidence": "Job log reports Num examples=48, per-device batch=1, effective batch=8, gradient accumulation=4 and total optimization steps=12; trainer_state reports global_step=max_steps=12."
+    },
+    "num_train_epochs": {
+      "confidence": "direct",
+      "evidence": "Job log and trainer_state both report 2 epochs."
+    },
+    "learning_rate": {
+      "confidence": "reconstructed_high",
+      "evidence": "The original submit-time environment string was not persisted. The trainer schedule records a 3e-5 peak at step 3 under the configured cosine scheduler and 0.1 warmup, and the experiment registry records learning_rate=3e-5. This is stronger than the stale copied template but is not an original resolved launch receipt."
+    },
+    "training_outcome": {
+      "confidence": "direct",
+      "evidence_files": [
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2/trainer_state.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2/train_results.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(13)-qwen3vl-v121-hardcase-sft-v2/training_summary.json",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    },
+    "dataset_contract": {
+      "confidence": "direct",
+      "evidence_files": [
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(12)-qwen3vl-v121-hardcase-data-v2-rerun1/data/manifest.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path": "outputs/CA_0801_archive/CA_0801(12)-qwen3vl-v121-hardcase-data-v2-rerun1/data/validation.json",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    }
+  },
+  "known_unrecoverable_or_non_persisted_fields": [
+    "The exact submit-shell spelling/order of LEARNING_RATE and NUM_TRAIN_EPOCHS was not persisted.",
+    "The compute-node transient output directory no longer exists; its exact path is recoverable from the log, while the copied adapter is in the archive.",
+    "Archived train/media absolute paths are historical strings and are not valid rerun inputs after CA_0801_archive relocation."
+  ],
+  "archive_mutation": false
+}

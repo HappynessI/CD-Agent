@@ -1,0 +1,86 @@
+{
+  "schema_id": "qwen3vl_evaluation_input_manifest_v1",
+  "design_status": "frozen",
+  "created_utc": "2026-08-02",
+  "purpose": "Freeze the ordered, byte-identified diagnostic inputs for the H0/H1 smoke and CORE3 comparison.",
+  "source_contract": {
+    "registry_path": "experiments/experiment_registry.json",
+    "registry_sheet": "03_数据登记",
+    "registry_dataset_ids": [
+      "DEV-CORE-3-V1",
+      "DEV-EXTENDED-5-V1"
+    ],
+    "input_root": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256",
+    "source_split": "test_256",
+    "hash_algorithm": "sha256",
+    "member_hashes_verified_against_source_files_utc": "2026-08-02"
+  },
+  "canonical_json_contract": {
+    "hash_scope": "The entire parsed JSON object in this file; no field is excluded.",
+    "serialization": "UTF-8 encoding of json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False) with no trailing newline.",
+    "digest": "sha256 of the serialized bytes",
+    "external_digest_location": "QWEN3VL_H0_H1_PREREGISTRATION_0802.json input_manifest.canonical_sha256"
+  },
+  "gt_boundary": {
+    "a_and_b_online_inputs": true,
+    "label_cvt_online_input": false,
+    "label_cvt_offline_scorer_only": true,
+    "label_may_be_opened_only_after_rollout_complete": true,
+    "label_hash_is_provenance_not_an_online_trigger_input": true
+  },
+  "evaluation_profiles": [
+    {
+      "phase": "smoke1",
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "ordered_sample_ids": [
+        "test_1_1"
+      ],
+      "arm_order": [
+        "h0",
+        "h1"
+      ]
+    },
+    {
+      "phase": "core3",
+      "evaluation_id": "DEV-CORE-3-V1",
+      "ordered_sample_ids": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ],
+      "arm_order": [
+        "h0",
+        "h1"
+      ]
+    }
+  ],
+  "samples": {
+    "test_20_15": {
+      "a_path_relative_to_input_root": "A/test_20_15.png",
+      "a_sha256": "<hash omitted>",
+      "b_path_relative_to_input_root": "B/test_20_15.png",
+      "b_sha256": "<hash omitted>",
+      "label_path_relative_to_input_root": "label_cvt/test_20_15.png",
+      "label_sha256": "<hash omitted>",
+      "label_access": "offline_scorer_only_after_rollout_complete"
+    },
+    "test_1_1": {
+      "a_path_relative_to_input_root": "A/test_1_1.png",
+      "a_sha256": "<hash omitted>",
+      "b_path_relative_to_input_root": "B/test_1_1.png",
+      "b_sha256": "<hash omitted>",
+      "label_path_relative_to_input_root": "label_cvt/test_1_1.png",
+      "label_sha256": "<hash omitted>",
+      "label_access": "offline_scorer_only_after_rollout_complete"
+    },
+    "test_50_8": {
+      "a_path_relative_to_input_root": "A/test_50_8.png",
+      "a_sha256": "<hash omitted>",
+      "b_path_relative_to_input_root": "B/test_50_8.png",
+      "b_sha256": "<hash omitted>",
+      "label_path_relative_to_input_root": "label_cvt/test_50_8.png",
+      "label_sha256": "<hash omitted>",
+      "label_access": "offline_scorer_only_after_rollout_complete"
+    }
+  }
+}

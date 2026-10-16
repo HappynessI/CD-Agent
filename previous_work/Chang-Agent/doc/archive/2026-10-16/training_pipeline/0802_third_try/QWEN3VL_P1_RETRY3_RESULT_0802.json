@@ -1,0 +1,240 @@
+{
+  "schema_id": "qwen3vl_p1_retry3_result_v1",
+  "created_at_utc": "2026-08-02",
+  "result_status": "complete",
+  "engineering_outcome": "pass",
+  "scientific_outcome": "diagnostic_no_gain",
+  "interpretation": "H1 terminal review passed the frozen protocol, provenance, GT-boundary and safety gates, but did not change selected masks or CORE3 IoU/F1 relative to H0.",
+  "git_lineage": {
+    "implementation_commit_a4": "a88404ac6a014f42692d1119d54de42c980fb310",
+    "final_freeze_commit_b4": "5210f89f5ca13ee1e636f5aa6a44631206a80123",
+    "b4_parent_is_a4": true,
+    "detached_run_worktree_exact_b4_clean_detached": true
+  },
+  "frozen_inputs": {
+    "resolved_config_raw_sha256": "<hash omitted>",
+    "fixture_manifest_canonical_sha256": "<hash omitted>",
+    "amendment_raw_sha256": "<hash omitted>",
+    "amendment_canonical_sha256": "<hash omitted>",
+    "freeze_input_manifest_sha256": "<hash omitted>",
+    "freeze_input_manifest_entries": 25
+  },
+  "formal_jobs": [
+    {
+      "role": "cpu_fixtures",
+      "job_id": "53155",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:00:25"
+    },
+    {
+      "role": "smoke_h0",
+      "job_id": "53156",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:01:16"
+    },
+    {
+      "role": "smoke_h1",
+      "job_id": "53157",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:01:58"
+    },
+    {
+      "role": "core_h0",
+      "job_id": "53158",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:04:18"
+    },
+    {
+      "role": "core_h1",
+      "job_id": "53159",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:05:59"
+    },
+    {
+      "role": "dependency_guard",
+      "job_id": "53160",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:00:02"
+    }
+  ],
+  "precommit_validation": {
+    "job_id": "53151",
+    "state": "COMPLETED",
+    "targeted_tests": 300,
+    "targeted_patterns": 11,
+    "full_tests": 470,
+    "skipped": 3,
+    "required_test_ids": 74,
+    "hash_job_id": "53152"
+  },
+  "independent_validation": {
+    "summary_validators": 4,
+    "evaluation_receipt_validators": 4,
+    "pair_validators": 2,
+    "smoke_controlled_variable_checks": "18/18",
+    "smoke_hard_gates": "34/34",
+    "core_controlled_variable_checks": "18/18",
+    "core_hard_gates": "25/25",
+    "dependency_guard_synthesized": "none",
+    "dependency_guard_unresolved": "none",
+    "cross_attempt_pair_composition": false
+  },
+  "core3_comparison": {
+    "evaluation_id": "DEV-CORE-3-V1",
+    "sample_order": [
+      "test_20_15",
+      "test_1_1",
+      "test_50_8"
+    ],
+    "h0": {
+      "job_id": "53158",
+      "micro_iou": 0.7422312,
+      "micro_precision": 0.7940492,
+      "micro_recall": 0.91918414,
+      "micro_f1": 0.85204673,
+      "macro_iou": 0.28212851,
+      "macro_f1": 0.30560087,
+      "round_two_invoked": 0,
+      "final_region_protocol_valid": 2
+    },
+    "h1": {
+      "job_id": "53159",
+      "micro_iou": 0.7422312,
+      "micro_precision": 0.7940492,
+      "micro_recall": 0.91918414,
+      "micro_f1": 0.85204673,
+      "macro_iou": 0.28212851,
+      "macro_f1": 0.30560087,
+      "round_two_invoked": 2,
+      "final_region_protocol_valid": 2
+    },
+    "delta_h1_minus_h0": {
+      "micro_iou": 0.0,
+      "micro_f1": 0.0,
+      "macro_iou": 0.0,
+      "macro_f1": 0.0,
+      "final_region_protocol_valid": 0
+    },
+    "shared_actions": {
+      "candidates": 3,
+      "harmful_candidates": 3,
+      "accepted": 0,
+      "rejected": 3,
+      "true_rejects": 3,
+      "successful_tool_actions": 3,
+      "tool_failures": 0,
+      "finish": 2,
+      "degraded_samples": 0
+    }
+  },
+  "trajectory_failure_analysis": {
+    "analysis_job_attempts": [
+      {
+        "job_id": "53164",
+        "state": "FAILED",
+        "exit_code": "1:0",
+        "reason": "diagnostic expected status=complete for a pair validator whose valid contract is status=valid; no result artifact was produced"
+      },
+      {
+        "job_id": "53165",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "result_sha256": "<hash omitted>",
+        "result_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_retry3_result_0802/trajectory_analysis.json"
+      }
+    ],
+    "test_20_15": {
+      "classification": "safe_rejection_of_three_harmful_candidates_no_gain",
+      "h1_review": "not_eligible_nonterminal_passthrough",
+      "selected_iou": 0.84638554,
+      "selected_f1": 0.91680261
+    },
+    "test_1_1": {
+      "classification": "false_finish_complete_false_positive",
+      "h1_review": "fresh_finish_confirmation_reconfirmed_error_without_state_change",
+      "ground_truth_positive_pixels": 0,
+      "predicted_positive_pixels": 626,
+      "selected_iou": 0.0,
+      "selected_f1": 0.0
+    },
+    "test_50_8": {
+      "classification": "false_finish_complete_false_negative",
+      "h1_review": "fresh_finish_confirmation_reconfirmed_error_without_state_change",
+      "ground_truth_positive_pixels": 166,
+      "predicted_positive_pixels": 0,
+      "selected_iou": 0.0,
+      "selected_f1": 0.0
+    },
+    "why_two_reviews_did_not_change_metrics": "Both additional H1 reviews reconfirmed finish, authorized no tool action and produced no new candidate or selected mask."
+  },
+  "training_data_hypothesis": {
+    "status": "registered_for_controlled_test_not_proven_causal",
+    "statement": "Isolated single-stage snapshots may be insufficient for learning the full task; same-episode audit-to-action-to-candidate-to-next-state trajectory supervision may better teach recovery and consequences.",
+    "next_comparison": "isolated_stage_snapshot_control_vs_mechanically_linked_full_episode_trajectory_treatment",
+    "required_controls": [
+      "same_source_split_and_leakage_policy",
+      "same_base_checkpoint",
+      "matched_token_budget",
+      "matched_optimizer_steps",
+      "same_evaluation_protocol",
+      "independent_data_manifest_and_hashes",
+      "checkpoint_lineage",
+      "failure_trajectory_taxonomy"
+    ]
+  },
+  "interpretation_limits": [
+    "DEV-CORE-3-V1 is a repeatedly used three-sample diagnostic gate.",
+    "The zero delta is not evidence of LEVIR-CD generalization or equivalence.",
+    "The trajectories are consistent with the training-data hypothesis but do not establish it as the unique cause."
+  ],
+  "registry_closeout_target": {
+    "experiment_rows": 14,
+    "field_dictionary_rows": 52,
+    "data_rows": 21,
+    "attempt_rows": 38
+  },
+  "registry_closeout_artifacts": {
+    "closeout_status": "validated",
+    "workbook_preparation_job_id": "53171",
+    "workbook_preparation_state": "COMPLETED",
+    "workbook_targeted_tests": 15,
+    "workbook_raw_sha256": "<hash omitted>",
+    "candidate_validation_attempts": [
+      {
+        "job_id": "53174",
+        "state": "FAILED",
+        "exit_code": "1:0",
+        "candidate_commit": "03af3c82b92d352de984eec80ba20d5de2c87f6d",
+        "passed_before_failure": [
+          "result_analysis_contract",
+          "workbook_check",
+          "15_registry_targeted_tests"
+        ],
+        "full_regression": "467_passed_1_failed_3_skipped_of_471",
+        "reason": "historical P0 contract test incorrectly compared the frozen P0 workbook hash with the later maintained workbook"
+      },
+      {
+        "job_id": "53178",
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "validated_commit": "d64ec522de1d46df27891cea1f9f9ab0fa1b7be0",
+        "full_regression": "471_ran_3_skipped_all_passed",
+        "receipt_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_closeout_validation_0802/job-53178/closeout_validation_receipt.json",
+        "receipt_sha256": "<hash omitted>",
+        "validated_parent_result_sha256": "<hash omitted>"
+      }
+    ]
+  },
+  "post_p1_authorization": {
+    "authorized_by_user": true,
+    "authorization_effective": true,
+    "effective_after": "P1 result report, registry/workbook validation and independent result Git commit are complete",
+    "next_pipeline": "training_data_creation_then_training_then_evaluation_then_failure_trajectory_analysis_then_next_iteration"
+  }
+}

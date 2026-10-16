@@ -1,0 +1,145 @@
+{
+  "schema_id": "qwen3vl_p0_validation_amendment_v1",
+  "design_status": "frozen",
+  "created_utc": "2026-08-02",
+  "amends": {
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_PREREGISTRATION_0802.json",
+    "canonical_sha256": "<hash omitted>",
+    "scope": "p0_contract_validation_allocation_and_worker_identity_only"
+  },
+  "reason_for_amendment": {
+    "category": "p0_harness_preflight_bug",
+    "summary": "Slurm executes an sbatch file from a controller spool copy, so requiring BASH_SOURCE[0] to resolve inside the Git worktree rejected both CPU jobs before any test began.",
+    "scientific_result_available": false,
+    "h0_or_h1_behavior_observed": false,
+    "gpu_job_started": false
+  },
+  "failed_attempt": {
+    "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1)-qwen3vl-p0-contract-validation",
+    "launch_commit": "383521f72e846b459697dc24208b8245243975ec",
+    "worker_sha256": "<hash omitted>",
+    "execution_status": "failed",
+    "tests_started": false,
+    "failure_message": "executed worker is outside the pinned repository",
+    "jobs": [
+      {
+        "job_id": "52553",
+        "job_name": "CA0802P0Target",
+        "state": "FAILED",
+        "exit_code": "1:0",
+        "elapsed": "00:00:03",
+        "allocated_cpus": 2,
+        "allocated_gpus": 0,
+        "requested_memory": "8G",
+        "node": "gpu20"
+      },
+      {
+        "job_id": "52554",
+        "job_name": "CA0802P0Regress",
+        "state": "FAILED",
+        "exit_code": "1:0",
+        "elapsed": "00:00:02",
+        "allocated_cpus": 2,
+        "allocated_gpus": 0,
+        "requested_memory": "8G",
+        "node": "gpu20",
+        "dependency": "afterany:52553"
+      }
+    ],
+    "preservation": {
+      "policy": "retain_read_only_and_never_reuse_or_overwrite",
+      "evidence_sha256": [
+        {
+          "path_relative_to_output": "submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/targeted_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/regression_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52553.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52554.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52553.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52553.out",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52554.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52554.out",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    }
+  },
+  "amended_worker_identity_contract": {
+    "slurm_spool_copy_expected": true,
+    "forbid_spool_path_equality_with_worktree": true,
+    "required_checks": [
+      "exact_clean_repo_commit_matches_submission",
+      "sha256_of_slurm_spool_copy_matches_submitter_pinned_worker_sha256",
+      "sha256_of_repo_worker_matches_submitter_pinned_worker_sha256"
+    ],
+    "path_identity_is_not_used_as_byte_identity": true
+  },
+  "retry_allocation": {
+    "phase": "p0_contract_validation_retry1",
+    "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R1)-qwen3vl-p0-contract-validation",
+    "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R1)-qwen3vl-p0-contract-validation/logs/slurm-%j.out",
+    "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R1)-qwen3vl-p0-contract-validation/logs/slurm-%j.err",
+    "targeted_job_name": "CA0802P0TargetR1",
+    "regression_job_name": "CA0802P0RegressR1",
+    "regression_dependency": "afterany:<targeted_job_id>",
+    "qq_title": "CA0802 P0 contract validation R1",
+    "gpus_per_job": 0,
+    "targeted_resources": {
+      "cpus": 2,
+      "memory": "8G",
+      "time": "00:20:00"
+    },
+    "regression_resources": {
+      "cpus": 2,
+      "memory": "8G",
+      "time": "00:45:00"
+    },
+    "must_not_exist_before_submission": true,
+    "reservation_status_at_amendment": "reserved_absent"
+  },
+  "unchanged_contract": {
+    "h0_h1_design": true,
+    "treatment_factor": "terminal_review_scheduler_v1",
+    "input_manifest_canonical_sha256": "<hash omitted>",
+    "workbook_and_summary_contracts": true,
+    "p1_allocations_ca0802_2_through_6": true,
+    "p1_execution_authorized": false,
+    "h1_code_implemented": false,
+    "gpu_execution_authorized": false
+  },
+  "authorization": {
+    "scope": "corrective_retry_within_user_approved_p0_only",
+    "p0_retry_execution_authorized": true,
+    "maximum_gpus": 0,
+    "p1_authorized": false
+  },
+  "acceptance_receipt": {
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_ACCEPTANCE_RECEIPT_0802.json",
+    "must_reference_failed_and_retry_attempts": true,
+    "status_at_amendment": "pending"
+  }
+}

@@ -1,0 +1,833 @@
+{
+  "schema_id": "qwen3vl_p1_execution_amendment_v1",
+  "record_status": "frozen",
+  "execution_readiness": "execution_ready",
+  "created_utc": "2026-08-02",
+  "state_interpretation": "Retry3 implementation A4 a88404ac6a014f42692d1119d54de42c980fb310 fixes the H1 nonterminal passthrough evidence cycle and adds a reset-to-save acyclicity regression. Clean A4 passed zero-GPU precommit Job 53151 and 25-entry hash Job 53152. Non-authorizing candidate 8a862e700ecc7d7d81ea512a65b5aca5430347ba is an A4 direct child. Under the recorded user-authorized amend workflow, the commit containing this record is final freeze B4; its own hash is excluded to avoid self-reference. The detached run worktree must be synchronized immediately and submitter check-only must pass before any retry3 formal job.",
+  "implementation_draft_status": {
+    "code_and_fixture_state": "implementation_commit_A4_complete_and_retry3_precommit_validated",
+    "slurm_cpu_fixture_status": "retry3_precommit_passed_job_53151_formal_cpu_retry_pending",
+    "slurm_gpu_status": "retry2_smoke_h0_53142_smoke_h1_53143_and_core_h0_53144_completed_core_h1_53145_failed_during_rollout",
+    "implemented_but_unvalidated": [],
+    "required_before_freeze": [],
+    "previous_precommit_slurm_evidence": {
+      "job_id": "53037",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "targeted_pattern_count": 11,
+      "full_regression_tests": 466,
+      "full_regression_skipped": 3,
+      "scope": "original_70_id_pre_retry1_suite_only",
+      "validates_retry1_suite": false
+    },
+    "retry1_precommit_slurm_evidence": {
+      "job_id": "53103",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "required_test_id_count": 72,
+      "targeted_pattern_count": 11,
+      "targeted_tests": 298,
+      "full_regression_tests": 468,
+      "full_regression_skipped": 3,
+      "failed_attempts": [
+        {
+          "job_id": "53102",
+          "implementation_candidate_commit": "25eaa5982ce03d40cf18bb14ed804c7f59c24f4e",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:14",
+          "failure_scope": "test_fixture_only",
+          "failure": "submitter_identity_receipt_writer_fixture_omitted_PARTITION_and_NODE_shell_variables"
+        }
+      ]
+    },
+    "retry2_precommit_slurm_evidence": {
+      "job_id": "53135",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "required_test_id_count": 73,
+      "targeted_pattern_count": 11,
+      "targeted_tests": 299,
+      "full_regression_tests": 469,
+      "full_regression_skipped": 3,
+      "failed_attempts": [
+        {
+          "job_id": "53134",
+          "implementation_candidate_commit": "47d67d45be5011eb91008fbd46c1692cef86e00c",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:15",
+          "failure_scope": "test_fixture_only",
+          "failure": "submitter_identity_fixture_inherited_retry2_null_summarizer_and_summary_validator_hashes"
+        }
+      ]
+    },
+    "retry3_precommit_slurm_evidence": {
+      "job_id": "53151",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "node": "gpu48",
+      "gpus": 0,
+      "required_test_id_count": 74,
+      "targeted_pattern_count": 11,
+      "targeted_tests": 300,
+      "full_regression_tests": 470,
+      "full_regression_skipped": 3
+    },
+    "no_item_in_this_object_is_a_pass_receipt": true
+  },
+  "retry1_hash_validation": {
+    "job_id": "53106",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "node": "gpu48",
+    "gpus": 0,
+    "implementation_commit": "15cdca7ddc4611ad773576dd582e5b4513188d8e",
+    "entry_count": 25,
+    "manifest_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_precommit_0802/hash-job-53106/freeze-input-sha256.tsv",
+    "manifest_sha256": "<hash omitted>",
+    "scope": "previous_retry1_freeze_only",
+    "validates_retry2": false
+  },
+  "retry2_hash_validation": {
+    "job_id": "53140",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "node": "gpu48",
+    "gpus": 0,
+    "implementation_commit": "e31fcb01d34cc28924e9c4189f319d7f44af4911",
+    "entry_count": 25,
+    "manifest_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_precommit_0802/hash-job-53140/freeze-input-sha256.tsv",
+    "manifest_sha256": "<hash omitted>"
+  },
+  "retry3_hash_validation": {
+    "job_id": "53152",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "node": "gpu48",
+    "gpus": 0,
+    "implementation_commit": "a88404ac6a014f42692d1119d54de42c980fb310",
+    "entry_count": 25,
+    "manifest_path": "/guisongxia01/pangchao/wangyihan/wyh/diagnostics/qwen3vl_p1_precommit_0802/hash-retry3-job-53152/freeze-input-sha256.tsv",
+    "manifest_sha256": "<hash omitted>"
+  },
+  "retry1_history": {
+    "previous_implementation_commit": "f97f9f090369bc5d97f2a60b3d247aae6166b16e",
+    "previous_freeze_commit": "1dfbdbeda9f8b1ace5e3074a4dee9d52b8f86efe",
+    "previous_amendment_canonical_sha256": "<hash omitted>",
+    "formal_cpu_job": {
+      "job_id": "53064",
+      "state": "COMPLETED",
+      "engineering_outcome": "formal_cpu_receipt_valid"
+    },
+    "smoke_h0_job": {
+      "job_id": "53065",
+      "state": "FAILED",
+      "engineering_outcome": "rollout_and_summary_valid_evaluation_receipt_not_built",
+      "root_cause": "submitter_shell_boolean_chain_concatenated_h0_and_h1_receipt_identity"
+    },
+    "cancelled_downstream_job_ids": [
+      "53066",
+      "53067",
+      "53068"
+    ],
+    "dependency_guard_job": {
+      "job_id": "53069",
+      "state": "FAILED",
+      "root_cause": "slurmdbd_sacct_reason_none_requires_live_controller_dependency_evidence"
+    },
+    "scientific_outcome": "not_evaluated",
+    "old_outputs_must_remain_unmodified": true,
+    "retry_output_suffix": "-retry1"
+  },
+  "retry2_history": {
+    "previous_implementation_commit": "15cdca7ddc4611ad773576dd582e5b4513188d8e",
+    "previous_freeze_commit": "a59382656ad6cdd4ee62b76a655f84c2279f023c",
+    "previous_config_raw_sha256": "<hash omitted>",
+    "previous_amendment_canonical_sha256": "<hash omitted>",
+    "formal_cpu_job": {
+      "job_id": "53109",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "formal_cpu_receipt_valid"
+    },
+    "smoke_h0_job": {
+      "job_id": "53110",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "summary_and_evaluation_receipt_valid"
+    },
+    "smoke_h1_job": {
+      "job_id": "53111",
+      "state": "FAILED",
+      "exit_code": "3:0",
+      "worker_result": "building_summary",
+      "engineering_outcome": "rollout_and_offline_metrics_complete_summary_not_built",
+      "exact_error": "p1_harness_audit.json.per_sample.test_1_1.terminal_reviews[0] trigger differs from raw round-one evidence",
+      "root_cause": "trigger_rebuilder_applied_derived_verifier_output_accept_stop_predicates_directly_to_production_initial_stage_trace"
+    },
+    "cancelled_downstream_job_ids": [
+      "53112",
+      "53113"
+    ],
+    "cancelled_downstream_jobs": [
+      {
+        "job_id": "53112",
+        "state": "CANCELLED",
+        "exit_code": "0:0",
+        "start": null,
+        "worker_started": false
+      },
+      {
+        "job_id": "53113",
+        "state": "CANCELLED",
+        "exit_code": "0:0",
+        "start": null,
+        "worker_started": false
+      }
+    ],
+    "dependency_guard_job": {
+      "job_id": "53114",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "cancelled_never_started_statuses_synthesized_with_controller_evidence",
+      "synthesized_status_job_ids": [
+        "53112",
+        "53113"
+      ],
+      "unresolved_missing_status_job_ids": []
+    },
+    "scientific_outcome": "not_evaluated",
+    "old_outputs_must_remain_unmodified": true,
+    "retry_output_suffix": "-retry2"
+  },
+  "retry3_history": {
+    "previous_implementation_commit": "e31fcb01d34cc28924e9c4189f319d7f44af4911",
+    "previous_freeze_commit": "64871db9f03d19d6ddb9ab3edf502c3ecb698ee5",
+    "previous_config_raw_sha256": "<hash omitted>",
+    "previous_fixture_manifest_canonical_sha256": "<hash omitted>",
+    "previous_amendment_raw_sha256": "<hash omitted>",
+    "previous_amendment_canonical_sha256": "<hash omitted>",
+    "formal_cpu_job": {
+      "job_id": "53141",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "formal_cpu_receipt_valid_299_targeted_469_full_3_skipped"
+    },
+    "smoke_h0_job": {
+      "job_id": "53142",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "summary_and_evaluation_receipt_valid"
+    },
+    "smoke_h1_job": {
+      "job_id": "53143",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "summary_evaluation_receipt_and_smoke_pair_receipt_valid"
+    },
+    "core_h0_job": {
+      "job_id": "53144",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "standalone_summary_and_evaluation_receipt_valid",
+      "micro_iou": 0.7422312,
+      "micro_f1": 0.85204673,
+      "macro_iou": 0.28212851,
+      "macro_f1": 0.30560087
+    },
+    "core_h1_job": {
+      "job_id": "53145",
+      "state": "FAILED",
+      "exit_code": "1:0",
+      "worker_result": "running_rollout",
+      "engineering_outcome": "test_20_15_reset_entry_attachment_written_but_trajectory_json_not_serialized",
+      "error_type": "RecursionError",
+      "exact_error": "maximum recursion depth exceeded",
+      "trajectory_json_present": false,
+      "rollout_complete_present": false,
+      "summary_present": false,
+      "evaluation_receipt_present": false,
+      "root_cause": "h1_nonterminal_passthrough_outer_evidence_aliased_round_one_evidence_and_terminal_review_attachment_created_an_object_cycle"
+    },
+    "dependency_guard_job": {
+      "job_id": "53146",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "engineering_outcome": "all_started_workers_had_status_and_dependency_audit_completed",
+      "synthesized_status_job_ids": [],
+      "unresolved_missing_status_job_ids": []
+    },
+    "smoke_pair_receipt_status": "complete_and_independently_validated",
+    "core_pair_receipt_status": "not_created",
+    "scientific_outcome": "not_evaluated",
+    "old_outputs_must_remain_unmodified": true,
+    "cross_attempt_pair_composition_forbidden": true,
+    "retry_output_suffix": "-retry3"
+  },
+  "amends_preregistration_path": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_PREREGISTRATION_0802.json",
+  "amends_preregistration_canonical_sha256": "<hash omitted>",
+  "implementation_commit": "a88404ac6a014f42692d1119d54de42c980fb310",
+  "clean_run_worktree": "/guisongxia01/pangchao/wangyihan/Chang-Agent-baseline-0802-run",
+  "p0_acceptance_receipt_sha256": "<hash omitted>",
+  "cpu_fixture_manifest_sha256": "<hash omitted>",
+  "worker_sha256": {
+    "cpu_fixtures": "<hash omitted>",
+    "evaluation": "<hash omitted>",
+    "dependency_guard": "<hash omitted>"
+  },
+  "model_hash": {
+    "model.safetensors": "<hash omitted>"
+  },
+  "tool_hashes": {
+    "simpleclick_checkpoint": "<hash omitted>",
+    "sam3_checkpoint": "<hash omitted>",
+    "sam3_bpe": "<hash omitted>",
+    "runner": "<hash omitted>",
+    "summarizer": "<hash omitted>",
+    "analyzer": "<hash omitted>",
+    "summary_validator": "<hash omitted>",
+    "receipt_builder": "<hash omitted>",
+    "receipt_validator": "<hash omitted>",
+    "pair_builder": "<hash omitted>",
+    "pair_validator": "<hash omitted>",
+    "runtime_manifest_builder": "<hash omitted>",
+    "harness_worker": "<hash omitted>",
+    "terminal_review_scheduler": "<hash omitted>",
+    "terminal_review_verifier": "<hash omitted>",
+    "staged_verifier": "<hash omitted>",
+    "stage_backends": "<hash omitted>",
+    "environment": "<hash omitted>",
+    "verifier_regions": "<hash omitted>",
+    "h0_golden_fixture_validator": "<hash omitted>",
+    "submitter": "<hash omitted>"
+  },
+  "input_manifest_canonical_sha256": "<hash omitted>",
+  "resolved_run_config_sha256": "<hash omitted>",
+  "summary_schema_definition_and_validator_hashes": {
+    "definition_path": "tools/summarize_qwen3vl_e2e_run.py",
+    "definition_sha256": "<hash omitted>",
+    "validator_path": "tools/validate_qwen3vl_e2e_summary.py",
+    "validator_sha256": "<hash omitted>"
+  },
+  "receipt_schema_definition_and_validator_hashes": {
+    "definition_path": "tools/build_qwen3vl_evaluation_receipt.py",
+    "definition_sha256": "<hash omitted>",
+    "validator_path": "tools/validate_qwen3vl_evaluation_receipt.py",
+    "validator_sha256": "<hash omitted>"
+  },
+  "unique_output_paths": [
+    "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3",
+    "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1-retry3",
+    "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1-retry3",
+    "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3",
+    "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3"
+  ],
+  "slurm_node_partition_cpu_memory_time": {
+    "fixed_node": "gpu48",
+    "partition": "gre",
+    "allocations": {
+      "CA_0802(2)": {
+        "gpus": 0,
+        "cpus_per_task": 2,
+        "memory": "16G",
+        "time_limit": "00:45:00"
+      },
+      "CA_0802(3)": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "01:00:00"
+      },
+      "CA_0802(4)": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "01:00:00"
+      },
+      "CA_0802(5)": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "03:00:00"
+      },
+      "CA_0802(6)": {
+        "gpus": 1,
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "03:00:00"
+      }
+    },
+    "dependency_guard": {
+      "node_constraint": "unconstrained",
+      "gpus": 0,
+      "cpus_per_task": 1,
+      "memory": "1G",
+      "time_limit": "00:10:00"
+    }
+  },
+  "submission_script_path_and_sha256": {
+    "path": "tools/submit_qwen3vl_p1.sh",
+    "sha256": "<hash omitted>"
+  },
+  "qq_notification_titles_verified": true,
+  "user_approval_reference": {
+    "status": "recorded",
+    "source": "current_conversation",
+    "date_utc": "2026-08-02",
+    "approved_scope": "P1 implementation and staged CPU fixture, smoke and CORE validation, subject to all preregistered readiness and stop gates",
+    "p2_authorized": false,
+    "post_p1_iterative_training_authorized": true,
+    "post_p1_training_authorization_effective_after": "P1 comparison receipts, independent validation, registry/workbook, result report and result commit are complete",
+    "post_p1_training_requires_separate_versioned_data_and_run_preregistration_freeze_and_slurm_gates": true,
+    "post_p1_iterative_training_scope": "After P1 comparison and append-only closeout, use the then-latest framework to version full-process training data, train, evaluate, analyze failed trajectories and iterate with records and Git management.",
+    "approval_does_not_override_readiness_gates": true,
+    "execution_authorization_confirmation": "执行上述流程，得到对比结果，做好记录和管理",
+    "freeze_amend_authorization_confirmation": "确认授权 amend candidate 为最终 freeze B，并立即同步 detached worktree；全部检查通过前不提交正式作业",
+    "post_p1_training_authorization_confirmation": "在完成现在的工作后，可以根据最新版本的框架，结合之前的问题考虑重新去走创建训练数据、训练、评测、分析失败轨迹的迭代过程，同时也做好记录和git管理",
+    "external_message_id": null
+  },
+  "p1_execution_authorized": true,
+  "p0_acceptance_receipt": {
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_ACCEPTANCE_RECEIPT_0802.json",
+    "schema_id": "qwen3vl_p0_acceptance_receipt_v1",
+    "status": "complete",
+    "canonical_sha256": "<hash omitted>",
+    "raw_sha256": "<hash omitted>",
+    "p0_accepted": true,
+    "failed_gates": [],
+    "p1_execution_authorized_in_receipt": false
+  },
+  "amendment_policy": {
+    "append_only": true,
+    "preregistration_must_not_be_backfilled": true,
+    "p0_receipt_must_not_be_modified": true,
+    "historical_archive_must_not_be_modified": true,
+    "unknown_hashes_must_remain_null": true,
+    "placeholder_resolution_requires_rehash_and_independent_review": true
+  },
+  "treatment_contract": {
+    "factor_id": "terminal_review_scheduler_v1",
+    "unique_causal_variable": true,
+    "model_io_protocol": "v12.1",
+    "base_model_path": "/guisongxia01/pangchao/wangyihan/models/Qwen3-VL-2B-Instruct",
+    "inference_seed": 42,
+    "summary_schema_id": "qwen3vl_e2e_summary_v2",
+    "receipt_schema_id": "qwen3vl_evaluation_receipt_v2",
+    "h0": {
+      "value": "legacy_single_round_terminal_policy",
+      "harness_protocol_id": "qwen3vl_harness_h0_legacy_single_round_v1",
+      "experiment_arm_id": "v12_1-h0-legacy-single-round-base-0802",
+      "max_verifier_rounds": 1,
+      "max_stage_attempts_per_round": 2,
+      "max_environment_steps": 3
+    },
+    "h1": {
+      "value": "one_gtfree_independent_terminal_review_round",
+      "harness_protocol_id": "qwen3vl_harness_h1_gtfree_terminal_review_v1",
+      "experiment_arm_id": "v12_1-h1-gtfree-terminal-review-base-0802",
+      "max_verifier_rounds": 2,
+      "max_stage_attempts_per_round": 2,
+      "max_environment_steps": 3,
+      "third_round_allowed": false,
+      "plan_null_selection_policy_version": "environment_ordered_terminal_review_v1",
+      "plan_null_next_unreviewed_prompt_version": "qwen3vl_plan_null_next_unreviewed_region_v1",
+      "plan_null_alternative_diagnosis_prompt_version": "qwen3vl_plan_null_alternative_diagnosis_v1"
+    },
+    "allowed_arm_differences": [
+      "harness_protocol_id",
+      "experiment_arm_id",
+      "max_verifier_rounds",
+      "terminal_review",
+      "round_two_trigger_selection_and_decision_fields"
+    ],
+    "all_other_runtime_variables_must_be_identical": true,
+    "online_gt_free": true,
+    "gt_allowed_only_after_rollout_complete": true,
+    "frozen_safety_boundaries": [
+      "parser",
+      "geometry_authorization",
+      "locality_hard_gate",
+      "candidate_benefit_without_harm",
+      "rollback"
+    ]
+  },
+  "resource_contract": {
+    "maximum_total_gpus_for_ca0802": 3,
+    "cpu_fixture_gpus": 0,
+    "auxiliary_dependency_guard_gpus": 0,
+    "auxiliary_dependency_guard_is_not_a_formal_allocation": true,
+    "gpus_per_smoke_or_core_job": 1,
+    "gpu_model": "NVIDIA A800",
+    "bf16_required": true,
+    "cuda_visible_device_count_per_gpu_job": 1,
+    "h0_h1_concurrent": false,
+    "slurm_user": "guisongxia",
+    "unresolved_exact_resource_fields": []
+  },
+  "execution_allocations": [
+    {
+      "allocation_id": "CA_0802(2)",
+      "phase": "p1_cpu_fixtures",
+      "arm": "h0_h1",
+      "job_name": "CA0802P1CPUFixtures",
+      "job_name_status": "frozen",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(2)-qwen3vl-h0-h1-cpu-fixtures-retry3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H0-H1 CPU fixtures",
+      "resources": {
+        "gpus": 0,
+        "gpu_model": "none",
+        "node": "gpu48",
+        "partition": "gre",
+        "cpus_per_task": 2,
+        "memory": "16G",
+        "time_limit": "00:45:00"
+      },
+      "dependency": null,
+      "must_not_exist_before_submission": true
+    },
+    {
+      "allocation_id": "CA_0802(3)",
+      "phase": "p1_smoke1",
+      "arm": "h0",
+      "job_name": "CA0802P1SmokeH0",
+      "job_name_status": "frozen",
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "samples": [
+        "test_1_1"
+      ],
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1-retry3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1-retry3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(3)-qwen3vl-h0-base-smoke1-retry3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H0 base smoke1",
+      "resources": {
+        "gpus": 1,
+        "gpu_model": "NVIDIA A800",
+        "bf16_required": true,
+        "cuda_visible_device_count": 1,
+        "node": "gpu48",
+        "partition": "gre",
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "01:00:00"
+      },
+      "dependency": "afterok:<cpu_fixture_job_id>",
+      "must_not_exist_before_submission": true
+    },
+    {
+      "allocation_id": "CA_0802(4)",
+      "phase": "p1_smoke1",
+      "arm": "h1",
+      "job_name": "CA0802P1SmokeH1",
+      "job_name_status": "frozen",
+      "evaluation_id": "DEV-SMOKE-1-H1-V1",
+      "samples": [
+        "test_1_1"
+      ],
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1-retry3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1-retry3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(4)-qwen3vl-h1-base-smoke1-retry3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H1 base smoke1",
+      "resources": {
+        "gpus": 1,
+        "gpu_model": "NVIDIA A800",
+        "bf16_required": true,
+        "cuda_visible_device_count": 1,
+        "node": "gpu48",
+        "partition": "gre",
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "01:00:00"
+      },
+      "dependency": "afterok:<smoke_h0_job_id>",
+      "must_not_exist_before_submission": true
+    },
+    {
+      "allocation_id": "CA_0802(5)",
+      "phase": "p1_core3",
+      "arm": "h0",
+      "job_name": "CA0802P1CoreH0",
+      "job_name_status": "frozen",
+      "evaluation_id": "DEV-CORE-3-V1",
+      "samples": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ],
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H0 base CORE3",
+      "resources": {
+        "gpus": 1,
+        "gpu_model": "NVIDIA A800",
+        "bf16_required": true,
+        "cuda_visible_device_count": 1,
+        "node": "gpu48",
+        "partition": "gre",
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "03:00:00"
+      },
+      "dependency": "afterok:<smoke_h1_job_id>",
+      "must_not_exist_before_submission": true
+    },
+    {
+      "allocation_id": "CA_0802(6)",
+      "phase": "p1_core3",
+      "arm": "h1",
+      "job_name": "CA0802P1CoreH1",
+      "job_name_status": "frozen",
+      "evaluation_id": "DEV-CORE-3-V1",
+      "samples": [
+        "test_20_15",
+        "test_1_1",
+        "test_50_8"
+      ],
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3",
+      "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3/logs/slurm-%j.out",
+      "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3/logs/slurm-%j.err",
+      "qq_title": "CA0802 P1 H1 base CORE3",
+      "resources": {
+        "gpus": 1,
+        "gpu_model": "NVIDIA A800",
+        "bf16_required": true,
+        "cuda_visible_device_count": 1,
+        "node": "gpu48",
+        "partition": "gre",
+        "cpus_per_task": 4,
+        "memory": "48G",
+        "time_limit": "03:00:00"
+      },
+      "dependency": "afterok:<core_h0_job_id>",
+      "must_not_exist_before_submission": true
+    }
+  ],
+  "dependency_contract": {
+    "submission_order": [
+      "CA_0802(2)",
+      "CA_0802(3)",
+      "CA_0802(4)",
+      "CA_0802(5)",
+      "CA_0802(6)"
+    ],
+    "dependency_type": "afterok",
+    "dependency_chain": [
+      "CA_0802(3) afterok CA_0802(2)",
+      "CA_0802(4) afterok CA_0802(3)",
+      "CA_0802(5) afterok CA_0802(4)",
+      "CA_0802(6) afterok CA_0802(5)"
+    ],
+    "auxiliary_dependency_guard": {
+      "included_in_formal_allocations": false,
+      "job_name": "CA0802P1DependencyGuard",
+      "dependency": "afterany:<all_five_formal_job_ids>",
+      "formal_afterok_chain_unchanged": true,
+      "resources": {
+        "gpus": 0,
+        "cpus_per_task": 1,
+        "memory": "1G",
+        "time_limit": "00:10:00",
+        "node_constraint": null
+      }
+    },
+    "downstream_release_after_failed_predecessor": false,
+    "h0_h1_concurrent": false,
+    "dependency_status": "frozen"
+  },
+  "notification_contract": {
+    "channel": "QQ",
+    "required_body_fields": [
+      "job_name",
+      "job_id",
+      "terminal_status",
+      "elapsed_seconds",
+      "key_result_or_error",
+      "artifact_path"
+    ],
+    "terminal_states": [
+      "success",
+      "failed",
+      "cancelled",
+      "timeout",
+      "out_of_memory",
+      "node_fail"
+    ],
+    "credentials_or_proxy_values_forbidden": true,
+    "delivery_claim_requires_external_receipt": true,
+    "dependency_cancelled_before_worker_start": {
+      "handled_by_auxiliary_guard": true,
+      "status_path": "logs/status-<job_id>.txt",
+      "status_publish": "same-filesystem atomic no-replace hard link",
+      "requires_missing_worker_status": true,
+      "requires_cancelled_dependency_state": true,
+      "requires_missing_start_time": true,
+      "requires_noncompleted_direct_predecessor": true,
+      "started_missing_status_fails_closed": true,
+      "qq_attempt_receipt": "logs/qq-attempt-<job_id>.txt",
+      "notifier_exit_code_recorded": true,
+      "delivery_claimed": false
+    }
+  },
+  "stage_gate_contract": {
+    "all_gates_fail_closed": true,
+    "before_any_submission": [
+      "all required amendment fields are present and all implementation-dependent hashes are non-null",
+      "P0 acceptance receipt canonical and raw hashes match",
+      "CPU fixture manifest exists, is canonical-hash-bound and passes its validator",
+      "independent frozen-v12.1 H0 golden receipt is P0/source-blob/hash-bound and its fail-closed validator passes",
+      "all required plan-null trigger, selection, prompt-version and raw-call identity fixtures exist and pass",
+      "final_region_protocol_valid is independently rebuilt from hash-bound raw trajectory evidence in both builder and validator",
+      "summary v2 definition and validator pass",
+      "receipt v2 definition and validator pass",
+      "implementation commit is exact and the detached run worktree is clean",
+      "model, tools, worker, submitter, input manifest and resolved configs are hash-bound",
+      "all exact Slurm resources and proposed Job names are frozen",
+      "all five reserved output paths are absent",
+      "Slurm controller, duplicate jobs and current GPU allocation are checked",
+      "user P1 approval is recorded"
+    ],
+    "cpu_fixture_required_cases": [
+      "legacy_finish_parity",
+      "legacy_plan_null_parity",
+      "round_two_safe_plan",
+      "round_two_uncertain",
+      "round_conflict",
+      "repair_exhausted",
+      "budget_exhausted",
+      "safety_gate_rejection",
+      "pre_rollout_label_path_is_not_opened_read_or_stat_checked",
+      "plan_null_trigger_rebuilt_from_initial_and_at_most_one_repair",
+      "plan_null_next_unreviewed_environment_region",
+      "plan_null_first_unresolved_alternative_diagnosis_prompt",
+      "real_h1_empty_dual_mask_terminal_review",
+      "explicit_network_retry_counter_reconstruction",
+      "h0_and_h1_final_region_protocol_reconstruction_from_raw_evidence",
+      "dependency_cancelled_never_started_guard_and_notification_attempt",
+      "h1_nonterminal_passthrough_reset_trajectory_is_acyclic_and_serializable"
+    ],
+    "cpu_to_first_gpu": [
+      "CPU fixture Job completed successfully",
+      "independent H0 golden receipt validation and coordinated-tamper fixtures pass",
+      "H0 behavior parity rate equals 1.0",
+      "each eligible trigger enters exactly one independent round two",
+      "round two is deterministic and the complete transition table is covered",
+      "pre-rollout GT violation and safety-boundary relaxation rates equal 0",
+      "all budget counters are present, separate and within limits",
+      "plan-null prompt version, selected region and raw backend-call identities replay exactly",
+      "final-region protocol validity is rebuilt rather than trusted from feedback or declared summary fields",
+      "a safe plan path and dangerous action rejection are both covered",
+      "requested/scored mismatch and tool failure rates equal 0"
+    ],
+    "smoke_h0_to_h1": [
+      "H0 smoke completes on test_1_1 with valid summary and receipt",
+      "H0 requested/scored and infrastructure gates pass"
+    ],
+    "smoke_to_core": [
+      "H1 smoke completes on test_1_1",
+      "the historical finish case enters a schema-valid fresh-context nonduplicate deterministic round two",
+      "H1 final-region protocol validity is not below paired H0",
+      "GT, safety, requested/scored and tool-failure gates pass"
+    ],
+    "core_h0_to_h1": [
+      "H0 CORE completes all samples in exact requested order",
+      "H0 summary, receipt, requested/scored and infrastructure gates pass"
+    ],
+    "core_sample_order": [
+      "test_20_15",
+      "test_1_1",
+      "test_50_8"
+    ],
+    "h1_freeze_gates": [
+      "p0_acceptance_receipt_complete_and_hash_bound",
+      "cpu_fixture_manifest_present_hash_bound_and_validator_passed",
+      "h0_behavior_parity_endpoint_passed",
+      "exactly_one_round_two_endpoint_passed",
+      "round_two_independence_and_determinism_passed",
+      "complete_round_transition_table_covered",
+      "pre_rollout_gt_boundary_endpoint_passed",
+      "safety_boundary_relaxation_endpoint_passed",
+      "all_budget_counts_present_separate_and_within_limits",
+      "safe_plan_and_dangerous_action_rejection_both_covered",
+      "live_smoke_enters_schema_valid_round_two",
+      "h1_final_region_protocol_validity_endpoint_passed",
+      "requested_scored_endpoint_passed",
+      "tool_failure_endpoint_passed",
+      "summary_v2_validator_passed",
+      "receipt_v2_definition_and_validator_passed",
+      "exact_commit_clean_worktree_and_hashes_bound",
+      "all_reserved_output_paths_absent_before_submission",
+      "p1_user_approval_recorded"
+    ],
+    "h1_freeze_requires_all_19_gates": true,
+    "metric_improvement_is_not_a_harness_freeze_gate": true,
+    "no_new_diagnosis_or_candidate_with_safety_gates_passed": "proceed_to_capability_diagnosis_without_tuning_the_harness"
+  },
+  "prohibited_actions": [
+    "edit or backfill the original preregistration or P0 acceptance receipt",
+    "modify any CA_0801 archive evidence",
+    "submit any P1 Job while execution_readiness is not_execution_ready",
+    "run compute, tests, preprocessing, training or evaluation on the management node",
+    "read GT, labels, offline TP/FP/FN, IoU/F1, manual failure labels or historical false-finish identity before rollout completion",
+    "change model, tools, ordered inputs, seed, generation, initial environment state or non-round budgets between H0 and H1",
+    "relax or bypass parser, geometry, locality, candidate-benefit-without-harm or rollback safety boundaries",
+    "inherit hidden state, copy the first raw response as an independent review, or execute a third verifier round",
+    "increase network retries, tool attempts or environment steps because H1 has an additional verifier round",
+    "force an action to meet a candidate quota",
+    "authorize action after conflict, unresolved, unsafe, nonunique, schema-invalid or budget-exhausted outcomes",
+    "run post-SFT models, EXTENDED5, locked final, training or P2 before H1 is frozen and separately authorized",
+    "reuse, overwrite or renumber CA_0802(2) through CA_0802(6) after a conflict",
+    "write Slurm logs directly into the outputs root or overwrite historical outputs",
+    "run H0 and H1 concurrently or allocate more than one GPU to a P1 smoke or CORE Job",
+    "save a checkpoint for smoke",
+    "use any Slurm user other than guisongxia",
+    "include credentials or proxy values in logs or notifications",
+    "mark a receipt complete when any required path or digest is missing",
+    "claim CORE3 demonstrates LEVIR-CD generalization"
+  ],
+  "readiness_blockers": [],
+  "git_freeze_contract": {
+    "implementation_commit_and_freeze_commit_must_be_distinct": true,
+    "implementation_commit_symbol": "A",
+    "freeze_commit_symbol": "B",
+    "amendment_implementation_commit_field_records": "A",
+    "freeze_commit_must_be_direct_child_of_implementation_commit": true,
+    "required_parent_relation": "B^ == A",
+    "implementation_commit_contains_complete_code_tests_and_maintenance_docs": true,
+    "freeze_commit_contains_real_hash_resource_and_authorization_bindings": true,
+    "freeze_files_must_not_embed_a_self_referential_freeze_commit_hash": true,
+    "clean_detached_run_worktree_must_match": "B",
+    "runtime_commit_must_equal": "B",
+    "submission_and_receipt_must_record_both_commits": [
+      "implementation_commit=A",
+      "freeze_commit=B"
+    ]
+  },
+  "readiness_transition_contract": {
+    "set_execution_readiness_to_ready_only_if": [
+      "every required P1 amendment field is non-null or positively verified",
+      "all five Job names, exact resources and dependencies are frozen",
+      "all referenced files exist and their digests match",
+      "implementation commit A is recorded in this amendment and freeze commit B is its direct child",
+      "the clean detached run worktree and runtime_commit both equal freeze commit B",
+      "submission and evaluation receipt each record implementation commit A and freeze commit B",
+      "all reserved output paths are absent immediately before submission"
+    ],
+    "silent_placeholder_replacement_forbidden": true,
+    "any_contract_change_requires_explicit_amendment_and_rehash": true
+  },
+  "canonical_json_contract": {
+    "serialization": "UTF-8 encoding of json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False) with no trailing newline.",
+    "scope": "the complete parsed JSON object",
+    "digest_status": "frozen_external_digest_recorded_in_handoff",
+    "external_digest_location": "the corresponding P1 amendment handoff after all placeholders are resolved"
+  }
+}

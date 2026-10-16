@@ -1,0 +1,194 @@
+{
+  "schema": "qwen3vl_v121_manual_curation_v1",
+  "curator": "manual_rgb_gt_sam3_review_0801",
+  "policy": "Use only visually clear building/background states; evidence names physical T1/T2 content and never cites masks or annotations.",
+  "hardcase_v2": {
+    "keep_scan_positive_ids": [
+      "train_train_118_r1c1_changed",
+      "train_train_114_r3c1_changed",
+      "train_train_231_r3c2_changed"
+    ],
+    "scan_negative_candidate_id": "train_train_127_r0c2_unchanged",
+    "scan_negative_evidence": "T1 and T2 show only forest, bare ground, or roadway without a roofed building in this scan tile.",
+    "candidate_harm_tile_ids": [0, 4, 8]
+  },
+  "hardcase_v3": {
+    "unchanged_scan_tile_ids": {
+      "train_train_127_r0c2_unchanged": 4,
+      "train_train_364_r0c2_unchanged": 4,
+      "train_train_365_r3c2_unchanged": 4
+    },
+    "scan_positive_tile_ids": {
+      "train_train_118_r1c1_changed": 0,
+      "train_train_114_r3c1_changed": 7,
+      "train_train_231_r3c2_changed": 4
+    },
+    "grid_scan_tile_ids": [0, 4, 8],
+    "grid_candidate_harm_tile_ids": [0, 4, 8],
+    "delta_removed_harm_candidate_ids": [
+      "train_train_118_r1c1_changed",
+      "train_train_114_r3c1_changed",
+      "train_train_231_r3c2_changed"
+    ],
+    "unchanged_transition_cases": [
+      {
+        "candidate_id": "train_train_364_r0c2_unchanged",
+        "source_view": "t2",
+        "component_rank": 1,
+        "expected_area": 236
+      },
+      {
+        "candidate_id": "train_train_365_r3c2_unchanged",
+        "source_view": "t2",
+        "component_rank": 0,
+        "expected_area": 1205
+      },
+      {
+        "candidate_id": "train_train_365_r3c2_unchanged",
+        "source_view": "t2",
+        "component_rank": 1,
+        "expected_area": 464
+      }
+    ],
+    "time_reverse_cases": [
+      {
+        "candidate_id": "train_train_407_r3c2_changed",
+        "evidence": "T1 shows a newly built roofed house while T2 shows cultivated ground at the same location."
+      },
+      {
+        "candidate_id": "train_train_231_r3c2_changed",
+        "evidence": "T1 shows a large roofed house while T2 shows graded bare ground at the same location."
+      }
+    ]
+  },
+  "hardcase_v4": {
+    "residual_false_positive_cases": [
+      {
+        "candidate_id": "train_train_51_r3c0_changed",
+        "source_view": "t2",
+        "component_rank": 0,
+        "expected_area": 1804,
+        "expected_gt_overlap": 0,
+        "expected_box_xyxy": [124, 130, 184, 181],
+        "t1_state": "background",
+        "t2_state": "background",
+        "evidence": "T1 shows bare construction ground and T2 shows construction vehicles and bare ground without a roofed building at this location."
+      },
+      {
+        "candidate_id": "train_train_85_r0c0_changed",
+        "source_view": "t1",
+        "component_rank": 1,
+        "expected_area": 258,
+        "expected_gt_overlap": 0,
+        "expected_box_xyxy": [74, 20, 91, 41],
+        "t1_state": "background",
+        "t2_state": "background",
+        "evidence": "T1 and T2 show tree canopy without a roofed building at this location."
+      }
+    ]
+  },
+  "hardcase_v5": {
+    "semantic_anchor_cases": [
+      {
+        "candidate_id": "train_train_118_r1c1_changed",
+        "expected_component_area": 1656,
+        "paired_candidate_id": "train_train_118_r1c1_changed_candidate_harm_delta_removed"
+      },
+      {
+        "candidate_id": "train_train_114_r3c1_changed",
+        "expected_component_area": 1906,
+        "paired_candidate_id": "train_train_114_r3c1_changed_candidate_harm_delta_removed"
+      }
+    ],
+    "actionable_repair_cases": [
+      {
+        "candidate_id": "train_train_364_r0c2_unchanged",
+        "source_view": "t2",
+        "component_rank": 1,
+        "expected_area": 236,
+        "paired_candidate_id": "train_train_364_r0c2_unchanged_candidate_improvement_delta_removed_r1"
+      },
+      {
+        "candidate_id": "train_train_365_r3c2_unchanged",
+        "source_view": "t2",
+        "component_rank": 0,
+        "expected_area": 1205,
+        "paired_candidate_id": "train_train_365_r3c2_unchanged_candidate_improvement_delta_removed_r0"
+      }
+    ]
+  },
+  "hardcase_v6": {
+    "base_round": "v3-action",
+    "include_background_fp_pairs": false,
+    "frozen_v3_core": {
+      "expected_rows": 53,
+      "source_job_id": "52132",
+      "handoff_content_sha256": "<hash omitted>",
+      "canonical_content_sha256": "<hash omitted>",
+      "canonical_content_fields": [
+        "id",
+        "prompt_sha256",
+        "target_sha256",
+        "image_sha256"
+      ]
+    },
+    "residual_false_positive_cases": [
+      {
+        "candidate_id": "train_train_51_r3c0_changed",
+        "source_view": "t2",
+        "component_rank": 0
+      },
+      {
+        "candidate_id": "train_train_85_r0c0_changed",
+        "source_view": "t1",
+        "component_rank": 1
+      }
+    ],
+    "true_transition_cases": [
+      {
+        "candidate_id": "train_train_407_r3c2_changed",
+        "variant": "forward",
+        "target_view": "t2",
+        "expected_component_area": 763,
+        "id_prefix": "train_train_407_r3c2_changed"
+      },
+      {
+        "candidate_id": "train_train_231_r3c2_changed",
+        "variant": "time_reverse",
+        "target_view": "t1",
+        "expected_component_area": 1630,
+        "id_prefix": "train_train_231_r3c2_changed_time_reverse"
+      }
+    ]
+  },
+  "hardcase_v7": {
+    "base_round": "v6-matched-contrast",
+    "repeat_selector_field": "v6_extension",
+    "expected_unique_train_rows": 63,
+    "expected_val_rows": 24,
+    "expected_weighted_source_rows": 10,
+    "sampling_repeat_copies": 2,
+    "sampling_weight_factor": 3,
+    "expected_train_exposures": 83
+  },
+  "samples": [
+    {"candidate_id":"train_train_407_r3c2_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows cultivated ground while T2 shows a newly built roofed house at the same location."},
+    {"candidate_id":"train_train_51_r3c0_changed","use":false,"reason":"small target and construction clutter make the local state less clear"},
+    {"candidate_id":"train_train_118_r1c1_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows scrub-covered ground while T2 shows a light-roofed building at the same location."},
+    {"candidate_id":"train_train_134_r3c0_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows a cleared construction plot while T2 shows a roofed house at the same location."},
+    {"candidate_id":"train_train_114_r3c1_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows trees and bare ground while T2 shows roofed buildings in the same area."},
+    {"candidate_id":"train_train_85_r0c0_changed","use":false,"reason":"tree cover makes the selected component boundary ambiguous"},
+    {"candidate_id":"train_train_333_r2c1_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows bare earth while T2 shows a roofed house at the same location."},
+    {"candidate_id":"train_train_231_r3c2_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows graded bare ground while T2 shows a large roofed house at the same location."},
+    {"candidate_id":"train_train_127_r0c2_unchanged","use":true,"t1_state":"background","t2_state":"background","evidence":"Both T1 and T2 show trees and a dirt road without a roofed building in the inspected area."},
+    {"candidate_id":"train_train_406_r3c2_unchanged","use":false,"reason":"redundant background-only scene"},
+    {"candidate_id":"train_train_364_r0c2_unchanged","use":true,"t1_state":"building","t2_state":"building","evidence":"The same roofed residential buildings remain visible in both T1 and T2."},
+    {"candidate_id":"train_train_365_r3c2_unchanged","use":true,"t1_state":"building","t2_state":"building","evidence":"A small roofed utility building remains at the same location in T1 and T2."},
+    {"candidate_id":"val_val_43_r1c1_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows grass and trees while T2 shows a roofed house at the same location."},
+    {"candidate_id":"val_val_41_r3c2_changed","use":true,"t1_state":"building","t2_state":"background","evidence":"T1 shows a small light-roofed building while T2 shows grass at the same location."},
+    {"candidate_id":"val_val_21_r2c1_changed","use":true,"t1_state":"background","t2_state":"building","evidence":"T1 shows trees and open ground while T2 shows a row of roofed houses in the same area."},
+    {"candidate_id":"val_val_57_r3c2_unchanged","use":true,"t1_state":"background","t2_state":"background","evidence":"Both T1 and T2 show scrub and bare ground without a roofed building in the inspected area."},
+    {"candidate_id":"val_val_60_r3c0_unchanged","use":true,"t1_state":"background","t2_state":"background","evidence":"Both T1 and T2 show open fields without a roofed building in the inspected area."},
+    {"candidate_id":"val_val_61_r1c3_unchanged","use":true,"t1_state":"background","t2_state":"background","evidence":"Both T1 and T2 show cultivated fields without a roofed building in the inspected area."}
+  ]
+}

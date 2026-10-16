@@ -1,0 +1,1828 @@
+{
+  "schema_id": "qwen3vl_p2_actionability_preregistration_v1",
+  "design_status": "frozen",
+  "execution_status": "not_run",
+  "created_utc": "2026-08-03",
+  "purpose": "Test whether the frozen production action space contains at least one single-step primary candidate that improves each P1 false-finish target and passes the unchanged pre-Qwen hard gates before any C-ISO or T-TRAJ data are constructed.",
+  "interpretation_scope": "Conclusions apply only to the frozen CORE3 source states, enumerator, tools, single-step budget, and primary action inventory. They are not a LEVIR-CD generalization result.",
+  "anchors": {
+    "p1_runtime_source_freeze_commit_b4": "5210f89f5ca13ee1e636f5aa6a44631206a80123",
+    "p1_acceptance_commit": "17e9bb9914266691aee0c3d2b5e78b6bf64d7a00",
+    "implementation_commit": "8252a57b191a2a7c4aa176a3f82cca5218119533",
+    "freeze_commit_policy": "The manifest records implementation commit A only. Freeze commit B must be its direct child and is recorded only by external run receipts."
+  },
+  "source_h0_retry3": {
+    "job_id": "53158",
+    "state": "COMPLETED",
+    "arm": "h0",
+    "experiment_arm_id": "v12_1-h0-legacy-single-round-base-0802",
+    "harness_protocol_id": "qwen3vl_harness_h0_legacy_single_round_v1",
+    "runtime_commit": "5210f89f5ca13ee1e636f5aa6a44631206a80123",
+    "output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3",
+    "rollout_complete": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/rollout_complete.json",
+      "sha256": "<hash omitted>"
+    },
+    "evaluation_receipt": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/evaluation_receipt.json",
+      "sha256": "<hash omitted>"
+    },
+    "source_state_policy": "Every candidate resets independently to the exact cached H0 retry3 selected-step-zero T1/T2 semantic masks. No candidate starts from another candidate."
+  },
+  "source_h1_retry3": {
+    "job_id": "53159",
+    "state": "COMPLETED",
+    "arm": "h1",
+    "experiment_arm_id": "v12_1-h1-gtfree-terminal-review-base-0802",
+    "harness_protocol_id": "qwen3vl_harness_h1_gtfree_terminal_review_v1",
+    "runtime_commit": "5210f89f5ca13ee1e636f5aa6a44631206a80123",
+    "output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3",
+    "rollout_complete": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3/run/rollout_complete.json",
+      "sha256": "<hash omitted>"
+    },
+    "evaluation_receipt": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3/evaluation_receipt.json",
+      "sha256": "<hash omitted>"
+    },
+    "pair_comparison_receipt": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(6)-qwen3vl-h1-base-core3-retry3/pair_comparison_receipt.json",
+      "sha256": "<hash omitted>"
+    },
+    "provenance_policy": "The frozen H0/H1 pair proves that H1 selected the same step-zero state and metrics as the H0 masks used for P2, while binding the two P1 false-finish targets to the completed H1 evaluation.",
+    "paired_h0_output_root": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3",
+    "pair_equivalence_requirement": "The fixed CORE3 pair must bind independent H0 Job 53158 and H1 Job 53159 receipts, and the bound summaries/source metrics must show the same verifier-selected step and selected metrics for every sample."
+  },
+  "ordered_samples": [
+    "test_20_15",
+    "test_1_1",
+    "test_50_8"
+  ],
+  "target_samples": [
+    "test_1_1",
+    "test_50_8"
+  ],
+  "execution_protocol": {
+    "seed": 42,
+    "query": "building",
+    "single_step_independent_reset": true,
+    "max_actions_per_candidate": 1,
+    "candidate_to_candidate_state_carryover": false,
+    "qwen_invoked": false,
+    "tool_device": "cuda",
+    "sam3_resolution": 1008,
+    "tool_timeout_seconds": 900,
+    "authorized_negative_point_input_scope": "full_session",
+    "matching": {
+      "mode": "overlap_presence",
+      "overlap_threshold": 0.25,
+      "t12_min_instance_area": 0,
+      "cd_min_instance_area": 0
+    },
+    "proposal_config": {
+      "max_regions": 1,
+      "max_delta_regions": 1,
+      "min_component_area": 4,
+      "padding_ratio": 0.25,
+      "empty_mask_scan_grid_size": 3
+    },
+    "gate_config": {
+      "max_selection_area_delta": 0.25,
+      "max_locality_outside_ratio": 0.1,
+      "max_target_mask_change_ratio": 0.25,
+      "max_component_count_delta": 4,
+      "max_point_proposal_change_ratio": 0.25,
+      "max_point_proposal_change_pixels": 256,
+      "max_point_image_change_ratio": 0.004,
+      "point_proposal_change_gate_enabled": true
+    }
+  },
+  "action_enumeration_contract": {
+    "authority": "MaskPairProcessor.rebuild followed by attach_verifier_regions on the frozen masks, then tools.run_qwen3vl_p2_oracle.enumerate_oracle_actions",
+    "manual_coordinate_selection_forbidden": true,
+    "present_proposal_primary": "one negative_point on the exactly one white target view at component_seed_pixels",
+    "present_proposal_diagnostic": "one positive_point on the exactly one black target view at the same component_seed_pixels",
+    "scan_proposal_primary": "one box action for each of t1 and t2 at box_pixels",
+    "diagnostic_tier_is_executor_only": true,
+    "primary_tier_is_only_decision_tier": true,
+    "action_spec_deduplication": "exact candidate_id and exact sample/tier/region/action/target/geometry identity",
+    "candidate_state_deduplication": "not used to reduce the preregistered action inventory; identical resulting masks remain separately auditable action outcomes",
+    "expected_candidate_counts": {
+      "total": 36,
+      "primary": 27,
+      "diagnostic_executor_only": 9
+    },
+    "expected_primary_by_sample": {
+      "test_20_15": 8,
+      "test_1_1": 1,
+      "test_50_8": 18
+    },
+    "expected_diagnostic_by_sample": {
+      "test_20_15": 8,
+      "test_1_1": 1,
+      "test_50_8": 0
+    },
+    "all_proposals_canonical_sha256": "<hash omitted>",
+    "all_actions_canonical_sha256": "<hash omitted>",
+    "combined_inventory_canonical_sha256": "<hash omitted>"
+  },
+  "schema_contracts": {
+    "execution_manifest": "qwen3vl_p2_oracle_execution_manifest_v1",
+    "candidate_index": "qwen3vl_p2_oracle_candidates_v1",
+    "generation_complete_marker": "qwen3vl_p2_candidate_generation_complete_v1",
+    "scoring_manifest": "qwen3vl_p2_oracle_scoring_manifest_v1",
+    "score_report": "qwen3vl_p2_oracle_score_report_v1",
+    "generation_receipt": "qwen3vl_p2_oracle_generation_receipt_v1",
+    "decision": "qwen3vl_p2_actionability_decision_v1",
+    "scoring_receipt": "qwen3vl_p2_oracle_scoring_receipt_v1",
+    "submission_receipt": "qwen3vl_p2_oracle_submission_receipt_v1"
+  },
+  "metric_contract": {
+    "comparison_epsilon": 1e-12,
+    "comparison_occurs_before_rounding": true,
+    "beneficial_if": "delta_iou_above_epsilon_and_delta_f1_above_epsilon",
+    "harmful_if": "either_metric_decreases_below_negative_epsilon_or_both_metrics_tie_with_tp_decrease_or_fp_increase_or_fn_increase",
+    "otherwise": "indeterminate",
+    "empty_gt_and_empty_prediction": {
+      "iou": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "empty_prediction_nonempty_gt": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "iou": 0.0,
+      "f1": 0.0
+    },
+    "empty_gt_nonempty_prediction": {
+      "precision": 0.0,
+      "recall": 1.0,
+      "iou": 0.0,
+      "f1": 0.0
+    },
+    "rate_contract": "Every rate records numerator, denominator, and Wilson 95% interval; a zero denominator is represented by null rate and bounds."
+  },
+  "decision_contract": {
+    "allow_data_construction_if": "test_1_1 and test_50_8 each have at least one primary beneficial candidate whose unchanged pre-Qwen hard gate passed",
+    "proceed_target": "construct matched C-ISO and T-TRAJ data only after this condition passes",
+    "stop_if": [
+      "either target has no primary beneficial candidate in the complete frozen inventory",
+      "either target has beneficial primary candidates but none pass the unchanged pre-Qwen hard gate",
+      "candidate generation or offline scoring evidence is incomplete or invalid"
+    ],
+    "beneficial_but_hard_gated_policy": "Report the action and gate reason for review; do not modify, relax, or retune the gate in this P2 run.",
+    "diagnostic_candidates_affect_decision": false,
+    "test_20_15_affects_target_gate": false,
+    "negative_result_interpretation": "No reachability was observed only within this preregistered finite single-step action inventory; it is not proof that no useful action exists in a broader space."
+  },
+  "gt_boundary": {
+    "generation_manifest_contains_labels": false,
+    "generation_process_receives_input_root": false,
+    "generation_process_receives_scoring_manifest": false,
+    "generation_process_receives_only_explicit_a_b_and_frozen_mask_files": true,
+    "candidate_generation_complete_marker_required_before_any_label_file_is_opened": true,
+    "all_candidate_records_and_masks_hash_verified_before_any_label_file_is_opened": true,
+    "labels_are_offline_scorer_only": true
+  },
+  "runtime_files": {
+    "action_generator": {
+      "path": "tools/run_qwen3vl_p2_oracle.py",
+      "sha256": "<hash omitted>"
+    },
+    "scorer": {
+      "path": "tools/score_qwen3vl_p2_oracle.py",
+      "sha256": "<hash omitted>"
+    },
+    "generation_runtime_sources": [
+      {
+        "path": "change_agent/action_parser.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/omniovcd_adapter.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/sam3_adapter.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/segagent_adapter.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/staged_verifier.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/subprocess_adapters.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/environment.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/executor.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/state.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/trajectory.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/verifier.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/verifier_protocol.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/verifier_regions.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/coordinates.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "tools/seeded_segmentation_worker.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "tools/segmentation_worker.py",
+        "sha256": "<hash omitted>"
+      }
+    ]
+  },
+  "tools": {
+    "workspace_root": {
+      "path": "/guisongxia01/pangchao/wangyihan"
+    },
+    "segagent_python": {
+      "path": "/guisongxia01/pangchao/wangyihan/conda_envs/segagent-env/bin/python3.10",
+      "sha256": "<hash omitted>"
+    },
+    "omniovcd_python": {
+      "path": "/guisongxia01/pangchao/wangyihan/conda_envs/omniovcd-env/bin/python3.12",
+      "sha256": "<hash omitted>"
+    },
+    "simpleclick_checkpoint": {
+      "path": "/guisongxia01/pangchao/wangyihan/models/SimpleClick/cocolvis_vit_large.pth",
+      "sha256": "<hash omitted>"
+    },
+    "sam3_checkpoint": {
+      "path": "/guisongxia01/pangchao/wangyihan/models/sam3/sam3.pt",
+      "sha256": "<hash omitted>"
+    },
+    "sam3_bpe": {
+      "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent/third_party/OmniOVCD/sam3/assets/bpe_simple_vocab_16e6.txt.gz",
+      "sha256": "<hash omitted>"
+    }
+  },
+  "samples": {
+    "test_20_15": {
+      "t1_image": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/A/test_20_15.png",
+        "sha256": "<hash omitted>"
+      },
+      "t2_image": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/B/test_20_15.png",
+        "sha256": "<hash omitted>"
+      },
+      "t1_mask": {
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/tool_runs/test_20_15/sam3_initialization/initialize_000/t1_mask.npy",
+        "sha256": "<hash omitted>",
+        "mask_sha256": "<hash omitted>"
+      },
+      "t2_mask": {
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/tool_runs/test_20_15/sam3_initialization/initialize_000/t2_mask.npy",
+        "sha256": "<hash omitted>",
+        "mask_sha256": "<hash omitted>"
+      },
+      "initial_state_mask_sha256": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>",
+        "change": "<hash omitted>"
+      },
+      "offline_label": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/label_cvt/test_20_15.png",
+        "sha256": "<hash omitted>"
+      },
+      "proposals_canonical_sha256": "<hash omitted>",
+      "actions_canonical_sha256": "<hash omitted>",
+      "proposals": [
+        {
+          "region_id": "r0",
+          "batch_index": 0,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 1390,
+          "component_seed_pixels": [
+            29,
+            153
+          ],
+          "component_seed_normalized": [
+            114,
+            600
+          ],
+          "box_pixels": [
+            0,
+            123,
+            76,
+            187
+          ],
+          "box_normalized": [
+            0,
+            482,
+            298,
+            733
+          ],
+          "change_pixels": 1830,
+          "temporal_difference_pixels": 1830,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 1830,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 1390,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r1",
+          "batch_index": 1,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 1116,
+          "component_seed_pixels": [
+            37,
+            110
+          ],
+          "component_seed_normalized": [
+            145,
+            431
+          ],
+          "box_pixels": [
+            0,
+            84,
+            69,
+            142
+          ],
+          "box_normalized": [
+            0,
+            329,
+            271,
+            557
+          ],
+          "change_pixels": 1696,
+          "temporal_difference_pixels": 1696,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 1696,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 1116,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r2",
+          "batch_index": 2,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 1057,
+          "component_seed_pixels": [
+            12,
+            83
+          ],
+          "component_seed_normalized": [
+            47,
+            325
+          ],
+          "box_pixels": [
+            0,
+            54,
+            50,
+            111
+          ],
+          "box_normalized": [
+            0,
+            212,
+            196,
+            435
+          ],
+          "change_pixels": 1765,
+          "temporal_difference_pixels": 1765,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 1765,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 1057,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r3",
+          "batch_index": 3,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 834,
+          "component_seed_pixels": [
+            109,
+            237
+          ],
+          "component_seed_normalized": [
+            427,
+            929
+          ],
+          "box_pixels": [
+            78,
+            215,
+            139,
+            255
+          ],
+          "box_normalized": [
+            306,
+            843,
+            545,
+            1000
+          ],
+          "change_pixels": 1062,
+          "temporal_difference_pixels": 1062,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 1062,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 834,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r4",
+          "batch_index": 4,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 360,
+          "component_seed_pixels": [
+            6,
+            183
+          ],
+          "component_seed_normalized": [
+            24,
+            718
+          ],
+          "box_pixels": [
+            0,
+            149,
+            25,
+            202
+          ],
+          "box_normalized": [
+            0,
+            584,
+            98,
+            792
+          ],
+          "change_pixels": 579,
+          "temporal_difference_pixels": 579,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 579,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 360,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r5",
+          "batch_index": 5,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 352,
+          "component_seed_pixels": [
+            5,
+            54
+          ],
+          "component_seed_normalized": [
+            20,
+            212
+          ],
+          "box_pixels": [
+            0,
+            29,
+            24,
+            76
+          ],
+          "box_normalized": [
+            0,
+            114,
+            94,
+            298
+          ],
+          "change_pixels": 568,
+          "temporal_difference_pixels": 568,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 568,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 352,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r6",
+          "batch_index": 6,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 278,
+          "component_seed_pixels": [
+            135,
+            250
+          ],
+          "component_seed_normalized": [
+            529,
+            980
+          ],
+          "box_pixels": [
+            98,
+            234,
+            155,
+            255
+          ],
+          "box_normalized": [
+            384,
+            918,
+            608,
+            1000
+          ],
+          "change_pixels": 741,
+          "temporal_difference_pixels": 741,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 741,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 278,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        },
+        {
+          "region_id": "r7",
+          "batch_index": 7,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 3,
+          "component_seed_pixels": [
+            7,
+            108
+          ],
+          "component_seed_normalized": [
+            27,
+            424
+          ],
+          "box_pixels": [
+            3,
+            104,
+            12,
+            113
+          ],
+          "box_normalized": [
+            12,
+            408,
+            47,
+            443
+          ],
+          "change_pixels": 21,
+          "temporal_difference_pixels": 21,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 21,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 3,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        }
+      ],
+      "actions": [
+        {
+          "candidate_id": "test_20_15--primary--r0--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r0",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            29,
+            153
+          ],
+          "coordinate": [
+            29,
+            153
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r1--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r1",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            37,
+            110
+          ],
+          "coordinate": [
+            37,
+            110
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r2--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r2",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            12,
+            83
+          ],
+          "coordinate": [
+            12,
+            83
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r3--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r3",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            109,
+            237
+          ],
+          "coordinate": [
+            109,
+            237
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r4--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r4",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            6,
+            183
+          ],
+          "coordinate": [
+            6,
+            183
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r5--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r5",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            5,
+            54
+          ],
+          "coordinate": [
+            5,
+            54
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r6--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r6",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            135,
+            250
+          ],
+          "coordinate": [
+            135,
+            250
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--primary--r7--negative_point--t2",
+          "sample": "test_20_15",
+          "tier": "primary",
+          "region_id": "r7",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            7,
+            108
+          ],
+          "coordinate": [
+            7,
+            108
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r0--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r0",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            29,
+            153
+          ],
+          "coordinate": [
+            29,
+            153
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r1--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r1",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            37,
+            110
+          ],
+          "coordinate": [
+            37,
+            110
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r2--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r2",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            12,
+            83
+          ],
+          "coordinate": [
+            12,
+            83
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r3--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r3",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            109,
+            237
+          ],
+          "coordinate": [
+            109,
+            237
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r4--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r4",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            6,
+            183
+          ],
+          "coordinate": [
+            6,
+            183
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r5--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r5",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            5,
+            54
+          ],
+          "coordinate": [
+            5,
+            54
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r6--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r6",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            135,
+            250
+          ],
+          "coordinate": [
+            135,
+            250
+          ]
+        },
+        {
+          "candidate_id": "test_20_15--diagnostic_executor_only--r7--positive_point--t1",
+          "sample": "test_20_15",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r7",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            7,
+            108
+          ],
+          "coordinate": [
+            7,
+            108
+          ]
+        }
+      ]
+    },
+    "test_1_1": {
+      "t1_image": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/A/test_1_1.png",
+        "sha256": "<hash omitted>"
+      },
+      "t2_image": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/B/test_1_1.png",
+        "sha256": "<hash omitted>"
+      },
+      "t1_mask": {
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/tool_runs/test_1_1/sam3_initialization/initialize_000/t1_mask.npy",
+        "sha256": "<hash omitted>",
+        "mask_sha256": "<hash omitted>"
+      },
+      "t2_mask": {
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/tool_runs/test_1_1/sam3_initialization/initialize_000/t2_mask.npy",
+        "sha256": "<hash omitted>",
+        "mask_sha256": "<hash omitted>"
+      },
+      "initial_state_mask_sha256": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>",
+        "change": "<hash omitted>"
+      },
+      "offline_label": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/label_cvt/test_1_1.png",
+        "sha256": "<hash omitted>"
+      },
+      "proposals_canonical_sha256": "<hash omitted>",
+      "actions_canonical_sha256": "<hash omitted>",
+      "proposals": [
+        {
+          "region_id": "r0",
+          "batch_index": 0,
+          "sources": [
+            "change_component",
+            "temporal_difference"
+          ],
+          "audit_kind": "present",
+          "component_area": 626,
+          "component_seed_pixels": [
+            217,
+            176
+          ],
+          "component_seed_normalized": [
+            851,
+            690
+          ],
+          "box_pixels": [
+            187,
+            155,
+            244,
+            196
+          ],
+          "box_normalized": [
+            733,
+            608,
+            957,
+            769
+          ],
+          "change_pixels": 626,
+          "temporal_difference_pixels": 626,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 626,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 626,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": true
+        }
+      ],
+      "actions": [
+        {
+          "candidate_id": "test_1_1--primary--r0--negative_point--t2",
+          "sample": "test_1_1",
+          "tier": "primary",
+          "region_id": "r0",
+          "action": "negative_point",
+          "target_view": "t2",
+          "geometry_pixels": [
+            217,
+            176
+          ],
+          "coordinate": [
+            217,
+            176
+          ]
+        },
+        {
+          "candidate_id": "test_1_1--diagnostic_executor_only--r0--positive_point--t1",
+          "sample": "test_1_1",
+          "tier": "diagnostic_executor_only",
+          "region_id": "r0",
+          "action": "positive_point",
+          "target_view": "t1",
+          "geometry_pixels": [
+            217,
+            176
+          ],
+          "coordinate": [
+            217,
+            176
+          ]
+        }
+      ]
+    },
+    "test_50_8": {
+      "t1_image": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/A/test_50_8.png",
+        "sha256": "<hash omitted>"
+      },
+      "t2_image": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/B/test_50_8.png",
+        "sha256": "<hash omitted>"
+      },
+      "t1_mask": {
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/tool_runs/test_50_8/sam3_initialization/initialize_000/t1_mask.npy",
+        "sha256": "<hash omitted>",
+        "mask_sha256": "<hash omitted>"
+      },
+      "t2_mask": {
+        "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(5)-qwen3vl-h0-base-core3-retry3/run/tool_runs/test_50_8/sam3_initialization/initialize_000/t2_mask.npy",
+        "sha256": "<hash omitted>",
+        "mask_sha256": "<hash omitted>"
+      },
+      "initial_state_mask_sha256": {
+        "t1": "<hash omitted>",
+        "t2": "<hash omitted>",
+        "change": "<hash omitted>"
+      },
+      "offline_label": {
+        "path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/test_256/label_cvt/test_50_8.png",
+        "sha256": "<hash omitted>"
+      },
+      "proposals_canonical_sha256": "<hash omitted>",
+      "actions_canonical_sha256": "<hash omitted>",
+      "proposals": [
+        {
+          "region_id": "s0",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 0,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7225,
+          "component_seed_pixels": [
+            42,
+            42
+          ],
+          "component_seed_normalized": [
+            165,
+            165
+          ],
+          "box_pixels": [
+            0,
+            0,
+            84,
+            84
+          ],
+          "box_normalized": [
+            0,
+            0,
+            329,
+            329
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 0,
+          "scan_tile_column": 0
+        },
+        {
+          "region_id": "s1",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 1,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7225,
+          "component_seed_pixels": [
+            127,
+            42
+          ],
+          "component_seed_normalized": [
+            498,
+            165
+          ],
+          "box_pixels": [
+            85,
+            0,
+            169,
+            84
+          ],
+          "box_normalized": [
+            333,
+            0,
+            663,
+            329
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 0,
+          "scan_tile_column": 1
+        },
+        {
+          "region_id": "s2",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 2,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7310,
+          "component_seed_pixels": [
+            212,
+            42
+          ],
+          "component_seed_normalized": [
+            831,
+            165
+          ],
+          "box_pixels": [
+            170,
+            0,
+            255,
+            84
+          ],
+          "box_normalized": [
+            667,
+            0,
+            1000,
+            329
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 0,
+          "scan_tile_column": 2
+        },
+        {
+          "region_id": "s3",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 3,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7225,
+          "component_seed_pixels": [
+            42,
+            127
+          ],
+          "component_seed_normalized": [
+            165,
+            498
+          ],
+          "box_pixels": [
+            0,
+            85,
+            84,
+            169
+          ],
+          "box_normalized": [
+            0,
+            333,
+            329,
+            663
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 1,
+          "scan_tile_column": 0
+        },
+        {
+          "region_id": "s4",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 4,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7225,
+          "component_seed_pixels": [
+            127,
+            127
+          ],
+          "component_seed_normalized": [
+            498,
+            498
+          ],
+          "box_pixels": [
+            85,
+            85,
+            169,
+            169
+          ],
+          "box_normalized": [
+            333,
+            333,
+            663,
+            663
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 1,
+          "scan_tile_column": 1
+        },
+        {
+          "region_id": "s5",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 5,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7310,
+          "component_seed_pixels": [
+            212,
+            127
+          ],
+          "component_seed_normalized": [
+            831,
+            498
+          ],
+          "box_pixels": [
+            170,
+            85,
+            255,
+            169
+          ],
+          "box_normalized": [
+            667,
+            333,
+            1000,
+            663
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 1,
+          "scan_tile_column": 2
+        },
+        {
+          "region_id": "s6",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 6,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7310,
+          "component_seed_pixels": [
+            42,
+            212
+          ],
+          "component_seed_normalized": [
+            165,
+            831
+          ],
+          "box_pixels": [
+            0,
+            170,
+            84,
+            255
+          ],
+          "box_normalized": [
+            0,
+            667,
+            329,
+            1000
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 2,
+          "scan_tile_column": 0
+        },
+        {
+          "region_id": "s7",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 7,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7310,
+          "component_seed_pixels": [
+            127,
+            212
+          ],
+          "component_seed_normalized": [
+            498,
+            831
+          ],
+          "box_pixels": [
+            85,
+            170,
+            169,
+            255
+          ],
+          "box_normalized": [
+            333,
+            667,
+            663,
+            1000
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 2,
+          "scan_tile_column": 1
+        },
+        {
+          "region_id": "s8",
+          "proposal_version": "qwen3vl_empty_dual_mask_scan_grid_v1",
+          "batch_index": 8,
+          "sources": [
+            "empty_dual_mask_full_frame_scan"
+          ],
+          "audit_kind": "scan",
+          "component_area": 7396,
+          "component_seed_pixels": [
+            212,
+            212
+          ],
+          "component_seed_normalized": [
+            831,
+            831
+          ],
+          "box_pixels": [
+            170,
+            170,
+            255,
+            255
+          ],
+          "box_normalized": [
+            667,
+            667,
+            1000,
+            1000
+          ],
+          "change_pixels": 0,
+          "temporal_difference_pixels": 0,
+          "candidate_delta_pixels": 0,
+          "candidate_added_pixels": 0,
+          "candidate_removed_pixels": 0,
+          "t1_mask_pixels": 0,
+          "t2_mask_pixels": 0,
+          "component_t1_mask_pixels": 0,
+          "component_t2_mask_pixels": 0,
+          "component_seed_t1_mask_white": false,
+          "component_seed_t2_mask_white": false,
+          "scan_tile_row": 2,
+          "scan_tile_column": 2
+        }
+      ],
+      "actions": [
+        {
+          "candidate_id": "test_50_8--primary--s0--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s0",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            0,
+            0,
+            84,
+            84
+          ],
+          "box": [
+            0,
+            0,
+            84,
+            84
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s0--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s0",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            0,
+            0,
+            84,
+            84
+          ],
+          "box": [
+            0,
+            0,
+            84,
+            84
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s1--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s1",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            85,
+            0,
+            169,
+            84
+          ],
+          "box": [
+            85,
+            0,
+            169,
+            84
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s1--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s1",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            85,
+            0,
+            169,
+            84
+          ],
+          "box": [
+            85,
+            0,
+            169,
+            84
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s2--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s2",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            170,
+            0,
+            255,
+            84
+          ],
+          "box": [
+            170,
+            0,
+            255,
+            84
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s2--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s2",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            170,
+            0,
+            255,
+            84
+          ],
+          "box": [
+            170,
+            0,
+            255,
+            84
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s3--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s3",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            0,
+            85,
+            84,
+            169
+          ],
+          "box": [
+            0,
+            85,
+            84,
+            169
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s3--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s3",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            0,
+            85,
+            84,
+            169
+          ],
+          "box": [
+            0,
+            85,
+            84,
+            169
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s4--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s4",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            85,
+            85,
+            169,
+            169
+          ],
+          "box": [
+            85,
+            85,
+            169,
+            169
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s4--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s4",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            85,
+            85,
+            169,
+            169
+          ],
+          "box": [
+            85,
+            85,
+            169,
+            169
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s5--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s5",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            170,
+            85,
+            255,
+            169
+          ],
+          "box": [
+            170,
+            85,
+            255,
+            169
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s5--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s5",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            170,
+            85,
+            255,
+            169
+          ],
+          "box": [
+            170,
+            85,
+            255,
+            169
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s6--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s6",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            0,
+            170,
+            84,
+            255
+          ],
+          "box": [
+            0,
+            170,
+            84,
+            255
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s6--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s6",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            0,
+            170,
+            84,
+            255
+          ],
+          "box": [
+            0,
+            170,
+            84,
+            255
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s7--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s7",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            85,
+            170,
+            169,
+            255
+          ],
+          "box": [
+            85,
+            170,
+            169,
+            255
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s7--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s7",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            85,
+            170,
+            169,
+            255
+          ],
+          "box": [
+            85,
+            170,
+            169,
+            255
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s8--box--t1",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s8",
+          "action": "box",
+          "target_view": "t1",
+          "geometry_pixels": [
+            170,
+            170,
+            255,
+            255
+          ],
+          "box": [
+            170,
+            170,
+            255,
+            255
+          ]
+        },
+        {
+          "candidate_id": "test_50_8--primary--s8--box--t2",
+          "sample": "test_50_8",
+          "tier": "primary",
+          "region_id": "s8",
+          "action": "box",
+          "target_view": "t2",
+          "geometry_pixels": [
+            170,
+            170,
+            255,
+            255
+          ],
+          "box": [
+            170,
+            170,
+            255,
+            255
+          ]
+        }
+      ]
+    }
+  },
+  "canonical_json_contract": {
+    "hash_scope": "The entire parsed preregistration object; no field is excluded.",
+    "serialization": "UTF-8 json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False) with no trailing newline.",
+    "digest": "sha256",
+    "self_digest_field_forbidden": true,
+    "formal_expected_digest_is_supplied_externally_to_submitter_and_workers": true
+  },
+  "formal_execution": {
+    "authorized_after_freeze_b_validation": true,
+    "freeze_b_contract": "B^ must equal anchors.implementation_commit",
+    "generation_resources": {
+      "node": "gpu48",
+      "accelerator": "A800",
+      "gpus": 1,
+      "cpus": 4,
+      "memory": "48G",
+      "time": "02:00:00"
+    },
+    "scoring_resources": {
+      "node": "gpu48",
+      "gpus": 0,
+      "cpus": 2,
+      "memory": "16G",
+      "time": "00:45:00"
+    },
+    "dependency": "scoring afterok generation",
+    "output": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0803(1)-qwen3vl-p2-oracle-actionability"
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "schema_id": "qwen3vl_h0_golden_fixture_receipt_v1",
+  "status": "frozen",
+  "created_utc": "2026-08-02",
+  "artifact_role": "read_only_behavioral_oracle",
+  "model_io_protocol": "v12.1",
+  "harness_protocol_id": "qwen3vl_harness_h0_legacy_single_round_v1",
+  "oracle_provenance": {
+    "origin": "frozen_v12_1_p0_behavioral_snapshot",
+    "current_h0_decorator_used_as_oracle": false,
+    "current_legacy_verifier_used_as_oracle": false,
+    "regeneration_allowed": false,
+    "reference_annotations_used": false
+  },
+  "p0_acceptance_receipt": {
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_ACCEPTANCE_RECEIPT_0802.json",
+    "raw_sha256": "<hash omitted>",
+    "canonical_sha256": "<hash omitted>"
+  },
+  "source_anchor": {
+    "commit": "e9fbcd690a9af2e91384231ced46555fe400d9ba",
+    "files": [
+      {
+        "path": "change_agent/adapters/stage_backends.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/adapters/staged_verifier.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/environment.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/state.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/verifier_protocol.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "change_agent/verifier_regions.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "tests/test_staged_verifier.py",
+        "sha256": "<hash omitted>"
+      },
+      {
+        "path": "tools/run_levir_change_agent.py",
+        "sha256": "<hash omitted>"
+      }
+    ]
+  },
+  "fixture_definition": {
+    "fixture_id": "qwen3vl_v12_1_single_region_atomic_audit_v1",
+    "state": {
+      "image_shape_hwc": [16, 16, 3],
+      "query": "building",
+      "t1_image_fill": 0,
+      "t2_image_fill": 0,
+      "t2_image_patch_xyxy_exclusive": [4, 4, 9, 9],
+      "t2_image_patch_value": 180,
+      "t1_mask_rectangles_xyxy_exclusive": [],
+      "t2_mask_rectangles_xyxy_exclusive": [[4, 4, 9, 9]],
+      "change_mask_rule": "logical_xor_t1_t2"
+    },
+    "region_builder": {
+      "factory": "attach_verifier_regions",
+      "max_regions": 6,
+      "min_component_area": 1,
+      "padding_ratio": 0.25,
+      "empty_mask_scan_grid_size": 0
+    },
+    "verifier": {
+      "factory": "StagedQwenVerifier",
+      "max_regions": 6,
+      "max_stage_attempts_including_initial": 2,
+      "visual_context": "hybrid"
+    }
+  },
+  "fixture_cases": [
+    {
+      "case_id": "initial_finish",
+      "source_test_id": "tests/test_staged_verifier.py::test_correct_appearance_change_can_finish_without_action_plan",
+      "backend_audit_response": {
+        "visual_judgment": {
+          "t1_state": "background",
+          "t2_state": "building",
+          "evidence": "Paired RGB and exact component are observable."
+        },
+        "diagnosis": {
+          "audit_checklist": {
+            "evidence_sufficient": "pass",
+            "target_class_only": "pass",
+            "white_pixels_supported": "pass",
+            "boundary_alignment": "pass",
+            "internal_holes_absent": "pass",
+            "changed_object_extent_complete": "pass",
+            "fragment_artifacts_absent": "pass"
+          }
+        }
+      },
+      "expected_behavior": {
+        "region_order": ["r0"],
+        "region_records": [
+          {
+            "region_id": "r0",
+            "audit_kind": "present",
+            "change_mask_state": "white",
+            "temporal_difference_state": "present",
+            "box_normalized_1000": [0, 0, 800, 800],
+            "component_seed_normalized_1000": [400, 400],
+            "t1_mask_pixels": 0,
+            "t2_mask_pixels": 25,
+            "component_area": 25,
+            "editable_seed_white": {"t1": false, "t2": true},
+            "allowed_actions": ["positive_point", "negative_point", "box"],
+            "transition_mask_facts": {}
+          }
+        ],
+        "model_calls": {
+          "count": 1,
+          "stages": ["audit"],
+          "region_ids": ["r0"],
+          "attempt_kinds": ["initial"],
+          "schema_repair_attempt_count": 0,
+          "network_retry_attempt_count": 0,
+          "payload_contracts": [
+            {
+              "stage": "audit",
+              "region_id": "r0",
+              "proposal_catalog_region_ids": ["r0"],
+              "schema": "environment_ordered_compact_region_audit_v12_1",
+              "target_class": "building",
+              "visual_context": "hybrid",
+              "terminal_review_present": false
+            }
+          ]
+        },
+        "runtime_diagnoses": [
+          {
+            "region_id": "r0",
+            "error_type": "none",
+            "target_view": null,
+            "audit_checklist": {
+              "evidence_sufficient": "pass",
+              "target_class_only": "pass",
+              "white_pixels_supported": "pass",
+              "boundary_alignment": "pass",
+              "internal_holes_absent": "pass",
+              "changed_object_extent_complete": "pass",
+              "fragment_artifacts_absent": "pass"
+            },
+            "summary": "Paired RGB and exact component are observable."
+          }
+        ],
+        "plan": {
+          "region_id": null,
+          "action": "finish",
+          "target_view": null,
+          "coordinate_normalized_1000": null,
+          "box_normalized_1000": null
+        },
+        "verifier_output": {
+          "quality_score": 1.0,
+          "progress_score": 0.0,
+          "score_delta": 0.0,
+          "comparison": "initial",
+          "error_type": "none",
+          "target_view": "t2",
+          "error_region": null,
+          "coordinate_space": "normalized_0_1000",
+          "suggested_action": "finish",
+          "feedback": "All Environment audit regions passed the compact checklist.",
+          "accept": true,
+          "verifier_valid": true,
+          "localization_valid": true,
+          "stop": true
+        },
+        "safety_gates": {
+          "completion_gate_passed": true,
+          "completion_gate_reason": "all Environment audit regions are covered and diagnosed none",
+          "regional_validation_errors": []
+        },
+        "candidate_and_termination": {
+          "planned_tool_action": null,
+          "tool_action_attempt_count": 0,
+          "candidate_state_count": 0,
+          "legacy_stop_reason": "initial_verifier_authorized_finish",
+          "episode_outcome": "converged"
+        },
+        "h0_rounds": {
+          "max_verifier_rounds": 1,
+          "verifier_round_count": 1,
+          "round_two_invocations": 0,
+          "round_three_invocations": 0
+        }
+      }
+    },
+    {
+      "case_id": "initial_plan_null",
+      "source_test_id": "tests/test_staged_verifier.py::test_initial_without_plan_cannot_authorize_external_candidate",
+      "backend_audit_response": {
+        "visual_judgment": {
+          "t1_state": "background",
+          "t2_state": "building",
+          "evidence": "Paired RGB and exact component are observable."
+        },
+        "diagnosis": {
+          "audit_checklist": {
+            "evidence_sufficient": "pass",
+            "target_class_only": "pass",
+            "white_pixels_supported": "fail",
+            "boundary_alignment": "pass",
+            "internal_holes_absent": "pass",
+            "changed_object_extent_complete": "fail",
+            "fragment_artifacts_absent": "pass"
+          }
+        }
+      },
+      "expected_behavior": {
+        "region_order": ["r0"],
+        "region_records": [
+          {
+            "region_id": "r0",
+            "audit_kind": "present",
+            "change_mask_state": "white",
+            "temporal_difference_state": "present",
+            "box_normalized_1000": [0, 0, 800, 800],
+            "component_seed_normalized_1000": [400, 400],
+            "t1_mask_pixels": 0,
+            "t2_mask_pixels": 25,
+            "component_area": 25,
+            "editable_seed_white": {"t1": false, "t2": true},
+            "allowed_actions": ["positive_point", "negative_point", "box"],
+            "transition_mask_facts": {}
+          }
+        ],
+        "model_calls": {
+          "count": 1,
+          "stages": ["audit"],
+          "region_ids": ["r0"],
+          "attempt_kinds": ["initial"],
+          "schema_repair_attempt_count": 0,
+          "network_retry_attempt_count": 0,
+          "payload_contracts": [
+            {
+              "stage": "audit",
+              "region_id": "r0",
+              "proposal_catalog_region_ids": ["r0"],
+              "schema": "environment_ordered_compact_region_audit_v12_1",
+              "target_class": "building",
+              "visual_context": "hybrid",
+              "terminal_review_present": false
+            }
+          ]
+        },
+        "runtime_diagnoses": [
+          {
+            "region_id": "r0",
+            "error_type": "mixed_error",
+            "target_view": null,
+            "audit_checklist": {
+              "evidence_sufficient": "pass",
+              "target_class_only": "pass",
+              "white_pixels_supported": "fail",
+              "boundary_alignment": "pass",
+              "internal_holes_absent": "pass",
+              "changed_object_extent_complete": "fail",
+              "fragment_artifacts_absent": "pass"
+            },
+            "summary": "Paired RGB and exact component are observable."
+          }
+        ],
+        "plan": null,
+        "verifier_output": {
+          "quality_score": 0.6666666666666666,
+          "progress_score": 0.0,
+          "score_delta": 0.0,
+          "comparison": "initial",
+          "error_type": "mixed_error",
+          "target_view": "t2",
+          "error_region": null,
+          "coordinate_space": "normalized_0_1000",
+          "suggested_action": null,
+          "feedback": "Paired RGB and exact component are observable.; completion gate: at least one diagnosed error remains",
+          "accept": false,
+          "verifier_valid": true,
+          "localization_valid": false,
+          "stop": false
+        },
+        "safety_gates": {
+          "completion_gate_passed": false,
+          "completion_gate_reason": "at least one diagnosed error remains",
+          "regional_validation_errors": []
+        },
+        "candidate_and_termination": {
+          "planned_tool_action": null,
+          "tool_action_attempt_count": 0,
+          "candidate_state_count": 0,
+          "legacy_stop_reason": "verifier_no_executable_action",
+          "episode_outcome": "no_executable_action"
+        },
+        "h0_rounds": {
+          "max_verifier_rounds": 1,
+          "verifier_round_count": 1,
+          "round_two_invocations": 0,
+          "round_three_invocations": 0
+        }
+      }
+    }
+  ]
+}

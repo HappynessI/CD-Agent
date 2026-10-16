@@ -1,0 +1,385 @@
+{
+  "schema_id": "qwen3vl_p0_validation_amendment_r2_v1",
+  "design_status": "frozen",
+  "created_utc": "2026-08-02",
+  "digest_contract": {
+    "canonical_json": "UTF-8 encoding of json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False) with no trailing newline.",
+    "canonical_scope": "the complete parsed JSON object",
+    "evidence_sha256_semantics": "SHA256 of raw file bytes; these are not canonical JSON digests",
+    "self_digest_location": "QWEN3VL_P0_ACCEPTANCE_RECEIPT_0802.json"
+  },
+  "amendment_chain": {
+    "preregistration": {
+      "path": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_PREREGISTRATION_0802.json",
+      "canonical_sha256": "<hash omitted>"
+    },
+    "r1_amendment": {
+      "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_VALIDATION_AMENDMENT_0802.json",
+      "canonical_sha256": "<hash omitted>",
+      "raw_file_sha256": "<hash omitted>"
+    },
+    "immutability_policy": "Do not edit the preregistration or R1 amendment; append this independent R2 observation/amendment."
+  },
+  "reason_for_amendment": {
+    "category": "canonical_sample_order_contract_conflict",
+    "summary": "The legacy rollout writer records rollout_complete.json.samples as a lexicographically sorted completion-membership list, while per_sample_metrics.json and summaries preserve requested/scored order. R1 incorrectly required the marker itself to preserve requested order.",
+    "failure_class": "contract_failed",
+    "systematic_not_flaky": true,
+    "scientific_result_available": false,
+    "h0_or_h1_behavior_observed": false,
+    "gpu_job_started": false
+  },
+  "failed_attempts": [
+    {
+      "attempt_id": "p0_initial",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1)-qwen3vl-p0-contract-validation",
+      "launch_commit": "383521f72e846b459697dc24208b8245243975ec",
+      "worker_sha256": "<hash omitted>",
+      "execution_status": "failed",
+      "tests_started": false,
+      "failure_stage": "slurm_worker_identity_preflight",
+      "failure_message": "executed worker is outside the pinned repository",
+      "jobs": [
+        {
+          "job_id": "52553",
+          "job_name": "CA0802P0Target",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:03",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        },
+        {
+          "job_id": "52554",
+          "job_name": "CA0802P0Regress",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:02",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20",
+          "dependency": "afterany:52553"
+        }
+      ],
+      "evidence_sha256": [
+        {
+          "path_relative_to_output": "submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/targeted_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/regression_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52553.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52554.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52553.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52553.out",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52554.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52554.out",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    },
+    {
+      "attempt_id": "p0_r1",
+      "retry_of_attempt_id": "p0_initial",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R1)-qwen3vl-p0-contract-validation",
+      "launch_commit": "28786e82a08fa9e755cc3bd2fd01885df333316c",
+      "worker_sha256": "<hash omitted>",
+      "execution_status": "failed",
+      "tests_started": true,
+      "scientific_outcome": "not_evaluated",
+      "failure_stage": "sample_identity_order_contract",
+      "failure_signature": "rollout sample identity/order differs: ['test_1_1', 'test_20_15', 'test_50_8'] != ['test_20_15', 'test_1_1', 'test_50_8']",
+      "jobs": [
+        {
+          "job_id": "52562",
+          "job_name": "CA0802P0TargetR1",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed_sacct": "00:00:04",
+          "elapsed_worker_receipt_seconds": 2,
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        },
+        {
+          "job_id": "52563",
+          "job_name": "CA0802P0RegressR1",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed_sacct": "00:00:10",
+          "elapsed_worker_receipt_seconds": 7,
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20",
+          "dependency": "afterany:52562"
+        }
+      ],
+      "test_observations": {
+        "targeted": {
+          "p0_contracts": "18/18 passed",
+          "experiment_registry": "14/14 passed",
+          "local_verifier_analysis": "45 passed, 3 errors, 48 total",
+          "combined": "77 passed, 3 errors, 80 total"
+        },
+        "full_regression": "352 passed, 3 errors, 3 skipped, 358 total",
+        "common_error_tests": [
+          "test_accepts_fixed_e2e3_identity_in_both_summaries",
+          "test_macro_is_equal_weighted_while_micro_uses_pixel_sums",
+          "test_read_only_v1_archive_summary_marks_test_50_8_degraded"
+        ],
+        "unreached_targeted_stages": [
+          "shell_syntax_check",
+          "workbook_check",
+          "v1_archive_summarization",
+          "v1_summary_contract_assertion"
+        ],
+        "expected_summary_artifact_status": "not_created"
+      },
+      "archive_hash_window": {
+        "status": "passed",
+        "scope": "8_named_summarizer_inputs",
+        "file_count": 8,
+        "archive_run_total_files_observed": 89,
+        "uncovered_files": 81,
+        "before_manifest_sha256": "<hash omitted>",
+        "after_manifest_sha256": "<hash omitted>",
+        "archive_mutation_during_r1": false,
+        "persistent_filesystem_immutability_proven": false
+      },
+      "evidence_sha256": [
+        {
+          "path_relative_to_output": "submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/targeted_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/regression_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_archive_sha256_before.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_archive_sha256_after.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52562.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52563.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52562.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52562.out",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52563.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52563.out",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    }
+  ],
+  "corrected_legacy_order_contract": {
+    "writer": "tools/run_levir_change_agent.py",
+    "rollout_complete_samples": {
+      "meaning": "legacy completion-membership list",
+      "required_value": "sorted(requested_samples)",
+      "comparison": "exact_list_equality",
+      "set_equality_forbidden": true
+    },
+    "per_sample_metrics_samples": {
+      "meaning": "requested and scored order",
+      "required_value": "requested_samples",
+      "comparison": "exact_mapping_key_order"
+    },
+    "protocol_and_baseline_summaries": {
+      "sample_order": "requested_samples",
+      "per_sample_key_order": "requested_samples"
+    },
+    "required_consumers": [
+      "tools/analyze_staged_verifier_run.py",
+      "tools/summarize_qwen3vl_e2e_run.py",
+      "tools/compare_local_verifier_ab.py"
+    ],
+    "future_explicit_requested_order_marker_field": "reserved_for_p1_not_implemented_in_p0"
+  },
+  "retry_allocation": {
+    "phase": "p0_contract_validation_retry2",
+    "retry_of_output": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R1)-qwen3vl-p0-contract-validation",
+    "must_verify_all_failed_attempts": true,
+    "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R2)-qwen3vl-p0-contract-validation",
+    "stdout_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R2)-qwen3vl-p0-contract-validation/logs/slurm-%j.out",
+    "stderr_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R2)-qwen3vl-p0-contract-validation/logs/slurm-%j.err",
+    "targeted_job_name": "CA0802P0TargetR2",
+    "regression_job_name": "CA0802P0RegressR2",
+    "regression_dependency": "afterany:<targeted_job_id>",
+    "qq_title": "CA0802 P0 contract validation R2",
+    "gpus_per_job": 0,
+    "targeted_resources": {
+      "cpus": 2,
+      "memory": "8G",
+      "time": "00:20:00"
+    },
+    "regression_resources": {
+      "cpus": 2,
+      "memory": "8G",
+      "time": "00:45:00"
+    },
+    "must_not_exist_before_submission": true,
+    "reservation_status_at_amendment": "reserved_absent"
+  },
+  "unchanged_contract": {
+    "h0_h1_design": true,
+    "treatment_factor": "terminal_review_scheduler_v1",
+    "input_manifest_canonical_sha256": "<hash omitted>",
+    "workbook_raw_sha256": "<hash omitted>",
+    "p1_allocations_ca0802_2_through_6": true,
+    "p1_execution_authorized": false,
+    "h1_code_implemented": false,
+    "gpu_execution_authorized": false
+  },
+  "authorization": {
+    "scope": "corrective_retry_within_user_approved_p0_only",
+    "p0_retry_execution_authorized": true,
+    "maximum_gpus": 0,
+    "p1_authorized": false
+  },
+  "acceptance_receipt": {
+    "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_ACCEPTANCE_RECEIPT_0802.json",
+    "schema_id": "qwen3vl_p0_acceptance_receipt_v1",
+    "must_reference_attempt_ids": [
+      "p0_initial",
+      "p0_r1",
+      "p0_r2"
+    ],
+    "required_top_level_fields": [
+      "schema_id",
+      "status",
+      "created_utc",
+      "validation_commit",
+      "validation_worktree",
+      "frozen_inputs",
+      "attempts",
+      "gate_matrix",
+      "archive_hash_window",
+      "notification_contract",
+      "p0_accepted",
+      "failed_gates",
+      "p1_execution_authorized",
+      "canonical_json_contract"
+    ],
+    "required_attempt_fields": [
+      "attempt_id",
+      "retry_of_attempt_id",
+      "terminal_status",
+      "scientific_result_available",
+      "output_path",
+      "launch_commit",
+      "worker_sha256",
+      "jobs",
+      "evidence_sha256"
+    ],
+    "required_job_fields": [
+      "job_id",
+      "job_name",
+      "mode",
+      "state",
+      "exit_code",
+      "elapsed",
+      "allocated_cpus",
+      "allocated_gpus",
+      "requested_memory",
+      "node"
+    ],
+    "required_gate_ids": [
+      "amendment_chain_hashes_match",
+      "failed_attempt_evidence_20_of_20_match",
+      "r2_submission_receipt_valid",
+      "r2_exact_clean_commit_and_worker_identity",
+      "r2_zero_gpu_resources",
+      "p0_contract_tests_pass",
+      "experiment_registry_tests_pass",
+      "local_verifier_analysis_tests_pass",
+      "shell_syntax_check_pass",
+      "workbook_deterministic_check_pass",
+      "v1_archive_summary_generated",
+      "v1_false_accept_and_degradation_assertion_pass",
+      "v1_archive_8_file_hash_window_unchanged",
+      "full_unittest_regression_pass",
+      "r2_targeted_job_success",
+      "r2_regression_job_success"
+    ],
+    "required_frozen_input_digests": [
+      "preregistration_canonical_sha256",
+      "r1_amendment_canonical_sha256",
+      "r2_amendment_canonical_sha256",
+      "input_manifest_canonical_sha256",
+      "workbook_raw_sha256"
+    ],
+    "complete_iff": [
+      "all required gate IDs exist exactly once and passed=true",
+      "both R2 jobs have Slurm state COMPLETED and exit_code 0:0",
+      "both R2 result receipts have status success and exit_code 0",
+      "all required evidence paths exist and raw byte SHA256 values match",
+      "archive claim is limited to the 8 named summarizer inputs and before equals after",
+      "p0_accepted is true and failed_gates is empty",
+      "p1_execution_authorized is false"
+    ],
+    "notification_claim_contract": {
+      "required_title": "CA0802 P0 contract validation R2",
+      "required_body_fields": [
+        "job_name",
+        "job_id",
+        "terminal_status",
+        "elapsed_seconds",
+        "key_result_or_error",
+        "artifact_path"
+      ],
+      "allowed_claim_without_external_delivery_receipt": "worker_attempted_notification",
+      "forbidden_claim_without_external_delivery_receipt": "recipient_delivery_proven"
+    },
+    "status_at_amendment": "pending"
+  }
+}

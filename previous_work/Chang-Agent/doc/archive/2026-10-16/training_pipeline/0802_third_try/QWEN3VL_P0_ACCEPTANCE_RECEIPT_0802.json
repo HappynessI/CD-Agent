@@ -1,0 +1,455 @@
+{
+  "schema_id": "qwen3vl_p0_acceptance_receipt_v1",
+  "status": "complete",
+  "created_utc": "2026-08-02T08:47:00Z",
+  "validation_commit": "e9fbcd690a9af2e91384231ced46555fe400d9ba",
+  "validation_worktree": {
+    "path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-baseline-0802-run",
+    "head": "e9fbcd690a9af2e91384231ced46555fe400d9ba",
+    "detached": true,
+    "git_status_porcelain": "",
+    "outputs_symlink_target": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs"
+  },
+  "frozen_inputs": {
+    "preregistration": {
+      "path": "doc/training_pipeline/0802_third_try/QWEN3VL_H0_H1_PREREGISTRATION_0802.json",
+      "canonical_sha256": "<hash omitted>",
+      "raw_sha256": "<hash omitted>"
+    },
+    "r1_amendment": {
+      "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_VALIDATION_AMENDMENT_0802.json",
+      "canonical_sha256": "<hash omitted>",
+      "raw_sha256": "<hash omitted>"
+    },
+    "r2_amendment": {
+      "path": "doc/training_pipeline/0802_third_try/QWEN3VL_P0_VALIDATION_AMENDMENT_R2_0802.json",
+      "canonical_sha256": "<hash omitted>",
+      "raw_sha256": "<hash omitted>"
+    },
+    "input_manifest": {
+      "path": "doc/training_pipeline/0802_third_try/QWEN3VL_EVALUATION_INPUT_MANIFEST_0802.json",
+      "canonical_sha256": "<hash omitted>",
+      "raw_sha256": "<hash omitted>"
+    },
+    "experiment_workbook": {
+      "path": "experiments/experiment_registry.xlsx",
+      "raw_sha256": "<hash omitted>",
+      "sheet_data_rows": {
+        "01_实验记录": 12,
+        "02_字段字典": 52,
+        "03_数据登记": 20,
+        "04_运行尝试": 14
+      }
+    },
+    "validation_worker": {
+      "path": "tools/run_qwen3vl_p0_validation.slurm",
+      "raw_sha256": "<hash omitted>"
+    },
+    "validation_submitter": {
+      "path": "tools/submit_qwen3vl_p0_validation.sh",
+      "raw_sha256": "<hash omitted>"
+    }
+  },
+  "attempts": [
+    {
+      "attempt_id": "p0_initial",
+      "retry_of_attempt_id": null,
+      "terminal_status": "failed",
+      "scientific_result_available": false,
+      "failure_category": "p0_harness_preflight_bug",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1)-qwen3vl-p0-contract-validation",
+      "launch_commit": "383521f72e846b459697dc24208b8245243975ec",
+      "worker_sha256": "<hash omitted>",
+      "jobs": [
+        {
+          "job_id": "52553",
+          "job_name": "CA0802P0Target",
+          "mode": "targeted",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:03",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        },
+        {
+          "job_id": "52554",
+          "job_name": "CA0802P0Regress",
+          "mode": "regression",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:02",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        }
+      ],
+      "evidence_sha256": [
+        {
+          "path_relative_to_output": "submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/targeted_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/regression_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52553.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52554.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52553.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52553.out",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52554.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52554.out",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    },
+    {
+      "attempt_id": "p0_r1",
+      "retry_of_attempt_id": "p0_initial",
+      "terminal_status": "failed",
+      "scientific_result_available": false,
+      "failure_class": "contract_failed",
+      "failure_category": "canonical_sample_order_contract_conflict",
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R1)-qwen3vl-p0-contract-validation",
+      "launch_commit": "28786e82a08fa9e755cc3bd2fd01885df333316c",
+      "worker_sha256": "<hash omitted>",
+      "jobs": [
+        {
+          "job_id": "52562",
+          "job_name": "CA0802P0TargetR1",
+          "mode": "targeted",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:04",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        },
+        {
+          "job_id": "52563",
+          "job_name": "CA0802P0RegressR1",
+          "mode": "regression",
+          "state": "FAILED",
+          "exit_code": "1:0",
+          "elapsed": "00:00:10",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        }
+      ],
+      "test_observations": {
+        "targeted": "77 passed, 3 errors, 80 total",
+        "full_regression": "352 passed, 3 errors, 3 skipped, 358 total",
+        "summary_artifact_created": false
+      },
+      "evidence_sha256": [
+        {
+          "path_relative_to_output": "submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/targeted_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/regression_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_archive_sha256_before.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_archive_sha256_after.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52562.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52563.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52562.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52562.out",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52563.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52563.out",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    },
+    {
+      "attempt_id": "p0_r2",
+      "retry_of_attempt_id": "p0_r1",
+      "terminal_status": "success",
+      "scientific_result_available": false,
+      "failure_class": null,
+      "output_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R2)-qwen3vl-p0-contract-validation",
+      "launch_commit": "e9fbcd690a9af2e91384231ced46555fe400d9ba",
+      "worker_sha256": "<hash omitted>",
+      "jobs": [
+        {
+          "job_id": "52598",
+          "job_name": "CA0802P0TargetR2",
+          "mode": "targeted",
+          "state": "COMPLETED",
+          "exit_code": "0:0",
+          "elapsed": "00:00:04",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        },
+        {
+          "job_id": "52599",
+          "job_name": "CA0802P0RegressR2",
+          "mode": "regression",
+          "state": "COMPLETED",
+          "exit_code": "0:0",
+          "elapsed": "00:00:09",
+          "allocated_cpus": 2,
+          "allocated_gpus": 0,
+          "requested_memory": "8G",
+          "node": "gpu20"
+        }
+      ],
+      "test_observations": {
+        "p0_contracts": "19/19 passed",
+        "experiment_registry": "14/14 passed",
+        "local_verifier_analysis": "49/49 passed",
+        "targeted_total": "82/82 passed",
+        "full_regression": "357 passed, 3 skipped, 360 total",
+        "shell_syntax": "passed",
+        "workbook_check": "passed",
+        "v1_summary_contract": "passed"
+      },
+      "evidence_sha256": [
+        {
+          "path_relative_to_output": "submission.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/targeted_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/regression_result.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_archive_sha256_before.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_archive_sha256_after.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "evidence/v1_post_sft_summary_v2.json",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52598.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/status-52599.txt",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52598.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52598.out",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52599.err",
+          "sha256": "<hash omitted>"
+        },
+        {
+          "path_relative_to_output": "logs/slurm-52599.out",
+          "sha256": "<hash omitted>"
+        }
+      ]
+    }
+  ],
+  "gate_matrix": [
+    {
+      "gate_id": "amendment_chain_hashes_match",
+      "passed": true,
+      "evidence": "preregistration, R1 amendment and R2 amendment canonical/raw hashes match frozen_inputs"
+    },
+    {
+      "gate_id": "failed_attempt_evidence_20_of_20_match",
+      "passed": true,
+      "evidence": "initial 9 plus R1 11 raw file hashes were checked by submitter, worker and receipt audit"
+    },
+    {
+      "gate_id": "r2_submission_receipt_valid",
+      "passed": true,
+      "evidence": "submission.txt binds commit, worker, output, two jobs and afterany:52598"
+    },
+    {
+      "gate_id": "r2_exact_clean_commit_and_worker_identity",
+      "passed": true,
+      "evidence": "both result/status receipts bind e9fbcd690a9af2e91384231ced46555fe400d9ba and <hash omitted>"
+    },
+    {
+      "gate_id": "r2_zero_gpu_resources",
+      "passed": true,
+      "evidence": "both result receipts and sacct AllocTRES show no GPU allocation"
+    },
+    {
+      "gate_id": "p0_contract_tests_pass",
+      "passed": true,
+      "evidence": "19/19"
+    },
+    {
+      "gate_id": "experiment_registry_tests_pass",
+      "passed": true,
+      "evidence": "14/14"
+    },
+    {
+      "gate_id": "local_verifier_analysis_tests_pass",
+      "passed": true,
+      "evidence": "49/49"
+    },
+    {
+      "gate_id": "shell_syntax_check_pass",
+      "passed": true,
+      "evidence": "targeted success token was emitted after bash -n"
+    },
+    {
+      "gate_id": "workbook_deterministic_check_pass",
+      "passed": true,
+      "evidence": "--check valid; SHA256 <hash omitted>; rows 12/52/20/14"
+    },
+    {
+      "gate_id": "v1_archive_summary_generated",
+      "passed": true,
+      "evidence": "v1_post_sft_summary_v2.json SHA256 <hash omitted>"
+    },
+    {
+      "gate_id": "v1_false_accept_and_degradation_assertion_pass",
+      "passed": true,
+      "evidence": "test_50_8: harmful accepted qwen candidate, leaf false_accept, FP +6518, degraded=true"
+    },
+    {
+      "gate_id": "v1_archive_8_file_hash_window_unchanged",
+      "passed": true,
+      "evidence": "before and after manifest raw SHA256 are both <hash omitted>"
+    },
+    {
+      "gate_id": "full_unittest_regression_pass",
+      "passed": true,
+      "evidence": "357 passed, 3 skipped, 360 total"
+    },
+    {
+      "gate_id": "r2_targeted_job_success",
+      "passed": true,
+      "evidence": "Job 52598 COMPLETED/0:0 and targeted result receipt status=success/exit_code=0"
+    },
+    {
+      "gate_id": "r2_regression_job_success",
+      "passed": true,
+      "evidence": "Job 52599 COMPLETED/0:0 and regression result receipt status=success/exit_code=0"
+    }
+  ],
+  "archive_hash_window": {
+    "archive_run_dir": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0801_archive/CA_0801(10)-qwen3vl-v121-post-sft-e2e3-v1/run",
+    "scope": "8_named_summarizer_inputs",
+    "archive_run_total_files_observed": 89,
+    "covered_files": 8,
+    "uncovered_files": 81,
+    "before_manifest_sha256": "<hash omitted>",
+    "after_manifest_sha256": "<hash omitted>",
+    "unchanged_during_r2": true,
+    "persistent_filesystem_immutability_proven": false
+  },
+  "v1_summary_observation": {
+    "artifact_path": "/guisongxia01/pangchao/wangyihan/Chang-Agent-local-qwen3vl/outputs/CA_0802(1R2)-qwen3vl-p0-contract-validation/evidence/v1_post_sft_summary_v2.json",
+    "sha256": "<hash omitted>",
+    "requested_samples": 3,
+    "scored_samples": 3,
+    "sample_order": [
+      "test_20_15",
+      "test_1_1",
+      "test_50_8"
+    ],
+    "initial_micro_iou": 0.7422312,
+    "selected_micro_iou": 0.3687664,
+    "initial_micro_f1": 0.85204673,
+    "selected_micro_f1": 0.5388303,
+    "delta_counts": {
+      "tp": 0,
+      "fp": 6518,
+      "fn": 0
+    },
+    "degraded_sample_count": 1,
+    "candidate_false_accept_count": 1,
+    "interpretation": "Historical v1 post-SFT rollout degraded one sample and accepted one harmful candidate; this is read-only historical evidence, not an R2 H0/H1 scientific run."
+  },
+  "notification_contract": {
+    "required_title": "CA0802 P0 contract validation R2",
+    "required_body_fields": [
+      "job_name",
+      "job_id",
+      "terminal_status",
+      "elapsed_seconds",
+      "key_result_or_error",
+      "artifact_path"
+    ],
+    "worker_attempted_notification": true,
+    "recipient_delivery_proven": false,
+    "claim_limit": "The worker attempted both terminal notifications; delivery cannot be claimed because no external delivery receipt was retained."
+  },
+  "p0_accepted": true,
+  "failed_gates": [],
+  "h0_or_h1_behavior_observed": false,
+  "h1_code_implemented": false,
+  "p1_execution_authorized": false,
+  "gpu_execution_authorized": false,
+  "next_authorization_boundary": "Report P0 acceptance to the user; do not implement H1 or execute P1/GPU work without a new explicit user approval.",
+  "canonical_json_contract": {
+    "serialization": "UTF-8 encoding of json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False) with no trailing newline.",
+    "scope": "the complete parsed JSON object",
+    "external_digest_location": "the final P0 handoff report and any future P1 amendment"
+  }
+}
