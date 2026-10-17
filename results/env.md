@@ -53,3 +53,17 @@
 
 - 脚本：`Chang-Agent/probe/`（说明见 `probe/README.md`），统一用 `probe/run.sbatch` 经 Slurm 运行；SAM3 使用 `conda_envs/omniovcd-env`，其余使用 `conda_envs/vlm-vs-onejev-env`。
 - 运行中发现 gpu37 的 `/tmp` 已写满，导致 SAM3 后处理的 triton 编译失败、速度下降 6 倍；已将每个作业的 TMPDIR 和 triton 缓存改到工作区内的作业目录，结束后删除。
+
+## 实验 4 资源确认（2026-10-16）
+
+任务：仓库 `doc/exp4_recall_candidates.md`（召回侧候选生成与确认）。
+
+| 资源 | 状态 | 用法 |
+| --- | --- | --- |
+| MambaSCD-Base 两期语义头输出 | **已有**：`Vlm_vs_OneJev/outputs/formal/SECOND/probabilities/test_*_T1.npy`、`_T2.npy`，7×512×512 softmax（类 0 = 未变化，1–6 为 SECOND 六类），覆盖全部 1694 张 test，无需补跑 | 来源 A：在类 1–6 内取 argmax |
+| SYSU 的语义头 | **无**：SChanger 只有二值头 | SYSU 不做来源 A |
+| 独立的地物分类 / 语义分割模型 | **无** | 来源 B 改用 SAM3 文本提示 |
+| 图像编码器 | SAM3 图像编码器可用（`vision_features`，256 维，72×72 patch） | 来源 C（改建）、D、E |
+| DINOv3（`facebook/dinov3-vitl16-pretrain-sat493m`） | HF 缓存里**只有配置文件**，权重为 `.incomplete` 未完成下载，**不可用**；按要求不补下载 | — |
+| DINOv2、CLIP 等其他编码器 | 无 | — |
+| AnyChange 代码或权重 | **无**（segagent-env 里只有 SAM1 的 `segment_anything` 包，没有 SAM ViT-H 权重） | 来源 D 自实现：SAM3 编码器两期特征差 |

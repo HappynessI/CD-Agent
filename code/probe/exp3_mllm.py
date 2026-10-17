@@ -78,6 +78,7 @@ def main():
     parser.add_argument("--tag", required=True)
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--datasets", nargs="+", default=list(DATASETS))
+    parser.add_argument("--subdir", default="exp3", help="candidate set: OUT/<subdir>/<dataset>/candidates.jsonl")
     args = parser.parse_args()
     processor, model = load(args.model)
     tok = processor.tokenizer
@@ -86,8 +87,8 @@ def main():
     yes_id, no_id = yes_no[0][0], yes_no[1][0]
     for dataset in args.datasets:
         prompt_text = prompt_for(dataset)
-        rows = [json.loads(line) for line in open(OUT / "exp3" / dataset / "candidates.jsonl")][: args.limit or None]
-        out_path = OUT / "exp3" / dataset / f"mllm_{args.tag}.jsonl"
+        rows = [json.loads(line) for line in open(OUT / args.subdir / dataset / "candidates.jsonl")][: args.limit or None]
+        out_path = OUT / args.subdir / dataset / f"mllm_{args.tag}.jsonl"
         start = time.time()
         with open(out_path, "w") as f:
             for i, r in enumerate(rows):

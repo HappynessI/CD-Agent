@@ -92,10 +92,11 @@ def main():
     parser.add_argument("--tag", required=True)
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--subdir", default="exp3", help="candidate set: OUT/<subdir>/<dataset>/candidates.jsonl")
     args = parser.parse_args()
     if args.dataset not in AUTHORIZED:
         raise SystemExit(f"{args.dataset} is not covered by the Bailian authorization")
-    base = OUT / "exp3" / args.dataset
+    base = OUT / args.subdir / args.dataset
     rows = [json.loads(line) for line in open(base / "candidates.jsonl")][: args.limit or None]
     prompt = prompt_for(args.dataset)
     # One probe call decides whether the endpoint accepts logprobs for this model.
