@@ -23,13 +23,16 @@ STRICT = (0.5, 0.6, 0.7, 0.8, 0.9)
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--datasets", nargs="+", default=["second", "sysu"])
+    parser.add_argument("--base", default="exp4c")
+    parser.add_argument("--kinds", nargs="+", default=["rule", "oracle"])
+    parser.add_argument("--every", type=int, default=1, help="score only every n-th image by name")
     args = parser.parse_args()
     for dataset in args.datasets:
-        base = OUT / "exp4c" / dataset
+        base = OUT / args.base / dataset
         totals = defaultdict(lambda: np.zeros(3, np.int64))
         added = defaultdict(lambda: np.zeros(2, np.int64))
-        rows = {k: [json.loads(line) for line in open(base / f"selected_{k}.jsonl")] for k in ("rule", "oracle")}
-        for name in names(dataset):
+        rows = {k: [json.loads(line) for line in open(base / f"selected_{k}.jsonl")] for k in args.kinds}
+        for name in sorted(names(dataset))[:: args.every]:
             gt = load_label(dataset, name)
             pred = load_pred(dataset, DETECTOR[dataset], name)
             totals["original"] += [(pred & gt).sum(), (pred & ~gt).sum(), (~pred & gt).sum()]
@@ -55,7 +58,7 @@ def main():
             report[label]["selected_candidates"] = sum(1 for r in rows[kind] if thr is None or r["rule_score"] >= thr)
             report[label]["added_tp_px"], report[label]["added_fp_px"] = map(int, added[label])
             report[label]["delta_f1"] = report[label]["f1"] - report["original"]["f1"]
-        write_json(base / "metrics_4c.json", report)
+        write_json(base / ("metrics_4c.json" if args.base == "exp4c" else f"metrics_sam3_{'_'.join(args.kinds)}.json"), report)
         print(dataset, {k: round(v["f1"], 4) for k, v in report.items()}, flush=True)
 
 

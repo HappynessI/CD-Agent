@@ -123,8 +123,12 @@ def panel(dataset, row, target, cands, title):
 
 
 def figures(dataset, rows, figdir):
+    figures_for(dataset, rows, figdir, ("A", "B", "C", "D10", "E10", "F", "G0.1"))
+
+
+def figures_for(dataset, rows, figdir, sources):
     rng = random.Random(1016)
-    for s in ("A", "B", "C", "D10", "E10", "F", "G0.1"):
+    for s in sources:
         hits, misses = [], []
         for r in rows:
             cands = [c for c in r["candidates"] if c["source"] == s]

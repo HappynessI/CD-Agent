@@ -17,6 +17,7 @@
 | [`results/exp2_oracle.md`](results/exp2_oracle.md) | 实验 2：SAM3 + 真值框提示的 oracle 上界 |
 | [`results/exp3_mllm_verify.md`](results/exp3_mllm_verify.md) | 实验 3：MLLM（Qwen3.5-4B、百炼 qwen3.7-plus）判断“是否真变化” |
 | [`results/exp4a_candidates.md`](results/exp4a_candidates.md)、[`exp4b_confirm.md`](results/exp4b_confirm.md)、[`exp4c_end_to_end.md`](results/exp4c_end_to_end.md) | 实验 4：召回侧候选来源覆盖率、真实候选上的确认信号、不靠真值的端到端估计（任务见 `doc/exp4_recall_candidates.md`；总结见 `results/summary.md` 末节） |
+| [`results/exp5a_anychange.md`](results/exp5a_anychange.md)、[`exp5b_confirm.md`](results/exp5b_confirm.md)、[`exp5c_end_to_end.md`](results/exp5c_end_to_end.md) | 实验 5：AnyChange 候选、RemoteCLIP 与检测器复检确认、补全方式变体（任务见 `doc/exp5_followup.md`；三个判断问题的回答见 `results/summary.md` 末节） |
 | [`results/env.md`](results/env.md) | 数据、检测器、模型和运行环境 |
 | `results/exp3_error_examples*/` | 实验 3 的 MLLM 判错样例（t1、t2 裁块，红框为候选区域） |
 | `figures/exp1_vis/<数据集>/<检测器>/` | 实验 1 每类误差 5 个样例：t1、t2、真值、预测叠加（绿 TP、红 FP、蓝 FN） |

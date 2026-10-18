@@ -67,3 +67,16 @@
 | DINOv3（`facebook/dinov3-vitl16-pretrain-sat493m`） | HF 缓存里**只有配置文件**，权重为 `.incomplete` 未完成下载，**不可用**；按要求不补下载 | — |
 | DINOv2、CLIP 等其他编码器 | 无 | — |
 | AnyChange 代码或权重 | **无**（segagent-env 里只有 SAM1 的 `segment_anything` 包，没有 SAM ViT-H 权重） | 来源 D 自实现：SAM3 编码器两期特征差 |
+
+## 实验 5 资源（2026-10-17）
+
+任务：仓库 `doc/exp5_followup.md`。
+
+| 资源 | 安装方式与版本 | 路径 | 跑通确认 |
+| --- | --- | --- | --- |
+| 独立环境 | conda 新建（清华镜像，python 3.11），`probe/exp5_build_env.sbatch` 在计算节点构建。torch 2.5.1+cu124，torchvision 0.20.1。没有改动 omniovcd-env 和 vlm-vs-onejev-env | `conda_envs/exp5-env` | 构建作业中 `import torch, open_clip, torchange` 及 `from torchange.models.segment_any_change import AnyChange` 成功，CUDA 可用 |
+| AnyChange | PyPI `torchange==0.0.4`。wheel 预先下载到 `wheels/exp5/`，里面包含 `torchange/models/segment_any_change` 的完整代码 | 代码在 exp5-env 中 | 在 SECOND test_0/1/10 上跑通：H1 每图 68–172 个变化掩码。H2（点查询）在 3 张中有 2 张因查询点没得到掩码而报错，处理方式见 exp5a |
+| SAM ViT-H 权重（AnyChange 官方示例用 vit_h） | 官方地址 dl.fbaipublicfiles.com 因管理节点代理中途失效无法下载，改为直连 hf-mirror 上的公开副本 `ybelkada/segment-anything`；大小 2,564,550,879 字节，与官方一致 | `models/SAM/sam_vit_h_4b8939.pth` | 同上 |
+| RemoteCLIP | `open_clip_torch` 3.3.0；权重 `chendelong/RemoteCLIP` 的 `RemoteCLIP-ViT-L-14.pt`（经 hf-mirror 直连下载，1,710,613,765 字节，与源站一致） | `models/RemoteCLIP/RemoteCLIP-ViT-L-14.pt` | 在 4b 全部 600 个候选（含 SECOND 300 个）上跑通，`probe/exp5b_clip.py` |
+
+- **网络情况**：管理节点的 HTTP 代理在下载途中失效（连接立即被拒）。PyPI 包和权重最终都改为直连清华镜像和 hf-mirror。计算节点同样直连可用。

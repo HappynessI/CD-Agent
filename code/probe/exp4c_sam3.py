@@ -21,13 +21,14 @@ from sam3_tools import autocast, build_processor
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", required=True)
-    parser.add_argument("--kind", choices=("rule", "oracle"), required=True)
+    parser.add_argument("--kind", required=True, help="reads <base>/<dataset>/selected_<kind>.jsonl")
+    parser.add_argument("--base", default="exp4c")
     parser.add_argument("--shard", type=int, default=0)
     parser.add_argument("--shards", type=int, default=1)
     args = parser.parse_args()
     processor = build_processor(inst_interactivity=True)
     model = processor.model
-    base = OUT / "exp4c" / args.dataset
+    base = OUT / args.base / args.dataset
     rows = [json.loads(line) for line in open(base / f"selected_{args.kind}.jsonl")]
     by_image = defaultdict(list)
     for i, r in enumerate(rows):

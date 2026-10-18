@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Usage: sbatch [resources] --job-name=NAME --output=$OUT/logs/%x-%j.out probe/run.sbatch ENV SCRIPT [ARGS...]
-#   ENV: omniovcd | vlm   SCRIPT: file name inside probe/
+#   ENV: omniovcd | vlm | exp5   SCRIPT: file name inside probe/
 #SBATCH --partition=gre
 #SBATCH --exclude=gpu06
 #SBATCH --nodes=1
@@ -12,6 +12,7 @@ ENVS=/guisongxia01/pangchao/wangyihan/conda_envs
 case "$1" in
   omniovcd) PY=$ENVS/omniovcd-env/bin/python ;;
   vlm) PY=$ENVS/vlm-vs-onejev-env/bin/python ;;
+  exp5) PY=$ENVS/exp5-env/bin/python ;;
   *) echo "unknown env $1"; exit 2 ;;
 esac
 shift

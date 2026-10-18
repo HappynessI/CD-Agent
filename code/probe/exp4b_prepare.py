@@ -26,8 +26,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--sources", nargs="+", required=True)
+    parser.add_argument("--candidates", default="exp4", help="exp4 (A-G) or exp5 (adds H1/H2/H3)")
+    parser.add_argument("--out", default="exp4b")
     args = parser.parse_args()
-    rows, _ = load(args.dataset)
+    if args.candidates == "exp5":
+        import exp5a_analyze
+        rows = exp5a_analyze.load(args.dataset)
+    else:
+        rows, _ = load(args.dataset)
     rng = random.Random(1016)
     pools = {s: {"pos": [], "neg": []} for s in args.sources}
     scores = {s: [] for s in args.sources}
@@ -55,11 +61,11 @@ def main():
                 c["label"] = int(kind == "pos")
                 c["score_pct"] = bisect_left(scores[s], c["score"]) / max(1, len(scores[s]))
                 chosen.append(c)
-    base = OUT / "exp4b" / args.dataset
+    base = OUT / args.out / args.dataset
     (base / "inputs").mkdir(parents=True, exist_ok=True)
     with open(base / "candidates.jsonl", "w") as f:
         for i, c in enumerate(chosen):
-            c["cid"] = f"{args.dataset}_4b_{i:04d}"
+            c["cid"] = f"{args.dataset}_{args.out}_{i:04d}"
             c["crop"], c["inputs"] = render(args.dataset, c, base / "inputs", c["cid"])
             c["det_mean_prob"] = c["det_prob"]
             f.write(json.dumps(c) + "\n")
