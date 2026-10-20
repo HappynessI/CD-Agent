@@ -20,14 +20,14 @@
 | [`results/exp3_mllm_verify.md`](results/exp3_mllm_verify.md) | 实验 3：MLLM（Qwen3.5-4B、百炼 qwen3.7-plus）判断“是否真变化” |
 | [`results/exp4a_candidates.md`](results/exp4a_candidates.md)、[`exp4b_confirm.md`](results/exp4b_confirm.md)、[`exp4c_end_to_end.md`](results/exp4c_end_to_end.md) | 实验 4：召回侧候选来源覆盖率、真实候选上的确认信号、不靠真值的端到端估计（任务见 `doc/exp4_recall_candidates.md`；总结见 `results/summary.md` 末节） |
 | [`results/exp5a_anychange.md`](results/exp5a_anychange.md)、[`exp5b_confirm.md`](results/exp5b_confirm.md)、[`exp5c_end_to_end.md`](results/exp5c_end_to_end.md) | 实验 5：AnyChange 候选、RemoteCLIP 与检测器复检确认、补全方式变体（任务见 `doc/exp5_followup.md`；三个判断问题的回答见 `results/summary.md` 末节） |
-| [`results/exp6a_pool.md`](results/exp6a_pool.md)、[`exp6e_fp_removal.md`](results/exp6e_fp_removal.md)、[`exp6d_backlog.md`](results/exp6d_backlog.md) | 实验 6（阶段性收尾）：交叉拟合检测器与留出折对照、去误检 oracle 上界、新来源资源核查（任务见 `doc/exp6_verifier.md`；完成情况与判断问题见 `results/summary.md` 末节） |
+| [`results/exp6a_pool.md`](results/exp6a_pool.md)、[`exp6b_verifier.md`](results/exp6b_verifier.md)、[`exp6e_fp_removal.md`](results/exp6e_fp_removal.md)、[`exp6d_backlog.md`](results/exp6d_backlog.md) | 实验 6（进行中）：交叉拟合检测器与训练候选池、V1 验证器结果（V2 训练中）、去误检 oracle 上界、新来源资源核查（任务见 `doc/exp6_verifier.md`；完成情况与判断问题见 `results/summary.md` 末节） |
 | [`results/pipeline.md`](results/pipeline.md) | **方法流程图**：用一张 SECOND 测试图逐步展示补漏与去误检每一步的真实输入输出，附术语表（`pipeline.html` 为同内容的单文件网页版，需下载后用浏览器打开） |
 | [`results/env.md`](results/env.md) | 数据、检测器、模型和运行环境 |
 | `results/exp3_error_examples*/` | 实验 3 的 MLLM 判错样例（t1、t2 裁块，红框为候选区域） |
 | `figures/exp1_vis/<数据集>/<检测器>/` | 实验 1 每类误差 5 个样例：t1、t2、真值、预测叠加（绿 TP、红 FP、蓝 FN） |
 | `interim/exp1/tables.md`、`interim/exp2/tables.md`、`interim/exp3/tables_*.md` | 四个数据集的完整表格（`results/` 中的表格摘自这里） |
 | `interim/*/*.json` | 表格对应的原始汇总 |
-| `interim/exp6/` | 实验 6 的原始记录：折划分清单、三折训练日志（每 500 步内部验证）、留出折对照、去误检 oracle 汇总、计时 |
+| `interim/exp6/` | 实验 6 的原始记录：折划分清单、三折训练日志（每 500 步内部验证）、留出折对照、去误检 oracle 汇总、计时、候选池分布表、V1 验证器完整结果表 |
 | `code/probe/` | 实验脚本（Slurm 集群上运行；路径为服务器路径） |
 
 ## 设置要点

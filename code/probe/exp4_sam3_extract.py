@@ -12,13 +12,15 @@ Per image and date: set_image once, then text prompts.
   E  exemplar retrieval: detector components with probability > 0.9 (on the 72x72 patch grid)
      give exemplar vectors [f_t1, f_t2]; every patch gets its max cosine similarity to any
      exemplar. Images without exemplars store an empty map and are counted.
-Writes exp4/<dataset>/sam3/<name>.npz. No GT is read.
+Writes exp4/<dataset>/sam3/<name>.npz. Supports second_cv, modulo sharding and
+skipping existing image files. No GT is read.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import time
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -28,7 +30,9 @@ from PIL import Image
 from common import OUT, load_prob, load_rgb, names
 from sam3_tools import autocast, build_processor
 
-DETECTOR = {"sysu": "schanger_small", "second": "mambascd_base"}
+DETECTOR = {"sysu": "schanger_small", "second": "mambascd_base", "second_cv": "mambascd_base",
+            "second_scannet": "scannet", "levir": "schanger_base", "whu": "schanger_base",
+            "lsscd": "mambascd_base", "scscd7": "mambascd_base"}
 # SECOND classes: 1 low vegetation, 2 non-vegetated ground surface, 3 tree, 4 water, 5 building, 6 playground.
 PROMPTS = {1: ("grass", "farmland"), 2: ("bare ground", "road", "parking lot"), 3: ("tree",),
            4: ("water",), 5: ("building",), 6: ("sports field",)}
@@ -85,15 +89,28 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", choices=tuple(DETECTOR), required=True)
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument("--shard", type=int, default=0)
+    parser.add_argument("--shards", type=int, default=1)
+    parser.add_argument("--output", type=Path, help="Override the sam3 directory, e.g. for a smoke run")
     args = parser.parse_args()
+    if args.shards < 1 or not 0 <= args.shard < args.shards:
+        parser.error("require --shards >= 1 and 0 <= --shard < --shards")
     processor = build_processor()
     processor.confidence_threshold = INSTANCE_MIN_SCORE
-    out = OUT / "exp4" / args.dataset / "sam3"
+    out = args.output or OUT / "exp4" / args.dataset / "sam3"
     out.mkdir(parents=True, exist_ok=True)
     items = names(args.dataset)[: args.limit or None]
+    items = items[args.shard::args.shards]
     no_exemplar = 0
+    skipped = 0
     start = time.time()
     for index, name in enumerate(items):
+        path = out / name.replace(".png", ".npz")
+        if path.exists():
+            skipped += 1
+            with np.load(path) as saved:
+                no_exemplar += int(saved["n_exemplars"]) == 0
+            continue
         result, feats = {}, {}
         for view in ("t1", "t2"):
             image = load_rgb(args.dataset, name, view)
@@ -136,11 +153,16 @@ def main():
             result["esim"] = np.zeros((0, 0), np.float16)
             no_exemplar += 1
         result["n_exemplars"] = np.array(count)
-        np.savez_compressed(out / name.replace(".png", ".npz"), **result)
+        temporary = path.with_suffix(".tmp.npz")
+        np.savez_compressed(temporary, **result)
+        temporary.replace(path)
         if (index + 1) % 100 == 0:
             print(f"{index + 1}/{len(items)} {time.time() - start:.0f}s", flush=True)
-    (OUT / "exp4" / args.dataset / "sam3_report.json").write_text(json.dumps(
-        {"images": len(items), "no_exemplar_images": no_exemplar, "prompts": PROMPTS,
+    report_name = "sam3_report.json" if args.shards == 1 else f"sam3_report_{args.shard}.json"
+    (out.parent / report_name).write_text(json.dumps(
+        {"dataset": args.dataset, "detector_for_exemplar": DETECTOR[args.dataset],
+         "images": len(items), "skipped_images": skipped, "shard": args.shard, "shards": args.shards,
+         "no_exemplar_images": no_exemplar, "prompts": PROMPTS,
          "class_min_conf": CLASS_MIN_CONF, "instance_min_score": INSTANCE_MIN_SCORE,
          "building_min_score": BUILDING_MIN_SCORE, "exemplar_prob": EXEMPLAR_PROB,
          "seconds": round(time.time() - start, 1)}, indent=2))

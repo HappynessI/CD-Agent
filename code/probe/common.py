@@ -16,7 +16,7 @@ OUT = WORKSPACE / "Chang-Agent/outputs/CD_1016_probe"
 PRED = OUT / "preds"
 
 LIM1 = WORKSPACE / "datasets/lim1"
-# dirs = (t1 folder, t2 folder, binary change label folder); prefix filters the test split.
+# dirs = (t1 folder, t2 folder, binary change label folder); prefix selects the split.
 # task: "building" (building-change datasets) or "general" (any land-cover change); it selects
 # the MLLM prompt in experiment 3.
 DATASETS = {
@@ -47,10 +47,36 @@ DATASETS = {
                     5: "building", 6: "playground"},
     },
 }
+DATASETS["second_cv"] = {**DATASETS["second"], "prefix": "train_"}
+DATASETS["second_scannet"] = {**DATASETS["second"], "detectors": ("scannet",)}
+RS_DATASETS = Path("/guisongxia01/pangchao/haoxiangyu/rs_datasets")
+for dataset, folder, classes in (
+    ("lsscd", "lsSCD", {0: "Unknown", 1: "Bareland", 2: "Rangeland", 3: "Developed space",
+                       4: "Road", 5: "Tree", 6: "Water", 7: "Agriculture land", 8: "Building"}),
+    ("scscd7", "SCSCD7", {0: "Bareland", 1: "Water", 2: "Building", 3: "Structure",
+                         4: "Farmland", 5: "Vegetation", 6: "Road"}),
+):
+    DATASETS[dataset] = {
+        "root": RS_DATASETS / folder, "dirs": ("img1", "img2", "label_unch0chi255"),
+        "prefix": "test_", "task": "general", "detectors": ("mambascd_base",),
+        "class1": RS_DATASETS / folder / "slabel1", "class2": RS_DATASETS / folder / "slabel2",
+        "classes": classes,
+    }
+
+# Used only to estimate train object geometry, never to train a transfer detector.
+# Keep LEVIR/WHU test registrations and their label semantics unchanged.
+TRAIN_DATASETS = {
+    "levir": {**DATASETS["levir"], "root": WORKSPACE / "datasets/LEVIR-CD/train_original"},
+    "whu": {**DATASETS["whu"], "root": LIM1 / "WHU-CD",
+            "dirs": ("img1", "img2", "label_unch0chi255"), "prefix": "train_"},
+    **{d: {**DATASETS[d], "prefix": "train_"} for d in ("lsscd", "scscd7")},
+}
 DETECTORS = ("schanger_small", "schanger_base", "sam3_omniovcd")   # LEVIR/WHU set
-PROB_DETECTORS = ("schanger_small", "schanger_base", "mambascd_base")
+PROB_DETECTORS = ("schanger_small", "schanger_base", "mambascd_base", "scannet")
 AREA_BUCKETS = ((0, 100, "<100"), (100, 1000, "100-1000"), (1000, None, ">1000"))
-DISPLAY = {"levir": "LEVIR-CD", "whu": "WHU-CD", "sysu": "SYSU-CD", "second": "SECOND"}
+DISPLAY = {"levir": "LEVIR-CD", "whu": "WHU-CD", "sysu": "SYSU-CD", "second": "SECOND",
+           "second_cv": "SECOND train (cross-fitted)", "second_scannet": "SECOND (SCanNet)",
+           "lsscd": "lsSCD", "scscd7": "SCSCD7"}
 
 
 def detectors(dataset: str) -> tuple[str, ...]:
