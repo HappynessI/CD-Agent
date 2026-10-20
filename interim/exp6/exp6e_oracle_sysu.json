@@ -1,0 +1,55 @@
+{
+  "original": {
+    "tp": 51998528,
+    "fp": 9143579,
+    "fn": 9822389,
+    "precision": 0.8504536489068,
+    "recall": 0.8411154431759723,
+    "f1": 0.8457587705390199,
+    "iou": 0.7327400451064995
+  },
+  "oracle_piece": {
+    "tp": 51968328,
+    "fp": 3465777,
+    "fn": 9852589,
+    "precision": 0.937479336953307,
+    "recall": 0.8406269353785224,
+    "f1": 0.8864153895259173,
+    "iou": 0.7960018315523834,
+    "delta_f1": 0.04065661898689732,
+    "deleted_tp_px": 30200,
+    "deleted_fp_px": 5677802,
+    "deleted_regions": 9767
+  },
+  "oracle_whole_fp": {
+    "tp": 51998528,
+    "fp": 7469277,
+    "fn": 9822389,
+    "precision": 0.8743979704648591,
+    "recall": 0.8411154431759723,
+    "f1": 0.8574338511044745,
+    "iou": 0.7504456979872217,
+    "delta_f1": 0.011675080565454521,
+    "deleted_tp_px": 0,
+    "deleted_fp_px": 1674302,
+    "deleted_regions": 1700
+  },
+  "config": {
+    "dataset": "sysu",
+    "detector": "schanger_small",
+    "images": 4000,
+    "workers": 8,
+    "aggregation": "micro",
+    "prediction": "saved_0.5_mask",
+    "connectivity": 8,
+    "median_target_area_source": "/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CD_1016_probe/exp5c/sysu/metrics_5c_B_G0.05.json",
+    "median_target_area": 972.0,
+    "large_area": 3888.0,
+    "slic_n_segments": "max(4, int(image_area / median_target_area))",
+    "slic_compactness": 10,
+    "min_piece_area": 10,
+    "oracle_piece_gt_frac_lt": 0.1,
+    "oracle_whole_fp": "delete whole components with zero GT overlap, any area",
+    "deleted_regions": "pieces for oracle_piece; components for oracle_whole_fp"
+  }
+}

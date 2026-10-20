@@ -112,7 +112,7 @@ footer { margin-top: 40px; font-size: 12.5px; color: var(--muted); }
   <span class="chip s">同一个验证器打分</span><span class="arrow">→</span>
   <span class="chip f">分低：删掉</span>
 </div>
-<p class="muted" style="margin-top:10px">下文用 SECOND 测试集的一张真实图（<code>{{EX}}.png</code>，512×512）走完每一步，每步都放这一步的真实输入和输出。验证器还在训练，它的输出暂用“oracle”（按真值判断，即假设验证器全对）代替，作为上界演示，页面上都注明了。灰色虚线框是实验跑完后要补的内容。</p>
+<p class="muted" style="margin-top:10px">下文用 SECOND 测试集的一张真实图（<code>{{EX}}.png</code>，512×512）走完每一步，每步都放这一步的真实输入和输出。验证器尚未训练，它的输出暂用“oracle”（按真值判断，即假设验证器全对）代替，作为上界演示，页面上都注明了。灰色虚线框是实验 6 后续部分完成后要补的内容。</p>
 
 <h2>先看懂几个词</h2>
 <div class="gloss">
@@ -212,7 +212,7 @@ footer { margin-top: 40px; font-size: 12.5px; color: var(--muted); }
 <div class="down">↓</div>
 
 <div class="stage">
-  <h3>⑤ 验证器：给每个切块打分 <span class="tag run">6b 训练中</span></h3>
+  <h3>⑤ 验证器：给每个切块打分 <span class="tag todo">6b 未开始</span></h3>
   <div class="io"><b>输入</b><span>以切块为中心的正方形裁图（边长 = max(4 × 切块长边, 64)），包括 t1 裁图、t2 裁图、切块掩码、检测器概率裁图，外加下面 JSON 里的数值特征</span><b>输出</b><span>一个数：这块是真变化的概率 P ∈ [0, 1]</span></div>
   <div class="two">
     <div>
@@ -279,7 +279,7 @@ footer { margin-top: 40px; font-size: 12.5px; color: var(--muted); }
       <figure><img src="{{img:{{EX}}/fp_after.jpg}}" alt=""><figcaption><b>oracle 删之后</b>：F1 66.6（精度 64.2 → 88.1）。红色误检大部分消失。</figcaption></figure>
     </div>
     <div class="facts">
-      <div class="fact">全测试集 oracle 上界：SECOND +5.74，SYSU +4.07；只删“整块都错”的区域：+2.43 / +1.17<span class="src">exp6e_fp_removal.md（数据在 exp6e/*/oracle.json）</span></div>
+      <div class="fact">全测试集 oracle 上界：SECOND +5.74，SYSU +4.07；只删“整块都错”的区域：+2.43 / +1.17<span class="src">exp6e_fp_removal.md</span></div>
       <div class="fact pend">验证器实际效果，以及对照基线（只按检测器自己的概率删块）：待 6e<span class="src">exp6e_fp_removal.md</span></div>
     </div>
   </div>
@@ -327,7 +327,7 @@ footer { margin-top: 40px; font-size: 12.5px; color: var(--muted); }
 <div class="down">↓</div>
 
 <div class="stage">
-  <h3>② 交叉拟合检测器 <span class="tag run">训练中，{{sek_iter}} / 50k 步</span></h3>
+  <h3>② 交叉拟合检测器 <span class="tag done">已完成，{{sek_iter}} / 50k 步</span></h3>
   <div class="io"><b>输入</b><span>其中 2 折的影像和标签</span><b>输出</b><span>3 个 MambaSCD-Base，每个只在“没见过”的那一折上出概率图和二值图（512×512）。三折拼起来就是整个训练集的“测试式”检测结果。</span></div>
   <div class="folds">
     <div class="fold"><b>fold0</b><div class="bar3"><span style="flex:1879;background:var(--accent)"></span><span style="flex:99;background:var(--ok)"></span><span style="flex:990;background:var(--warn)"></span></div>训练 1879 · 选模型 99 · 留出预测 990</div>
@@ -348,7 +348,7 @@ footer { margin-top: 40px; font-size: 12.5px; color: var(--muted); }
     </div>
   </div>
   <div class="facts">
-    <div class="fact pend">留出折上的检测结果和 F1（应接近测试集的 74.17，否则说明交叉拟合样本和测试分布不一致）：待 6a<span class="src">exp6a_pool.md</span></div>
+    <div class="fact">留出折检测结果（2,968 张）：F1 71.04，精度 77.0，召回 66.0；测试集为 74.17 / 77.6 / 71.1。无信号漏检占真值像素 17.8%（测试 14.9%）。分布接近，差别集中在召回，因为每折只用了 63% 的训练图<span class="src">exp6a_pool.md</span></div>
   </div>
 </div>
 <div class="down">↓</div>
@@ -389,13 +389,13 @@ footer { margin-top: 40px; font-size: 12.5px; color: var(--muted); }
   </div>
 </div>
 
-<h2>当前进度</h2>
+<h2>当前进度（2026-10-20 阶段性收尾）</h2>
 <div class="tw">
 <table>
   <tr><th>步骤</th><th>状态</th><th>结果文件</th></tr>
   <tr><td>第 0 步：资源与耗时评估</td><td>完成。卫星版 DINOv3 无下载权限；Zero-OVCD 无公开代码</td><td>env.md</td></tr>
-  <tr><td>6a 交叉拟合候选池</td><td>三折检测器训练中（{{sek_iter}} / 50k 步）</td><td>exp6a_pool.md</td></tr>
-  <tr><td>6b 验证器 V1 + 端到端</td><td>等 6a</td><td>exp6b_verifier.md</td></tr>
+  <tr><td>6a 交叉拟合候选池</td><td>三折检测器训练与留出折推理完成；训练候选池未建</td><td>exp6a_pool.md</td></tr>
+  <tr><td>6b 验证器 V1 + 端到端</td><td>未开始（等 6a 候选池）</td><td>exp6b_verifier.md</td></tr>
   <tr><td>6e 去误检</td><td>oracle 上界完成；对照基线和验证器待做</td><td>exp6e_fp_removal.md</td></tr>
   <tr><td>6c 换检测器 / 换数据集</td><td>SCanNet 代码和权重已就位</td><td>exp6c_generalization.md</td></tr>
   <tr><td>6d 新候选来源</td><td>RingMo-SAM 待做；Zero-OVCD 停止</td><td>exp6d_backlog.md</td></tr>

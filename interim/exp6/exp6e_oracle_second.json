@@ -1,0 +1,55 @@
+{
+  "original": {
+    "tp": 63317347,
+    "fp": 18316031,
+    "fn": 25796045,
+    "precision": 0.7756306127623434,
+    "recall": 0.7105256076437984,
+    "f1": 0.7416520617051789,
+    "iou": 0.5893855261607428
+  },
+  "oracle_piece": {
+    "tp": 63259058,
+    "fp": 5960614,
+    "fn": 25854334,
+    "precision": 0.9138884391130891,
+    "recall": 0.7098715084260288,
+    "f1": 0.7990631445116226,
+    "iou": 0.6653664935502981,
+    "delta_f1": 0.05741108280644369,
+    "deleted_tp_px": 58289,
+    "deleted_fp_px": 12355417,
+    "deleted_regions": 69671
+  },
+  "oracle_whole_fp": {
+    "tp": 63317347,
+    "fp": 12889704,
+    "fn": 25796045,
+    "precision": 0.8308594305794618,
+    "recall": 0.7105256076437984,
+    "f1": 0.7659953705785799,
+    "iou": 0.6207394626531728,
+    "delta_f1": 0.02434330887340097,
+    "deleted_tp_px": 0,
+    "deleted_fp_px": 5426327,
+    "deleted_regions": 10963
+  },
+  "config": {
+    "dataset": "second",
+    "detector": "mambascd_base",
+    "images": 1694,
+    "workers": 8,
+    "aggregation": "micro",
+    "prediction": "saved_0.5_mask",
+    "connectivity": 8,
+    "median_target_area_source": "/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CD_1016_probe/exp5c/second/metrics_5c_B_G0.05.json",
+    "median_target_area": 298.0,
+    "large_area": 1192.0,
+    "slic_n_segments": "max(4, int(image_area / median_target_area))",
+    "slic_compactness": 10,
+    "min_piece_area": 10,
+    "oracle_piece_gt_frac_lt": 0.1,
+    "oracle_whole_fp": "delete whole components with zero GT overlap, any area",
+    "deleted_regions": "pieces for oracle_piece; components for oracle_whole_fp"
+  }
+}

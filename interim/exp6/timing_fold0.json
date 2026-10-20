@@ -1,0 +1,60 @@
+{
+  "complete": true,
+  "manifest": "/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CD_1016_probe/exp6/second_cv/manifest.json",
+  "fold": 0,
+  "gpu": "NVIDIA A800-SXM4-80GB",
+  "batch_size": 16,
+  "crop_size": 512,
+  "dtype": "float32",
+  "optimizer": "AdamW",
+  "learning_rate": 0.0001,
+  "weight_decay": 0.005,
+  "cfg": "/guisongxia01/pangchao/wangyihan/Vlm_vs_OneJev/vendor/ChangeMamba/changedetection/configs/vssm1/vssm_base_224.yaml",
+  "encoder_pretrained_path": "/guisongxia01/pangchao/wangyihan/models/VMamba/vssm_base_0229_ckpt_epoch_237.pth",
+  "encoder_load": {
+    "loaded_keys": 398,
+    "missing_keys": [
+      "outnorm0.bias",
+      "outnorm0.weight",
+      "outnorm1.bias",
+      "outnorm1.weight",
+      "outnorm2.bias",
+      "outnorm2.weight",
+      "outnorm3.bias",
+      "outnorm3.weight"
+    ],
+    "unexpected_keys": [
+      "classifier.norm.weight",
+      "classifier.norm.bias",
+      "classifier.head.weight",
+      "classifier.head.bias"
+    ],
+    "mismatched_keys": [],
+    "remapped_legacy_keys": [],
+    "path": "/guisongxia01/pangchao/wangyihan/models/VMamba/vssm_base_0229_ckpt_epoch_237.pth"
+  },
+  "train_num_workers": 16,
+  "max_iters": 50000,
+  "lr_step_size": 10000,
+  "warmup_steps": 20,
+  "timed_steps": 200,
+  "requested_timed_steps": 200,
+  "warmup_seconds": 86.59663812862709,
+  "mean_step_seconds": 4.15809128064895,
+  "mean_data_wait_seconds": 0.027420059198047967,
+  "mean_compute_seconds": 4.1306712214509025,
+  "startup_seconds": 3.094691726844758,
+  "peak_allocated_gib": 71.87425994873047,
+  "peak_reserved_gib": 74.32421875,
+  "validation_images": 99,
+  "validation_seconds": 9.309801553376019,
+  "validation_seconds_per_image": 0.0940383995290507,
+  "validation_sek": 0.16326343469940013,
+  "elapsed_seconds": 930.6367739629932,
+  "budget_reserve_fraction": 0.2,
+  "checkpoint_saved": false,
+  "budget_gpu_days": {
+    "20000": 3.48474093760933,
+    "50000": 8.705629542303958
+  }
+}

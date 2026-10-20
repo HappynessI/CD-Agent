@@ -80,3 +80,23 @@
 | RemoteCLIP | `open_clip_torch` 3.3.0；权重 `chendelong/RemoteCLIP` 的 `RemoteCLIP-ViT-L-14.pt`（经 hf-mirror 直连下载，1,710,613,765 字节，与源站一致） | `models/RemoteCLIP/RemoteCLIP-ViT-L-14.pt` | 在 4b 全部 600 个候选（含 SECOND 300 个）上跑通，`probe/exp5b_clip.py` |
 
 - **网络情况**：管理节点的 HTTP 代理在下载途中失效（连接立即被拒）。PyPI 包和权重最终都改为直连清华镜像和 hf-mirror。计算节点同样直连可用。
+
+## 实验 6 资源（2026-10-18，第 0 步最终状态）
+
+| 项目 | 状态 | 说明 |
+|---|---|---|
+| SECOND train | 可用 | 2,968 对（test 1,694 对），每对有两期 RGB 512×512、两期语义标签（0 未变化，1–6 为低矮植被、非植被地表、树、水、建筑、运动场）、二值变化标签 |
+| MambaSCD 官方训练代码 | 可用 | ChangeMamba 的 `train_MambaSCD.py` / `SCDTrainer`；官方 SCD 调度：batch 16、512 裁块、50,000 次迭代、AdamW lr 1e-4、wd 5e-3、每 10,000 次 lr×0.5、每 500 次验证。本地目录名与官方不同，用 `exp6_prepare_folds.py` 建软链接目录适配 |
+| VMamba-Base 初始化权重 | 已下载 | 官方 Zenodo 记录 15479555，`models/VMamba/vssm_base_0229_ckpt_epoch_237.pth`（354,373,070 字节）。已有的 MambaSCD SECOND 权重见过完整 train，不能用于交叉拟合 |
+| 第二个 SECOND 检测器 | 已下载，未加载 | SCanNet（ResNet34 + CSWin Transformer，结构与 MambaSCD 不同）。代码 `Chang-Agent/third_party/SCanNet/`；官方 SECOND 权重 `models/SCanNet/SCanNet_32e_mIoU73.37_Sek23.94_Fscd63.66_OA87.86.pth`（111,811,247 字节）。模型构造默认下载 ImageNet ResNet34，加载完整权重时需关掉 |
+| 第三个双时相语义数据集 | 服务器已有 | `/guisongxia01/pangchao/haoxiangyu/rs_datasets/` 下：lsSCD（train/test 1,120/480，512²，8 类）、SCSCD7（1,400/322，512²，7 类）、CCSCD5（700/253）、LevirSCD（3,225/645，256²）。HRSCD 划分文件与实际文件数不一致；Hi-CNA 没有 test 语义标签 |
+| 验证器骨干 | 部分可用 | SAM ViT-H（`models/SAM/`）、RemoteCLIP ViT-L-14（`models/RemoteCLIP/`）可用。卫星版 DINOv3 是 gated 模型，hf-mirror 返回 403，需要有访问资格的 HF 账号 |
+| RingMo-SAM | 有公开 demo | HF Space `AI-Cyber/RingMo-SAM` 有代码和约 2.59 GB 光学权重，但未找到论文或作者主页对该地址的确认，Space 当前运行报错；未下载 |
+| Zero-OVCD | 停止 | 官方仓库只有 README，源码待论文接收后公开；按任务要求停止该子项 |
+
+**6a 耗时实测与资源决定（2026-10-18）**
+
+- 单卡 A800 80GB 上 batch 16 显存不足；用 2×8 梯度累积时 4.16 秒/步，峰值显存 71.9 GiB；内部验证 0.094 秒/张（`exp6/second_cv/timing_fold0.json`）。
+- 按此单卡速度，K=3 完整调度约 7.5 GPU 天，超过任务的 3 天门槛。已报告用户，用户同意按官方完整调度跑，改为每折 2 卡 DDP（每卡 batch 8，全局 16），三折并行共 6 卡。
+- 实际：三折各 2 卡，每折约 29.4 小时（2026-10-18 07:27 至 10-19 12:52 UTC），共约 176 GPU 小时（约 7.3 GPU 天）。
+- 运行注意：PyTorch DataLoader 在 `TMPDIR` 下建 AF_UNIX socket，工作区长路径会超长，训练作业用 `JOB_TMP_ROOT=/tmp`；gpu04、gpu06、gpu37 上作业异常，已排除。

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Usage: sbatch [resources] --job-name=NAME --output=$OUT/logs/%x-%j.out probe/run.sbatch ENV SCRIPT [ARGS...]
 #   ENV: omniovcd | vlm | exp5   SCRIPT: file name inside probe/
+#   RUNNER=torchrun2: two local DDP workers; default is plain python.
 #SBATCH --partition=gre
 #SBATCH --exclude=gpu06
 #SBATCH --nodes=1
@@ -31,11 +32,20 @@ finish() {
 }
 trap finish EXIT
 # Node-local /tmp can be full (seen on gpu37); keep compiler/triton scratch per job in the workspace.
-JOB_TMP=/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CD_1016_probe/.tmp/${SLURM_JOB_ID}
+# JOB_TMP_ROOT=/tmp gives a short path: PyTorch DataLoader workers put AF_UNIX sockets in TMPDIR,
+# and the long workspace path exceeds the socket path limit.
+JOB_TMP=${JOB_TMP_ROOT:-/guisongxia01/pangchao/wangyihan/Chang-Agent/outputs/CD_1016_probe/.tmp}/cd${SLURM_JOB_ID}
 mkdir -p "$JOB_TMP"
 export TMPDIR=$JOB_TMP TRITON_CACHE_DIR=$JOB_TMP/triton
 unset HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy
 export HF_HUB_OFFLINE=1 HF_HUB_DISABLE_PROGRESS_BARS=1 TRANSFORMERS_VERBOSITY=error OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-4} TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1
 cd "$PROBE"
 echo "node=$(hostname -s) job=${SLURM_JOB_ID} cmd=$*"
-"$PY" "$@"
+case "${RUNNER:-python}" in
+  python) "$PY" "$@" ;;
+  torchrun2)
+    export OMP_NUM_THREADS=$(( ${SLURM_CPUS_PER_TASK:-16} / 2 ))
+    "$PY" -m torch.distributed.run --standalone --nnodes=1 --nproc_per_node=2 "$@"
+    ;;
+  *) echo "unknown RUNNER: $RUNNER"; exit 2 ;;
+esac
