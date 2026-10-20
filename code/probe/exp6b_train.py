@@ -7,6 +7,7 @@ import os
 import random
 import time
 import uuid
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -16,6 +17,13 @@ from exp6b_common import (
     BACKBONES, SEED, SOURCES, Features, Pool, binary_metrics, classifier, grouped_metrics,
     normalization, predict, run_dir, verifier_split, write_json,
 )
+
+
+def weighted_bce(labels, scores, pos_weight):
+    """Same weighted BCE as training, from sigmoid scores (eval mode, no dropout)."""
+    p = np.clip(np.asarray(scores, np.float64), 1e-7, 1 - 1e-7)
+    y = np.asarray(labels, np.float64)
+    return float(np.mean(-(pos_weight * y * np.log(p) + (1 - y) * np.log1p(-p))))
 
 
 def main():
@@ -30,6 +38,9 @@ def main():
     parser.add_argument("--dropout", type=float, default=0.15)
     parser.add_argument("--seed", type=int, default=SEED)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--out", help="Run directory override, e.g. to re-log curves without touching the main run")
+    parser.add_argument("--train_monitor", type=int, default=300000,
+                        help="Fixed random training pieces scored in eval mode each epoch (0 disables)")
     args = parser.parse_args()
     if (min(args.epochs, args.patience, args.batch_size) < 1 or args.lr <= 0
             or args.weight_decay < 0 or not 0 <= args.dropout < 1):
@@ -52,7 +63,7 @@ def main():
     positive, negative = int((pool.label[train] == 1).sum()), int((pool.label[train] == 0).sum())
     if min(positive, negative) == 0 or len(np.unique(pool.label[val])) != 2:
         raise ValueError("Training and validation must each contain positive and negative pieces")
-    out = run_dir(args.backbone, args.include_pred)
+    out = Path(args.out) if args.out else run_dir(args.backbone, args.include_pred)
     out.mkdir(parents=True, exist_ok=True)
     if any((out / name).exists() for name in ("model.pt", "train_log.jsonl", "val_metrics.json")):
         raise FileExistsError(f"{out}: move the previous run before training")
@@ -61,6 +72,13 @@ def main():
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     pos_weight = negative / positive
     criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor(pos_weight, device=args.device))
+    # Separate generator so the monitor subset leaves the training order unchanged.
+    monitor = np.zeros_like(train)
+    if args.train_monitor:
+        chosen = np.flatnonzero(train)
+        chosen = np.random.default_rng(args.seed + 1).choice(
+            chosen, min(args.train_monitor, len(chosen)), replace=False)
+        monitor[chosen] = True
     best_ap, best_epoch, best_state, best_scores = -1.0, 0, None, None
     start = time.monotonic()
     run_id = str(uuid.uuid4())
@@ -81,12 +99,18 @@ def main():
                 count += len(idx)
             scores = predict(model, features, val, mean, std, args.batch_size, args.device)
             metrics = binary_metrics(pool.label[val], scores[val])
+            metrics["loss"] = weighted_bce(pool.label[val], scores[val], pos_weight)
+            train_eval = None
+            if monitor.any():
+                train_scores = predict(model, features, monitor, mean, std, args.batch_size, args.device)
+                train_eval = binary_metrics(pool.label[monitor], train_scores[monitor])
+                train_eval["loss"] = weighted_bce(pool.label[monitor], train_scores[monitor], pos_weight)
             if metrics["ap"] > best_ap:
                 best_ap, best_epoch = metrics["ap"], epoch
                 best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
                 best_scores = scores.copy()
             record = dict(epoch=epoch, loss=loss_sum / count, train_samples=count,
-                          val=metrics, best_epoch=best_epoch,
+                          val=metrics, train_eval=train_eval, best_epoch=best_epoch,
                           seconds=time.monotonic() - start)
             log.write(json.dumps(record, allow_nan=False) + "\n")
             log.flush()

@@ -12,9 +12,26 @@ import torch
 
 from exp6b_common import ROOT, SEED, verifier_split, write_json
 from exp6v2_common import (
-    MODEL, input_batch, load_model, read_rows, response_logps, save_adapter,
+    MODEL, encode, input_batch, load_model, read_rows, response_logps, save_adapter,
     target_ids, validation,
 )
+
+
+@torch.no_grad()
+def teacher_forced_loss(processor, model, rows, variant):
+    """Token-mean NLL of the full target and of the answer token(s) alone, eval mode."""
+    model.eval()
+    total, tokens, answer, answer_tokens = 0.0, 0, 0.0, 0
+    for row in rows:
+        response = target_ids(processor, row, variant)
+        with torch.autocast("cuda", dtype=torch.bfloat16):
+            nll = -response_logps(model, input_batch(processor, row, variant), response)
+        k = len(encode(processor, "是" if row["label"] else "否"))
+        total += float(nll.sum())
+        tokens += len(response)
+        answer += float(nll[-k - 1:-1].sum())
+        answer_tokens += k
+    return dict(loss=total / tokens, answer_loss=answer / answer_tokens, n=len(rows))
 
 
 def main():
@@ -34,6 +51,9 @@ def main():
     parser.add_argument("--val-limit", type=int, default=0, help="Smoke only; requires --no-save")
     parser.add_argument("--no-save", action="store_true", help="Smoke: never write an adapter")
     parser.add_argument("--seed", type=int, default=SEED)
+    parser.add_argument("--loss-every", type=int, default=100, help="Teacher-forced loss log interval (0 disables)")
+    parser.add_argument("--loss-samples", type=int, default=512,
+                        help="Validation subset and already-seen training samples for the loss log")
     args = parser.parse_args()
     if min(args.rank, args.alpha, args.epochs, args.grad_accum, args.eval_every, args.max_new_tokens) < 1:
         parser.error("Integer hyperparameters must be positive")
@@ -68,10 +88,14 @@ def main():
     write_json(out / "config.json", metadata)
     start = time.monotonic()
     step, best_auc, best_step = 0, -1.0, None
-    history = []
+    history, loss_history = [], []
+    loss_val = random.Random(args.seed + 1).sample(val, min(args.loss_samples, len(val)))
     for epoch in range(args.epochs):
         order = list(range(len(train)))
         rng.shuffle(order)
+        # Samples of the first steps of epoch 1: a fixed "already seen" set to track memorisation.
+        if epoch == 0:
+            loss_seen = [train[i] for i in order[:args.loss_samples]]
         for offset in range(0, len(order), args.grad_accum):
             model.train()
             model.get_base_model().model.visual.eval()
@@ -98,6 +122,12 @@ def main():
                 group["lr"] = args.lr * scale
             optimizer.step()
             print(f"step={step}/{total_steps} loss={loss_sum / token_count:.5f}", flush=True)
+            if args.loss_every and (step % args.loss_every == 0 or step == total_steps):
+                loss_history.append(dict(
+                    step=step, epoch=epoch + 1, train_step_loss=loss_sum / token_count,
+                    seen_train=teacher_forced_loss(processor, model, loss_seen, args.variant),
+                    validation=teacher_forced_loss(processor, model, loss_val, args.variant)))
+                write_json(out / "loss_history.json", loss_history)
             if step % args.eval_every == 0 or step == total_steps:
                 metrics, _ = validation(processor, model, val, args.variant, args.max_new_tokens)
                 history.append(dict(step=step, epoch=epoch + 1, loss=loss_sum / token_count, metrics=metrics))

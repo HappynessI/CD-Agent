@@ -64,7 +64,7 @@
 | SYSU 的语义头 | **无**：SChanger 只有二值头 | SYSU 不做来源 A |
 | 独立的地物分类 / 语义分割模型 | **无** | 来源 B 改用 SAM3 文本提示 |
 | 图像编码器 | SAM3 图像编码器可用（`vision_features`，256 维，72×72 patch） | 来源 C（改建）、D、E |
-| DINOv3（`facebook/dinov3-vitl16-pretrain-sat493m`） | HF 缓存里**只有配置文件**，权重为 `.incomplete` 未完成下载，**不可用**；按要求不补下载 | — |
+| DINOv3（`facebook/dinov3-vitl16-pretrain-sat493m`） | HF 缓存里**只有配置文件**，权重为 `.incomplete` 未完成下载，**不可用**；按要求不补下载（后已更正：服务器上另有完整权重，见下方“实验 6 资源”的验证器骨干一行） | — |
 | DINOv2、CLIP 等其他编码器 | 无 | — |
 | AnyChange 代码或权重 | **无**（segagent-env 里只有 SAM1 的 `segment_anything` 包，没有 SAM ViT-H 权重） | 来源 D 自实现：SAM3 编码器两期特征差 |
 
@@ -90,7 +90,7 @@
 | VMamba-Base 初始化权重 | 已下载 | 官方 Zenodo 记录 15479555，`models/VMamba/vssm_base_0229_ckpt_epoch_237.pth`（354,373,070 字节）。已有的 MambaSCD SECOND 权重见过完整 train，不能用于交叉拟合 |
 | 第二个 SECOND 检测器 | 已下载，未加载 | SCanNet（ResNet34 + CSWin Transformer，结构与 MambaSCD 不同）。代码 `Chang-Agent/third_party/SCanNet/`；官方 SECOND 权重 `models/SCanNet/SCanNet_32e_mIoU73.37_Sek23.94_Fscd63.66_OA87.86.pth`（111,811,247 字节）。模型构造默认下载 ImageNet ResNet34，加载完整权重时需关掉 |
 | 第三个双时相语义数据集 | 服务器已有 | `/guisongxia01/pangchao/haoxiangyu/rs_datasets/` 下：lsSCD（train/test 1,120/480，512²，8 类）、SCSCD7（1,400/322，512²，7 类）、CCSCD5（700/253）、LevirSCD（3,225/645，256²）。HRSCD 划分文件与实际文件数不一致；Hi-CNA 没有 test 语义标签 |
-| 验证器骨干 | 部分可用 | SAM ViT-H（`models/SAM/`）、RemoteCLIP ViT-L-14（`models/RemoteCLIP/`）可用。卫星版 DINOv3 是 gated 模型，hf-mirror 返回 403，需要有访问资格的 HF 账号 |
+| 验证器骨干 | 可用 | SAM ViT-H（`models/SAM/`）、RemoteCLIP ViT-L-14（`models/RemoteCLIP/`）可用。卫星版 DINOv3：hf-mirror 下载返回 403（gated）。**更正（2026-10-20）**：服务器上同组成员的工作区已有完整的 `dinov3-vitl16-pretrain-sat493m`（含 `model.safetensors`），经用户指定后以软链接接入 `models/dinov3/dinov3-vitl16-pretrain-sat493m`；6b 的 DINOv3 结果用的就是这份卫星版 ViT-L/16 权重，用 transformers 的 `DINOv3ViTModel` 加载 |
 | RingMo-SAM | 有公开 demo | HF Space `AI-Cyber/RingMo-SAM` 有代码和约 2.59 GB 光学权重，但未找到论文或作者主页对该地址的确认，Space 当前运行报错；未下载 |
 | Zero-OVCD | 停止 | 官方仓库只有 README，源码待论文接收后公开；按任务要求停止该子项 |
 
@@ -100,3 +100,20 @@
 - 按此单卡速度，K=3 完整调度约 7.5 GPU 天，超过任务的 3 天门槛。已报告用户，用户同意按官方完整调度跑，改为每折 2 卡 DDP（每卡 batch 8，全局 16），三折并行共 6 卡。
 - 实际：三折各 2 卡，每折约 29.4 小时（2026-10-18 07:27 至 10-19 12:52 UTC），共约 176 GPU 小时（约 7.3 GPU 天）。
 - 运行注意：PyTorch DataLoader 在 `TMPDIR` 下建 AF_UNIX socket，工作区长路径会超长，训练作业用 `JOB_TMP_ROOT=/tmp`；gpu04、gpu06、gpu37 上作业异常，已排除。
+
+**6a 候选池与 6b V1 实际耗时（2026-10-19 至 10-20，单卡 A800，按 Slurm 记录的作业时长）**
+
+| 步骤 | 作业 | 耗时 |
+|---|---|---|
+| 6a second_cv 候选：AnyChange H1 | 4 分片 × 1 GPU | 各约 37 分钟，共约 2.5 GPU 小时 |
+| 6a second_cv 候选：SAM3 实例/类别（B、C） | 2 分片 × 1 GPU | 各约 28 分钟，共约 0.9 GPU 小时 |
+| 6a 候选合并 + SLIC 切细 + 标注 | CPU，8 核，各数据集 1–6 分片 | 每分片约 2 分钟；second_cv 共约 14 分钟，test 约 8 分钟 |
+| 6b 特征提取 SAM ViT-H | second_cv 4 分片 + test 2 分片 | 共约 1.6 GPU 小时 |
+| 6b 特征提取 DINOv3 | 同上 | 共约 0.9 GPU 小时 |
+| 6b 特征提取 RemoteCLIP | 同上 | 共约 0.8 GPU 小时 |
+| 6b MLP 训练（早停） | 1 GPU | none 6 分钟，SAM 13 分钟，DINOv3 15 分钟，RemoteCLIP 9 分钟 |
+| 6b 评估（验证集定阈值 + 测试集） | CPU，8 核 | 每个版本约 18 分钟（验证 5–6 分钟，测试 12–13 分钟） |
+| 6b 学习曲线重跑（30 轮，不早停） | 1 GPU | 每轮约 1.25 分钟 |
+
+6a 候选池加 6b V1 合计约 7.4 GPU 小时，另有约 2 小时 CPU 作业。实测内存峰值：MLP 训练与评估 1–11 GB，V2 训练约 12.6 GB；之后按峰值申请（V1 24G、V2 32G）。
+
