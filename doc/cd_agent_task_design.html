@@ -168,7 +168,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <div class="scene fnS"><span class="chip fn">漏检场景</span><p><strong>检查变化掩码之外的区域</strong>：哪些真变化没有报出来。</p>
       <p class="path">2.1 漏检搜索 → 3.1 存在性 → 4.1 补回整个目标、4.3 时相选择 → 5.2 给提示 → 6.1 结果核验</p></div>
   </div>
-  <p class="note">误检是 OVCD-v0 中错误的大头：误检像素占全部错误的 68–80%，其中 69–87% 是贴在已检出目标外面的多余像素，所以误检场景更依赖“局部删除”（4.2）和工具，而不只是整块删除。</p>
+  <p class="note">在 OVCD-v0 中（LEVIR-CD building，三种免训练初始化：DynamicEarth 的 M-C-I、I-M-C，以及 ReA-OVCD），按像素算误检是错误的大头：误检像素占全部错误的 68–80%，其中 69–87% 是贴在已检出目标外面的多余像素。按目标算，整目标漏检率（14–51%）不低于整目标误检率（6–39%）。在 SECOND 上、用监督检测器时（实验 1），漏检反而是主要问题。所以两个场景都要做，误检场景更依赖“局部删除”（4.2）和工具；SECOND v0 初始化后要重新统计。</p>
 </section>
 
 <section>
