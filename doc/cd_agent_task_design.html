@@ -261,6 +261,15 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     </tbody>
   </table>
   </div>
+  <h3>构建流程</h3>
+  <ol class="q">
+    <li>挑图并编号：icl 24 / val 64 / test 128，记录新编号、原始编号、来源。<span class="qtag">v0</span></li>
+    <li>三种初始化（I-M-C、M-C-I、ReA-OVCD）各跑一遍，得到三份 M0。主要耗时在这一步。<span class="qtag">v0 · GPU</span></li>
+    <li>SAM3 分块推理（512² 分块，提示 building），得到两期建筑掩码，用于漏检侧候选。OVCD-v0 中 192 张约 0.15 GPU 小时。<span class="qtag">v0 · GPU</span></li>
+    <li>一个派生脚本：按 GT 切出真值区域；生成 v0-judge 的图块级和区域级条目并打标签。只用 CPU，零标注。<span class="qtag">v0-judge · CPU</span></li>
+    <li>从 SECOND 另抽 v0-sem（与 v0 按图分开），切出区域并从两期语义图取类别标签。<span class="qtag">v0-sem · CPU</span></li>
+    <li>审核页：每个任务抽 3 条展示。<span class="qtag">审核</span></li>
+  </ol>
   <p class="note">派生规则（门限、最小面积、候选来源）改动时，v0-judge 加小版本号（v0-judge.1、v0-judge.2），v0 本身不变。</p>
 </section>
 
@@ -275,7 +284,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
         <dt>设想</dt><dd>给定类别集合，让 MLLM 输出两期对象的类别。</dd>
         <dt>目的</dt><dd>检验 MLLM 能否认出影像里的地物，以及文本对应的类别。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；但 v0 里只有 SECOND 来源的图有两期语义，LEVIR-CD、WHU-CD 只有变化掩码。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
+      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；但 v0 里只有 SECOND 来源的图有两期语义，LEVIR-CD、WHU-CD 只有变化掩码，所以 1.1 单独用 v0-sem：从 SECOND 抽图（规模先按验证 64 / 测试 128），与 v0 按图分开，区域的两期类别直接取自语义图。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
     </article>
 
     <article class="task mod">
