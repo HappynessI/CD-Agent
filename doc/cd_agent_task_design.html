@@ -325,12 +325,15 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <article class="task mod">
       <header><span class="id">任务 1.3 · 定位</span><h3>给出点或框，让 SAM 分出目标</h3><span class="state">基于 v0</span></header>
       <dl>
-        <dt>设定</dt><dd>在 v0 中，已知某个 building 是漏检或误检。</dd>
-        <dt>输出</dt><dd>MLLM 输出点或框的坐标，输入给 SAM、SAM3 等工具，把这个 building 分出来。</dd>
-        <dt>效果</dt><dd>已知是漏检还是误检，就知道分出来的目标该加上还是删除；加上或删除之后，F1 会变化。</dd>
-        <dt>待定</dt><dd>要不要人工确定最佳点或框，作为 golden 数据？还是点只要落在 building 形状内就行？</dd>
+        <dt>设定</dt><dd>已知一个方块里有错（漏检或误检），让 MLLM 把它分准。隔离“产生候选”的影响：只测定位，不测判断。</dd>
+        <dt>数据</dt><dd>用 v0，不用 v0-judge。以 GT 切出的错误目标（v0 的真值区域）定位置，取一个方块：边长为外接框的 2–3 倍、至少 128，<strong>随机偏移</strong>，目标不总在正中（否则“给中心点”太容易）。MLLM 只看到方块和两期影像，看不到完美形状。方块里有多个错误时要求全部处理，按方块内全部错误像素评分。</dd>
+        <dt>两侧</dt><dd><span class="chip fn">漏检</span> 补回整目标（子能力 4.1）：MLLM 给点或框，工具分出目标后加入。<br><span class="chip fp">误检</span> 删除局部（子能力 4.2，对应附着误检）：方块框住“检出目标 + 多出的部分”，MLLM 指出多出的部分，或给真建筑的点让工具分出建筑再裁剪。</dd>
+        <dt>输出</dt><dd>点或框的坐标、选用的工具、在哪一期上分（T1 / T2 / 两期并集）。</dd>
+        <dt>评测</dt><dd>点或框的命中率（点落在目标内、框与 GT 框 IoU ≥ 0.5）；工具结果与 GT 的 IoU 及 IoU ≥ 0.5 的比例；方块内 F1 的变化。按目标面积分桶报，都与 GT 提示的上界对比。</dd>
+        <dt>摸底实验（先做）</dt><dd>回答“要不要人工 golden 点或框”。只用 v0 验证集，用 GT 自动生成提示：<br><strong>提示</strong>：中心点（目标内离边界最远的点）、内部随机点（取 5 个）、边缘点（靠近边界的内部点）、外接框、框 + 中心点；<br><strong>工具</strong>：SAM（ViT-H）、SAM3 交互头、SimpleClick 原版、AnyChange 点查询；SAM3 文本提示作“不给点”的对照；<br><strong>时相</strong>：T1 / T2 / 两期并集都记录（AnyChange 本身是双时相，不需选）；<br><strong>指标</strong>：与 GT 目标的 IoU、IoU ≥ 0.5 比例，按面积分桶。<br>判读：随机内部点 ≈ 中心点 → 标准定为“点落在目标内即可”；差距大 → 用自动算出的中心点作 golden。两种情况都不需要人工标。</dd>
+        <dt>已有参照</dt><dd>实验 2（<code>results/exp2_oracle.md</code>）：GT 外接框提示 SAM3，与 GT 的平均 IoU 为 LEVIR 0.86、WHU 0.91，漏检目标 IoU ≥ 0.5 的占 95–100%；框再加中心点几乎没有变化。所以摸底实验真正缺的是“只给点”、小目标和 SECOND。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>不需要人工标。GT 外接框就是 golden 框，用它提示 SAM 的 IoU 是上界。点位影响有多大，可以自动比较中心点、随机内部点和边缘点来实测。评测看三项：命中率、SAM 结果与 GT 的 IoU、F1 变化。SAM 在哪一期上分（新建用 T2，拆除用 T1）也应由 MLLM 决定。除了补回整目标，还要评“删除局部”（子能力 4.2），因为误检里 69–85% 是多出的局部像素。</span></p>
+      <p class="sug"><b>评审建议</b><span>SAM、SimpleClick 都是单期分割，新建用 T2、拆除用 T1，选错时相效果会差；AnyChange 点查询直接给出变化掩码，可以绕开这一步，值得重点比较。小目标先按框裁块再送工具。遥感微调的 SimpleClick（SegMap / RSSeg 权重）或 CrossCut 需要下载权重，放到第二轮。</span></p>
     </article>
 
     <article class="task mod">
@@ -338,6 +341,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
       <dl>
         <dt>设定</dt><dd>同样已知漏检和误检。</dd>
         <dt>目标</dt><dd>在有限的预算内执行动作，取得最大的 F1 收益。</dd>
+        <dt>动作空间</dt><dd>见本节末尾的工具清单：分割类工具（经 1.3 摸底筛选）、语义与特征核验工具、不调用模型的掩码操作。</dd>
         <dt>搜索指标</dt><dd>从轨迹中统计。每一步的“足迹”= 这一步看过的范围（给 MLLM 的近景或图块、核实的候选掩码、给 SAM 的框或点）。足迹覆盖某个错误目标 ≥ 50% 面积即为命中；足迹大于一个 256² 图块（或目标外接框的若干倍）不算命中，整图浏览单独计数。<br><strong>错误访问率</strong>：预算 k 内被命中过的错误目标比例，误检、漏检及其子类型分开报；<strong>访问精度</strong>：命中至少一个错误目标的步数比例；<strong>首次命中步数</strong>：画访问率–步数曲线；<strong>停止时遗留</strong>：从未被看过的错误目标数。</dd>
         <dt>失败归因</dt><dd>每个最终没修好的错误目标归入三类：没看到（搜索）、看到但判断错（判断）、判断对但分割或工具出错（定位与工具）。</dd>
       </dl>
@@ -357,6 +361,28 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     </article>
 
   </div>
+  <h3>工具清单（Agent 的动作空间）</h3>
+  <p>汇总此前讨论和实验中用过的工具，按 MLLM 能调用的动作分组。状态来自 <code>results/env.md</code> 和各实验记录。</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>动作</th><th>工具</th><th>输入 → 输出</th><th>状态</th><th>用在</th></tr></thead>
+    <tbody>
+      <tr><th>点/框分割</th><td>SAM（ViT-H）</td><td>单期影像 + 点或框 → 掩码</td><td>服务器有，OVCD-v0 用过</td><td>1.3、1.4</td></tr>
+      <tr><th>点/框分割</th><td>SAM3 交互头</td><td>同上</td><td>服务器有，实验 2 用过</td><td>1.3、1.4</td></tr>
+      <tr><th>点击修正</th><td>SimpleClick（原版）</td><td>点击 + 上一轮掩码 → 掩码</td><td>旧原型里有，当时效果一般</td><td>1.3、1.4</td></tr>
+      <tr><th>点击修正</th><td>SimpleClick 遥感微调版（SegMap / RSSeg 权重）、CrossCut</td><td>同上，针对遥感小目标</td><td>只讨论过，未装；需同意后下载</td><td>1.3 第二轮</td></tr>
+      <tr><th>点击传播</th><td>ISRS-DETR</td><td>一次点击 → 同类目标都分出</td><td>只读过，代码情况未确认</td><td>以后</td></tr>
+      <tr><th>文本分割</th><td>SAM3 文本提示（如 building）</td><td>影像 + 类别名 → 实例</td><td>服务器有，OVCD-v0 第 5–11 轮用过</td><td>1.3 对照、1.4</td></tr>
+      <tr><th>示例分割</th><td>SAM3 示例框</td><td>同图框一个样例 → 所有同类实例</td><td>讨论过，没用过</td><td>2.3、2.4</td></tr>
+      <tr><th>双时相变化分割</th><td>AnyChange 点查询</td><td>两期影像 + 一个点 → 该处变化掩码</td><td>已装（exp5-env），只用过全图模式</td><td>1.3、1.4</td></tr>
+      <tr><th>语义核验</th><td>RemoteCLIP</td><td>区域 → 两期类别相似度</td><td>已装，实验 5 用过</td><td>1.2、1.5</td></tr>
+      <tr><th>特征差</th><td>DINOv3 卫星版</td><td>区域 → 两期特征相似度</td><td>已接入，实验 6b 用过</td><td>1.2、1.5</td></tr>
+      <tr><th>开放词汇分割</th><td>SegEarth-OV3（Zero-OVCD 中使用）</td><td>影像 + 类别 → 语义图</td><td>只讨论过</td><td>以后</td></tr>
+      <tr><th>掩码操作（不用模型）</th><td>删连通域、加入候选、SAM3 建筑图裁剪、按初始化分数过滤</td><td>当前掩码 → 新掩码</td><td>OVCD-v0 已实现</td><td>1.4、2.1</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">RSPrompter（自动给 SAM 生成提示）更适合当非 Agent 对照，不列为工具。单期分割工具都要选时相：新建用 T2，拆除用 T1。</p>
 </section>
 
 <section>
@@ -391,7 +417,8 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <li>baseline 包括哪些行？建议每种初始化三行：只有初始化；零样本 Agent（沿用 OVCD-v0 流程）；不用 MLLM 的对照（只在验证集上调阈值）。先跑 2.1，C2 和示例、自然语言两种条件放在之后。<span class="qtag">baseline</span></li>
     <li>任务 1.1 的具体形式：输出对象类别，还是区域的两期类别？<span class="qtag">原方案待定</span></li>
     <li>错误访问率中“命中”的门限：覆盖目标面积多少算看到，足迹多大算太大？建议先取覆盖 ≥ 50%、足迹不超过 256²，在验证集上看分布后再定。<span class="qtag">指标</span></li>
-    <li>定位任务是否需要人工 golden 点或框？<span class="qtag">原方案待定 · 建议不需要</span></li>
+    <li>定位任务是否需要人工 golden 点或框？由 1.3 的摸底实验决定，预期不需要人工标。<span class="qtag">1.3 摸底</span></li>
+    <li>是否下载遥感微调的 SimpleClick（SegMap / RSSeg）或 CrossCut 权重，放进 1.3 第二轮？<span class="qtag">工具</span></li>
     <li>任务 1.3 和 1.4 是否合并？<span class="qtag">原方案待定</span></li>
   </ol>
   <p class="note">审核前端：每个任务只抽 3 条示例展示。</p>
