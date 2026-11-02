@@ -150,7 +150,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
       <ul><li><strong>1.1 地物识别</strong>：两期影像中各区域是什么类别</li><li><strong>1.2 判定标准理解</strong>：从类别名、示例或自然语言中归纳“什么算变化、什么不算”</li></ul></article>
     <article class="cap isnew"><span class="n">能力 2</span><span class="badge new">新增</span><h3>搜索</h3>
       <ul><li><strong>2.1 漏检搜索</strong>：在检测结果之外提出可疑区域，并排序</li><li><strong>2.2 待查排序</strong>：在检测结果之内，决定先查哪个区域</li></ul>
-      <p class="ev">不单独设任务：用 MLLM 搜索就是粗粒度上的判断（任务 1.2 的整图、图块两级）；与判断无关的部分（先看哪里、看多少、何时停）用轨迹中的错误访问率衡量（任务 1.4、2.1）。</p>
+      <p class="ev">不单独设任务：用 MLLM 搜索就是粗粒度上的判断（任务 1.2 的图块级）；与判断无关的部分（先看哪里、看多少、何时停）用轨迹中的错误访问率衡量（任务 1.4、2.1）。</p>
       <div class="sc"><span><i class="chip fp">误检</i>2.2 掩码之内先查哪个</span><span><i class="chip fn">漏检</i>2.1 掩码之外去哪里找</span></div></article>
     <article class="cap"><span class="n">能力 3</span><span class="badge old">原有 · 细化</span><h3>判断</h3>
       <ul><li><strong>3.1 存在性</strong>：区域内有没有目标类别的变化</li><li><strong>3.2 取舍</strong>：这个区域整体该保留还是删除</li><li><strong>3.3 方向与类型</strong>：新增、消失或类型转换</li></ul>
@@ -214,7 +214,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <tbody>
       <tr><td colspan="8" class="grp">第一大类 · 模块任务</td></tr>
       <tr><th>1.1 遥感图像理解</th><td class="c"><i class="dot"></i></td><td></td><td></td><td></td><td></td><td></td><td class="note">待定</td></tr>
-      <tr><th>1.2 变化判断（整图 / 图块 / 区域）</th><td class="c"><i class="ring"></i></td><td class="c"><i class="ring"></i></td><td class="c"><i class="dot"></i></td><td></td><td></td><td></td><td class="note">先做，数据集 v0</td></tr>
+      <tr><th>1.2 变化判断（图块 / 区域）</th><td class="c"><i class="ring"></i></td><td class="c"><i class="ring"></i></td><td class="c"><i class="dot"></i></td><td></td><td></td><td></td><td class="note">先做，数据集 v0</td></tr>
       <tr><th>1.3 定位</th><td class="c"><i class="ring"></i></td><td></td><td></td><td class="c"><i class="dot"></i></td><td class="c"><i class="ring"></i></td><td></td><td class="note">基于 v0</td></tr>
       <tr><th>1.4 工具调度</th><td></td><td class="c"><i class="ring"></i></td><td></td><td class="c"><i class="ring"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="ring"></i></td><td class="note">可能与 1.3 合并；在轨迹中统计搜索</td></tr>
       <tr><th>1.5 核验（新增）</th><td class="c"><i class="ring"></i></td><td></td><td class="c"><i class="ring"></i></td><td class="c"><i class="ring"></i></td><td class="c"><i class="ring"></i></td><td class="c"><i class="dot"></i></td><td class="note">可先用 OVCD-v0 轨迹</td></tr>
@@ -225,7 +225,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     </tbody>
   </table>
   </div>
-  <p class="note">实心点：主要考察的能力；空心圈：会用到但不是考察重点。搜索没有单独的模块任务，在 1.2 的整图、图块两级和 1.4、2.1 的轨迹里衡量。所有任务都报告“不用 MLLM”的对照（结论 6）。</p>
+  <p class="note">实心点：主要考察的能力；空心圈：会用到但不是考察重点。搜索没有单独的模块任务，在 1.2 的图块级和 1.4、2.1 的轨迹里衡量。所有任务都报告“不用 MLLM”的对照（结论 6）。</p>
 </section>
 
 <section>
@@ -266,10 +266,10 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     </article>
 
     <article class="task mod">
-      <header><span class="id">任务 1.2 · 判断</span><h3>变化判断：整图、图块、区域三种粒度</h3><span class="state">先做</span></header>
+      <header><span class="id">任务 1.2 · 判断</span><h3>变化判断：图块、区域两种粒度</h3><span class="state">先做</span></header>
       <dl>
         <dt>数据</dt><dd>building 变化，从 LEVIR-CD、WHU-CD、SECOND 中挑 192 张作为 v0：T1、T2、building 变化掩码，每张图记录新编号、原始编号和来源（见第 06 节）。之后需要再扩。</dd>
-        <dt>粒度</dt><dd>三级，误检、漏检两侧都问：<br><strong>整图</strong>：这张图的检测结果里有没有误检、有没有漏检；<br><strong>图块</strong>（如 256²）：这块里有没有误检、有没有没标出的变化；<br><strong>区域</strong>：给定的这个区域是不是误检、是不是漏检。<br>整图、图块两级就是 MLLM 做“搜索”的方式，真值都由 GT 和 M0 直接算出。</dd>
+        <dt>粒度</dt><dd>两级，误检、漏检两侧都问：<br><strong>图块</strong>（如 256²）：这块里有没有误检、有没有没标出的变化；<br><strong>区域</strong>：给定的这个区域是不是误检、是不是漏检。<br>图块级就是 MLLM 做“搜索”的方式，真值由 GT 和 M0 直接算出，只计面积超过最小门限的错误目标。<br>不设整图级：按像素算几乎每张图都有误检和漏检，答案几乎全是“有”，测不出区分能力。</dd>
         <dt>标注</dt><dd><span class="legend3"><i class="chip tp">检出的真实变化</i><i class="chip fn">漏检</i><i class="chip fp">误检</i></span>三种颜色，以 GT 为准。</dd>
         <dt>审核页</dt><dd>抽几个典型例子，展示全景和近景。</dd>
         <dt>要想清楚</dt><dd>候选怎样构造，才能把想让 MLLM 区分的变化区域分出来：给 MLLM 看的图应该是什么形状、什么大小。</dd>
