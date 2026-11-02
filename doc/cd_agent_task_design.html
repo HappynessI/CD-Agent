@@ -118,7 +118,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
 <div class="wrap">
 
 <header style="display:flex;flex-direction:column;gap:10px">
-  <p class="meta">CV Learning · Ethan 的任务设置方案 · 2026-10-29 初稿 · 2026-10-30 更新能力体系 · 2026-11-02 加入数据与“前置条件 × 核心任务”</p>
+  <p class="meta">CV Learning · Ethan 的任务设置方案 · 2026-10-29 初稿 · 2026-10-30 更新能力体系 · 2026-11-02 加入数据与“前置条件 × 核心任务”，同日按新设定改为三源 building v0、三种初始化</p>
   <h1>变化检测智能体：能力与任务设置</h1>
   <p class="lead">研究方向是“变化检测 + 变化检测智能体”，开放词汇变化检测是其中一个任务。任务围绕两件事来设：变化检测流程中存在哪些问题，以及 Agent 解决这些问题时需要具备哪些能力。参照师兄的做法：灾害智能体按灾害的四个特点建任务，另一位师兄按增、删、改、查建任务。</p>
   <p class="note">灰底的“评审建议”是 Claude 的补充。2026-10-30 起，能力从“读图、判断、定位、工具调度”四项扩为六项，新增“搜索”和“核验”两项能力及对应的任务 1.2 搜索、1.6 核验，Ethan 已确认。</p>
@@ -168,7 +168,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <div class="scene fnS"><span class="chip fn">漏检场景</span><p><strong>检查变化掩码之外的区域</strong>：哪些真变化没有报出来。</p>
       <p class="path">2.1 漏检搜索 → 3.1 存在性 → 4.1 补回整个目标、4.3 时相选择 → 5.2 给提示 → 6.1 结果核验</p></div>
   </div>
-  <p class="note">在 OVCD-v0 中（LEVIR-CD building，三种免训练初始化：DynamicEarth 的 M-C-I、I-M-C，以及 ReA-OVCD），按像素算误检是错误的大头：误检像素占全部错误的 68–80%，其中 69–87% 是贴在已检出目标外面的多余像素。按目标算，整目标漏检率（14–51%）不低于整目标误检率（6–39%）。在 SECOND 上、用监督检测器时（实验 1），漏检反而是主要问题。所以两个场景都要做，误检场景更依赖“局部删除”（4.2）和工具；SECOND v0 初始化后要重新统计。</p>
+  <p class="note">在 OVCD-v0 中（LEVIR-CD building，三种免训练初始化：DynamicEarth 的 M-C-I、I-M-C，以及 ReA-OVCD），按像素算误检是错误的大头：误检像素占全部错误的 68–80%，其中 69–87% 是贴在已检出目标外面的多余像素。按目标算，整目标漏检率（14–51%）不低于整目标误检率（6–39%）。在 SECOND 上、用监督检测器时（实验 1），漏检反而是主要问题。所以两个场景都要做，误检场景更依赖“局部删除”（4.2）和工具；v0 初始化后要按来源重新统计。</p>
 </section>
 
 <section>
@@ -229,12 +229,12 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
 </section>
 
 <section>
-  <h2><span class="k">06</span>数据：数据集 v0 与示例集</h2>
-  <p>模块任务和端到端任务共用同一批数据。数据来自 SECOND：二值任务只看 building，语义任务用全部六类。每张图都先经过初始化方法（建议 ReA-OVCD）得到检测结果 M0，再按 GT 派生出三类区域。</p>
+  <h2><span class="k">06</span>数据：数据集 v0（building，三个来源）</h2>
+  <p>v0 只做 building 变化，从已有的 LEVIR-CD、WHU-CD、SECOND 中挑图组成。baseline 走零样本，不设训练集。检测器不绑定特定数据集：每张图用三种免训练检测器分别初始化，得到三份检测结果 M0，作为 MLLM 接手的起点；再按 GT 派生出三类区域。</p>
   <div class="grid2">
-    <div class="box"><span class="t">示例集 · 24 条</span><p>从 SECOND 训练集中抽取，<strong>不训练模型</strong>，只作为 ICL 示例告诉 MLLM 什么是误检、什么是漏检。</p><p>同样经过初始化，同样派生三类区域；每条记录原始数据集来源。</p></div>
-    <div class="box"><span class="t">数据集 v0 · 250 张</span><p>开发和评测用，按图像划分为验证集和测试集，同一张图的区域不跨集合。与示例集不重叠。</p><p>每张图记录 SECOND 原始划分与文件名。</p></div>
-    <div class="box"><span class="t">初始化 · M0</span><p>ReA-OVCD，免训练，对示例集和 v0 的每张图都跑一遍。I-M-C 留作之后复测判断任务的对照。</p></div>
+    <div class="box"><span class="t">数据集 v0 · 192 张</span><p><strong>训练 0 张</strong>（零样本）· 验证 64 张 · 测试 128 张，沿用 OVCD-v0 的数量。</p><p>来源：LEVIR-CD、WHU-CD、SECOND；SECOND 取两期语义图中涉及 building 的变化。同一张图不跨集合。</p></div>
+    <div class="box"><span class="t">每个样本的记录</span><p><strong>新编号</strong>：如 v0-val-0001、v0-test-0001。</p><p><strong>原始编号</strong>：原文件名；切块时加上块坐标。</p><p><strong>来源</strong>：来源数据集及其原始划分。</p></div>
+    <div class="box"><span class="t">初始化 · 三份 M0</span><p>I-M-C、M-C-I（DynamicEarth）和 ReA-OVCD，都免训练，验证集和测试集的每张图都跑一遍。</p><p>三者在 LEVIR 测试集上 F1 为 69.67、53.76、84.52，正好给出中、弱、强三档起点。</p></div>
   </div>
   <h3>每张图派生出的三类区域</h3>
   <div class="scroll">
@@ -247,12 +247,13 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     </tbody>
   </table>
   </div>
-  <p class="note">每个区域记录在 v0 中的来源：区域编号、所属 v0 图像编号和划分、SECOND 原始文件名、初始化方法、区域类型与子类型、外接框、面积、对应的 GT 和 M0 连通域编号。语义任务另记两期类别。后续设任务时按区域类型单独取出误检、漏检。</p>
+  <p class="note">三种初始化各派生一套区域，即每张图有三套。每个区域记录：区域编号、所属 v0 图像的新编号和划分、来源数据集和原始编号、初始化方法、区域类型与子类型、外接框、面积、对应的 GT 和 M0 连通域编号。后续设任务时按区域类型单独取出误检、漏检，并按初始化和来源分开报告。</p>
+  <p class="note">示例集暂不做：训练集为 0，baseline 全部零样本。以后做“给定示例”条件（2.3、2.4）或 ICL 时，再从各数据集的训练集抽，与 v0 不重叠。</p>
 </section>
 
 <section>
   <h2><span class="k">07</span>第一大类：模块任务</h2>
-  <p>按 Agent 的工作顺序排列：理解 → 搜索 → 判断 → 定位 → 工具调度 → 核验，每项能力对应一个任务。数据都来自第 06 节的数据集 v0 和示例集。</p>
+  <p>按 Agent 的工作顺序排列：理解 → 搜索 → 判断 → 定位 → 工具调度 → 核验，每项能力对应一个任务。数据都来自第 06 节的数据集 v0。</p>
   <div class="tasks">
 
     <article class="task mod">
@@ -261,7 +262,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
         <dt>设想</dt><dd>给定类别集合，让 MLLM 输出两期对象的类别。</dd>
         <dt>目的</dt><dd>检验 MLLM 能否认出影像里的地物，以及文本对应的类别。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；也可以和 1.3 共用数据。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
+      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；但 v0 里只有 SECOND 来源的图有两期语义，LEVIR-CD、WHU-CD 只有变化掩码。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
     </article>
 
     <article class="task mod isnew">
@@ -279,14 +280,15 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <article class="task mod">
       <header><span class="id">任务 1.3 · 判断</span><h3>变化判断：数据集 v0</h3><span class="state">先做</span></header>
       <dl>
-        <dt>数据</dt><dd>SECOND 的 building 类，单独抽成一个集合：T1、T2、T1 语义、T2 语义、building 变化掩码。挑 250 张作为初始开发集 v0，之后需要再扩。</dd>
+        <dt>数据</dt><dd>building 变化，从 LEVIR-CD、WHU-CD、SECOND 中挑 192 张作为 v0：T1、T2、building 变化掩码，每张图记录新编号、原始编号和来源（见第 06 节）。之后需要再扩。</dd>
         <dt>标注</dt><dd><span class="legend3"><i class="chip tp">检出的真实变化</i><i class="chip fn">漏检</i><i class="chip fp">误检</i></span>三种颜色，以 GT 为准。</dd>
         <dt>审核页</dt><dd>抽几个典型例子，展示全景和近景。</dd>
         <dt>要想清楚</dt><dd>候选怎样构造，才能把想让 MLLM 区分的变化区域分出来：给 MLLM 看的图应该是什么形状、什么大小。</dd>
-        <dt>划分</dt><dd>训练集、验证集、测试集。</dd>
+        <dt>划分</dt><dd>训练集 0 张（零样本）、验证集 64 张、测试集 128 张。</dd>
+        <dt>初始化</dt><dd>I-M-C、M-C-I、ReA-OVCD 三种免训练检测器，各自的结果都作为 MLLM 判断的起点。</dd>
         <dt>目的</dt><dd>得到一个能识别变化的判断器。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>初始化建议用 ReA-OVCD（免训练，不受 SECOND 训练集限制）。负样本要包括没变化的建筑。候选分两档：v0-oracle 用 GT 推出的区域，v0-real 用实际能得到的候选，两者的差距本身就是结论。按图像划分，例如 150/50/50。exp6l 中 Qwen3.5-4B 的同类判断 AP 只有 0.071，预期要放低。OVCD-v0 显示同一个 Qwen 在不同候选来源上 AUC 从 0.74 到 0.94 不等，所以要分来源报告；判断标签建议分“存在性”和“取舍”两种（子能力 3.1、3.2）。</span></p>
+      <p class="sug"><b>评审建议</b><span>判断结果按三种初始化分开报告：初始化越弱，留给判断的错误越多。负样本要包括没变化的建筑。候选分两档：v0-oracle 用 GT 推出的区域，v0-real 用实际能得到的候选，两者的差距本身就是结论。exp6l 中 Qwen3.5-4B 的同类判断 AP 只有 0.071，预期要放低。OVCD-v0 显示同一个 Qwen 在不同候选来源上 AUC 从 0.74 到 0.94 不等，所以要分来源报告；判断标签建议分“存在性”和“取舍”两种（子能力 3.1、3.2）。</span></p>
     </article>
 
     <article class="task mod">
@@ -318,7 +320,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
         <dt>评测</dt><dd>采纳决策的 AUC 与准确率；按决策执行后的 F1，与“总是采纳”“从不采纳”比较。</dd>
         <dt>目的</dt><dd>衡量 Agent 能否发现工具出错，这是它和固定流程的主要区别。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>数据可以先从 OVCD-v0 的轨迹取：11 轮记录了大量工具输出和采纳前后的 F1，正负样本都现成（LEVIR building）。之后在 SECOND 的 v0 上重新生成。典型负例：整图框分出 97 万像素误检；SAM3 在密集小住宅区漏检后的裁剪。</span></p>
+      <p class="sug"><b>评审建议</b><span>数据可以先从 OVCD-v0 的轨迹取：11 轮记录了大量工具输出和采纳前后的 F1，正负样本都现成（LEVIR building）。之后在 v0 上按三种初始化重新生成。典型负例：整图框分出 97 万像素误检；SAM3 在密集小住宅区漏检后的裁剪。</span></p>
     </article>
 
   </div>
@@ -331,25 +333,27 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
   <table class="pc">
     <thead><tr><th>前置条件 ↓ / 核心任务 →</th><th>C1 二值变化检测<small>输出：符合条件的变化掩码（一张二值图）<br>指标：F1^c、IoU^c、P、R</small></th><th>C2 多类别语义变化检测<small>输出：变化区域内 T1、T2 各是什么类别<br>指标：mIoU、SeK、F_scd（SECOND 标准）</small></th></tr></thead>
     <tbody>
-      <tr><th>P1 给定类别<small>一个类别名或类别集合</small></th><td><strong>2.1</strong> 例：building → 建筑的变化掩码。即 OVCD，沿用 DynamicEarth 协议，可直接和已有论文比。</td><td><strong>2.2</strong> 例：给定 SECOND 六类 → 每个变化像素的前后类别。</td></tr>
+      <tr><th>P1 给定类别<small>一个类别名或类别集合</small></th><td><strong>2.1</strong> 例：building → 建筑的变化掩码。即 OVCD，沿用 DynamicEarth 协议，可直接和已有论文比。v0 先做这一格。</td><td><strong>2.2</strong> 例：给定 SECOND 六类 → 每个变化像素的前后类别。</td></tr>
       <tr><th>P2 给定示例<small>几对已标好的变化示例</small></th><td><strong>2.3</strong> 例：给几对“新建厂房”的示例 → 找出同类变化。</td><td><strong>2.4</strong> 例：示例中带有前后类别 → 按示例的类别体系输出前后类别。</td></tr>
       <tr><th>P3 给定自然语言<small>一段要求</small></th><td><strong>2.5</strong> 例：“找出新建的建筑，不包括拆除” → 二值掩码。</td><td><strong>2.6</strong> 例：“标出所有从植被变成建筑的区域” → 带前后类别的结果。</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="sug"><b>评审建议</b><span>SECOND 同时有二值变化和两期语义图，一份数据就能支撑两种核心任务。C2 的初始化需要额外设计：ReA-OVCD 只输出单类变化掩码，可以逐类运行，再按两期的类别得分给出前后类别。示例和自然语言两种前置条件里，“判定标准理解”（子能力 1.2）是关键。已有工作中最接近 2.5 的是 RCD、QSCP、DVL-Bench；2.3、2.4 在检索范围内没有找到已有方法。</span></p>
+  <p class="sug"><b>评审建议</b><span>v0 只有 building，先支撑 C1 的 2.1 和第一大类的模块任务。C2 需要多类别语义标注，三个来源中只有 SECOND 有，做 C2 时再从 SECOND 单独抽一个语义子集。C2 的初始化需要额外设计：ReA-OVCD 只输出单类变化掩码，可以逐类运行，再按两期的类别得分给出前后类别。示例和自然语言两种前置条件里，“判定标准理解”（子能力 1.2）是关键。已有工作中最接近 2.5 的是 RCD、QSCP、DVL-Bench；2.3、2.4 在检索范围内没有找到已有方法。</span></p>
   <p class="note">时间序列变化检测暂不加入。以后加入时，需要设计成公平的任务：同一序列、同一时相数，与双时相方法的输入信息量可比。</p>
 </section>
 
 <section>
   <h2><span class="k">09</span>开跑 baseline 之前需要确定的问题</h2>
   <ol class="q">
-    <li>示例集的 24 条，是 24 张图，还是 24 个区域？建议 24 张图，派生后按误检、漏检、正确各挑 8 个作示例。<span class="qtag">数据</span></li>
-    <li>示例集从 SECOND 官方训练集抽，v0 的 250 张从哪里抽？建议从官方测试集抽，两者天然不重叠；v0 划为验证 100 / 测试 150。<span class="qtag">数据</span></li>
+    <li>三个来源各取多少张？建议大致均分：验证 22 / 21 / 21，测试 43 / 43 / 42（LEVIR-CD / WHU-CD / SECOND），结果按来源分开报告。<span class="qtag">数据</span></li>
+    <li>LEVIR 部分是否直接复用 OVCD-v0 的图？建议复用：从 OVCD-v0 的验证 64 / 测试 128 中各抽一部分，三种初始化的结果已经有了，切块时一起裁剪即可，可以少跑一轮。<span class="qtag">数据</span></li>
+    <li>图像尺寸不一：LEVIR-CD 为 1024²，SECOND 为 512²，WHU-CD 是一对大图，必须切块。是否统一切成 512²？建议统一 512²，原始编号里记块坐标。<span class="qtag">数据</span></li>
+    <li>从各数据集的哪个划分抽？建议优先用官方测试集，避免以后和监督检测器的训练集重叠。SECOND 的公开标注可能只有训练集（推断，需在服务器上确认），那 SECOND 部分就只能从训练集抽。<span class="qtag">数据</span></li>
+    <li>挑图规则：是否要求每张图都有 building 变化？建议大部分图含 building 变化，另留约 10–20% 没有变化的图，用来测误检。<span class="qtag">数据</span></li>
     <li>误检区是否拆成“整块误检”和“附着误检”，漏检区是否拆成“孤立”和“贴边”？区域的最小面积取多少？<span class="qtag">数据</span></li>
-    <li>C2 语义任务的初始化：是否按“ReA-OVCD 逐类运行，再按两期类别得分给出前后类别”来做？<span class="qtag">端到端</span></li>
-    <li>baseline 先跑哪几格？建议先跑 2.1（类别 × 二值，building）和 2.2（类别 × 语义，六类），示例和自然语言两种条件放在之后。<span class="qtag">端到端</span></li>
-    <li>baseline 包括哪些行？建议三行：只有初始化；零样本 Agent（沿用 OVCD-v0 流程）；不用 MLLM 的对照。<span class="qtag">baseline</span></li>
+    <li>三种检测器换到 WHU-CD、SECOND 上，参数是否沿用 LEVIR 上的设置？建议沿用 OVCD-v0 的默认设置，阈值只在验证集上调。<span class="qtag">初始化</span></li>
+    <li>baseline 包括哪些行？建议每种初始化三行：只有初始化；零样本 Agent（沿用 OVCD-v0 流程）；不用 MLLM 的对照（只在验证集上调阈值）。先跑 2.1，C2 和示例、自然语言两种条件放在之后。<span class="qtag">baseline</span></li>
     <li>任务 1.1 的具体形式：输出对象类别，还是区域的两期类别？<span class="qtag">原方案待定</span></li>
     <li>定位任务是否需要人工 golden 点或框？<span class="qtag">原方案待定 · 建议不需要</span></li>
     <li>任务 1.4 和 1.5 是否合并？<span class="qtag">原方案待定</span></li>
