@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: one reading column. Pipeline strip → six capabilities → comparison → OVCD-v0 lessons → capability × task matrix → task cards (module, then end-to-end) → open questions */
+/* Layout: one reading column. Pipeline → six capabilities → comparison → OVCD-v0 lessons → capability × task matrix → data → module tasks → condition × core-task grid → decisions */
 :root{
   --bg:#f4f6f8; --surface:#ffffff; --fg:#16202a; --muted:#5b6875; --line:#d8dfe5;
   --acc:#1f5f8b; --acc-soft:#dde9f3;
@@ -106,12 +106,19 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
 .rf.add .t{color:var(--tp)} .rf.ref .t{color:var(--acc)}
 .rf p{font-size:14px} .rf .ev{font-size:13px;color:var(--muted)}
 @media (max-width:640px){.refine{grid-template-columns:1fr}}
+.grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .t{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;font-weight:600;color:var(--acc)}
+.box p,.box li{font-size:14px}
+.pc td{vertical-align:top;font-size:13.5px;min-width:200px}
+.pc th small{display:block;font-weight:400;color:var(--muted);font-size:12px;white-space:normal}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
 </style>
 
 <div class="wrap">
 
 <header style="display:flex;flex-direction:column;gap:10px">
-  <p class="meta">CV Learning · Ethan 的任务设置方案 · 2026-10-29 初稿 · 2026-10-30 按 OVCD-v0 十一轮结果更新能力体系</p>
+  <p class="meta">CV Learning · Ethan 的任务设置方案 · 2026-10-29 初稿 · 2026-10-30 更新能力体系 · 2026-11-02 加入数据与“前置条件 × 核心任务”</p>
   <h1>变化检测智能体：能力与任务设置</h1>
   <p class="lead">研究方向是“变化检测 + 变化检测智能体”，开放词汇变化检测是其中一个任务。任务围绕两件事来设：变化检测流程中存在哪些问题，以及 Agent 解决这些问题时需要具备哪些能力。参照师兄的做法：灾害智能体按灾害的四个特点建任务，另一位师兄按增、删、改、查建任务。</p>
   <p class="note">灰底的“评审建议”是 Claude 的补充。2026-10-30 起，能力从“读图、判断、定位、工具调度”四项扩为六项，新增“搜索”和“核验”两项能力及对应的任务 1.2 搜索、1.6 核验，Ethan 已确认。</p>
@@ -211,10 +218,10 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
       <tr><th>1.4 定位</th><td class="c"><i class="ring"></i></td><td></td><td></td><td class="c"><i class="dot"></i></td><td class="c"><i class="ring"></i></td><td></td><td class="note">基于 v0</td></tr>
       <tr><th>1.5 工具调度</th><td></td><td></td><td></td><td class="c"><i class="ring"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="ring"></i></td><td class="note">可能与 1.4 合并</td></tr>
       <tr><th>1.6 核验（新增）</th><td class="c"><i class="ring"></i></td><td></td><td class="c"><i class="ring"></i></td><td class="c"><i class="ring"></i></td><td class="c"><i class="ring"></i></td><td class="c"><i class="dot"></i></td><td class="note">可先用 OVCD-v0 轨迹</td></tr>
-      <tr><td colspan="8" class="grp">第二大类 · 端到端任务</td></tr>
-      <tr><th>2.1 给定类别</th><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="note">即 OVCD</td></tr>
-      <tr><th>2.2 给定示例</th><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="note">—</td></tr>
-      <tr><th>2.3 给定自然语言要求</th><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="note">—</td></tr>
+      <tr><td colspan="8" class="grp">第二大类 · 端到端任务（前置条件 × 核心任务，见第 08 节）</td></tr>
+      <tr><th>2.1–2.2 给定类别</th><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="note">2.1 即 OVCD</td></tr>
+      <tr><th>2.3–2.4 给定示例</th><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="note">—</td></tr>
+      <tr><th>2.5–2.6 给定自然语言</th><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="c"><i class="dot"></i></td><td class="note">—</td></tr>
     </tbody>
   </table>
   </div>
@@ -222,8 +229,30 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
 </section>
 
 <section>
-  <h2><span class="k">06</span>第一大类：模块任务</h2>
-  <p>按 Agent 的工作顺序排列：理解 → 搜索 → 判断 → 定位 → 工具调度 → 核验，每项能力对应一个任务。</p>
+  <h2><span class="k">06</span>数据：数据集 v0 与示例集</h2>
+  <p>模块任务和端到端任务共用同一批数据。数据来自 SECOND：二值任务只看 building，语义任务用全部六类。每张图都先经过初始化方法（建议 ReA-OVCD）得到检测结果 M0，再按 GT 派生出三类区域。</p>
+  <div class="grid2">
+    <div class="box"><span class="t">示例集 · 24 条</span><p>从 SECOND 训练集中抽取，<strong>不训练模型</strong>，只作为 ICL 示例告诉 MLLM 什么是误检、什么是漏检。</p><p>同样经过初始化，同样派生三类区域；每条记录原始数据集来源。</p></div>
+    <div class="box"><span class="t">数据集 v0 · 250 张</span><p>开发和评测用，按图像划分为验证集和测试集，同一张图的区域不跨集合。与示例集不重叠。</p><p>每张图记录 SECOND 原始划分与文件名。</p></div>
+    <div class="box"><span class="t">初始化 · M0</span><p>ReA-OVCD，免训练，对示例集和 v0 的每张图都跑一遍。I-M-C 留作之后复测判断任务的对照。</p></div>
+  </div>
+  <h3>每张图派生出的三类区域</h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>区域</th><th>定义（按 GT）</th><th>子类型</th><th>主要服务的任务</th></tr></thead>
+    <tbody>
+      <tr><th><span class="chip fp">误检区</span></th><td>M0 中不在 GT 内的像素，按连通域切分</td><td>整块误检：整个连通域都不对<br>附着误检：贴在正确区域外面的多余像素</td><td>1.2 搜索（误检侧）、1.3 判断、1.4 定位（局部删除）</td></tr>
+      <tr><th><span class="chip fn">漏检区</span></th><td>GT 中不在 M0 内的像素，按连通域切分</td><td>孤立漏检：附近没有任何检测<br>贴边漏检：紧挨正确区域</td><td>1.2 搜索（漏检侧）、1.3 判断、1.4 定位（补回整目标）</td></tr>
+      <tr><th><span class="chip tp">正确区</span></th><td>M0 与 GT 重叠的像素，按连通域切分</td><td>—</td><td>1.3 判断的负样本（不该删）、1.6 核验</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">每个区域记录在 v0 中的来源：区域编号、所属 v0 图像编号和划分、SECOND 原始文件名、初始化方法、区域类型与子类型、外接框、面积、对应的 GT 和 M0 连通域编号。语义任务另记两期类别。后续设任务时按区域类型单独取出误检、漏检。</p>
+</section>
+
+<section>
+  <h2><span class="k">07</span>第一大类：模块任务</h2>
+  <p>按 Agent 的工作顺序排列：理解 → 搜索 → 判断 → 定位 → 工具调度 → 核验，每项能力对应一个任务。数据都来自第 06 节的数据集 v0 和示例集。</p>
   <div class="tasks">
 
     <article class="task mod">
@@ -232,7 +261,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
         <dt>设想</dt><dd>给定类别集合，让 MLLM 输出两期对象的类别。</dd>
         <dt>目的</dt><dd>检验 MLLM 能否认出影像里的地物，以及文本对应的类别。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；也可以和 1.3 共用数据。判定标准理解（子能力 1.2）留给端到端任务 2.2、2.3 检验。</span></p>
+      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；也可以和 1.3 共用数据。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
     </article>
 
     <article class="task mod isnew">
@@ -257,7 +286,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
         <dt>划分</dt><dd>训练集、验证集、测试集。</dd>
         <dt>目的</dt><dd>得到一个能识别变化的判断器。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>先定用哪个检测器（若在 SECOND 上训练过，250 张不能在它的训练集里）。负样本要包括没变化的建筑。候选分两档：v0-oracle 用 GT 推出的区域，v0-real 用实际能得到的候选，两者的差距本身就是结论。按图像划分，例如 150/50/50。exp6l 中 Qwen3.5-4B 的同类判断 AP 只有 0.071，预期要放低。OVCD-v0 显示同一个 Qwen 在不同候选来源上 AUC 从 0.74 到 0.94 不等，所以要分来源报告；判断标签建议分“存在性”和“取舍”两种（子能力 3.1、3.2）。</span></p>
+      <p class="sug"><b>评审建议</b><span>初始化建议用 ReA-OVCD（免训练，不受 SECOND 训练集限制）。负样本要包括没变化的建筑。候选分两档：v0-oracle 用 GT 推出的区域，v0-real 用实际能得到的候选，两者的差距本身就是结论。按图像划分，例如 150/50/50。exp6l 中 Qwen3.5-4B 的同类判断 AP 只有 0.071，预期要放低。OVCD-v0 显示同一个 Qwen 在不同候选来源上 AUC 从 0.74 到 0.94 不等，所以要分来源报告；判断标签建议分“存在性”和“取舍”两种（子能力 3.1、3.2）。</span></p>
     </article>
 
     <article class="task mod">
@@ -296,37 +325,36 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
 </section>
 
 <section>
-  <h2><span class="k">07</span>第二大类：端到端任务</h2>
-  <div class="tasks">
-    <article class="task e2e">
-      <header><span class="id">任务 2.1</span><h3>给定类别的变化检测</h3></header>
-      <dl><dt>输入</dt><dd>T1、T2、类别文本</dd><dt>输出</dt><dd>该类别的变化掩码</dd></dl>
-      <p class="sug"><b>评审建议</b><span>就是 OVCD，沿用 DynamicEarth 的协议，可以和已有论文直接比。服务器上正在跑的 v0（LEVIR building）属于这一项。</span></p>
-    </article>
-    <article class="task e2e">
-      <header><span class="id">任务 2.2</span><h3>给定示例的变化检测</h3></header>
-      <dl><dt>输入</dt><dd>T1、T2，以及一组变化示例</dd><dt>输出</dt><dd>与示例同类的变化掩码</dd></dl>
-      <p class="sug"><b>评审建议</b><span>查到的 OVCD 论文都没做过这种设定，可能是新意所在（推断，需专门检索确认）。要先定示例怎么给：几对、给裁剪还是给掩码。</span></p>
-    </article>
-    <article class="task e2e wide">
-      <header><span class="id">任务 2.3</span><h3>给定特定文本的变化检测</h3></header>
-      <dl><dt>输入</dt><dd>T1、T2，以及一段自然语言要求</dd><dt>输出</dt><dd>符合要求的变化掩码</dd></dl>
-      <p class="sug"><b>评审建议</b><span>和指代变化检测（RCD）、QSCP、DVL-Bench 最接近。可以吸收昨天讨论的细粒度查询，例如“新建的建筑”“被拆除的建筑”。</span></p>
-    </article>
+  <h2><span class="k">08</span>第二大类：端到端任务 = 前置条件 × 核心变化检测任务</h2>
+  <p>给定类别、给定示例、给定自然语言只是“前置条件”，规定要找什么变化；真正决定输出形式的是中间的核心变化检测任务。核心任务定为两种：二值变化检测和多类别语义变化检测。两者组合得到 6 个端到端任务。</p>
+  <div class="scroll">
+  <table class="pc">
+    <thead><tr><th>前置条件 ↓ / 核心任务 →</th><th>C1 二值变化检测<small>输出：符合条件的变化掩码（一张二值图）<br>指标：F1^c、IoU^c、P、R</small></th><th>C2 多类别语义变化检测<small>输出：变化区域内 T1、T2 各是什么类别<br>指标：mIoU、SeK、F_scd（SECOND 标准）</small></th></tr></thead>
+    <tbody>
+      <tr><th>P1 给定类别<small>一个类别名或类别集合</small></th><td><strong>2.1</strong> 例：building → 建筑的变化掩码。即 OVCD，沿用 DynamicEarth 协议，可直接和已有论文比。</td><td><strong>2.2</strong> 例：给定 SECOND 六类 → 每个变化像素的前后类别。</td></tr>
+      <tr><th>P2 给定示例<small>几对已标好的变化示例</small></th><td><strong>2.3</strong> 例：给几对“新建厂房”的示例 → 找出同类变化。</td><td><strong>2.4</strong> 例：示例中带有前后类别 → 按示例的类别体系输出前后类别。</td></tr>
+      <tr><th>P3 给定自然语言<small>一段要求</small></th><td><strong>2.5</strong> 例：“找出新建的建筑，不包括拆除” → 二值掩码。</td><td><strong>2.6</strong> 例：“标出所有从植被变成建筑的区域” → 带前后类别的结果。</td></tr>
+    </tbody>
+  </table>
   </div>
+  <p class="sug"><b>评审建议</b><span>SECOND 同时有二值变化和两期语义图，一份数据就能支撑两种核心任务。C2 的初始化需要额外设计：ReA-OVCD 只输出单类变化掩码，可以逐类运行，再按两期的类别得分给出前后类别。示例和自然语言两种前置条件里，“判定标准理解”（子能力 1.2）是关键。已有工作中最接近 2.5 的是 RCD、QSCP、DVL-Bench；2.3、2.4 在检索范围内没有找到已有方法。</span></p>
+  <p class="note">时间序列变化检测暂不加入。以后加入时，需要设计成公平的任务：同一序列、同一时相数，与双时相方法的输入信息量可比。</p>
 </section>
 
 <section>
-  <h2><span class="k">08</span>待定的问题</h2>
+  <h2><span class="k">09</span>开跑 baseline 之前需要确定的问题</h2>
   <ol class="q">
+    <li>示例集的 24 条，是 24 张图，还是 24 个区域？建议 24 张图，派生后按误检、漏检、正确各挑 8 个作示例。<span class="qtag">数据</span></li>
+    <li>示例集从 SECOND 官方训练集抽，v0 的 250 张从哪里抽？建议从官方测试集抽，两者天然不重叠；v0 划为验证 100 / 测试 150。<span class="qtag">数据</span></li>
+    <li>误检区是否拆成“整块误检”和“附着误检”，漏检区是否拆成“孤立”和“贴边”？区域的最小面积取多少？<span class="qtag">数据</span></li>
+    <li>C2 语义任务的初始化：是否按“ReA-OVCD 逐类运行，再按两期类别得分给出前后类别”来做？<span class="qtag">端到端</span></li>
+    <li>baseline 先跑哪几格？建议先跑 2.1（类别 × 二值，building）和 2.2（类别 × 语义，六类），示例和自然语言两种条件放在之后。<span class="qtag">端到端</span></li>
+    <li>baseline 包括哪些行？建议三行：只有初始化；零样本 Agent（沿用 OVCD-v0 流程）；不用 MLLM 的对照。<span class="qtag">baseline</span></li>
     <li>任务 1.1 的具体形式：输出对象类别，还是区域的两期类别？<span class="qtag">原方案待定</span></li>
-    <li>数据集 v0 的候选形状和大小：给 MLLM 看的图长什么样？<span class="qtag">原方案待定</span></li>
     <li>定位任务是否需要人工 golden 点或框？<span class="qtag">原方案待定 · 建议不需要</span></li>
     <li>任务 1.4 和 1.5 是否合并？<span class="qtag">原方案待定</span></li>
-    <li>数据集 v0 用哪个检测器，250 张从 SECOND 的哪一部分取？<span class="qtag">评审补充</span></li>
-    <li>任务 1.6 先用 OVCD-v0 的 LEVIR 轨迹，还是等 SECOND v0 建好后一起生成？<span class="qtag">评审补充</span></li>
-    <li>任务 1.2 的候选用掩码还是框表示？这决定它能否直接接到任务 1.3 的输入。<span class="qtag">评审补充</span></li>
   </ol>
+  <p class="note">审核前端：每个任务只抽 3 条示例展示。</p>
 </section>
 
 </div>
