@@ -279,12 +279,18 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
   <div class="tasks">
 
     <article class="task mod">
-      <header><span class="id">任务 1.1 · 理解</span><h3>遥感图像理解</h3><span class="state">待定</span></header>
+      <header><span class="id">任务 1.1 · 理解</span><h3>遥感图像理解</h3><span class="state">基于 v0-sem</span></header>
       <dl>
         <dt>设想</dt><dd>给定类别集合，让 MLLM 输出两期对象的类别。</dd>
         <dt>目的</dt><dd>检验 MLLM 能否认出影像里的地物，以及文本对应的类别。</dd>
+        <dt>数据</dt><dd>v0-sem：从 SECOND 抽图（先按验证 64 / 测试 128），与 v0 按图分开。</dd>
+        <dt>区域怎么来</dt><dd>直接从 SECOND 的两期标签图切，不经过检测器：<br>① 每个像素在 T1、T2 标签图中各有一个类别，组成类别对 (T1 类, T2 类)；六类为低植被、无植被地表、树、水体、建筑、运动场，标签 0（未变化）跳过。<br>② 在类别对图上取 8 连通域，一个连通域就是一个区域，自带 T1、T2 两个真值类别。<br>③ 去掉面积小于门限（512² 图中先取 256 像素）和被图像边缘截断过多的区域。<br>④ 按 T1 类、T2 类分层抽样，每类设上限，避免低植被、无植被地表等大类主导准确率。</dd>
+        <dt>给 MLLM 看</dt><dd>与 1.2 相同：以外接框为中心外扩一倍裁成近景，两期都画出区域轮廓；分别问 T1、T2 中这个区域是六类中的哪一类。</dd>
+        <dt>评测</dt><dd>每期分类准确率、每类召回、两期都答对的比例。</dd>
+        <dt>局限</dt><dd>SECOND 只在变化区域标注两期类别，未变化区域两期都是 0、没有类别（凭记忆，需在服务器上核对：<code>(label1 == 0) == (label2 == 0)</code> 是否对所有像素成立）。所以 1.1 只考变化区域的类别；“没变化的地方是否真的没变”属于 1.2。相邻同类目标会连成一个区域，对认类别影响不大，先接受。</dd>
+        <dt>记录</dt><dd>沿用 v0-judge 的 JSON 格式，另加 <code>t1_class</code>、<code>t2_class</code>。</dd>
       </dl>
-      <p class="sug"><b>评审建议</b><span>做成区域级：给一个区域，分别问 T1、T2 的类别。SECOND 的两期语义图可直接当真值，零标注；但 v0 里只有 SECOND 来源的图有两期语义，LEVIR-CD、WHU-CD 只有变化掩码，所以 1.1 单独用 v0-sem：从 SECOND 抽图（规模先按验证 64 / 测试 128），与 v0 按图分开，区域的两期类别直接取自语义图。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
+      <p class="sug"><b>评审建议</b><span>v0 里只有 SECOND 来源的图有两期语义，LEVIR-CD、WHU-CD 只有变化掩码，所以 1.1 单独用 v0-sem，零标注。判定标准理解（子能力 1.2）留给端到端任务 2.3–2.6（示例、自然语言两种前置条件）检验。</span></p>
     </article>
 
     <article class="task mod">
