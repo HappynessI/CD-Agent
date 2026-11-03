@@ -24,6 +24,16 @@
 4. **和 GPT 合作**：在固定节点找 Codex 讨论（第 10 节），讨论要点写进文档。实现细节由你判断，写明理由即可，不必停下来问 Ethan。
 5. **数据集**：只用 LEVIR-CD。验证 64 对用于一切选择和调试，测试 128 对每个配置只评一次。
 
+## 2.1 组会后的调整（2026-11-03 下午，优先级高于后文）
+
+组会纪要要点：先跑通「给定类别」场景（LEVIR building）；**两天内要出结果**；要有一份**可视化示例**向导师汇报，包含输入、中间工具链推理过程、输出和指标；工具链按「高性能基础模型（SAM3）+ 裁剪、过滤等轻量工具」配置，不要为接模型而接模型。因此：
+
+1. 新增里程碑 **BF（快速版，2 天）**，排在 B0 之前，见第 10 节。BF 只做：核心工具（第 4 节标 ★ 的）+ JSON 循环 + 规划器 qwen3.7-plus（单一规划器）+ 验证集 64 对 + 一份可视化示例。
+2. 工具分两档：★ 核心档（SAM3 为主的基础模型 + 轻量工具），BF 只用这一档；M-C-I 拆出的原子工具（segment_everything、extract_features、compare_features、classify）放到 B0 之后再加，作为「工具扩展」的对照。
+3. CodeAgent、本地开源规划器、测试集评测都放到 BF 之后，顺序不变。
+4. 百炼费用：BF 前先在 5 张验证图上量 token，估出 64 张的费用告诉 Ethan；预计很低时可以先跑，同时报告。
+5. 可视化示例（汇报用）提前到 BF 产出，从验证集挑，标准同第 8 节；测试集上的正式展示轨迹仍在 B5。
+
 ## 3. 任务定义
 
 | 项 | 定义 |
@@ -49,24 +59,24 @@
 
 | 类别 | 工具 | 参数 | 返回 | 底层实现（已有） |
 |---|---|---|---|---|
-| 看 | `view` | `region`（可选 xyxy，默认全图）、`overlay`（可选 mask 句柄）、`label_components`（bool） | T1、T2 两张图（放大到 768² 以内），可叠加红色轮廓和连通域编号 | `code/ovcd_v0/render.py` |
-| 看 | `inspect` | `mask` | 连通域清单：编号、面积、外接框，若有来源分数一并给出；最多列 50 个，按面积降序 | `common.components` |
+| 看 | ★ `view` | `region`（可选 xyxy，默认全图）、`overlay`（可选 mask 句柄）、`label_components`（bool） | T1、T2 两张图（放大到 768² 以内），可叠加红色轮廓和连通域编号 | `code/ovcd_v0/render.py` |
+| 看 | ★ `inspect` | `mask` | 连通域清单：编号、面积、外接框，若有来源分数一并给出；最多列 50 个，按面积降序 | `common.components` |
 | 分割 | `segment_everything` | `time`（t1/t2） | `props#k`：无类别 SAM 提议集，个数和面积分布 | SAM ViT-H；第一版直接读 M-C-I 导出缓存（`common.MCI`，`queues.read_dump`），每图约 600 个 |
-| 分割 | `segment_text` | `time`、`text`、`tile`（0 或 512）、`score_thr`（默认 0.5） | `inst#k`：实例集，个数、分数 | SAM3（`code/ovcd_v0/sam3_t7.py`，已有 text="building" 的缓存；其他文本要现算） |
-| 分割 | `segment_prompt` | `time`、`box` 或 `point` | `mask#k`：一个目标 | SAM ViT-H 提示模式，`code/ovcd_v0/sam_tools.py`（嵌入缓存 + CPU 解码） |
+| 分割 | ★ `segment_text` | `time`、`text`、`tile`（0 或 512）、`score_thr`（默认 0.5） | `inst#k`：实例集，个数、分数 | SAM3（`code/ovcd_v0/sam3_t7.py`，已有 text="building" 的缓存；其他文本要现算） |
+| 分割 | ★ `segment_prompt` | `time`、`box` 或 `point` | `mask#k`：一个目标 | SAM ViT-H 提示模式，`code/ovcd_v0/sam_tools.py`（嵌入缓存 + CPU 解码） |
 | 特征 | `extract_features` | `time`、`model`（dinov2） | `feat#k` | DINOv2；同上，第一版可读 M-C-I 缓存 |
 | 比较 | `compare_features` | `feat_t1`、`feat_t2`、`props` | 给提议集每个提议附上两期特征差异分数（−cos），返回分布 | M-C-I 的 C 步，缓存里已有 |
-| 比较 | `match_instances` | `inst_t1`、`inst_t2`、`iou_thr`（默认 0.25） | `appeared#k`、`disappeared#k`、`unchanged#k` 三个实例集 | OmniOVCD overlap_presence |
+| 比较 | ★ `match_instances` | `inst_t1`、`inst_t2`、`iou_thr`（默认 0.25） | `appeared#k`、`disappeared#k`、`unchanged#k` 三个实例集 | OmniOVCD overlap_presence |
 | 语义 | `classify` | `props`、`time`、`text` | 给每个提议附上该时相属于 `text` 的概率 | SegEarth-OV，M-C-I 的 I 步，缓存里已有 building 两期概率 |
-| 语义 | `ask` | `regions`（掩码句柄 + 连通域编号列表，**支持批量**）、`question` | 每个区域的 P(yes)、类型、一句理由 | Qwen3.5-4B 本地 + `code/ovcd_v0/mllm.py` 的 yes/no 读数 |
-| 运算 | `select` | `set`、`where`（如 `score>0.57 and p_t1<0.5`）、`area`（min/max） | 子集句柄 | numpy |
-| 运算 | `to_mask` | `set` | `mask#k`（并集） | numpy |
-| 运算 | `combine` | `op`（union/intersect/subtract）、`a`、`b` | `mask#k` | numpy |
-| 运算 | `morph` | `mask`、`op`（open/close/fill_holes）、`radius` | `mask#k` | scipy |
-| 修改 | `remove_region` | `mask`、`ids` | `mask#k` | — |
-| 修改 | `add_region` | `mask`、`other`（掩码或实例句柄 + 编号） | `mask#k` | — |
-| 修改 | `refine_region` | `mask`、`id`、`prompt`（box/point，可选） | `mask#k`：该连通域用 SAM 重分割后替换 | v0 的 T6 |
-| 结束 | `submit` | `mask`、`note` | — | — |
+| 语义 | ★ `ask` | `regions`（掩码句柄 + 连通域编号列表，**支持批量**）、`question` | 每个区域的 P(yes)、类型、一句理由 | Qwen3.5-4B 本地 + `code/ovcd_v0/mllm.py` 的 yes/no 读数 |
+| 运算 | ★ `select` | `set`、`where`（如 `score>0.57 and p_t1<0.5`）、`area`（min/max） | 子集句柄 | numpy |
+| 运算 | ★ `to_mask` | `set` | `mask#k`（并集） | numpy |
+| 运算 | ★ `combine` | `op`（union/intersect/subtract）、`a`、`b` | `mask#k` | numpy |
+| 运算 | ★ `morph` | `mask`、`op`（open/close/fill_holes）、`radius` | `mask#k` | scipy |
+| 修改 | ★ `remove_region` | `mask`、`ids` | `mask#k` | — |
+| 修改 | ★ `add_region` | `mask`、`other`（掩码或实例句柄 + 编号） | `mask#k` | — |
+| 修改 | ★ `refine_region` | `mask`、`id`、`prompt`（box/point，可选） | `mask#k`：该连通域用 SAM 重分割后替换 | v0 的 T6 |
+| 结束 | ★ `submit` | `mask`、`note` | — | — |
 
 用这套工具：
 - **M-C-I 路线** = `segment_everything(t1/t2)` → `extract_features` ×2 → `compare_features` → `classify` ×2 → `select` → `to_mask`。
@@ -166,6 +176,7 @@
 
 | 编号 | 内容 | 完成标准 | Codex |
 |---|---|---|---|
+| **BF** | **2 天快速版**：★ 工具 + JSON 循环 + qwen3.7-plus；验证集 64 对；一份可视化示例（输入 → 每步推理和工具调用 → 输出 + 指标），单文件 HTML 放 `results/agent_baseline/demo/` | 64 张有完整轨迹和 summary；示例页能离线打开 | 工具接口定稿前讨论一次（可与 B0 合并） |
 | B0 | 工具层 + 状态仓库 + schema；固定脚本拼出 M-C-I、I-M-C(SAM3) | M-C-I 测试集差 ≤ 0.2；工具单元测试通过；GT 隔离测试通过 | **工具接口定稿前讨论一次** |
 | B1 | JSON 循环 + 轨迹记录；5 张验证图跑通；量 token、估费用 | 5 张图都有完整轨迹；费用报给 Ethan | — |
 | B2 | CodeAgent 接同一套工具；同 5 张图跑通 | 同上 | — |
@@ -179,6 +190,7 @@
 
 | 日期 | 里程碑 | 做了什么 / 改了什么 | 结果 | 下一步 |
 |---|---|---|---|---|
+| 2026-11-03 | — | 组会后调整：新增 BF（2 天快速版），工具分 ★ 核心档与扩展档，可视化示例提前 | — | BF |
 | 2026-11-03 | — | 文档建立：任务、工具、轨迹格式、里程碑与 Ethan 确认 | — | B0 |
 
 ## 12. 可复用代码索引
