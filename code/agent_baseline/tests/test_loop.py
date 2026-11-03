@@ -201,6 +201,32 @@ class LoopTests(unittest.TestCase):
             planner.complete([dict(role='user',content='x')],[],1)
         self.assertTrue((self.root/'STOP.json').exists())
 
+    def test_budget_ledger_sums_processes_and_survives_a_bad_peer(self):
+        from agent_baseline.planner import RunGuard, RunStopped
+        one=RunGuard(self.root/'STOP.json',self.root/'batch.txt',max_cost=1)
+        two=RunGuard(self.root/'STOP.json',self.root/'batch.txt',max_cost=1)
+        two.own=one.own.with_name('peer.txt')
+        one.charge(.4)
+        two.charge(.4)
+        self.assertEqual(float(one.own.read_text()),.4)
+        (one.directory/'broken.txt').write_bytes(b'\x00\x00.1')
+        one.checked=two.checked=0
+        self.assertAlmostEqual(one.total(),.8)
+        self.assertFalse((self.root/'STOP.json').exists())
+        one.checked=0
+        with self.assertRaises(RunStopped):
+            one.charge(.3)
+        self.assertIn('budget',(self.root/'STOP.json').read_text())
+
+    def test_budget_ledger_stops_when_it_cannot_be_written(self):
+        from agent_baseline.planner import RunGuard, RunStopped
+        (self.root/'blocked').write_text('a file where the ledger directory should be')
+        guard=RunGuard(self.root/'STOP.json',self.root/'blocked.txt')
+        with self.assertRaises(RunStopped):
+            for _ in range(guard.MAX_WRITE_FAILURES):
+                guard.charge(.1)
+        self.assertIn('ledger',(self.root/'STOP.json').read_text())
+
     def test_eval_cache_object_counts_and_cost(self):
         import agent_baseline.recorder as rec
         real=rec.object_counts

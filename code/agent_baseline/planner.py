@@ -7,6 +7,7 @@ import json
 import os
 import random
 import socket
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -59,10 +60,27 @@ def is_quota_error(code, body):
 
 
 class RunGuard:
-    """Stop switch shared by all sessions and all parallel jobs through one file, plus an optional budget ledger."""
+    """Stop switch shared by all sessions and all parallel jobs through one file, plus an optional budget ledger.
+
+    Each process writes only its own ledger file, replaced atomically, and the batch total is the sum of the files.
+    A single shared file is unsafe here: jobs on different nodes append through a network filesystem with stale
+    file sizes, which leaves zero-filled holes. A stale peer value only delays the stop by a moment. If this
+    process cannot keep its ledger, the batch stops resumably, so the budget cap never silently lapses.
+    """
+    CHECK_SECONDS, MAX_WRITE_FAILURES = 2., 5
 
     def __init__(self, stop_file, budget_file=None, max_cost=None):
-        self.stop_file, self.budget_file, self.max_cost = Path(stop_file), budget_file and Path(budget_file), max_cost
+        self.stop_file, self.max_cost = Path(stop_file), max_cost
+        self.directory = Path(budget_file).with_suffix('') if budget_file else None
+        self.lock = threading.Lock()
+        self.spent, self.peers, self.checked, self.write_failures = 0., {}, 0., 0
+        self.own = None
+        if self.directory:
+            self.own = self.directory / f'{socket.gethostname()}-{os.getpid()}.txt'
+            try:
+                self.spent = float(self.own.read_text())
+            except (OSError, ValueError):
+                pass
 
     def stopped(self):
         return self.stop_file.exists()
@@ -76,19 +94,37 @@ class RunGuard:
         self.stop_file.write_text(json.dumps(dict(reason=reason, at=time.time()), ensure_ascii=False))
         raise RunStopped(reason)
 
+    def total(self):
+        """Own spending plus each peer's last readable value."""
+        for path in self.directory.glob('*.txt'):
+            if path != self.own:
+                try:
+                    self.peers[path.name] = float(path.read_text())
+                except (OSError, ValueError):
+                    pass
+        return self.spent + sum(self.peers.values())
+
     def charge(self, cost):
-        if self.budget_file is None:
+        if self.directory is None:
             return
-        self.budget_file.parent.mkdir(parents=True, exist_ok=True)
-        with self.budget_file.open('a+') as file:
-            fcntl.flock(file, fcntl.LOCK_EX)
-            file.seek(0)
-            total = float(file.read() or 0) + cost
-            file.seek(0)
-            file.truncate()
-            file.write(str(total))
-        if self.max_cost is not None and total > self.max_cost:
-            self.trip(f'budget: {total:.2f} > {self.max_cost:.2f} CNY')
+        with self.lock:
+            self.spent += cost
+            try:
+                self.directory.mkdir(parents=True, exist_ok=True)
+                temporary = self.own.with_suffix('.tmp')
+                temporary.write_text(repr(self.spent))
+                temporary.replace(self.own)
+                self.write_failures = 0
+            except OSError:
+                self.write_failures += 1
+            if self.write_failures >= self.MAX_WRITE_FAILURES:
+                self.trip('budget ledger cannot be written')
+            if self.max_cost is None or time.monotonic() - self.checked < self.CHECK_SECONDS and self.spent <= self.max_cost:
+                return
+            self.checked = time.monotonic()
+            total = self.total()
+            if total > self.max_cost:
+                self.trip(f'budget: {total:.2f} > {self.max_cost:.2f} CNY')
 
 
 class Planner:

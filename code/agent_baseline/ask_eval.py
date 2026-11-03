@@ -9,7 +9,8 @@ chose to ask. Labels are used only by `report`; the prompts and crops never see 
     python -m agent_baseline.ask_eval report --split val --out probe/ask_eval.json
 
 Variants: local = Qwen3.5-4B worker (the BF ask); q37 and vl = API with the BF crop;
-q37_ms = API with close-up and wider context crops; q37_think = q37 with thinking enabled.
+q37_ms = API with close-up and wider context crops; q37_think = q37 with thinking enabled;
+q37_pp = one question per date ("is there a building inside the contour?"), the answers are compared.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -30,7 +31,11 @@ RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp
 # The ledger prices every variant at planner.PRICE (qwen3.7-plus). The price of qwen3-vl-plus is not
 # confirmed here, so its cost_cny is only an estimate; the console bill is authoritative.
 VARIANTS = dict(q37=dict(model='qwen3.7-plus'), q37_ms=dict(model='qwen3.7-plus', context=True),
-                q37_think=dict(model='qwen3.7-plus', think=True), vl=dict(model='qwen3-vl-plus'))
+                q37_think=dict(model='qwen3.7-plus', think=True), vl=dict(model='qwen3-vl-plus'),
+                q37_pp=dict(model='qwen3.7-plus', presence=True))
+PRESENCE_SYSTEM = 'You inspect one remote sensing image of a place, shown as a close-up and as a wider view.'
+PRESENCE = ('The red contour marks the same region in both views. Is there a building inside the red contour? '
+            'Reply with JSON only: {"building": "yes" or "no", "reason": one short sentence}')
 CONTEXT_QUESTION = ('The first two images are close-ups and the last two show the same place with more '
                     'surroundings. ' + VERIFY)
 
@@ -78,6 +83,32 @@ def api_answer(images, spec, guard, seed):
                 p_yes=yes_probability(result['raw']['choices'][0]), tokens=tokens, cost_cny=token_cost(tokens))
 
 
+def presence_answer(rgb, labels, row, spec, guard, seed):
+    """Each date alone: a persistent building gives yes twice, however different the two dates look."""
+    images = crops(rgb, labels, row, True)
+    readings, tokens = [], dict(input=0, cached=0, output=0)
+    for t in (0, 1):
+        content = []
+        for word, image in (('Close-up', images[t]), ('Wider view', images[t + 2])):
+            content += [dict(type='text', text=word), dict(type='image_url',
+                        image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
+        content.append(dict(type='text', text=PRESENCE))
+        planner = Planner(seed=seed, guard=guard, max_attempts=12, parameters=dict(model=spec['model'], max_tokens=128,
+            parallel_tool_calls=False, logprobs=True, top_logprobs=5, response_format={'type': 'json_object'}))
+        result = planner.complete([dict(role='system', content=PRESENCE_SYSTEM), dict(role='user', content=content)], [], 1)
+        for key, value in usage_tokens(result['usage']).items():
+            tokens[key] += value
+        raw = result['message'].get('content') or ''
+        parsed = parse_json(raw)
+        parsed = parsed if isinstance(parsed, dict) else {}
+        readings.append(dict(answer=parsed.get('building'), p=yes_probability(result['raw']['choices'][0]), reason=parsed.get('reason')))
+    a1, a2 = readings[0]['answer'], readings[1]['answer']
+    valid = a1 in ('yes', 'no') and a2 in ('yes', 'no')
+    p1, p2 = readings[0]['p'], readings[1]['p']
+    return dict(answer=('yes' if a1 != a2 else 'no') if valid else None, p_yes=None if p1 is None or p2 is None else p1 * (1 - p2) + p2 * (1 - p1),
+                type=f'{a1}->{a2}', reason=json.dumps(readings, ensure_ascii=False), raw=None, tokens=tokens, cost_cny=token_cost(tokens))
+
+
 def answers(args):
     out = RUN / 'ask_eval' / args.split / f'{args.variant}.jsonl'
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -103,11 +134,14 @@ def answers(args):
 
     def one(row):
         rgb, labels = image(row)
-        pair = crops(rgb, labels, row, spec.get('context'))
-        if spec.get('local'):
+        pair = None if spec.get('presence') else crops(rgb, labels, row, spec.get('context'))
+        seed = sum(map(ord, row['uid'])) % (2**31)
+        if spec.get('presence'):
+            result = presence_answer(rgb, labels, row, spec, guard, seed)
+        elif spec.get('local'):
             result = post(args.ask_worker, dict(pairs=[[encode_image(im) for im in pair]], question=VERIFY))['results'][0]
         else:
-            result = api_answer(pair, spec, guard, sum(map(ord, row['uid'])) % (2**31))
+            result = api_answer(pair, spec, guard, seed)
         return dict(uid=row['uid'], variant=args.variant, **{k: result.get(k) for k in
                     ('answer', 'p_yes', 'type', 'reason', 'tokens', 'cost_cny', 'raw')})
 
