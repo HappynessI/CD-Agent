@@ -100,14 +100,16 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     dict(role='user', content=[dict(type='text', text=text)] + image_blocks(initial))]
         recorder.start(session, dict(metadata or {}, task_id=task, instruction=instruction,
             image_shape=list(session.shape), system_prompt_version=prompt_version, system_prompt_path=str(path),
-            system_prompt_template=template, system_prompt=system, tool_schema_version='v1', schemas=SCHEMAS,
+            system_prompt_template=template, system_prompt=system, tool_schema_version='v2', schemas=SCHEMAS,
             model_parameters=planner.parameters, seed=planner.parameters['seed'], seed_acceptance='not_reported',
             budget=budget, max_calls_per_reply=8, total_attempt_limit=planner.max_attempts,
             initial_view=initial.public, initial_handle=session.initial_mask))
         if task == 'T5.1' and session.initial_mask is None:
             raise ValueError('T5.1 requires the fixed initial mask')
         for number in range(1, budget + 1):
-            response = planner.complete(messages, SCHEMAS, number)
+            # Default auto keeps the model's one-line reasons (required returns empty content); after a
+            # reply without a function call, the next request forces one and changes the seed.
+            response = planner.complete(messages, SCHEMAS, number, 'required' if no_tools else None, no_tools)
             rounds += 1
             original = response['message']
             assistant = {k: copy.deepcopy(original[k]) for k in ('role', 'content', 'tool_calls') if k in original}
@@ -157,10 +159,14 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 break
             if not calls:
                 no_tools += 1
-                if no_tools == 2:
+                if no_tools == 3:
                     reason = 'no_submit'
                     break
-                messages.append(dict(role='user', content='Please call tools to continue, or call submit with an existing mask and summary.'))
+                # Pseudo-calls written as text prime the next reply to do the same, even under
+                # tool_choice=required, so the reply stays in the trace but leaves the context.
+                messages.pop()
+                if no_tools == 1:
+                    messages.append(dict(role='user', content='Your last reply contained no function call, so nothing ran. Writing a tool call as text does not execute it. Make a function call now, or call submit with an existing mask and a summary.'))
             else:
                 no_tools = 0
             left = budget - number
@@ -191,7 +197,8 @@ def main():
     parser.add_argument('--ask-backend', choices=['local', 'api', 'none'], default='local')
     parser.add_argument('--sam3-worker')
     parser.add_argument('--ask-worker')
-    parser.add_argument('--prompt-version', default='v1', choices=['v1'])
+    parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2'])
+    parser.add_argument('--seed-offset', type=int, default=0, help='Repeat runs of one configuration.')
     args = parser.parse_args()
     todo = Path(args.names_file).read_text().split() if args.names_file else names(args.split)
     if args.limit is not None:
@@ -210,7 +217,7 @@ def main():
             return name, 'error'
         init_path = RUN / 'init' / 'sam3_imc' / args.split / (Path(name).stem + '.png')
         # Recorder is created before optional init loading so an absent initial asset gets an error record.
-        planner = Planner(seed=sum((i+1)*ord(c) for i,c in enumerate(name)) % (2**31))
+        planner = Planner(seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
         init = None
         init_error = None
         if args.task == 'T5.1':

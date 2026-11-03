@@ -48,16 +48,21 @@ class LoopTests(unittest.TestCase):
         self.assertEqual((final['submitted_by'],final['fallback_kind']),('model','none'))
 
     def test_budget_empty_and_no_tools_twice(self):
-        final,_,client,_=run(self.root,[response(),response()],budget=30)
+        final,_,client,_=run(self.root,[response(content='pseudo call A'),response(content='pseudo call B'),response()],budget=30)
         self.assertEqual(final['termination_reason'],'no_submit')
         self.assertEqual(final['submitted_by'],'empty')
-        self.assertEqual(final['planning_rounds'],2)
-        self.assertIn('Please call tools',client.requests[1]['messages'][-1]['content'])
+        self.assertEqual(final['planning_rounds'],3)
+        self.assertIn('no function call',client.requests[1]['messages'][-1]['content'])
+        # The text-only reply leaves the context; the retry forces a call under another seed.
+        self.assertNotIn('pseudo call A',json.dumps(client.requests[1]['messages']))
+        self.assertEqual(client.requests[1]['tool_choice'],'required')
+        self.assertNotEqual(client.requests[0]['seed'],client.requests[1]['seed'])
+        self.assertNotEqual(client.requests[1]['seed'],client.requests[2]['seed'])
         final,*_=run(self.root/'other',[response()],budget=1)
         self.assertEqual((final['submitted_by'],final['termination_reason']),('empty','budget'))
 
     def test_no_tools_with_initial(self):
-        final,*_=run(self.root,[response(content='I have submitted.'),response()],init=mask())
+        final,*_=run(self.root,[response(content='I have submitted.'),response(),response()],init=mask())
         self.assertEqual(final['submitted_by'],'no_submit')
         self.assertTrue(final['identical_to_init'])
 
@@ -119,7 +124,14 @@ class LoopTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 assert_no_evidence(self,bad)
         package=Path(__file__).resolve().parents[1]
-        allowed={'recorder.py','summarize.py','fixed_routes.py'}
+        allowed={'recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py'}
+        # Offline analysis may read labels, but nothing the agent runs may import it.
+        online=['loop_json.py','tools.py','state.py','view.py','backends.py','planner.py','instances.py']
+        for filename in online:
+            source=(package/filename).read_text()
+            for module in ('make_demo','pick_demo','diagnose','summarize','fixed_routes'):
+                self.assertNotIn('import '+module,source)
+                self.assertNotIn('from .'+module,source)
         for path in package.rglob('*.py'):
             tree=ast.parse(path.read_text())
             for node in ast.walk(tree):

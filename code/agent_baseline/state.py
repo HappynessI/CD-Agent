@@ -82,5 +82,5 @@ def chosen_ids(rows, ids):
     if not isinstance(ids, list) or any(type(i) is not int for i in ids):
         raise ToolError('bad_args', 'ids must be a list of integers.')
     if not set(ids) <= valid:
-        raise ToolError('bad_id', 'An ID does not belong to the supplied handle.')
+        raise ToolError('bad_id', f'IDs {sorted(set(ids) - valid)[:10]} do not exist on this handle ({len(valid)} valid IDs). Component IDs change when a mask changes; inspect the handle first.')
     return set(ids)

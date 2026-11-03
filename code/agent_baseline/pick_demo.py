@@ -48,7 +48,7 @@ def inspect_session(directory, summary, init_f1_from_final=False):
     improved_after_view = False
     for call in calls:
         if call['tool'] in GROUPS['修改'] and seen_view:
-            delta = (call.get('eval') or {}).get('delta_f1')
+            delta = next((c.get('delta_f1_from_parent') for c in call.get('candidate_eval') or [] if c.get('delta_f1_from_parent') is not None), (call.get('eval') or {}).get('delta_f1'))
             if delta is not None and delta > 0:
                 improved_after_view = True
         if call['tool'] == 'view':

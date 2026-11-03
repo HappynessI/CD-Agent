@@ -19,7 +19,7 @@ import numpy as np
 from common import load_gt, load_mask_png, names, confusion, image_f1, scores, read_jsonl, write_json
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
-EDIT = {'remove_region', 'add_region', 'refine_region', 'morph', 'combine'}
+EDIT = {'remove_region', 'add_region', 'refine_region', 'morph'}
 
 
 def total_f1(rows, key):
@@ -40,19 +40,40 @@ def bootstrap(rows, a, b, n=2000, seed=0):
     return [float(np.percentile(out, q)) for q in (2.5, 50, 97.5)]
 
 
-def tag(row):
-    """Primary cause, first match wins; rules are about what the agent did, not about scores it saw."""
-    if row['submitted_by'] == 'empty':
-        return 'no_answer'
-    if row['submitted_by'] in ('budget', 'no_submit', 'error'):
-        return 'stopped_by_budget'
-    if row['route'] != 'imc_like':
-        return 'skipped_matching'
-    if row['thresholds'] and row['thresholds'] != [0.5]:
-        return 'changed_threshold'
-    if row['edits']:
-        return 'edited'
-    return 'plain_route'
+def lineage(steps, final):
+    """Tools whose outputs actually fed the submitted mask, walking output handle -> call inputs."""
+    producer = {}
+    for step in steps:
+        for call in step['calls']:
+            if call['ok'] and call['tool'] != 'submit':
+                for handle in call.get('output_handles') or []:
+                    producer[handle] = call
+    tools, stack, seen = [], [final], set()
+    while stack:
+        call = producer.get(stack.pop())
+        if call is None or id(call) in seen:
+            continue
+        seen.add(id(call))
+        tools.append(call)
+        stack.extend(call.get('input_handles') or [])
+    return tools
+
+
+def tag(row, task):
+    """Observed behaviour, first match wins. A label names what happened, not why; causes are read per trajectory."""
+    if row['termination'] == 'no_submit':
+        return 'no_function_call'
+    if row['submitted_by'] in ('budget', 'error'):
+        return 'stopped_by_' + row['submitted_by']
+    if task == 'T5.1':
+        if row['same_as_init']:
+            return 'kept_init'
+        if row['added'] and row['removed']:
+            return 'added_and_removed'
+        return 'added_only' if row['added'] else 'removed_only'
+    if not row['final_from_match']:
+        return 'final_not_from_match'
+    return 'matched_then_edited' if not row['same_as_imc'] else 'matched_plain'
 
 
 def main():
@@ -70,8 +91,10 @@ def main():
         gt = load_gt(a.split, name)
         pred = load_mask_png(d / final['mask_path'])
         imc = load_mask_png(RUN / 'init' / 'sam3_imc' / a.split / name)
-        calls = [c for s in read_jsonl(d / 'steps.jsonl') for c in s['calls'] if c['ok']]
+        steps = read_jsonl(d / 'steps.jsonl')
+        calls = [c for s in steps for c in s['calls'] if c['ok']]
         used = [c['tool'] for c in calls]
+        feeds = [c['tool'] for c in lineage(steps, final['final_handle'])]
         route = 'imc_like' if used.count('segment_text') >= 2 and 'match_instances' in used else 'other'
         thr = sorted({(c['args'] or {}).get('score_thr', 0.5) for c in calls if c['tool'] == 'segment_text'})
         texts = sorted({(c['args'] or {}).get('text') for c in calls if c['tool'] == 'segment_text'})
@@ -81,9 +104,11 @@ def main():
             route=route, thresholds=thr, texts=texts, tiles=tiles, views=used.count('view'), asks=used.count('ask'),
             edits=sum(t in EDIT for t in used), removes=used.count('remove_region'),
             gt_px=int(gt.sum()), pred=c_pred, imc=c_imc, f1=image_f1(pred, gt), f1_imc=image_f1(imc, gt),
-            same_as_imc=bool(np.array_equal(pred, imc))))
+            same_as_imc=bool(np.array_equal(pred, imc)), termination=final.get('termination_reason'),
+            final_from_match='match_instances' in feeds, final_tools=sorted(set(feeds)),
+            same_as_init=bool(np.array_equal(pred, imc)), added=int((pred & ~imc).sum()), removed=int((imc & ~pred).sum())))
     for r in rows:
-        r['cause'] = tag(r)
+        r['cause'] = tag(r, a.task)
     out = dict(config=a.config, task=a.task, f1=total_f1(rows, 'pred'), f1_imc=total_f1(rows, 'imc'),
                bootstrap_vs_imc=bootstrap(rows, 'pred', 'imc'), causes={})
     for cause, n in Counter(r['cause'] for r in rows).items():

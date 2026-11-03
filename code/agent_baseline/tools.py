@@ -19,6 +19,7 @@ from scipy import ndimage as ndi
 from render import crop_box, render_pair
 from prompts import VERIFY
 from . import instances
+from common import components
 from .state import Session, Mask, Instances, ToolError, chosen_ids
 from .view import render_view, box_pixels
 
@@ -49,10 +50,10 @@ def schema(name, description, properties, required=()):
 
 
 SCHEMAS = [
-    schema('view', 'Look at T1 and T2 with full-image coordinate ticks. Optional thin red mask contours and component IDs.',
-           dict(region=BOX, overlay=M, label_components=arg('boolean', default=False), ids=IDS)),
-    schema('inspect', 'List full-image mask components: id, area, bbox; sorted by decreasing area then ID. No scores.',
-           dict(mask=M, offset=arg('integer', minimum=0, default=0), limit=arg('integer', minimum=1, maximum=50, default=50)), ['mask']),
+    schema('view', 'Look at T1 and T2 with full-image coordinate ticks. Optional thin red contours of a mask or inst set; component IDs can be labelled on masks only.',
+           dict(region=BOX, overlay=arg('string', description='An existing mask#k or inst#k handle.'), label_components=arg('boolean', default=False), ids=IDS)),
+    schema('inspect', 'List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID.',
+           dict(mask=arg('string', description='An existing mask#k or inst#k handle.'), offset=arg('integer', minimum=0, default=0), limit=arg('integer', minimum=1, maximum=50, default=50)), ['mask']),
     schema('segment_text', 'Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.',
            dict(time=TIME, text=S, tile=arg('integer', enum=[0, 512], default=512),
                 score_thr=arg('number', minimum=0, maximum=1, default=0.5)), ['time', 'text']),
@@ -234,7 +235,13 @@ class Toolbox:
         return out
 
     def view(self, region=None, overlay=None, label_components=False, ids=None):
-        item = self.get(overlay, Mask) if overlay is not None else None
+        item = self.get(overlay) if overlay is not None else None
+        if isinstance(item, Instances):
+            if label_components or ids is not None:
+                raise ToolError('bad_args', 'Component labels need a mask handle; call to_mask first.')
+            union = instances.to_mask(item.items, self.session.shape)
+            labels, comps = components(union)
+            item = Mask(union, labels, tuple(comps))
         num = self.session.view_count
         info, paths = render_view(self.rgb, self.directory / 'images', num, region, item,
                                   overlay, label_components, ids)
@@ -242,8 +249,10 @@ class Toolbox:
         return Result(dict(ok=True, **info), paths)
 
     def inspect(self, mask, offset=0, limit=50):
-        rows = sorted(self.get(mask, Mask).components, key=lambda c: (-c['area'], c['id']))
-        selected = [dict(r) for r in rows[offset:offset + limit]]
+        item = self.get(mask)
+        keys = ('id', 'area', 'bbox') if isinstance(item, Mask) else ('id', 'area', 'bbox', 'score')
+        rows = sorted(item.components if isinstance(item, Mask) else item.items, key=lambda c: (-c['area'], c['id']))
+        selected = [{k: r[k] for k in keys if k in r} for r in rows[offset:offset + limit]]
         return dict(mask=mask, total_components=len(rows), returned=len(selected),
                     has_more=offset + len(selected) < len(rows), components=selected)
 

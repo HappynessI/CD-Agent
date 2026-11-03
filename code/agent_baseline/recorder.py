@@ -134,6 +134,17 @@ class Recorder:
         calls = self.archive_images(copy.deepcopy(calls))
         for call in calls:
             call['eval'] = self.edge(session, call.get('current_after'), call.get('current_before'))
+            # Candidates a model keeps out of current (set_current=false) still get scored here, for analysis only.
+            scored = []
+            for key in call.get('handles_created', []):
+                value = session.handles.get(key)
+                if isinstance(value, Mask):
+                    parent = next((p for p in value.parents if isinstance(session.handles.get(p), Mask)), None)
+                    row = dict(handle=key, parent=parent, **self.metric(session, key))
+                    if parent is not None:
+                        row['delta_f1_from_parent'] = row['f1'] - self.metric(session, parent)['f1']
+                    scored.append(row)
+            call['candidate_eval'] = scored
             meta = call.get('provenance', {})
             for k, n in meta.get('tokens', {}).items():
                 self.ask_tokens[k] += n

@@ -67,8 +67,12 @@ class Planner:
         with urllib.request.urlopen(request, timeout=180) as response:
             return json.load(response)
 
-    def complete(self, messages, tools, round_id):
+    def complete(self, messages, tools, round_id, tool_choice=None, seed_bump=0):
         params = dict(self.parameters)
+        if tool_choice is not None:
+            params['tool_choice'] = tool_choice
+        if seed_bump and 'seed' in params:
+            params['seed'] += seed_bump
         archived = dict(params, messages=clean_messages(messages), tools=tools)
         payload = dict(params, messages=clean_messages(messages, encode=True), tools=tools)
         if not tools:

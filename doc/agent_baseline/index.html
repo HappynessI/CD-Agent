@@ -448,7 +448,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
   <h3 style="margin:22px 0 8px;font-size:15px">优化轮次记录</h3>
   <div class="panel scroll"><table>
     <thead><tr><th>轮次</th><th>层</th><th>诊断</th><th>改动</th><th>验证集 F1^c</th><th>步数 / 失败率</th><th>结果</th></tr></thead>
-    <tbody><tr><td>—</td><td>—</td><td>尚未开始</td><td>—</td><td>—</td><td>—</td><td>—</td></tr></tbody>
+    <tbody><tr><td>r2</td><td>系统</td><td>同 r1</td><td>提示 v2、无工具回复重试</td><td>未评测（配额用尽）</td><td>—</td><td>待定</td></tr><tr><td>r1</td><td>系统</td><td>无工具回复、句柄类型错误</td><td>接口修复、强制调用</td><td>T1.1 79.55→81.06；T5.1 83.34→80.68（在运行波动内）</td><td>17.8 / 4.7%；17.5 / 3.1%</td><td>接口修复保留，效果未定</td></tr><tr><td>r0</td><td>—</td><td>基线</td><td>—</td><td>T1.1 79.55；T5.1 83.34</td><td>17.2 / 9.4%；17.6 / 3.1%</td><td>—</td></tr></tbody>
   </table></div>
 
   <h3 style="margin:22px 0 8px;font-size:15px">工具质量卡</h3>
@@ -470,6 +470,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
     <table>
       <thead><tr><th>日期</th><th>里程碑</th><th>做了什么</th><th>结果</th><th>下一步</th></tr></thead>
       <tbody>
+        <tr><td class="num">2026-11-03</td><td>BF（r1；重复实验作废）</td><td>r1 跑完；v1、v2 各 3 组重复实验中途配额用尽，全部作废</td><td>r1：T1.1 81.06，T5.1 80.68。<b>更正：T5.1 相对原样 r0 +1.20、r1 −1.46，没有稳定优势</b>。累计估算约 90 元</td><td>等 Ethan 决定配额和预算</td></tr>
         <tr><td class="num">2026-11-03</td><td>BF（r0）</td><td>验证集 64 对 × 2 任务跑通；第一版可视化示例（<a href="../../results/agent_baseline/demo/">demo/</a>）</td><td>T1.1 79.55（固定路线 82.14）；T5.1 83.34（原样 82.14，调门限 82.52）；费用 23.33 元</td><td>第 1 轮优化</td></tr>
         <tr><td class="num">2026-11-03</td><td>B0、B1</td><td>工具层、JSON 循环和轨迹记录落地；与 Codex 讨论接口；5 张图 × 2 任务跑通</td><td>I-M-C(SAM3) 验证集 82.14，调门限后 82.52；预计 64 张 × 2 任务约 24.4 元</td><td>跑验证集 64 对</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>扩大自主权：可换工具、下载、改架构，不用确认；加 LEVIR 分析</td><td>—</td><td>BF</td></tr>
