@@ -82,7 +82,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
 </header>
 
 <section class="panel" style="border-color:var(--accent)">
-  <h2><span class="k">00</span>组会后的调整（11-03 下午）</h2>
+  <h2><span class="k">00</span>组会和任务体系定稿后的调整（11-03）</h2>
   <div class="scroll"><table>
     <thead><tr><th>变化</th><th>原计划</th><th>现在</th></tr></thead>
     <tbody>
@@ -90,6 +90,9 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
       <tr><td>工具</td><td>M-C-I 拆出的原子工具全上</td><td>★ 核心档：SAM3 为主 + 裁剪、过滤等轻量工具 + 看图、核实、修改；M-C-I 原子工具放到之后作扩展对照</td></tr>
       <tr><td>可视化示例</td><td>测试集评完后（B5）</td><td>BF 就产出一份：输入 → 每步推理和工具调用 → 输出 + 指标，用于向导师汇报</td></tr>
       <tr><td>CodeAgent、本地模型、测试集</td><td>并行</td><td>放在 BF 之后，顺序不变</td></tr>
+      <tr><td>任务范围</td><td>只做从零生成</td><td><b>两个任务</b>：T1.1 × C0（从零生成建筑变化掩码）和 T5.1 自主修正（输入 SAM3 的变化掩码，Agent 检查并修正）。同一套工具、同一个循环，只差有没有初始掩码</td></tr>
+      <tr><td>不用 MLLM 的对照</td><td>固定路线</td><td>T1.1：M-C-I、I-M-C(SAM3) 固定路线；T5.1：SAM3 掩码原样提交、验证集调门限后提交</td></tr>
+      <tr><td>输出</td><td>掩码</td><td>掩码 + 文字说明 + 变化个数和面积；第一版只给掩码打分</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -388,6 +391,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
     <table>
       <thead><tr><th>日期</th><th>里程碑</th><th>做了什么</th><th>结果</th><th>下一步</th></tr></thead>
       <tbody>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>对照任务体系定稿：第一版 = T1.1 × C0 + T5.1（修正 SAM3 输出）</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>组会后调整：新增 BF 快速版（2 天），工具分核心档与扩展档，可视化示例提前</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>建立两份文档；方案和开发规范与 Ethan 确认</td><td>—</td><td>B0</td></tr>
       </tbody>

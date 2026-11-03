@@ -34,11 +34,22 @@
 4. 百炼费用：BF 前先在 5 张验证图上量 token，估出 64 张的费用告诉 Ethan；预计很低时可以先跑，同时报告。
 5. 可视化示例（汇报用）提前到 BF 产出，从验证集挑，标准同第 8 节；测试集上的正式展示轨迹仍在 B5。
 
+## 2.2 对照任务体系定稿的调整（2026-11-03 晚）
+
+任务体系定稿：横轴 T1 常见类别 / T2 稀缺类别 / T3 视觉示例 / T4 描述定义 / T5 已有结果更新；纵轴 C0–C4 附加约束。**第一版做两个任务：T1.1 × C0（LEVIR building，从零生成）和 T5.1 自主修正（修正对象是 SAM3 的输出）。** 因此：
+
+1. **两个任务共用同一套工具和同一个循环**，只是输入不同：T1.1 不给 `init_mask`；T5.1 给 `init_mask` = SAM3 变化掩码，指令改为“这是一份建筑变化检测结果，请检查并修正”。
+2. **T5.1 的初始掩码固定为「SAM3 版 I-M-C」**：`segment_text(t1/t2, "building", tile=512)` → `match_instances` → 出现 ∪ 消失。用固定脚本对 192 张图预先算好存盘，这也是 T1.1 的「I-M-C(SAM3) 固定路线」对照行，一份数字两用。
+3. **每个任务都有「不用 MLLM」的对照**：T1.1 是固定路线（M-C-I、I-M-C(SAM3)）；T5.1 是「SAM3 掩码原样提交」和「只在验证集上调 SAM3 分数门限后提交」。没有这两行，会把调门限的收益算到 Agent 头上（ovcd_v0 结论 6）。
+4. **掩码、数量面积、文字说明是每个任务都要有的输出**：`submit` 增加 `summary`（一段文字说明：变了什么、大概几处）；记录器自动算变化目标个数和面积写进 `final.json`。第一版只评掩码，数量和文字只记录、展示，不打分。
+5. **OSM 查询**属于 T2.1 的工具，第一版不接，工具接口预留即可。
+6. BF 的范围相应变成：T1.1 × C0 和 T5.1 两个任务 × JSON 循环 × qwen3.7-plus × 验证集 64 对；可视化示例两个任务各一份。
+
 ## 3. 任务定义
 
 | 项 | 定义 |
 |---|---|
-| 输入 | `T1`、`T2`（LEVIR 1024×1024 RGB）+ 一句指令 `instruction` + 可选的初始掩码 `init_mask`（本 baseline 不给） |
+| 输入 | `T1`、`T2`（LEVIR 1024×1024 RGB）+ 一句指令 `instruction` + 可选的初始掩码 `init_mask`（T1.1 不给；T5.1 给 SAM3 变化掩码） |
 | 默认指令 | `"Find all buildings that changed between T1 and T2 (newly built or demolished). Output a binary change mask."` 另跑一个中文版做稳定性对照 |
 | 输出 | 二值变化掩码 + 轨迹 |
 | Agent 可见 | 系统提示、工具说明、building 口径卡（复用 `code/ovcd_v0/prompts.py` 的 `SCOPE_CARD`）、预算 |
@@ -76,7 +87,7 @@
 | 修改 | ★ `remove_region` | `mask`、`ids` | `mask#k` | — |
 | 修改 | ★ `add_region` | `mask`、`other`（掩码或实例句柄 + 编号） | `mask#k` | — |
 | 修改 | ★ `refine_region` | `mask`、`id`、`prompt`（box/point，可选） | `mask#k`：该连通域用 SAM 重分割后替换 | v0 的 T6 |
-| 结束 | ★ `submit` | `mask`、`note` | — | — |
+| 结束 | ★ `submit` | `mask`、`summary`（文字说明） | — | — |
 
 用这套工具：
 - **M-C-I 路线** = `segment_everything(t1/t2)` → `extract_features` ×2 → `compare_features` → `classify` ×2 → `select` → `to_mask`。
@@ -118,7 +129,7 @@
   steps.jsonl         # 每一步一行，见下
   images/             # view 返回的图、每一步的掩码叠加图（PNG）
   masks/              # 每个 mask 句柄的 PNG（mask_<k>.png）
-  final.json          # 最终掩码路径、submitted_by、本图 F1/IoU/P/R、步数、token、耗时
+  final.json          # 任务编号（T1.1xC0 / T5.1）、最终掩码路径、summary 文字、变化目标个数与面积、submitted_by、本图 F1/IoU/P/R、步数、token、耗时
 ```
 
 `steps.jsonl` 每一行：
@@ -169,6 +180,8 @@
 | Agent：JSON × {qwen3.7-plus, 本地模型} | 主结果 |
 | Agent：CodeAgent × {qwen3.7-plus, 本地模型} | 主结果 |
 | 中文指令 | 稳定性 |
+| **T5.1**：SAM3 掩码原样 / 验证集调门限后 | 不用 MLLM 的对照 |
+| **T5.1**：Agent 修正 SAM3 掩码 | 主结果；另报修正前后整目标漏检率、误检率的变化 |
 
 每行报 F1^c、IoU^c、P、R、整目标漏检率、整目标误检率、逐图平均 F1；Agent 行另报平均步数、token、耗时、费用、失败率、路线分布、修改工具 ΔF1。
 
@@ -176,7 +189,7 @@
 
 | 编号 | 内容 | 完成标准 | Codex |
 |---|---|---|---|
-| **BF** | **2 天快速版**：★ 工具 + JSON 循环 + qwen3.7-plus；验证集 64 对；一份可视化示例（输入 → 每步推理和工具调用 → 输出 + 指标），单文件 HTML 放 `results/agent_baseline/demo/` | 64 张有完整轨迹和 summary；示例页能离线打开 | 工具接口定稿前讨论一次（可与 B0 合并） |
+| **BF** | **2 天快速版**：T1.1 × C0 和 T5.1 两个任务；★ 工具 + JSON 循环 + qwen3.7-plus；验证集 64 对；每个任务一份可视化示例（输入 → 每步推理和工具调用 → 输出 + 指标），单文件 HTML 放 `results/agent_baseline/demo/` | 64 张有完整轨迹和 summary；示例页能离线打开 | 工具接口定稿前讨论一次（可与 B0 合并） |
 | B0 | 工具层 + 状态仓库 + schema；固定脚本拼出 M-C-I、I-M-C(SAM3) | M-C-I 测试集差 ≤ 0.2；工具单元测试通过；GT 隔离测试通过 | **工具接口定稿前讨论一次** |
 | B1 | JSON 循环 + 轨迹记录；5 张验证图跑通；量 token、估费用 | 5 张图都有完整轨迹；费用报给 Ethan | — |
 | B2 | CodeAgent 接同一套工具；同 5 张图跑通 | 同上 | — |
@@ -190,6 +203,7 @@
 
 | 日期 | 里程碑 | 做了什么 / 改了什么 | 结果 | 下一步 |
 |---|---|---|---|---|
+| 2026-11-03 | — | 对照任务体系定稿：第一版 = T1.1 × C0 + T5.1（修正 SAM3 输出）；加 T5.1 的输入和不用 MLLM 对照；submit 加文字说明，记录数量面积 | — | BF |
 | 2026-11-03 | — | 组会后调整：新增 BF（2 天快速版），工具分 ★ 核心档与扩展档，可视化示例提前 | — | BF |
 | 2026-11-03 | — | 文档建立：任务、工具、轨迹格式、里程碑与 Ethan 确认 | — | B0 |
 
