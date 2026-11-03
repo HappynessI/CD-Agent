@@ -257,6 +257,7 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
     <tbody>
       <tr><th>v0</th><td>图像、GT、三种初始化的 M0、SAM3 分块掩码，以及上面的真值区域；划分为 icl 24 / val 64 / test 128</td><td>底座；端到端 2.1 直接用</td></tr>
       <tr><th>v0-judge</th><td>任务 1.2 的全部判断条目，一条一行 JSON；图块级、区域级，误检侧、漏检侧，候选来源都作为字段</td><td>任务 1.2</td></tr>
+      <tr><th>v0-loc</th><td>任务 1.3 的方块：每个 GT 错误目标居中取一个方块，记录方块内误检、漏检数并分层（1 / 2–3 / ≥ 4）；偏移在使用时按固定种子施加</td><td>任务 1.3</td></tr>
       <tr><th>v0-sem</th><td>SECOND 六类语义子集，与 v0 按图分开</td><td>任务 1.1；以后的 2.2</td></tr>
     </tbody>
   </table>
@@ -326,7 +327,17 @@ ol.q li::marker{font-family:var(--mono);color:var(--muted)}
       <header><span class="id">任务 1.3 · 定位</span><h3>给出点或框，让 SAM 分出目标</h3><span class="state">基于 v0</span></header>
       <dl>
         <dt>设定</dt><dd>已知一个方块里有错（漏检或误检），让 MLLM 把它分准。隔离“产生候选”的影响：只测定位，不测判断。</dd>
-        <dt>数据</dt><dd>用 v0，不用 v0-judge。以 GT 切出的错误目标（v0 的真值区域）定位置，取一个方块：边长为外接框的 2–3 倍、至少 128，<strong>随机偏移</strong>，目标不总在正中（否则“给中心点”太容易）。MLLM 只看到方块和两期影像，看不到完美形状。方块里有多个错误时要求全部处理，按方块内全部错误像素评分。</dd>
+        <dt>数据</dt><dd>单独构造 <strong>v0-loc</strong>（从 v0 派生，不依赖 v0-judge 的候选）：<br>① 每个 GT 错误目标（v0 的真值区域）作为一个锚点，取以它为<strong>正中心</strong>的方块，边长 = max(外接框长边 × 2.5, 128)。<br>② 统计方块内的错误目标数，误检、漏检分开记（n_fp、n_fn），按总数分层：1 个、2–3 个、≥ 4 个。<br>③ 构造时不偏移。使用时再施加随机偏移，固定随机种子保证可复现；偏移上限 = (边长 − 锚点外接框边长) / 2，保证锚点仍完整在方块内。<br>④ 偏移后方块内的错误数可能变化，评测脚本按偏移后的方块重新计数，结果按实际错误数报。<br>MLLM 只看到方块和两期影像，看不到完美形状；方块里有多个错误时要求全部处理，按方块内全部错误像素评分。相邻锚点的方块可能重叠，统计时按锚点去重。</dd>
+        <dt>记录</dt><dd>v0-loc 中一条一行，例如：<pre>{"id": "v0-loc-val-000057",
+ "image_id": "v0-val-0012", "split": "val",
+ "source": {"dataset": "LEVIR-CD", "split": "val", "orig_id": "..."},
+ "init": "I-M-C",
+ "anchor": {"side": "fn", "err_subtype": "isolated", "gt_err_id": 3,
+            "bbox": [212, 340, 260, 391], "area": 1874},
+ "box": [108, 237, 364, 493],   // 以锚点为中心，未偏移
+ "max_shift": 104,
+ "n_fp": 1, "n_fn": 2, "stratum": "2-3",
+ "err_ids_in_box": {"fp": [7], "fn": [3, 4]}}</pre></dd>
         <dt>两侧</dt><dd><span class="chip fn">漏检</span> 补回整目标（子能力 4.1）：MLLM 给点或框，工具分出目标后加入。<br><span class="chip fp">误检</span> 删除局部（子能力 4.2，对应附着误检）：方块框住“检出目标 + 多出的部分”，MLLM 指出多出的部分，或给真建筑的点让工具分出建筑再裁剪。</dd>
         <dt>输出</dt><dd>点或框的坐标、选用的工具、在哪一期上分（T1 / T2 / 两期并集）。</dd>
         <dt>评测</dt><dd>点或框的命中率（点落在目标内、框与 GT 框 IoU ≥ 0.5）；工具结果与 GT 的 IoU 及 IoU ≥ 0.5 的比例；方块内 F1 的变化。按目标面积分桶报，都与 GT 提示的上界对比。</dd>
