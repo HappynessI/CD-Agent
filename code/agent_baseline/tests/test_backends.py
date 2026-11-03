@@ -154,18 +154,33 @@ class BackendTests(unittest.TestCase):
         answers,meta=backend([pair],VERIFY)
         self.assertEqual(answers[0]['answer'],'yes')
         self.assertGreater(answers[0]['p_yes'],.8)
-        self.assertEqual(payloads[0]['model'],'qwen3-vl-plus')
+        self.assertEqual(payloads[0]['model'],'qwen3.7-plus')
         self.assertTrue(payloads[0]['logprobs'])
         self.assertEqual(payloads[0]['top_logprobs'],5)
         self.assertGreater(meta['cost_cny'],0)
         self.assertIsNone(yes_probability({'logprobs':None}))
+        self.assertNotIn('data:image',json.dumps(meta))
         with tempdir() as root:
             recorder=Recorder(root,'synthetic','image.png',gt=mask())
-            archived=recorder.archive_images(meta)
-            self.assertNotIn('data:image',json.dumps(archived))
-            url=archived['attempts'][0]['request']['messages'][1]['content'][1]['image_url']['url']
-            with Image.open(url) as image:
-                self.assertEqual(image.size,(384,384))
+            recorder.archive_images(meta)
+
+    def test_api_ask_context_order_and_failure_accounting(self):
+        payloads=[]
+        backend=ApiAsk(client=lambda p:(payloads.append(p) or raw()))
+        four=[Image.fromarray(im).resize((384,384)) for im in rgb()]*2
+        answers,meta=backend([four,four,four],VERIFY)
+        self.assertEqual(len(answers),3)
+        text=[b['text'] for b in payloads[0]['messages'][1]['content'] if b['type']=='text']
+        self.assertEqual(text[:4],['T1 close-up','T2 close-up','T1 wider view','T2 wider view'])
+        self.assertEqual(meta['tokens']['input'],3*raw()['usage']['prompt_tokens'])
+        def flaky(p,calls=[]):
+            calls.append(1)
+            if len(calls)==2:
+                raise ValueError('bad reply')
+            return raw()
+        with self.assertRaises(Exception) as caught:
+            ApiAsk(client=flaky)([four,four,four],VERIFY)
+        self.assertGreater(caught.exception.backend_meta['cost_cny'],0)
 
     def test_microbatch_order_limit_and_wait(self):
         sizes=[]

@@ -16,14 +16,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import numpy as np
 from scipy import ndimage as ndi
-from render import crop_box, render_pair
 from prompts import VERIFY
 from . import instances
 from common import components
 from .state import Session, Mask, Instances, ToolError, chosen_ids
-from .view import render_view, box_pixels
+from .view import render_view, box_pixels, ask_images
 
 MATCH_BASIS = 'raw'
+MAX_ASK = 64
 CURRENT = 'By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.'
 
 
@@ -60,7 +60,7 @@ SCHEMAS = [
     schema('segment_prompt', 'Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.', PROMPT_ARGS, ['time']),
     schema('match_instances', 'Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.',
            dict(inst_t1=I, inst_t2=I, overlap_thr=arg('number', minimum=0, maximum=1, default=0.25)), ['inst_t1', 'inst_t2']),
-    schema('ask', 'Verify building change in up to 16 mask components with a fixed question. Returns answer, type, reason, p_yes (relative yes/no reading), status. Unparsed is not no.',
+    schema('ask', 'Verify building change in up to 64 mask components with a fixed question. Returns answer, type, reason, p_yes (relative yes/no reading), status. Unparsed is not no.',
            dict(regions=arg('array', items=dict(type='object', properties=dict(mask=M, ids=IDS),
                 required=['mask', 'ids'], additionalProperties=False))), ['regions']),
     schema('select', 'Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors.',
@@ -311,12 +311,12 @@ class Toolbox:
             item = self.get(entry['mask'], Mask)
             ids = chosen_ids(item.components, entry['ids'])
             expanded.extend((entry['mask'], item, c) for c in item.components if c['id'] in ids)
-        if len(expanded) > 16:
-            raise ToolError('bad_args', 'regions expands to more than 16 components.')
+        if len(expanded) > MAX_ASK:
+            raise ToolError('bad_args', f'regions expands to more than {MAX_ASK} components.')
         if not expanded:
             return dict(results=[])
-        pairs = [render_pair(self.rgb, item.labels == c['id'], crop_box(c['bbox'], self.session.shape))
-                 for _, item, c in expanded]
+        context = getattr(self.ask_backend, 'context', False)
+        pairs = [ask_images(self.rgb, item.labels == c['id'], c['bbox'], context) for _, item, c in expanded]
         rows, meta = self._backend(self.ask_backend, pairs, VERIFY)
         self.meta.update(meta)
         self.meta['answers'] = rows

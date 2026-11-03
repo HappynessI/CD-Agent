@@ -1,5 +1,6 @@
 """Adapters for existing caches, one shared SAM decoder, and optional HTTP workers."""
 import base64
+from concurrent.futures import ThreadPoolExecutor
 from io import BytesIO
 import json
 import math
@@ -121,32 +122,65 @@ def yes_probability(choice):
     return None
 
 
+# Bounds simultaneous verifier requests per process, whatever the number of sessions.
+ASK_SLOTS = threading.Semaphore(4)
+CROP_WORDS = ('T1 close-up', 'T2 close-up', 'T1 wider view', 'T2 wider view')
+CONTEXT_NOTE = 'The first two images are close-ups and the last two show the same place with more surroundings. '
+
+
 class ApiAsk:
-    def __init__(self, client=None, guard=None):
-        self.client, self.guard = client, guard
+    """Independent verifier: each region is one fresh request that knows nothing of the planner's reasoning."""
+    context = True
+
+    def __init__(self, client=None, guard=None, model='qwen3.7-plus', max_attempts=12):
+        self.client, self.guard, self.model, self.max_attempts = client, guard, model, max_attempts
+
+    def one(self, images, question, number):
+        from mllm import parse_json
+        events = []
+        # Region crops are reproducible from the mask, so the archive keeps the reply and not the images.
+        planner = Planner(client=self.client, guard=self.guard, max_attempts=self.max_attempts,
+            record=lambda event: events.append({k: v for k, v in event.items() if k != 'request'}),
+            parameters=dict(model=self.model, logprobs=True, top_logprobs=5, response_format={'type': 'json_object'},
+                            parallel_tool_calls=False, max_tokens=256))
+        content = []
+        for word, image in zip(CROP_WORDS, images):
+            content += [dict(type='text', text=word), dict(type='image_url',
+                        image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
+        content.append(dict(type='text', text=(CONTEXT_NOTE if len(images) > 2 else '') + question))
+        try:
+            with ASK_SLOTS:
+                result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], number)
+        except Exception as exc:
+            exc.partial = dict(attempts=events, tokens=planner.tokens)
+            raise
+        raw = result['message'].get('content') or ''
+        parsed = parse_json(raw)
+        parsed = parsed if isinstance(parsed, dict) else {}
+        answer = dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'),
+                      p_yes=yes_probability(result['raw']['choices'][0]), raw=raw, usage=result['usage'])
+        return answer, events, planner.tokens
 
     def __call__(self, pairs, question):
-        from mllm import parse_json
-        answers, events = [], []
-        planner = Planner(client=self.client, record=events.append, max_attempts=96, guard=self.guard,
-            parameters=dict(model='qwen3-vl-plus', logprobs=True, top_logprobs=5,
-                            response_format={'type': 'json_object'}, parallel_tool_calls=False, max_tokens=256))
-        try:
-            for n, pair in enumerate(pairs, 1):
-                content = []
-                for t, im in enumerate(pair, 1):
-                    content.extend([dict(type='text', text=f'T{t} close-up'), dict(type='image_url',
-                        image_url=dict(url='data:image/jpeg;base64,' + encode_image(im)))])
-                content.append(dict(type='text', text=question))
-                result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], n)
-                choice = result['raw']['choices'][0]
-                raw = result['message'].get('content', '')
-                parsed = parse_json(raw)
-                parsed = parsed if isinstance(parsed, dict) else {}
-                answers.append(dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'),
-                    p_yes=yes_probability(choice), raw=raw, usage=result['usage']))
-        except Exception as exc:
-            # Partial API usage remains accountable even when a later region fails.
-            exc.backend_meta = dict(backend='api_ask', attempts=events, tokens=planner.tokens, cost_cny=token_cost(planner.tokens))
-            raise
-        return answers, dict(backend='api_ask', attempts=events, tokens=planner.tokens, cost_cny=token_cost(planner.tokens))
+        total = dict(input=0, cached=0, output=0)
+        attempts = []
+        answers = [None] * len(pairs)
+        failure = None
+        with ThreadPoolExecutor(min(4, len(pairs)) or 1) as pool:
+            futures = [pool.submit(self.one, images, question, n) for n, images in enumerate(pairs, 1)]
+            for n, future in enumerate(futures):
+                try:
+                    answers[n], events, tokens = future.result()
+                except Exception as exc:
+                    # Keep the first failure and let the other requests finish, so all spending is accounted.
+                    failure = failure or exc
+                    partial = getattr(exc, 'partial', dict(attempts=[], tokens=dict(input=0, cached=0, output=0)))
+                    events, tokens = partial['attempts'], partial['tokens']
+                attempts.extend(events)
+                for key in total:
+                    total[key] += tokens[key]
+        meta = dict(backend='api_ask', model=self.model, attempts=attempts, tokens=total, cost_cny=token_cost(total))
+        if failure is not None:
+            failure.backend_meta = meta
+            raise failure
+        return answers, meta

@@ -165,7 +165,7 @@ class ToolTests(unittest.TestCase):
         self.box.ask_backend=lambda pairs,q:([dict(answer=None,p_yes=.4,type=None,reason=None) for p in pairs],{})
         result = self.good('ask',regions=[dict(mask='mask#0',ids=[1])])['results'][0]
         self.assertEqual((result['answer'],result['status']),(None,'unparsed'))
-        self.assertEqual(self.execute('ask',regions=[dict(mask='mask#0',ids=[1,2])]*9)['error_code'],'bad_args')
+        self.assertEqual(self.execute('ask',regions=[dict(mask='mask#0',ids=[1,2])]*33)['error_code'],'bad_args')
 
     def test_backend_error_is_private(self):
         def broken(*args):

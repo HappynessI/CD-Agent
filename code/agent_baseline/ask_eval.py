@@ -22,9 +22,9 @@ from PIL import Image
 from common import components, load_rgb, names
 from mllm import parse_json
 from prompts import SYSTEM, VERIFY
-from render import crop_box, render_pair
 from .backends import encode_image, post, yes_probability
 from .planner import Planner, RunGuard, RunStopped, token_cost, usage_tokens
+from .view import ask_images
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
 # The ledger prices every variant at planner.PRICE (qwen3.7-plus). The price of qwen3-vl-plus is not
@@ -51,11 +51,7 @@ def pool(split):
 
 
 def crops(rgb, labels, row, context):
-    mask = labels == row['id']
-    pair = render_pair(rgb, mask, crop_box(row['bbox'], labels.shape))
-    if context:
-        pair = pair + render_pair(rgb, mask, crop_box(row['bbox'], labels.shape, scale=10, min_side=256))
-    return pair
+    return ask_images(rgb, labels == row['id'], row['bbox'], context)
 
 
 def api_answer(images, spec, guard, seed):

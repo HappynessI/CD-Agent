@@ -3,9 +3,19 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage as ndi
+from render import crop_box, render_pair
 from .state import ToolError, chosen_ids
 
 BORDER = 28
+
+
+def ask_images(rgb, region, bbox, context=False):
+    """Close-up T1, T2 for one region; with context, also a wider T1, T2 at the same size."""
+    shape = region.shape
+    images = render_pair(rgb, region, crop_box(bbox, shape))
+    if context:
+        images = images + render_pair(rgb, region, crop_box(bbox, shape, scale=10, min_side=256))
+    return images
 
 
 def box_pixels(box, shape, field='box'):
