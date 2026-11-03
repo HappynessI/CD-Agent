@@ -385,6 +385,68 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
   <p class="read">B0 之前先做 BF 快速版（2 天）。之后 B0–B2 预计 4–5 天，B3–B5 预计 2–3 天。百炼全量跑之前停一次，等 Ethan 确认费用。</p>
 </section>
 
+<!-- 7b. optimization loop -->
+<section>
+  <h2><span class="k">07+</span>优化外循环：跑通之后持续调到足够好</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 940 300" width="100%" style="min-width:720px" role="img" aria-label="Claude 优化外循环">
+    <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker></defs>
+    <g font-size="13">
+      <rect x="20" y="40" width="170" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="105" y="70" text-anchor="middle" font-weight="700">① 跑验证集 64 对</text>
+      <text x="105" y="92" text-anchor="middle" font-size="11.5" class="m">完整轨迹按轮次单独存</text>
+      <line x1="190" y1="80" x2="246" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
+      <rect x="248" y="40" width="200" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="348" y="70" text-anchor="middle" font-weight="700">② 诊断</text>
+      <text x="348" y="92" text-anchor="middle" font-size="11.5" class="m">每张错图标主因</text>
+      <text x="348" y="108" text-anchor="middle" font-size="11.5" class="m">统计图数和 F1 损失</text>
+      <line x1="448" y1="80" x2="504" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
+      <rect x="506" y="40" width="200" height="80" rx="10" style="fill:none;stroke:var(--accent);stroke-width:2"/>
+      <text x="606" y="70" text-anchor="middle" font-weight="700" style="fill:var(--accent)">③ 只改一个东西</text>
+      <text x="606" y="92" text-anchor="middle" font-size="11.5" class="m">工具层 或 系统层</text>
+      <text x="606" y="108" text-anchor="middle" font-size="11.5" class="m">写明依据哪些轨迹</text>
+      <line x1="706" y1="80" x2="762" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
+      <rect x="764" y="40" width="160" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="844" y="70" text-anchor="middle" font-weight="700">④ 重跑对比</text>
+      <text x="844" y="92" text-anchor="middle" font-size="11.5" class="m">变好保留</text>
+      <text x="844" y="108" text-anchor="middle" font-size="11.5" class="m">没变好回滚</text>
+      <path d="M844,120 C844,150 105,150 105,122" style="stroke:var(--accent);fill:none;stroke-dasharray:5 4" marker-end="url(#ah4)"/>
+      <text x="474" y="178" text-anchor="middle" font-size="12" style="fill:var(--accent)">下一轮 · 最多 8 轮（BF 期间 2 轮）· 连续 2 轮提升 &lt; 0.3 就停</text>
+      <!-- two layers -->
+      <rect x="248" y="200" width="300" height="80" rx="8" style="fill:none;stroke:var(--c-seg)"/>
+      <text x="398" y="226" text-anchor="middle" font-weight="700" style="fill:var(--c-seg)">工具层</text>
+      <text x="398" y="248" text-anchor="middle" font-size="11.5" class="m">SAM3 分块与门限、匹配门限、SAM 提示、ask 提示</text>
+      <text x="398" y="266" text-anchor="middle" font-size="11.5" class="m">每个工具有自己的单项指标，离线直接算</text>
+      <rect x="568" y="200" width="300" height="80" rx="8" style="fill:none;stroke:var(--accent)"/>
+      <text x="718" y="226" text-anchor="middle" font-weight="700" style="fill:var(--accent)">系统层</text>
+      <text x="718" y="248" text-anchor="middle" font-size="11.5" class="m">系统提示、工具说明、工具增删、停止规则</text>
+      <text x="718" y="266" text-anchor="middle" font-size="11.5" class="m">看整套 Agent 的 F1、步数、失败率</text>
+      <text x="20" y="220" font-size="12" class="m">只看验证集</text>
+      <text x="20" y="240" font-size="12" class="m">测试集最后评一次</text>
+      <text x="20" y="260" font-size="12" class="m">每两轮找 Codex 看一次</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">提示里只允许写通用的方法性指导，不能写数据集名或针对 LEVIR 的规则。这一步是工程调优，相当于把人工调提示交给 Claude 来做，论文里如实写「经过 N 轮验证集迭代」，不作为方法贡献。</p>
+
+  <h3 style="margin:22px 0 8px;font-size:15px">优化轮次记录</h3>
+  <div class="panel scroll"><table>
+    <thead><tr><th>轮次</th><th>层</th><th>诊断</th><th>改动</th><th>验证集 F1^c</th><th>步数 / 失败率</th><th>结果</th></tr></thead>
+    <tbody><tr><td>—</td><td>—</td><td>尚未开始</td><td>—</td><td>—</td><td>—</td><td>—</td></tr></tbody>
+  </table></div>
+
+  <h3 style="margin:22px 0 8px;font-size:15px">工具质量卡</h3>
+  <div class="panel scroll"><table>
+    <thead><tr><th>工具</th><th>当前配置</th><th>单项指标</th><th>单项指标值</th><th>已知弱点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">segment_text</td><td>SAM3，512² 分块，门限 0.5</td><td>建筑实例召回、每图误报数</td><td>待测</td><td>密集小住宅区几乎检不出</td></tr>
+      <tr><td class="mono">match_instances</td><td>IoU 0.25</td><td>出现 ∪ 消失的 F1^c</td><td>待测</td><td>—</td></tr>
+      <tr><td class="mono">segment_prompt / refine_region</td><td>SAM ViT-H 框提示</td><td>GT 框 / 扰动框下的 mIoU</td><td>待测</td><td>—</td></tr>
+      <tr><td class="mono">ask</td><td>Qwen3.5-4B，yes/no 读数</td><td>区域级 AUC、面积加权 AP</td><td>v0：AUC 0.85，面积加权 0.69</td><td>倾向答「是」</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
 <!-- 8. progress -->
 <section>
   <h2><span class="k">08</span>进度（新的在上）</h2>
@@ -392,6 +454,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
     <table>
       <thead><tr><th>日期</th><th>里程碑</th><th>做了什么</th><th>结果</th><th>下一步</th></tr></thead>
       <tbody>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>加入优化外循环、轮次记录和工具质量卡</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>只调 API、不等本地模型、提高并发</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>对照任务体系定稿：第一版 = T1.1 × C0 + T5.1（修正 SAM3 输出）</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>组会后调整：新增 BF 快速版（2 天），工具分核心档与扩展档，可视化示例提前</td><td>—</td><td>BF</td></tr>
