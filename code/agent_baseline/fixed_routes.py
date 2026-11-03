@@ -34,20 +34,20 @@ def imc(toolbox, score_thr=.5):
 
 
 def one(arguments):
-    split, name, threshold, save = arguments
-    toolbox = Toolbox(load_rgb(split, name), RUN / 'fixed', segment=SegmentBackend(split, name))
+    split, name, threshold, save, pixel_thr, init_name = arguments
+    toolbox = Toolbox(load_rgb(split, name), RUN / 'fixed', segment=SegmentBackend(split, name, pixel_thr=pixel_thr))
     mask = imc(toolbox, threshold)
     if save:
-        save_mask_png(RUN / 'init' / 'sam3_imc' / split / (Path(name).stem + '.png'), mask)
+        save_mask_png(RUN / 'init' / init_name / split / (Path(name).stem + '.png'), mask)
     return name, mask
 
 
-def run(split, procs, threshold=.5, save=False):
-    todo = [(split, name, threshold, save) for name in names(split)]
+def run(split, procs, threshold=.5, save=False, pixel_thr=.5, init_name='sam3_imc'):
+    todo = [(split, name, threshold, save, pixel_thr, init_name) for name in names(split)]
     with ProcessPoolExecutor(max_workers=procs) as pool:
         preds = dict(pool.map(one, todo))
     metrics, per = evaluate(preds, split)
-    return dict(metrics, per_image_f1=per, score_thr=threshold, tile=512, overlap_thr=.25, match_basis=tools.MATCH_BASIS)
+    return dict(metrics, per_image_f1=per, score_thr=threshold, pixel_thr=pixel_thr, tile=512, overlap_thr=.25, match_basis=tools.MATCH_BASIS)
 
 
 def main():
@@ -55,11 +55,14 @@ def main():
     parser.add_argument('route', choices=['imc', 'tune'])
     parser.add_argument('--split', choices=['val','test'], default='val')
     parser.add_argument('--procs', type=int, default=1)
+    parser.add_argument('--pixel-thr', type=float, default=.5)
+    parser.add_argument('--init-name', default='sam3_imc')
     parser.add_argument('--apply-test', action='store_true', help='Apply frozen val selection, without retuning.')
     args = parser.parse_args()
     if args.route == 'imc':
-        result = run(args.split, args.procs, save=True)
-        write_json(RUN / 'fixed' / f'imc_{args.split}.json', result)
+        result = run(args.split, args.procs, save=True, pixel_thr=args.pixel_thr, init_name=args.init_name)
+        tag = '' if args.init_name == 'sam3_imc' else '_' + args.init_name
+        write_json(RUN / 'fixed' / f'imc{tag}_{args.split}.json', result)
     elif args.apply_test:
         frozen = json.loads((RUN / 'fixed' / 'tune_val.json').read_text())
         if frozen['match_basis'] != tools.MATCH_BASIS:

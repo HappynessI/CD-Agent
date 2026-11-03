@@ -2,6 +2,7 @@ import copy
 from contextlib import nullcontext
 from io import BytesIO
 import json
+from pathlib import Path
 import socket
 import threading
 import time
@@ -146,6 +147,22 @@ class BackendTests(unittest.TestCase):
         for t in threads:t.join()
         self.assertEqual([x[0] for x in calls],['start','end','start','end'])
         self.assertEqual(calls[0][1],calls[1][1])
+
+    def test_soft_cache_keeps_the_grid_and_applies_thresholds(self):
+        from agent_baseline.backends import read_soft
+        with tempdir() as root:
+            folder=Path(root)/'sam3_soft'/'t512s256'/'synthetic'
+            folder.mkdir(parents=True)
+            # Instance 0 on the 512 grid, instance 1 on an overlap tile, instance 2 below the score threshold.
+            np.savez(folder/'a.npz',shape=np.array([1024,1024]),
+                scores0=np.array([.6,.9,.2],np.float32),origins0=np.array([[512,0],[256,0],[0,0]]),offs0=np.array([0,3,4,5]),
+                idx0=np.array([1024*2+600,1024*1+600,1024*3+700,7,8],np.int32),val0=np.array([250,200,240,255,255],np.uint8))
+            rows_=read_soft('synthetic','a.png',0,.85,.3,root)
+            self.assertEqual(len(rows_),1)
+            self.assertEqual(rows_[0]['idx'].tolist(),[1024*2+600,1024*3+700])
+            self.assertEqual(rows_[0]['bbox'],[600,2,701,4])
+            self.assertEqual(rows_[0]['area'],2)
+            self.assertEqual(len(read_soft('synthetic','a.png',0,.5,.3,root)[0]['idx']),3)
 
     def test_api_ask_readout_and_cost(self):
         payloads=[]

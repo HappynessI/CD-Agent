@@ -26,12 +26,12 @@ class Segmenter:
         self.processor, self.engine, self.run = processor, engine, Path(run)
         self.lock = threading.Lock()
 
-    def infer(self, split, name, time, text, tile, conf=.1):
-        if time not in ('t1', 't2') or tile not in (0, 512) or not 0 <= conf <= 1:
+    def infer(self, split, name, time, text, tile, conf=.1, pixel_thr=.5):
+        if time not in ('t1', 't2') or tile not in (0, 512) or not 0 <= conf <= 1 or not 0 < pixel_thr < 1:
             raise ValueError('Invalid segmentation parameters')
         text = ' '.join(text.lower().split())
         slug = quote(text, safe='')
-        path = self.run / 'sam3_cache' / f'{slug}_t{tile}_c{conf:g}' / split / f'{Path(name).stem}_{time}.npz'
+        path = self.run / 'sam3_cache' / (f'{slug}_t{tile}_c{conf:g}' + (f'_p{pixel_thr:g}' if pixel_thr != .5 else '')) / split / f'{Path(name).stem}_{time}.npz'
         started = __import__('time').monotonic()
         with self.lock:
             queued = __import__('time').monotonic() - started
@@ -50,7 +50,7 @@ class Segmenter:
                         state = self.processor.set_text_prompt(prompt=text, state=state)
                     if not len(state['scores']):
                         continue
-                    masks = state['masks'][:, 0].cpu().numpy().astype(bool)
+                    masks = (state['masks'] if pixel_thr == .5 else state['masks_logits'] > pixel_thr)[:, 0].cpu().numpy().astype(bool)
                     values = state['scores'].float().cpu().numpy()
                     for mask, score in zip(masks, values):
                         full = np.zeros((h, w), bool)

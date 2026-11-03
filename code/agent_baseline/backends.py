@@ -4,6 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from io import BytesIO
 import json
 import math
+import os
+from pathlib import Path
 import threading
 import time
 import urllib.error
@@ -34,15 +36,42 @@ def encode_image(image):
     return base64.b64encode(buffer.getvalue()).decode('ascii')
 
 
+def read_soft(split, name, index, pixel_thr, score_thr, root=None):
+    """Instances of the 512 grid from the soft cache (sam3_soft.py, tile 512, step 256), binarized at pixel_thr."""
+    root = Path(root or os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
+    with np.load(root / 'sam3_soft' / 't512s256' / split / (Path(name).stem + '.npz')) as z:
+        scores, origins, offsets = z[f'scores{index}'], z[f'origins{index}'], z[f'offs{index}']
+        pixels, values, (h, w) = z[f'idx{index}'], z[f'val{index}'], z['shape']
+    rows = []
+    for i in np.flatnonzero(scores >= score_thr):
+        if origins[i][0] % 512 or origins[i][1] % 512:
+            continue
+        idx = pixels[offsets[i]:offsets[i + 1]][values[offsets[i]:offsets[i + 1]] >= round(pixel_thr * 255)]
+        if len(idx):
+            idx = np.sort(idx).astype(np.int32)
+            ys, xs = idx // w, idx % w
+            rows.append(dict(id=len(rows) + 1, idx=idx, area=int(idx.size), score=float(scores[i]),
+                             bbox=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1]))
+    return rows
+
+
 class SegmentBackend:
-    def __init__(self, split, name, worker=None):
-        self.split, self.name, self.worker = split, name, worker
+    def __init__(self, split, name, worker=None, pixel_thr=.5):
+        self.split, self.name, self.worker, self.pixel_thr = split, name, worker, pixel_thr
 
     def __call__(self, time, text, tile, score_thr):
         import sam3_t7
         index = 0 if time == 't1' else 1
-        cached = ''.join(text.lower().split()) == 'building' and ((tile == 512 and score_thr >= .1) or (tile == 0 and score_thr >= .5))
-        if cached:
+        building = ''.join(text.lower().split()) == 'building'
+        if self.pixel_thr != .5:
+            # The soft cache holds scores from 0.3 and values from 0.2.
+            if building and tile == 512 and score_thr >= .3:
+                try:
+                    return read_soft(self.split, self.name, index, self.pixel_thr, score_thr), dict(
+                        cache_hit=True, backend='sam3_soft_cache', tile=tile, pixel_thr=self.pixel_thr)
+                except FileNotFoundError:
+                    pass
+        elif building and ((tile == 512 and score_thr >= .1) or (tile == 0 and score_thr >= .5)):
             conf = .1 if tile == 512 else .5
             try:
                 masks, scores = sam3_t7.read(self.split, self.name, tile, conf=conf, min_score=score_thr)[index]
@@ -54,7 +83,7 @@ class SegmentBackend:
             raise ToolError('backend_unavailable', 'This text or threshold needs a SAM3 worker.')
         # A lower requested threshold must never read a cache truncated above it.
         conf = min(.1, score_thr)
-        response = post(self.worker, dict(split=self.split, name=self.name, time=time, text=text, tile=tile, conf=conf))
+        response = post(self.worker, dict(split=self.split, name=self.name, time=time, text=text, tile=tile, conf=conf, pixel_thr=self.pixel_thr))
         with np.load(response['path']) as z:
             h, w = (int(x) for x in z['shape'])
             scores = z['scores']
@@ -62,7 +91,7 @@ class SegmentBackend:
             masks = np.unpackbits(z['masks'][keep], axis=1, count=h*w).reshape(-1, h, w).astype(bool)
             rows = instances.from_dense(masks, scores[keep])
         return rows, dict(cache_hit=response.get('cache_hit', False), backend='sam3_worker',
-                          worker_seconds=response.get('seconds'), cache_path=response['path'], conf=conf)
+                          worker_seconds=response.get('seconds'), cache_path=response['path'], conf=conf, pixel_thr=self.pixel_thr)
 
 
 class SharedPrompter:

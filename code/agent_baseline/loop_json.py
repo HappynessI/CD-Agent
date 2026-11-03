@@ -217,6 +217,8 @@ def main():
     parser.add_argument('--ask-backend', choices=['local', 'api', 'none'], default='local')
     parser.add_argument('--sam3-worker')
     parser.add_argument('--ask-worker')
+    parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
+    parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
     parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2'])
     parser.add_argument('--seed-offset', type=int, default=0, help='Repeat runs of one configuration.')
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
@@ -242,7 +244,7 @@ def main():
         except Exception:
             recorder.input_failure(args.task, dict(session_id=Path(name).stem), traceback.format_exc())
             return name, 'error'
-        init_path = RUN / 'init' / 'sam3_imc' / args.split / (Path(name).stem + '.png')
+        init_path = RUN / 'init' / args.init_name / args.split / (Path(name).stem + '.png')
         # Recorder is created before optional init loading so an absent initial asset gets an error record.
         planner = Planner(guard=guard, seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
         init = None
@@ -253,17 +255,17 @@ def main():
             except Exception:
                 init_error = traceback.format_exc()
         ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard) if args.ask_backend == 'api' else None
-        toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker),
+        toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr),
             shared.for_image(args.split, name), ask, init_mask=init)
         try:
           result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version,
             metadata=dict(session_id=Path(name).stem, source_images=[str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')],
                 init_mask_path=str(init_path) if args.task == 'T5.1' else None,
-                init_config=dict(route='sam3_imc', text='building', tile=512, score_thr=.5,
+                init_config=dict(route=args.init_name, text='building', tile=512, score_thr=.5,
                                  overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if args.task == 'T5.1' else None,
-                backends=dict(ask=args.ask_backend, ask_model='qwen3-vl-plus' if args.ask_backend == 'api'
+                backends=dict(ask=args.ask_backend, ask_model='qwen3.7-plus' if args.ask_backend == 'api'
                     else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
-                    sam3_worker=bool(args.sam3_worker), sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
+                    sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
                 init_error=init_error))
         except RunStopped:
             return name, 'stopped'  # no final.json, so a later run redoes this image
