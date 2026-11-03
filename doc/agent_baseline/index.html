@@ -402,8 +402,8 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
       <text x="348" y="108" text-anchor="middle" font-size="11.5" class="m">统计图数和 F1 损失</text>
       <line x1="448" y1="80" x2="504" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
       <rect x="506" y="40" width="200" height="80" rx="10" style="fill:none;stroke:var(--accent);stroke-width:2"/>
-      <text x="606" y="70" text-anchor="middle" font-weight="700" style="fill:var(--accent)">③ 只改一个东西</text>
-      <text x="606" y="92" text-anchor="middle" font-size="11.5" class="m">工具层 或 系统层</text>
+      <text x="606" y="70" text-anchor="middle" font-weight="700" style="fill:var(--accent)">③ 选改动</text>
+      <text x="606" y="92" text-anchor="middle" font-size="11.5" class="m">调参、换工具、改架构都行</text>
       <text x="606" y="108" text-anchor="middle" font-size="11.5" class="m">写明依据哪些轨迹</text>
       <line x1="706" y1="80" x2="762" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
       <rect x="764" y="40" width="160" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
@@ -411,7 +411,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
       <text x="844" y="92" text-anchor="middle" font-size="11.5" class="m">变好保留</text>
       <text x="844" y="108" text-anchor="middle" font-size="11.5" class="m">没变好回滚</text>
       <path d="M844,120 C844,150 105,150 105,122" style="stroke:var(--accent);fill:none;stroke-dasharray:5 4" marker-end="url(#ah4)"/>
-      <text x="474" y="178" text-anchor="middle" font-size="12" style="fill:var(--accent)">下一轮 · 最多 8 轮（BF 期间 2 轮）· 连续 2 轮提升 &lt; 0.3 就停</text>
+      <text x="474" y="178" text-anchor="middle" font-size="12" style="fill:var(--accent)">下一轮 · BF 期间 2 轮，之后不设上限 · 连续 3 轮小改无效就必须做结构性改动</text>
       <!-- two layers -->
       <rect x="248" y="200" width="300" height="80" rx="8" style="fill:none;stroke:var(--c-seg)"/>
       <text x="398" y="226" text-anchor="middle" font-weight="700" style="fill:var(--c-seg)">工具层</text>
@@ -428,6 +428,22 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
   </svg>
   </div>
   <p class="read">提示里只允许写通用的方法性指导，不能写数据集名或针对 LEVIR 的规则。这一步是工程调优，相当于把人工调提示交给 Claude 来做，论文里如实写「经过 N 轮验证集迭代」，不作为方法贡献。</p>
+
+  <div class="two" style="margin-top:16px">
+    <div class="panel"><b style="color:var(--accent)">不用向 Ethan 确认就能做</b>
+      <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px">
+        <li>换工具、加工具：SimpleClick、AnyChange、RemoteCLIP、APE、Grounding DINO 等</li>
+        <li>自主下载权重和代码、配环境</li>
+        <li>改架构或转换方向：CodeAgent 当主线、加反思步骤、推翻现有设计</li>
+        <li>API 和 GPU 按需用，费用只报告</li></ul></div>
+    <div class="panel"><b style="color:var(--old)">结果可信的底线，不能碰</b>
+      <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px">
+        <li>不用在 LEVIR 上训练过的模型，也不在 LEVIR 上训练</li>
+        <li>真值、数据集名、针对 LEVIR 的规则不进 Agent 输入</li>
+        <li>测试集只在冻结配置时评，评完不回头改</li>
+        <li>新工具先登记来源、许可、训练数据和单项指标</li></ul></div>
+  </div>
+  <p class="read">另外持续维护一份 LEVIR 分析：什么在限制 F1（工具上界、决策错误、停止错误各占多少），每类错误在各轮里怎么变化，哪些工具换了有效、为什么。</p>
 
   <h3 style="margin:22px 0 8px;font-size:15px">优化轮次记录</h3>
   <div class="panel scroll"><table>
@@ -454,6 +470,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
     <table>
       <thead><tr><th>日期</th><th>里程碑</th><th>做了什么</th><th>结果</th><th>下一步</th></tr></thead>
       <tbody>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>扩大自主权：可换工具、下载、改架构，不用确认；加 LEVIR 分析</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>加入优化外循环、轮次记录和工具质量卡</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>只调 API、不等本地模型、提高并发</td><td>—</td><td>BF</td></tr>
         <tr><td class="num">2026-11-03</td><td>—</td><td>对照任务体系定稿：第一版 = T1.1 × C0 + T5.1（修正 SAM3 输出）</td><td>—</td><td>BF</td></tr>
