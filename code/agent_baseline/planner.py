@@ -1,6 +1,7 @@
 """Bounded urllib OpenAI-compatible transport; credentials never enter records."""
 import base64
 import copy
+import fcntl
 import http.client
 import json
 import os
@@ -46,9 +47,54 @@ class PlannerError(RuntimeError):
     pass
 
 
+class RunStopped(RuntimeError):
+    """The provider quota or the batch budget is gone: every session stops and leaves no final.json, so the run can resume."""
+
+
+QUOTA_WORDS = ('quota', 'arrearage', 'good standing', 'access denied', 'access to model denied')
+
+
+def is_quota_error(code, body):
+    return code == 403 or (code in (400, 402, 429) and any(word in body.lower() for word in QUOTA_WORDS))
+
+
+class RunGuard:
+    """Stop switch shared by all sessions and all parallel jobs through one file, plus an optional budget ledger."""
+
+    def __init__(self, stop_file, budget_file=None, max_cost=None):
+        self.stop_file, self.budget_file, self.max_cost = Path(stop_file), budget_file and Path(budget_file), max_cost
+
+    def stopped(self):
+        return self.stop_file.exists()
+
+    def check(self):
+        if self.stopped():
+            raise RunStopped(self.stop_file.read_text())
+
+    def trip(self, reason):
+        self.stop_file.parent.mkdir(parents=True, exist_ok=True)
+        self.stop_file.write_text(json.dumps(dict(reason=reason, at=time.time()), ensure_ascii=False))
+        raise RunStopped(reason)
+
+    def charge(self, cost):
+        if self.budget_file is None:
+            return
+        self.budget_file.parent.mkdir(parents=True, exist_ok=True)
+        with self.budget_file.open('a+') as file:
+            fcntl.flock(file, fcntl.LOCK_EX)
+            file.seek(0)
+            total = float(file.read() or 0) + cost
+            file.seek(0)
+            file.truncate()
+            file.write(str(total))
+        if self.max_cost is not None and total > self.max_cost:
+            self.trip(f'budget: {total:.2f} > {self.max_cost:.2f} CNY')
+
+
 class Planner:
     def __init__(self, seed=0, client=None, record=None, sleep=time.sleep, jitter=random.random,
-                 max_attempts=180, parameters=None):
+                 max_attempts=180, parameters=None, guard=None):
+        self.guard = guard
         self.parameters = dict(DEFAULTS, seed=seed, **(parameters or {}))
         self.client = client or self._http
         self.record = record or (lambda event: None)
@@ -80,6 +126,8 @@ class Planner:
                 body.pop('tools')
                 body.pop('parallel_tool_calls', None)
         for attempt in range(1, 7):
+            if self.guard:
+                self.guard.check()
             if self.attempts >= self.max_attempts:
                 raise PlannerError('Total planner attempt budget exhausted.')
             self.attempts += 1
@@ -99,15 +147,21 @@ class Planner:
             except Exception as exc:
                 error = exc
                 if isinstance(exc, urllib.error.HTTPError):
-                    retry = exc.code == 429 or 500 <= exc.code < 600
                     # Server error text explains rejections (rate limits, content inspection); it holds no credentials.
                     event['error_body'] = exc.read(2000).decode('utf-8', 'replace')
+                    quota = is_quota_error(exc.code, event['error_body'])
+                    retry = not quota and (exc.code == 429 or 500 <= exc.code < 600)
+                    event['quota_error'] = quota
                 else:
                     retry = isinstance(exc, (OSError, http.client.HTTPException, json.JSONDecodeError))
                 event.update(error_type=type(exc).__name__, http_status=getattr(exc, 'code', None), retryable=retry)
             event['seconds'] = time.monotonic() - start
             # Record outside the network try: logging failures must not cause a duplicate request.
             self.record(event)
+            if error is None and self.guard:
+                self.guard.charge(token_cost(usage_tokens(usage)))
+            if error is not None and event.get('quota_error') and self.guard:
+                self.guard.trip(f'quota: HTTP {event.get("http_status")}')
             if error is None:
                 return dict(message=message, raw=raw, usage=usage, request_id=event['request_id'],
                             seconds=event['seconds'], attempts=attempt)

@@ -122,13 +122,13 @@ def yes_probability(choice):
 
 
 class ApiAsk:
-    def __init__(self, client=None):
-        self.client = client
+    def __init__(self, client=None, guard=None):
+        self.client, self.guard = client, guard
 
     def __call__(self, pairs, question):
         from mllm import parse_json
         answers, events = [], []
-        planner = Planner(client=self.client, record=events.append, max_attempts=96,
+        planner = Planner(client=self.client, record=events.append, max_attempts=96, guard=self.guard,
             parameters=dict(model='qwen3-vl-plus', logprobs=True, top_logprobs=5,
                             response_format={'type': 'json_object'}, parallel_tool_calls=False, max_tokens=256))
         try:

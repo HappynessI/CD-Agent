@@ -19,7 +19,7 @@ from prompts import SCOPE_CARD
 from .tools import Toolbox, SCHEMAS, failure
 from . import tools as tool_module
 from .state import Mask
-from .planner import Planner, usage_tokens
+from .planner import Planner, RunGuard, RunStopped, usage_tokens
 from .recorder import Recorder
 from .backends import SegmentBackend, SharedPrompter, LocalAsk, ApiAsk
 
@@ -46,6 +46,11 @@ def image_blocks(result):
     return blocks
 
 
+# Editing an earlier message breaks the provider's prefix cache from that point on, so images leave in one
+# batch: nothing changes until more than MAX_VIEW_PAIRS view pairs are live, then only the latest KEEP_VIEW_PAIRS stay.
+MAX_VIEW_PAIRS, KEEP_VIEW_PAIRS = 7, 3
+
+
 def trim_images(messages):
     views = []
     for message in messages:
@@ -53,7 +58,10 @@ def trim_images(messages):
             info = block.get('_view')
             if info and info['view_id'] not in views:
                 views.append(info['view_id'])
-    keep = {'view#0', *[v for v in views if v != 'view#0'][-3:]}
+    later = [v for v in views if v != 'view#0']
+    if len(later) <= MAX_VIEW_PAIRS:
+        return
+    keep = {'view#0', *later[-KEEP_VIEW_PAIRS:]}
     for message in messages:
         if not isinstance(message.get('content'), list):
             continue
@@ -83,6 +91,7 @@ def referenced_handles(args):
 def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None):
     session = toolbox.session
     rounds, no_tools = 0, 0
+    previous_calls = None
     reason, error = 'budget', None
     messages = []
     planner.record = recorder.request
@@ -116,6 +125,13 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             assistant.setdefault('role', 'assistant')
             messages.append(assistant)
             calls = original.get('tool_calls') or []
+            # The provider rejects a history with the same call in consecutive rounds, and rerunning it teaches nothing.
+            signature = [(c.get('function') or {}).get('name') for c in calls], [(c.get('function') or {}).get('arguments') for c in calls]
+            repeated = bool(calls) and signature == previous_calls
+            if repeated:
+                calls = []
+            elif calls:
+                previous_calls = signature
             call_records, images = [], []
             allowed = frozenset(session.handles)
             for index, call in enumerate(calls):
@@ -165,13 +181,17 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 # Pseudo-calls written as text prime the next reply to do the same, even under
                 # tool_choice=required, so the reply stays in the trace but leaves the context.
                 messages.pop()
-                if no_tools == 1:
+                if repeated:
+                    messages.append(dict(role='user', content='You repeated your previous tool call, so it did not run again. Its result is above. Choose a different action, or call submit with an existing mask and a summary.'))
+                elif no_tools == 1:
                     messages.append(dict(role='user', content='Your last reply contained no function call, so nothing ran. Writing a tool call as text does not execute it. Make a function call now, or call submit with an existing mask and a summary.'))
             else:
                 no_tools = 0
             left = budget - number
             if 0 < left <= 3:
                 messages.append(dict(role='user', content=f'You have {left} replies left. Submit your best mask before they run out.'))
+    except RunStopped:
+        raise
     except Exception:
         reason, error = 'error', traceback.format_exc()
     if session.submitted is not None:
@@ -199,7 +219,12 @@ def main():
     parser.add_argument('--ask-worker')
     parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2'])
     parser.add_argument('--seed-offset', type=int, default=0, help='Repeat runs of one configuration.')
+    parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
+    parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
+    if guard.stopped():
+        raise SystemExit(f'{guard.stop_file} exists; check quota or budget, then delete it before running: {guard.stop_file.read_text()}')
     todo = Path(args.names_file).read_text().split() if args.names_file else names(args.split)
     if args.limit is not None:
         todo = todo[:args.limit]
@@ -209,6 +234,8 @@ def main():
         directory = RUN / args.config / args.task / args.split / Path(name).stem
         if (directory / 'final.json').exists():
             return name, 'skipped'
+        if guard.stopped():
+            return name, 'stopped'
         recorder = Recorder(directory, args.split, name)
         try:
             rgb = load_rgb(args.split, name)
@@ -217,7 +244,7 @@ def main():
             return name, 'error'
         init_path = RUN / 'init' / 'sam3_imc' / args.split / (Path(name).stem + '.png')
         # Recorder is created before optional init loading so an absent initial asset gets an error record.
-        planner = Planner(seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
+        planner = Planner(guard=guard, seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
         init = None
         init_error = None
         if args.task == 'T5.1':
@@ -225,10 +252,11 @@ def main():
                 init = load_mask_png(init_path)
             except Exception:
                 init_error = traceback.format_exc()
-        ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk() if args.ask_backend == 'api' else None
+        ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard) if args.ask_backend == 'api' else None
         toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker),
             shared.for_image(args.split, name), ask, init_mask=init)
-        result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version,
+        try:
+          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version,
             metadata=dict(session_id=Path(name).stem, source_images=[str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')],
                 init_mask_path=str(init_path) if args.task == 'T5.1' else None,
                 init_config=dict(route='sam3_imc', text='building', tile=512, score_thr=.5,
@@ -237,6 +265,8 @@ def main():
                     else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                     sam3_worker=bool(args.sam3_worker), sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
                 init_error=init_error))
+        except RunStopped:
+            return name, 'stopped'  # no final.json, so a later run redoes this image
         return name, result['submitted_by']
     with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
         futures = {pool.submit(process, item): item[1] for item in enumerate(todo)}
@@ -253,6 +283,8 @@ def main():
                     error=traceback.format_exc(),
                     summary='系统兜底：输入数据无法读取，无法生成掩码。', elapsed_seconds=0))
                 print(futures[future], 'input_error', flush=True)
+    if guard.stopped():
+        raise SystemExit(3)  # a failed job state, so a stop cannot pass as a finished run
 
 
 if __name__ == '__main__':

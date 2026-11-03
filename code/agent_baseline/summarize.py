@@ -12,7 +12,7 @@ import json
 import os
 from pathlib import Path
 import numpy as np
-from common import evaluate, load_gt, load_mask_png, read_jsonl, write_json
+from common import evaluate, load_gt, load_mask_png, names, read_jsonl, write_json
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
 MODIFY = {'combine', 'morph', 'remove_region', 'add_region', 'refine_region'}
@@ -101,6 +101,10 @@ def main():
     parser.add_argument('--split', default='val', choices=['val','test'])
     parser.add_argument('--errors', action='store_true')
     args = parser.parse_args()
+    found = len(list((RUN / args.config / args.task / args.split).glob('*/final.json')))
+    expected = len(names(args.split))
+    if found != expected:
+        parser.error(f'{found} of {expected} sessions have final.json; finish the run before summarizing.')
     print(json.dumps(summarize(RUN / args.config / args.task / args.split, args.split, args.task, args.errors), ensure_ascii=False))
 
 
