@@ -123,12 +123,12 @@ class LoopTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 assert_no_evidence(self,bad)
         package=Path(__file__).resolve().parents[1]
-        allowed={'recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py'}
+        allowed={'recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py','ask_eval.py','compare_runs.py','levir_analysis.py'}
         # Offline analysis may read labels, but nothing the agent runs may import it.
         online=['loop_json.py','tools.py','state.py','view.py','backends.py','planner.py','instances.py']
         for filename in online:
             source=(package/filename).read_text()
-            for module in ('make_demo','pick_demo','diagnose','summarize','fixed_routes'):
+            for module in ('make_demo','pick_demo','diagnose','summarize','fixed_routes','ask_eval','compare_runs','levir_analysis'):
                 self.assertNotIn('import '+module,source)
                 self.assertNotIn('from .'+module,source)
         for path in package.rglob('*.py'):

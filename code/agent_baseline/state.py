@@ -46,11 +46,12 @@ class Session:
         self.handles[key] = value
         return key
 
-    def add_mask(self, data, parents=()):
+    def add_mask(self, data, parents=(), labeled=None):
         data = np.array(data, dtype=bool, copy=True)
         if data.shape != self.shape:
             raise ValueError('backend mask shape differs from image shape')
-        labels, comps = components(data)
+        # labeled keeps existing component IDs when an edit removes whole components.
+        labels, comps = labeled if labeled is not None else components(data)
         data.flags.writeable = labels.flags.writeable = False
         comps = tuple(MappingProxyType(dict(c, bbox=tuple(c['bbox']))) for c in comps)
         return self._put('mask', Mask(data, labels, comps, tuple(parents)))
@@ -82,5 +83,5 @@ def chosen_ids(rows, ids):
     if not isinstance(ids, list) or any(type(i) is not int for i in ids):
         raise ToolError('bad_args', 'ids must be a list of integers.')
     if not set(ids) <= valid:
-        raise ToolError('bad_id', f'IDs {sorted(set(ids) - valid)[:10]} do not exist on this handle ({len(valid)} valid IDs). Component IDs change when a mask changes; inspect the handle first.')
+        raise ToolError('bad_id', f'IDs {sorted(set(ids) - valid)[:10]} do not exist on this handle ({len(valid)} valid IDs). remove_region keeps the IDs of the remaining components; any other edit renumbers them, so inspect the new handle first.')
     return set(ids)

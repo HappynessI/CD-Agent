@@ -71,7 +71,7 @@ SCHEMAS = [
            dict(op=arg('string', enum=['union', 'intersect', 'subtract']), a=M, b=M, set_current=SET_CURRENT), ['op', 'a', 'b']),
     schema('morph', 'Open/close with a disk of positive integer radius in original pixels; fill_holes uses no radius. ' + CURRENT,
            dict(mask=M, op=arg('string', enum=['open', 'close', 'fill_holes']), radius=arg('integer', minimum=1), set_current=SET_CURRENT), ['mask', 'op']),
-    schema('remove_region', 'Remove full components identified on mask. ' + CURRENT,
+    schema('remove_region', 'Remove full components identified on mask. The remaining components keep their IDs; other edits renumber components. ' + CURRENT,
            dict(mask=M, ids=IDS, set_current=SET_CURRENT), ['mask', 'ids']),
     schema('add_region', 'Add selected regions from other: mask component IDs or inst instance IDs; omitted IDs mean all. ' + CURRENT,
            dict(mask=M, other=S, ids=IDS, set_current=SET_CURRENT), ['mask', 'other']),
@@ -222,8 +222,8 @@ class Toolbox:
         finally:
             self.meta['backend_seconds'] = clock.monotonic() - start
 
-    def _mask(self, data, parents=(), set_current=True, previous=None, **extra):
-        key = self.session.add_mask(data, parents)
+    def _mask(self, data, parents=(), set_current=True, previous=None, labeled=None, **extra):
+        key = self.session.add_mask(data, parents, labeled)
         item = self.session.get(key, Mask)
         out = dict(mask=key, area=int(item.data.sum()), component_count=len(item.components), **extra)
         if previous is not None:
@@ -367,7 +367,10 @@ class Toolbox:
     def remove_region(self, mask, ids, set_current=True):
         item = self.get(mask, Mask)
         selected = chosen_ids(item.components, ids)
-        return self._mask(item.data & ~np.isin(item.labels, list(selected)), (mask,), set_current, item.data)
+        gone = np.isin(item.labels, list(selected))
+        # Whole components leave, so the others stay intact and keep their IDs across batched removals.
+        labeled = (np.where(gone, 0, item.labels), [c for c in item.components if c['id'] not in selected])
+        return self._mask(item.data & ~gone, (mask,), set_current, item.data, labeled)
 
     def add_region(self, mask, other, ids=None, set_current=True):
         target, source = self.get(mask, Mask), self.get(other)

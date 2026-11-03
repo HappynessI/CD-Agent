@@ -75,6 +75,25 @@ class ToolTests(unittest.TestCase):
         self.good('submit',mask='mask#0',summary='Keep the initial answer.')
         self.assertEqual(self.box.session.submitted,'mask#0')
 
+    def test_remove_region_keeps_ids_across_batches(self):
+        a = self.good('segment_prompt',time='t1',box=[0,0,4,4])['mask']
+        b = self.good('segment_prompt',time='t1',box=[10,0,14,4])['mask']
+        c = self.good('segment_prompt',time='t1',box=[20,0,24,4])['mask']
+        ab = self.good('combine',op='union',a=a,b=b)['mask']
+        abc = self.box.session.get(self.good('combine',op='union',a=ab,b=c)['mask'])
+        key = [k for k,v in self.box.session.handles.items() if v is abc][0]
+        last = abc.components[-1]
+        first = self.good('remove_region',mask=key,ids=[abc.components[0]['id']])['mask']
+        kept = self.box.session.get(first)
+        self.assertEqual([x['id'] for x in kept.components],[x['id'] for x in abc.components[1:]])
+        second = self.good('remove_region',mask=first,ids=[abc.components[1]['id']])['mask']
+        final = self.box.session.get(second)
+        self.assertEqual([x['id'] for x in final.components],[last['id']])
+        self.assertTrue((final.data==(abc.labels==last['id'])).all())
+        self.assertTrue((final.labels[final.data]==last['id']).all())
+        self.good('view',overlay=second,label_components=True)
+        self.assertEqual(self.good('inspect',mask=second)['total_components'],1)
+
     def test_same_reply_handles(self):
         allowed = frozenset(self.box.session.handles)
         new = self.box.execute('segment_prompt',dict(time='t1',box=[0,0,10,10]),allowed).public['mask']
