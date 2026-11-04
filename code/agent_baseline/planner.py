@@ -39,6 +39,19 @@ def usage_tokens(usage):
     return dict(input=total, cached=min(total, cached), output=int(usage.get('completion_tokens', 0)))
 
 
+# Third-party listing of the Beijing tiers by input length of one request; the console bill is authoritative.
+# The cached price of qwen3.7-flash is not known, so cached tokens are charged in full and the estimate errs high.
+FLASH_TIERS = ((32_000, .2, .8), (256_000, .6, 2.4), (float('inf'), 1.2, 4.8))
+
+
+def request_cost(model, tokens):
+    """Estimated cost of one request; models without their own table use the qwen3.7-plus price."""
+    if model == 'qwen3.7-flash':
+        _, price_in, price_out = next(tier for tier in FLASH_TIERS if tokens['input'] <= tier[0])
+        return (tokens['input'] * price_in + tokens['output'] * price_out) / 1_000_000
+    return token_cost(tokens)
+
+
 def token_cost(tokens):
     return ((tokens['input'] - tokens['cached']) * PRICE['input'] + tokens['cached'] * PRICE['cached']
             + tokens['output'] * PRICE['output']) / 1_000_000
@@ -138,6 +151,7 @@ class Planner:
         self.attempts = 0
         self.max_attempts = max_attempts
         self.tokens = dict(input=0, cached=0, output=0)
+        self.cost = 0.
 
     def _http(self, payload):
         key = os.environ.get('DASHSCOPE_API_KEY')
@@ -194,8 +208,11 @@ class Planner:
             event['seconds'] = time.monotonic() - start
             # Record outside the network try: logging failures must not cause a duplicate request.
             self.record(event)
-            if error is None and self.guard:
-                self.guard.charge(token_cost(usage_tokens(usage)))
+            if error is None:
+                cost = request_cost(self.parameters.get('model'), usage_tokens(usage))
+                self.cost += cost
+                if self.guard:
+                    self.guard.charge(cost)
             if error is not None and event.get('quota_error') and self.guard:
                 self.guard.trip(f'quota: HTTP {event.get("http_status")}')
             if error is None:

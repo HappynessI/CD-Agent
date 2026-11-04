@@ -175,7 +175,7 @@ class Recorder:
             planning_rounds=rounds, api_attempts=planner.attempts + self.ask_attempts,
             planner_api_attempts=planner.attempts, ask_api_attempts=self.ask_attempts,
             tool_calls=len(calls), tokens=tokens, planner_tokens=planner.tokens, ask_tokens=self.ask_tokens,
-            cost_cny=token_cost(tokens), price_cny_per_million=PRICE, elapsed_seconds=time.monotonic()-self.started,
+            cost_cny=planner.cost + token_cost(self.ask_tokens), planner_model=planner.parameters.get('model'), price_cny_per_million=PRICE, elapsed_seconds=time.monotonic()-self.started,
             identical_to_init=bool(np.array_equal(mask.data, initial)) if initial is not None else None,
             added_px=int((mask.data & ~initial).sum()) if initial is not None else None,
             removed_px=int((initial & ~mask.data).sum()) if initial is not None else None,

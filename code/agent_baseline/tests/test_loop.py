@@ -218,6 +218,13 @@ class LoopTests(unittest.TestCase):
             one.charge(.3)
         self.assertIn('budget',(self.root/'STOP.json').read_text())
 
+    def test_request_cost_by_model_and_tier(self):
+        from agent_baseline.planner import request_cost, token_cost
+        small=dict(input=1_000_000,cached=0,output=1_000_000)
+        self.assertAlmostEqual(request_cost('qwen3.7-plus',small),token_cost(small))
+        self.assertAlmostEqual(request_cost('qwen3.7-flash',dict(input=30_000,cached=30_000,output=1000)),(30_000*.2+1000*.8)/1e6)
+        self.assertAlmostEqual(request_cost('qwen3.7-flash',dict(input=40_000,cached=0,output=1000)),(40_000*.6+1000*2.4)/1e6)
+
     def test_budget_ledger_stops_when_it_cannot_be_written(self):
         from agent_baseline.planner import RunGuard, RunStopped
         (self.root/'blocked').write_text('a file where the ledger directory should be')

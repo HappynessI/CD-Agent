@@ -217,6 +217,7 @@ def main():
     parser.add_argument('--ask-backend', choices=['local', 'api', 'none'], default='local')
     parser.add_argument('--sam3-worker')
     parser.add_argument('--ask-worker')
+    parser.add_argument('--planner-model', default='qwen3.7-plus')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
     parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
     parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2', 'v3'])
@@ -246,7 +247,7 @@ def main():
             return name, 'error'
         init_path = RUN / 'init' / args.init_name / args.split / (Path(name).stem + '.png')
         # Recorder is created before optional init loading so an absent initial asset gets an error record.
-        planner = Planner(guard=guard, seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
+        planner = Planner(guard=guard, parameters=dict(model=args.planner_model), seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
         init = None
         init_error = None
         if args.task == 'T5.1':
