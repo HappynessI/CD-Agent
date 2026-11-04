@@ -10,7 +10,8 @@ chose to ask. Labels are used only by `report`; the prompts and crops never see 
 
 Variants: local = Qwen3.5-4B worker (the BF ask); q37 and vl = API with the BF crop;
 q37_ms = API with close-up and wider context crops; q37_think = q37 with thinking enabled;
-q37_pp = one question per date ("is there a building inside the contour?"), the answers are compared.
+q37_pp = one question per date ("is there a building inside the contour?"), the answers are compared;
+q37_corr = q37_ms with a question about the correspondence of the object across the dates.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -22,7 +23,7 @@ import numpy as np
 from PIL import Image
 from common import components, load_rgb, names
 from mllm import parse_json
-from prompts import SYSTEM, VERIFY
+from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
 from .backends import encode_image, post, yes_probability
 from .planner import Planner, RunGuard, RunStopped, token_cost, usage_tokens
 from .view import ask_images
@@ -32,7 +33,15 @@ RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp
 # confirmed here, so its cost_cny is only an estimate; the console bill is authoritative.
 VARIANTS = dict(q37=dict(model='qwen3.7-plus'), q37_ms=dict(model='qwen3.7-plus', context=True),
                 q37_think=dict(model='qwen3.7-plus', think=True), vl=dict(model='qwen3-vl-plus'),
-                q37_pp=dict(model='qwen3.7-plus', presence=True))
+                q37_pp=dict(model='qwen3.7-plus', presence=True),
+                q37_corr=dict(model='qwen3.7-plus', context=True, correspondence=True))
+CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
+    'The red contour marks the same region in all of them. First find the object inside the contour at the same '
+    'position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence '
+    'that a building was newly constructed, demolished, or replaced by a different building? If both dates show the '
+    'same building and only its color, shadow, occlusion or visibility differs, answer no. Do not read poor visibility '
+    'as demolition. The reason must name the evidence of correspondence or change. Reply with JSON only: '
+    '{"change": "yes" or "no", "type": one of ' + str(PSEUDO_TYPES).replace("'", '"') + ', "reason": one short sentence}')
 PRESENCE_SYSTEM = 'You inspect one remote sensing image of a place, shown as a close-up and as a wider view.'
 PRESENCE = ('The red contour marks the same region in both views. Is there a building inside the red contour? '
             'Reply with JSON only: {"building": "yes" or "no", "reason": one short sentence}')
@@ -72,7 +81,7 @@ def api_answer(images, spec, guard, seed):
     for word, image in zip(words, images):
         content += [dict(type='text', text=word), dict(type='image_url',
                     image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
-    content.append(dict(type='text', text=CONTEXT_QUESTION if spec.get('context') else VERIFY))
+    content.append(dict(type='text', text=CORRESPONDENCE if spec.get('correspondence') else CONTEXT_QUESTION if spec.get('context') else VERIFY))
     parameters = dict(model=spec['model'], max_tokens=256, parallel_tool_calls=False)
     if spec.get('think'):
         # Thinking endpoints reject forced JSON and logprobs, and need room for the reasoning.

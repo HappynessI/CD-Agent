@@ -219,7 +219,7 @@ def main():
     parser.add_argument('--ask-worker')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
     parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
-    parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2'])
+    parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2', 'v3'])
     parser.add_argument('--seed-offset', type=int, default=0, help='Repeat runs of one configuration.')
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
