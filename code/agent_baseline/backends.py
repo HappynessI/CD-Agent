@@ -11,7 +11,7 @@ import time
 import urllib.error
 import urllib.request
 import numpy as np
-from prompts import SYSTEM, VERIFY
+from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
 from . import instances
 from .state import ToolError
 from .planner import Planner, usage_tokens, token_cost
@@ -155,14 +155,22 @@ def yes_probability(choice):
 ASK_SLOTS = threading.Semaphore(4)
 CROP_WORDS = ('T1 close-up', 'T2 close-up', 'T1 wider view', 'T2 wider view')
 CONTEXT_NOTE = 'The first two images are close-ups and the last two show the same place with more surroundings. '
+CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
+    'The red contour marks the same region in all of them. First find the object inside the contour at the same '
+    'position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence '
+    'that a building was newly constructed, demolished, or replaced by a different building? If both dates show the '
+    'same building and only its color, shadow, occlusion or visibility differs, answer no. Do not read poor visibility '
+    'as demolition. The reason must name the evidence of correspondence or change. Reply with JSON only: '
+    '{"change": "yes" or "no", "type": one of ' + str(PSEUDO_TYPES).replace("'", '"') + ', "reason": one short sentence}')
 
 
 class ApiAsk:
     """Independent verifier: each region is one fresh request that knows nothing of the planner's reasoning."""
     context = True
 
-    def __init__(self, client=None, guard=None, model='qwen3.7-plus', max_attempts=12):
+    def __init__(self, client=None, guard=None, model='qwen3.7-plus', max_attempts=12, correspondence=False):
         self.client, self.guard, self.model, self.max_attempts = client, guard, model, max_attempts
+        self.correspondence = correspondence
 
     def one(self, images, question, number):
         from mllm import parse_json
@@ -176,7 +184,7 @@ class ApiAsk:
         for word, image in zip(CROP_WORDS, images):
             content += [dict(type='text', text=word), dict(type='image_url',
                         image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
-        content.append(dict(type='text', text=(CONTEXT_NOTE if len(images) > 2 else '') + question))
+        content.append(dict(type='text', text=CORRESPONDENCE if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
         try:
             with ASK_SLOTS:
                 result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], number)
@@ -208,7 +216,7 @@ class ApiAsk:
                 attempts.extend(events)
                 for key in total:
                     total[key] += tokens[key]
-        meta = dict(backend='api_ask', model=self.model, attempts=attempts, tokens=total, cost_cny=token_cost(total))
+        meta = dict(backend='api_ask', model=self.model, correspondence=self.correspondence, attempts=attempts, tokens=total, cost_cny=token_cost(total))
         if failure is not None:
             failure.backend_meta = meta
             raise failure

@@ -24,8 +24,8 @@ import numpy as np
 from PIL import Image
 from common import components, load_rgb, names
 from mllm import parse_json
-from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
-from .backends import encode_image, post, yes_probability
+from prompts import SYSTEM, VERIFY
+from .backends import CORRESPONDENCE, encode_image, post, yes_probability
 from .planner import Planner, RunGuard, RunStopped, token_cost, usage_tokens
 from .view import ask_images
 
@@ -38,13 +38,6 @@ VARIANTS = dict(q37=dict(model='qwen3.7-plus'), q37_ms=dict(model='qwen3.7-plus'
                 q37_corr=dict(model='qwen3.7-plus', context=True, correspondence=True),
                 f37_ms=dict(model='qwen3.7-flash', context=True),
                 f37_corr=dict(model='qwen3.7-flash', context=True, correspondence=True))
-CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
-    'The red contour marks the same region in all of them. First find the object inside the contour at the same '
-    'position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence '
-    'that a building was newly constructed, demolished, or replaced by a different building? If both dates show the '
-    'same building and only its color, shadow, occlusion or visibility differs, answer no. Do not read poor visibility '
-    'as demolition. The reason must name the evidence of correspondence or change. Reply with JSON only: '
-    '{"change": "yes" or "no", "type": one of ' + str(PSEUDO_TYPES).replace("'", '"') + ', "reason": one short sentence}')
 PRESENCE_SYSTEM = 'You inspect one remote sensing image of a place, shown as a close-up and as a wider view.'
 PRESENCE = ('The red contour marks the same region in both views. Is there a building inside the red contour? '
             'Reply with JSON only: {"building": "yes" or "no", "reason": one short sentence}')

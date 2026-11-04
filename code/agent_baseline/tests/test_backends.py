@@ -181,6 +181,14 @@ class BackendTests(unittest.TestCase):
             recorder=Recorder(root,'synthetic','image.png',gt=mask())
             recorder.archive_images(meta)
 
+    def test_api_ask_correspondence_question(self):
+        from agent_baseline.backends import CORRESPONDENCE
+        payloads=[]
+        four=[Image.fromarray(im).resize((384,384)) for im in rgb()]*2
+        ApiAsk(client=lambda p:(payloads.append(p) or raw()),model='qwen3.7-flash',correspondence=True)([four],VERIFY)
+        self.assertEqual(payloads[0]['model'],'qwen3.7-flash')
+        self.assertEqual(payloads[0]['messages'][1]['content'][-1]['text'],CORRESPONDENCE)
+
     def test_api_ask_context_order_and_failure_accounting(self):
         payloads=[]
         backend=ApiAsk(client=lambda p:(payloads.append(p) or raw()))

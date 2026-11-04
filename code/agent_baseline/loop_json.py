@@ -218,6 +218,7 @@ def main():
     parser.add_argument('--sam3-worker')
     parser.add_argument('--ask-worker')
     parser.add_argument('--planner-model', default='qwen3.7-plus')
+    parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
     parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
@@ -256,7 +257,7 @@ def main():
                 init = load_mask_png(init_path)
             except Exception:
                 init_error = traceback.format_exc()
-        ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model) if args.ask_backend == 'api' else None
+        ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence) if args.ask_backend == 'api' else None
         toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr),
             shared.for_image(args.split, name), ask, init_mask=init)
         try:
@@ -265,7 +266,7 @@ def main():
                 init_mask_path=str(init_path) if args.task == 'T5.1' else None,
                 init_config=dict(route=args.init_name, text='building', tile=512, score_thr=.5,
                                  overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if args.task == 'T5.1' else None,
-                backends=dict(ask=args.ask_backend, ask_model=args.ask_model if args.ask_backend == 'api'
+                backends=dict(ask=args.ask_backend, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
                     else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                     sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
                 init_error=init_error))
