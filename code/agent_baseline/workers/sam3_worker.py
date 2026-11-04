@@ -27,7 +27,7 @@ class Segmenter:
         self.lock = threading.Lock()
 
     def infer(self, split, name, time, text, tile, conf=.1, pixel_thr=.5):
-        if time not in ('t1', 't2') or tile not in (0, 512) or not 0 <= conf <= 1 or not 0 < pixel_thr < 1:
+        if time not in ('t1', 't2') or tile not in (0, 256, 512) or not 0 <= conf <= 1 or not 0 < pixel_thr < 1:
             raise ValueError('Invalid segmentation parameters')
         text = ' '.join(text.lower().split())
         slug = quote(text, safe='')

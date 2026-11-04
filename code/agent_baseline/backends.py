@@ -14,7 +14,7 @@ import numpy as np
 from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
 from . import instances
 from .state import ToolError
-from .planner import Planner, usage_tokens, token_cost
+from .planner import Planner
 
 
 def post(url, payload, timeout=180):
@@ -36,15 +36,15 @@ def encode_image(image):
     return base64.b64encode(buffer.getvalue()).decode('ascii')
 
 
-def read_soft(split, name, index, pixel_thr, score_thr, root=None):
-    """Instances of the 512 grid from the soft cache (sam3_soft.py, tile 512, step 256), binarized at pixel_thr."""
+def read_soft(split, name, index, pixel_thr, score_thr, root=None, tile=512):
+    """Instances of one tile grid from the soft cache (sam3_soft.py, step = tile / 2), binarized at pixel_thr."""
     root = Path(root or os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
-    with np.load(root / 'sam3_soft' / 't512s256' / split / (Path(name).stem + '.npz')) as z:
+    with np.load(root / 'sam3_soft' / f't{tile}s{tile // 2}' / split / (Path(name).stem + '.npz')) as z:
         scores, origins, offsets = z[f'scores{index}'], z[f'origins{index}'], z[f'offs{index}']
         pixels, values, (h, w) = z[f'idx{index}'], z[f'val{index}'], z['shape']
     rows = []
     for i in np.flatnonzero(scores >= score_thr):
-        if origins[i][0] % 512 or origins[i][1] % 512:
+        if origins[i][0] % tile or origins[i][1] % tile:
             continue
         idx = pixels[offsets[i]:offsets[i + 1]][values[offsets[i]:offsets[i + 1]] >= round(pixel_thr * 255)]
         if len(idx):
@@ -65,9 +65,9 @@ class SegmentBackend:
         building = ''.join(text.lower().split()) == 'building'
         if self.pixel_thr != .5:
             # The soft cache holds scores from 0.3 and values from 0.2.
-            if building and tile == 512 and score_thr >= .3:
+            if building and tile in (256, 512) and score_thr >= .3:
                 try:
-                    return read_soft(self.split, self.name, index, self.pixel_thr, score_thr), dict(
+                    return read_soft(self.split, self.name, index, self.pixel_thr, score_thr, tile=tile), dict(
                         cache_hit=True, backend='sam3_soft_cache', tile=tile, pixel_thr=self.pixel_thr)
                 except FileNotFoundError:
                     pass
@@ -152,7 +152,7 @@ def yes_probability(choice):
 
 
 # Bounds simultaneous verifier requests per process, whatever the number of sessions.
-ASK_SLOTS = threading.Semaphore(4)
+ASK_SLOTS = threading.Semaphore(int(os.environ.get('AGENT_ASK_SLOTS', 4)))
 CROP_WORDS = ('T1 close-up', 'T2 close-up', 'T1 wider view', 'T2 wider view')
 CONTEXT_NOTE = 'The first two images are close-ups and the last two show the same place with more surroundings. '
 CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
@@ -164,6 +164,34 @@ CORRESPONDENCE = ('The first two images are close-ups and the last two show the 
     '{"change": "yes" or "no", "type": one of ' + str(PSEUDO_TYPES).replace("'", '"') + ', "reason": one short sentence}')
 
 
+EXAMPLES = Path(__file__).parent / 'verifier_examples.json'
+_example_blocks = None
+_example_lock = threading.Lock()
+
+
+def example_blocks():
+    """Fixed solved examples for the thorough check: the same bytes in every request, so the provider can cache the prefix."""
+    global _example_blocks
+    with _example_lock:
+        if _example_blocks is None:
+            from common import load_rgb
+            from .view import ask_images
+            blocks = [dict(type='text', text='Solved examples from other places. They show how to apply the question; they are not part of the region you will answer about.')]
+            for n, row in enumerate(json.loads(EXAMPLES.read_text()), 1):
+                rgb = load_rgb('train', row['name'])
+                region = np.zeros(rgb[0].shape[:2], bool)
+                flat = region.ravel()
+                for start, length in row['runs']:
+                    flat[start:start + length] = True
+                blocks.append(dict(type='text', text=f'Example {n}.'))
+                for word, image in zip(CROP_WORDS, ask_images(rgb, region, row['bbox'], True)):
+                    blocks += [dict(type='text', text=word), dict(type='image_url', image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
+                blocks.append(dict(type='text', text='Answer: ' + json.dumps(dict(change=row['answer'], type=row['type'], reason=row['reason']))))
+            blocks.append(dict(type='text', text='Now the region to answer about.'))
+            _example_blocks = blocks
+    return _example_blocks
+
+
 class ApiAsk:
     """Independent verifier: each region is one fresh request that knows nothing of the planner's reasoning."""
     context = True
@@ -172,7 +200,7 @@ class ApiAsk:
         self.client, self.guard, self.model, self.max_attempts = client, guard, model, max_attempts
         self.correspondence = correspondence
 
-    def one(self, images, question, number):
+    def one(self, images, question, number, level='L1'):
         from mllm import parse_json
         events = []
         # Region crops are reproducible from the mask, so the archive keeps the reply and not the images.
@@ -180,7 +208,7 @@ class ApiAsk:
             record=lambda event: events.append({k: v for k, v in event.items() if k != 'request'}),
             parameters=dict(model=self.model, logprobs=True, top_logprobs=5, response_format={'type': 'json_object'},
                             parallel_tool_calls=False, max_tokens=256))
-        content = []
+        content = list(example_blocks()) if level == 'L2' else []
         for word, image in zip(CROP_WORDS, images):
             content += [dict(type='text', text=word), dict(type='image_url',
                         image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
@@ -189,34 +217,37 @@ class ApiAsk:
             with ASK_SLOTS:
                 result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], number)
         except Exception as exc:
-            exc.partial = dict(attempts=events, tokens=planner.tokens)
+            exc.partial = dict(attempts=events, tokens=planner.tokens, cost=planner.cost)
             raise
         raw = result['message'].get('content') or ''
         parsed = parse_json(raw)
         parsed = parsed if isinstance(parsed, dict) else {}
-        answer = dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'),
+        answer = dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'), level=level,
                       p_yes=yes_probability(result['raw']['choices'][0]), raw=raw, usage=result['usage'])
-        return answer, events, planner.tokens
+        return answer, events, planner.tokens, planner.cost
 
-    def __call__(self, pairs, question):
+    def __call__(self, pairs, question, level='L1'):
         total = dict(input=0, cached=0, output=0)
+        cost = 0.
         attempts = []
         answers = [None] * len(pairs)
         failure = None
-        with ThreadPoolExecutor(min(4, len(pairs)) or 1) as pool:
-            futures = [pool.submit(self.one, images, question, n) for n, images in enumerate(pairs, 1)]
+        with ThreadPoolExecutor(min(16, len(pairs)) or 1) as pool:
+            futures = [pool.submit(self.one, images, question, n, level) for n, images in enumerate(pairs, 1)]
             for n, future in enumerate(futures):
                 try:
-                    answers[n], events, tokens = future.result()
+                    answers[n], events, tokens, spent = future.result()
+                    cost += spent
                 except Exception as exc:
                     # Keep the first failure and let the other requests finish, so all spending is accounted.
                     failure = failure or exc
-                    partial = getattr(exc, 'partial', dict(attempts=[], tokens=dict(input=0, cached=0, output=0)))
+                    partial = getattr(exc, 'partial', dict(attempts=[], tokens=dict(input=0, cached=0, output=0), cost=0.))
                     events, tokens = partial['attempts'], partial['tokens']
+                    cost += partial['cost']
                 attempts.extend(events)
                 for key in total:
                     total[key] += tokens[key]
-        meta = dict(backend='api_ask', model=self.model, correspondence=self.correspondence, attempts=attempts, tokens=total, cost_cny=token_cost(total))
+        meta = dict(backend='api_ask', model=self.model, correspondence=self.correspondence, attempts=attempts, tokens=total, cost_cny=cost)
         if failure is not None:
             failure.backend_meta = meta
             raise failure

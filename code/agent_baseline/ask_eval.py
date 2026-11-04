@@ -13,6 +13,9 @@ q37_ms = API with close-up and wider context crops; q37_think = q37 with thinkin
 q37_pp = one question per date ("is there a building inside the contour?"), the answers are compared;
 q37_corr = q37_ms with a question about the correspondence of the object across the dates;
 f37_ms and f37_corr = q37_ms and q37_corr on qwen3.7-flash.
+Plan v2, on the dev2 pool: f37_corr is L1. v1_ex adds fixed solved examples before the question; v2_s1..3 sample L1
+three times; v2_close and v2_wide ask from one crop pair only; v3 is L1 on qwen3.7-plus; v4 makes the answer the
+first token of the reply, so that its probability can be read.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -24,9 +27,9 @@ import numpy as np
 from PIL import Image
 from common import components, load_rgb, names
 from mllm import parse_json
-from prompts import SYSTEM, VERIFY
-from .backends import CORRESPONDENCE, encode_image, post, yes_probability
-from .planner import Planner, RunGuard, RunStopped, token_cost, usage_tokens
+from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
+from .backends import CORRESPONDENCE, encode_image, example_blocks, post, yes_probability
+from .planner import Planner, RunGuard, RunStopped, request_cost, token_cost, usage_tokens
 from .view import ask_images
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
@@ -37,7 +40,15 @@ VARIANTS = dict(q37=dict(model='qwen3.7-plus'), q37_ms=dict(model='qwen3.7-plus'
                 q37_pp=dict(model='qwen3.7-plus', presence=True),
                 q37_corr=dict(model='qwen3.7-plus', context=True, correspondence=True),
                 f37_ms=dict(model='qwen3.7-flash', context=True),
-                f37_corr=dict(model='qwen3.7-flash', context=True, correspondence=True))
+                f37_corr=dict(model='qwen3.7-flash', context=True, correspondence=True),
+                v1_ex=dict(model='qwen3.7-flash', context=True, correspondence=True, examples=True),
+                v2_s1=dict(model='qwen3.7-flash', context=True, correspondence=True, temperature=.7, sample=1),
+                v2_s2=dict(model='qwen3.7-flash', context=True, correspondence=True, temperature=.7, sample=2),
+                v2_s3=dict(model='qwen3.7-flash', context=True, correspondence=True, temperature=.7, sample=3),
+                v2_close=dict(model='qwen3.7-flash', correspondence=True, only='close'),
+                v2_wide=dict(model='qwen3.7-flash', context=True, correspondence=True, only='wide'),
+                v3=dict(model='qwen3.7-plus', context=True, correspondence=True),
+                v4=dict(model='qwen3.7-flash', context=True, correspondence=True, first_token=True))
 PRESENCE_SYSTEM = 'You inspect one remote sensing image of a place, shown as a close-up and as a wider view.'
 PRESENCE = ('The red contour marks the same region in both views. Is there a building inside the red contour? '
             'Reply with JSON only: {"building": "yes" or "no", "reason": one short sentence}')
@@ -46,6 +57,18 @@ CONTEXT_QUESTION = ('The first two images are close-ups and the last two show th
 
 
 INIT = 'sam3_imc'
+LISTED = None
+TAG = None
+
+
+def image_names(split):
+    return LISTED or names(split)
+
+
+FIRST_TOKEN = CORRESPONDENCE.split('Reply with JSON only')[0] + ('Reply on one line in this exact format, starting with the answer: '
+    'yes or no, then |, then one of ' + str(PSEUDO_TYPES).replace("'", '') + ', then |, then one short sentence. Example: no|no_change|Same roof outline in both dates.')
+ONE_PAIR = dict(close='The two images show the same place at T1 and T2, close up. ', wide='The two images show the same place at T1 and T2, with surroundings. ')
+ONE_QUESTION = CORRESPONDENCE.split('The red contour')[1]
 
 
 def load_init(split, stem):
@@ -53,13 +76,13 @@ def load_init(split, stem):
 
 
 def folder(split):
-    return RUN / 'ask_eval' / (split if INIT == 'sam3_imc' else f'{split}_{INIT}')
+    return RUN / 'ask_eval' / (TAG or (split if INIT == 'sam3_imc' else f'{split}_{INIT}'))
 
 
 def pool(split):
     """All components of the fixed-route masks, largest first within an image."""
     rows = []
-    for name in names(split):
+    for name in image_names(split):
         stem = Path(name).stem
         _, comps = components(load_init(split, stem))
         rows.extend(dict(uid=f"{stem}:{c['id']}", name=name, stem=stem, id=c['id'], area=int(c['area']),
@@ -73,26 +96,42 @@ def crops(rgb, labels, row, context):
 
 def api_answer(images, spec, guard, seed):
     words = ['T1 close-up', 'T2 close-up', 'T1 wider view', 'T2 wider view']
-    content = []
+    question = CORRESPONDENCE if spec.get('correspondence') else CONTEXT_QUESTION if spec.get('context') else VERIFY
+    if spec.get('only'):
+        keep = (0, 1) if spec['only'] == 'close' else (2, 3)
+        words = [words[i] for i in keep]
+        images = [images[i] for i in keep]
+        question = ONE_PAIR[spec['only']] + 'The red contour' + ONE_QUESTION
+    if spec.get('first_token'):
+        question = FIRST_TOKEN
+    content = list(example_blocks()) if spec.get('examples') else []
     for word, image in zip(words, images):
         content += [dict(type='text', text=word), dict(type='image_url',
                     image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
-    content.append(dict(type='text', text=CORRESPONDENCE if spec.get('correspondence') else CONTEXT_QUESTION if spec.get('context') else VERIFY))
+    content.append(dict(type='text', text=question))
     parameters = dict(model=spec['model'], max_tokens=256, parallel_tool_calls=False)
+    if spec.get('temperature') is not None:
+        parameters['temperature'] = spec['temperature']
     if spec.get('think'):
         # Thinking endpoints reject forced JSON and logprobs, and need room for the reasoning.
         parameters.update(enable_thinking=True, max_tokens=4096, stream=False)
     else:
-        parameters.update(logprobs=True, top_logprobs=5, response_format={'type': 'json_object'})
+        parameters.update(logprobs=True, top_logprobs=5)
+        if not spec.get('first_token'):
+            parameters['response_format'] = {'type': 'json_object'}
     # The guard stops every thread on a quota error or when the batch budget is spent.
     planner = Planner(seed=seed, guard=guard, parameters=parameters, max_attempts=12)
     result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], 1)
     tokens = usage_tokens(result['usage'])
     raw = result['message'].get('content') or ''
-    parsed = parse_json(raw)
-    parsed = parsed if isinstance(parsed, dict) else {}
+    if spec.get('first_token'):
+        parts = [part.strip() for part in raw.split('|', 2)]
+        parsed = dict(change=parts[0].lower(), type=parts[1] if len(parts) > 1 else None, reason=parts[2] if len(parts) > 2 else None)
+    else:
+        parsed = parse_json(raw)
+        parsed = parsed if isinstance(parsed, dict) else {}
     return dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'), raw=raw,
-                p_yes=yes_probability(result['raw']['choices'][0]), tokens=tokens, cost_cny=token_cost(tokens))
+                p_yes=yes_probability(result['raw']['choices'][0]), tokens=tokens, cost_cny=request_cost(spec['model'], tokens))
 
 
 def presence_answer(rgb, labels, row, spec, guard, seed):
@@ -130,7 +169,7 @@ def answers(args):
     rows = [row for row in pool(args.split) if row['uid'] not in done]
     if args.limit:
         rows = rows[:args.limit]
-    guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'ask_eval_{INIT}_{args.variant}.txt', args.max_cost_cny)
+    guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'ask_eval_{TAG or INIT}_{args.variant}.txt', args.max_cost_cny)
     guard.check()
     lock, images = threading.Lock(), {}
 
@@ -147,7 +186,7 @@ def answers(args):
     def one(row):
         rgb, labels = image(row)
         pair = None if spec.get('presence') else crops(rgb, labels, row, spec.get('context'))
-        seed = sum(map(ord, row['uid'])) % (2**31)
+        seed = (sum(map(ord, row['uid'])) + 1000 * spec.get('sample', 0)) % (2**31)
         if spec.get('presence'):
             result = presence_answer(rgb, labels, row, spec, guard, seed)
         elif spec.get('local'):
@@ -194,7 +233,7 @@ def f1(tp, fp, fn):
 def truth(split):
     from common import load_gt
     table, totals = {}, dict(fp=0, tp=0, fn=0)
-    for name in names(split):
+    for name in image_names(split):
         stem = Path(name).stem
         gt = load_gt(split, name)
         data = load_init(split, stem)
@@ -268,13 +307,19 @@ def main():
     one.add_argument('--limit', type=int)
     one.add_argument('--ask-worker')
     one.add_argument('--max-cost-cny', type=float, default=20)
+    one.add_argument('--names-file')
+    one.add_argument('--tag', help='Folder under ask_eval, when the pool is a listed set of images.')
     two = sub.add_parser('report')
     two.add_argument('--split', default='val')
     two.add_argument('--init-name', default='sam3_imc')
     two.add_argument('--out')
+    two.add_argument('--names-file')
+    two.add_argument('--tag')
     args = parser.parse_args()
-    global INIT
+    global INIT, LISTED, TAG
     INIT = args.init_name
+    LISTED = Path(args.names_file).read_text().split() if args.names_file else None
+    TAG = args.tag
     (answers if args.command == 'answers' else report)(args)
 
 

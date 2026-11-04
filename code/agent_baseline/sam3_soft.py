@@ -7,11 +7,12 @@ from PIL import Image
 sys.path[:0]=[str(Path(__file__).resolve().parents[1]/'ovcd_v0'),'/guisongxia01/pangchao/wangyihan/Chang-Agent/probe']
 from common import names, load_rgb
 import sam3_tools
-p=argparse.ArgumentParser(); p.add_argument('--tile',type=int); p.add_argument('--step',type=int); p.add_argument('--split',default='val')
+p=argparse.ArgumentParser(); p.add_argument('--tile',type=int); p.add_argument('--step',type=int); p.add_argument('--split',default='val'); p.add_argument('--names-file')
 p.add_argument('--shard',type=int,default=0); p.add_argument('--shards',type=int,default=1); a=p.parse_args()
 OUT=Path(os.environ.get('AGENT_RUN','/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))/f'sam3_soft/t{a.tile}s{a.step}/{a.split}'; OUT.mkdir(parents=True,exist_ok=True)
 proc=sam3_tools.build_processor(); proc.confidence_threshold=.3
-for name in names(a.split)[a.shard::a.shards]:
+todo=Path(a.names_file).read_text().split() if a.names_file else names(a.split)
+for name in todo[a.shard::a.shards]:
     out=OUT/(Path(name).stem+'.npz')
     if out.exists(): continue
     t0=time.time(); arrays={}

@@ -9,7 +9,8 @@ import numpy as np
 from common import read_jsonl
 from agent_baseline.tools import SCHEMAS
 from agent_baseline.planner import token_cost, clean_messages
-from .helpers import run, call, response, tempdir, mask
+from agent_baseline.tools import Toolbox
+from .helpers import run, call, response, tempdir, mask, rgb, segment, prompt
 
 
 def assert_no_evidence(test, payload):
@@ -40,8 +41,8 @@ class LoopTests(unittest.TestCase):
         self.assertEqual(final['submitted_by'],'model')
         self.assertEqual(final['planning_rounds'],2)
         first=recorder.steps[0]['calls'][0]
-        self.assertEqual(first['status'],'review')
-        self.assertIn('nothing is submitted yet',first['result_text'])
+        self.assertEqual(first['status'],'report')
+        self.assertIn('Report before submission',first['result_text'])
         assert_no_evidence(self,json.loads(first['result_text']))
         self.assertEqual(recorder.steps[1]['calls'][0]['status'],'executed')
 
@@ -53,9 +54,9 @@ class LoopTests(unittest.TestCase):
                 response([call('submit',dict(mask='mask#2',summary='Add.'))]),
                 response([call('submit',dict(mask='mask#2',summary='Add.'))])]
         _,box,_,recorder=run(self.root,script,init=init,review=True)
-        text=json.loads(recorder.steps[3]['calls'][0]['result_text'])['review']
-        self.assertIn('1 components answered yes',text)
-        self.assertIn('No verifier record: 2 components',text)
+        text=json.loads(recorder.steps[3]['calls'][0]['result_text'])['report']
+        self.assertIn('1 yes, 0 no, 0 unparsed, 2 with no answer',text)
+        self.assertIn('no answer: id=',text)
         self.assertRegex(text,r'[1-9][0-9]* pixels added')
         self.assertEqual(box.session.submitted,'mask#2')
 
@@ -67,23 +68,156 @@ class LoopTests(unittest.TestCase):
         self.assertEqual(final['planning_rounds'],4)
         self.assertEqual(recorder.steps[3]['calls'][0]['status'],'executed')
         texts=[m['content'] for m in client.requests[2]['messages'] if m['role']=='user' and isinstance(m['content'],str)]
-        self.assertTrue(any('Final review' in t for t in texts))
+        self.assertTrue(any('Report before submission' in t for t in texts))
         last=[response([call('submit',dict(mask='mask#0',summary='Retain.'))])]
         (self.root/'one').mkdir()
         final,_,_,_=run(self.root/'one',last,init=mask(),budget=1,review=True)
         self.assertEqual(final['submitted_by'],'model')
 
+    def test_verify_stage_checks_all_reports_and_never_edits(self):
+        init=mask()|mask((30,20,35,25))
+        seen=[]
+        def reply(pairs,question):
+            seen.append(len(pairs))
+            return [dict(answer='no' if i==0 else 'yes',type='no_change',reason='Same roof.',p_yes=None) for i,_ in enumerate(pairs)],dict(tokens=dict(input=10,cached=0,output=2),cost_cny=.5,attempts=[])
+        submit=call('submit',dict(mask='mask#0',summary='Keep all.'))
+        final,box,_,recorder=run(self.root,[response([submit]),response([submit])],init=init,verify=True,ask_backend=reply)
+        self.assertEqual(seen,[2])
+        text=json.loads(recorder.steps[0]['calls'][0]['result_text'])['report']
+        self.assertIn('1 yes, 1 no',text)
+        self.assertIn('IDs answered no',text)
+        for word in ('reject','fail','must'):
+            self.assertNotIn(word,text.lower())
+        self.assertTrue((box.session.get('mask#0').data==init).all())
+        self.assertEqual(box.session.submitted,'mask#0')
+        self.assertEqual(final['submitted_by'],'model')
+        self.assertAlmostEqual(final['ask_cost_cny'],.5)
+        ledger=json.loads((self.root/'verification.json').read_text())
+        self.assertEqual(sum(row['differs_from_rule'] for row in ledger),1)
+
+    def test_stage_also_checks_given_components_dropped_unasked(self):
+        init=mask()|mask((30,20,35,25))
+        seen=[]
+        def reply(pairs,question):
+            seen.append(len(pairs))
+            return [dict(answer='yes',type='new_building',reason='New.',p_yes=.9) for _ in pairs],{}
+        script=[response([call('remove_region',dict(mask='mask#0',ids=[1]))]),
+                response([call('submit',dict(mask='mask#1',summary='One.'))]),response([call('submit',dict(mask='mask#1',summary='One.'))])]
+        _,_,_,recorder=run(self.root,script,init=init,verify=True,ask_backend=reply)
+        self.assertEqual(seen,[2])
+        text=json.loads(recorder.steps[1]['calls'][0]['result_text'])['report']
+        self.assertIn('gone and answered yes, IDs on mask#0: [1]',text)
+
+    def test_new_outline_goes_back_to_the_verifier_and_a_checked_one_does_not(self):
+        init=mask()|mask((30,20,35,25))
+        seen=[]
+        def reply(pairs,question):
+            seen.append(len(pairs))
+            return [dict(answer='yes',type='new_building',reason='New.',p_yes=.9) for _ in pairs],{}
+        script=[response([call('submit',dict(mask='mask#0',summary='One.'))]),
+                response([call('remove_region',dict(mask='mask#0',ids=[1]))]),
+                response([call('submit',dict(mask='mask#1',summary='Two.'))])]
+        final,box,_,recorder=run(self.root,script,init=init,verify=True,ask_backend=reply)
+        self.assertEqual(seen,[2])
+        self.assertEqual(box.session.submitted,'mask#1')
+        self.assertEqual(final['planning_rounds'],3)
+        self.assertEqual(recorder.steps[2]['calls'][0]['status'],'executed')
+
+    def test_ask_defaults_to_unchecked_components_largest_first_and_caps(self):
+        from agent_baseline import tools
+        init=np.zeros((32,48),bool)
+        init[1,1::2]=True
+        init[3:10,20:30]=True
+        def reply(pairs,question):
+            return [dict(answer='yes',type='x',reason='r',p_yes=.5) for _ in pairs],{}
+        box=Toolbox(rgb(),self.root,segment,prompt,reply,init_mask=init)
+        old,tools.MAX_ASK=tools.MAX_ASK,3
+        self.addCleanup(setattr,tools,'MAX_ASK',old)
+        first=box.execute('ask',{}).public
+        self.assertEqual(len(first['results']),3)
+        self.assertEqual(first['results'][0]['id'],max(box.session.get('mask#0').components,key=lambda c:c['area'])['id'])
+        self.assertGreater(first['remaining_unverified'],0)
+        second=box.execute('ask',{}).public
+        self.assertFalse({r['id'] for r in first['results']}&{r['id'] for r in second['results']})
+
+    def test_proposal_becomes_current_and_status_reports_it(self):
+        script=[response([call('segment_prompt',dict(time='t1',box=[0,0,6,6]))]),
+                response([call('submit',dict(mask='mask#0',summary='Propose.'))]),
+                response([call('view',{})]),
+                response([call('submit',dict(mask='mask#0',summary='Done.'))])]
+        final,box,client,recorder=run(self.root,script,review=True,status=True)
+        text=[m['content'] for m in client.requests[2]['messages'] if m['role']=='user' and isinstance(m['content'],str)][-1]
+        self.assertIn('Current answer mask#0',text)
+        self.assertEqual(box.session.submitted,'mask#0')
+
+    def test_report_lists_what_left_the_mask_and_all_answers_are_kept(self):
+        init=mask()|mask((30,20,35,25))
+        replies=iter(['yes','no'])
+        def reply(pairs,question):
+            return [dict(answer=next(replies),type='x',reason='because',p_yes=None) for _ in pairs],{}
+        ask1=call('ask',dict(regions=[dict(mask='mask#0',ids=[1])]))
+        ask2=call('ask',dict(regions=[dict(mask='mask#0',ids=[1])]),'b')
+        script=[response([ask1]),response([call('view',{})]),response([ask2]),
+                response([call('remove_region',dict(mask='mask#0',ids=[2]))]),
+                response([call('submit',dict(mask='mask#1',summary='x'))]),response([call('submit',dict(mask='mask#1',summary='x'))])]
+        _,box,_,recorder=run(self.root,script,init=init,review=True,ask_backend=reply)
+        text=json.loads(recorder.steps[4]['calls'][0]['result_text'])['report']
+        self.assertIn('answers disagree across repeats for IDs: [1]',text)
+        self.assertIn('1 given components are gone',text)
+        self.assertIn('gone with no answer',text)
+        entry=box.entry(box.session.get('mask#0'),box.session.get('mask#0').components[0])
+        self.assertEqual([r['answer'] for r in entry['records']],['yes','no'])
+
+    def test_skills_are_indexed_and_loaded_only_when_on(self):
+        from agent_baseline.tools import SKILLS
+        script=[response([call('load_skill',dict(name='mask-correction'))]),response([call('submit',dict(mask='mask#0',summary='Keep.'))])]
+        final,box,client,recorder=run(self.root,script,init=mask(),skills=('mask-correction',))
+        self.assertEqual(final['submitted_by'],'model')
+        system=client.requests[0]['messages'][0]['content']
+        self.assertIn('- mask-correction:',system)
+        self.assertNotIn('Removing:',system)
+        self.assertIn('Removing:',recorder.steps[0]['calls'][0]['result_text'])
+        self.assertIn('load_skill',[t['function']['name'] for t in client.requests[0]['tools']])
+        (self.root/'off').mkdir()
+        _,_,client,_=run(self.root/'off',[response([call('submit',dict(mask='mask#0',summary='Keep.'))])],init=mask())
+        self.assertNotIn('load_skill',[t['function']['name'] for t in client.requests[0]['tools']])
+        for path in SKILLS.glob('*/SKILL.md'):
+            text=path.read_text()
+            for word in ('LEVIR','levir','F1','86.','val_','train_'):
+                self.assertNotIn(word,text,path)
+
+    def test_ask_level_two_reaches_the_backend_and_the_report(self):
+        levels=[]
+        def reply(pairs,question,level='L1'):
+            levels.append(level)
+            return [dict(answer='no',type='no_change',reason='Same.',p_yes=.1) for _ in pairs],{}
+        script=[response([call('ask',dict(regions=[dict(mask='mask#0',ids=[1])],level='L2'))]),
+                response([call('submit',dict(mask='mask#0',summary='Keep.'))]),response([call('submit',dict(mask='mask#0',summary='Keep.'))])]
+        _,box,_,recorder=run(self.root,script,init=mask(),review=True,ask_backend=reply)
+        self.assertEqual(levels,['L2'])
+        self.assertIn('level=L2',json.loads(recorder.steps[1]['calls'][0]['result_text'])['report'])
+
+    def test_segment_region_keeps_only_instances_touching_it(self):
+        script=[response([call('segment_text',dict(time='t1',text='building',region=[40,28,48,32]))]),response([call('submit',dict(mask='empty',summary='x'))])]
+        _,box,_,recorder=run(self.root,script)
+        self.assertEqual(json.loads(recorder.steps[0]['calls'][0]['result_text'])['n'],0)
+
+    def test_submit_empty_answers_nothing_changed(self):
+        final,box,_,_=run(self.root,[response([call('submit',dict(mask='empty',summary='No change.'))])])
+        self.assertEqual(final['submitted_by'],'model')
+        self.assertEqual(final['change_area_px'],0)
+
     def test_status_line_and_plan_only_when_on(self):
         plan=call('plan',dict(items=[dict(text='Look at both dates',status='done'),dict(text='Check components',status='todo')]))
         script=[response([plan]),response([call('submit',dict(mask='mask#0',summary='Retain.'))])]
-        final,box,client,recorder=run(self.root,script,init=mask(),status=True)
+        final,box,client,recorder=run(self.root,script,init=mask(),status=True,plan=True)
         self.assertEqual(final['submitted_by'],'model')
         names=[t['function']['name'] for t in client.requests[0]['tools']]
         self.assertIn('plan',names)
         texts=[m['content'] for m in client.requests[1]['messages'] if m['role']=='user' and isinstance(m['content'],str)]
         self.assertEqual(len(texts),1)
         self.assertIn('29 replies left',texts[0])
-        self.assertIn('0 yes, 0 no, 1 none',texts[0])
+        self.assertIn('0 yes, 0 no, 0 unparsed, 1 none',texts[0])
         self.assertIn('Plan: 1/2 closed; next: Check components',texts[0])
         assert_no_evidence(self,dict(content=texts[0]))
         (self.root/'off').mkdir()
@@ -179,7 +313,7 @@ class LoopTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 assert_no_evidence(self,bad)
         package=Path(__file__).resolve().parents[1]
-        allowed={'recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py','ask_eval.py','compare_runs.py','levir_analysis.py','boundary_eval.py','sam3_soft_eval.py','agent_vs_rule.py','ask_pair.py','ask_fp_sample.py','vs_fixed.py','vs_fixed_r7.py'}
+        allowed={'recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py','ask_eval.py','compare_runs.py','levir_analysis.py','boundary_eval.py','sam3_soft_eval.py','agent_vs_rule.py','vs_rule.py','verifier_select.py','planner_room.py','ask_pair.py','ask_fp_sample.py','vs_fixed.py','vs_fixed_r7.py'}
         # Offline analysis may read labels, but nothing the agent runs may import it.
         online=['loop_json.py','tools.py','state.py','view.py','backends.py','planner.py','instances.py']
         for filename in online:

@@ -54,15 +54,16 @@ SCHEMAS = [
            dict(region=BOX, overlay=arg('string', description='An existing mask#k or inst#k handle.'), label_components=arg('boolean', default=False), ids=IDS)),
     schema('inspect', 'List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID.',
            dict(mask=arg('string', description='An existing mask#k or inst#k handle.'), offset=arg('integer', minimum=0, default=0), limit=arg('integer', minimum=1, maximum=50, default=50)), ['mask']),
-    schema('segment_text', 'Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.',
-           dict(time=TIME, text=S, tile=arg('integer', enum=[0, 512], default=512),
-                score_thr=arg('number', minimum=0, maximum=1, default=0.5)), ['time', 'text']),
+    schema('segment_text', 'Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer. A smaller tile zooms in: it finds smaller objects and more false ones. region keeps only instances that touch that box.',
+           dict(time=TIME, text=S, tile=arg('integer', enum=[0, 256, 512], default=512),
+                score_thr=arg('number', minimum=0, maximum=1, default=0.5), region=BOX), ['time', 'text']),
     schema('segment_prompt', 'Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.', PROMPT_ARGS, ['time']),
     schema('match_instances', 'Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.',
            dict(inst_t1=I, inst_t2=I, overlap_thr=arg('number', minimum=0, maximum=1, default=0.25)), ['inst_t1', 'inst_t2']),
-    schema('ask', 'Verify building change in up to 64 mask components with a fixed question. Returns answer, type, reason, p_yes (relative yes/no reading), status. Unparsed is not no.',
+    schema('ask', 'Ask the independent verifier about building change in mask components. With no arguments it checks the components of your current answer that have no answer yet, largest first, up to 64 per call; remaining_unverified says how many are left. For a mask without ids, the same on that mask. With ids it asks about exactly those components, up to 64 in total. Returns answer, type, reason, p_yes (relative yes/no reading, may be null), status. Unparsed is not no.',
            dict(regions=arg('array', items=dict(type='object', properties=dict(mask=M, ids=IDS),
-                required=['mask', 'ids'], additionalProperties=False))), ['regions']),
+                required=['mask'], additionalProperties=False)), level=arg('string', enum=['L1', 'L2'], default='L1',
+                description='L1 is the quick check. L2 is a thorough check of the same question for doubtful components; it costs several times more.'))),
     schema('select', 'Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors.',
            dict(set=I, ids=IDS, where=S, area_min=arg('number', minimum=0), area_max=arg('number', minimum=0)), ['set']),
     schema('to_mask', 'Union one or more instance sets into a binary mask. ' + CURRENT,
@@ -77,15 +78,28 @@ SCHEMAS = [
            dict(mask=M, other=S, ids=IDS, set_current=SET_CURRENT), ['mask', 'other']),
     schema('refine_region', 'Replace only the target component using SAM at the required time, clipped to the editing ROI. Without a prompt use its box; default ROI expands that box by 10%, at least 4 pixels. An explicit box is the ROI. ' + CURRENT,
            dict(mask=M, id=arg('integer', minimum=1), **PROMPT_ARGS, set_current=SET_CURRENT), ['mask', 'id', 'time']),
-    schema('submit', 'Finish with any existing mask (including an old or empty mask) and a short summary. Subsequent calls in this reply are skipped.',
-           dict(mask=M, summary=S), ['mask', 'summary']),
+    schema('submit', 'Finish with any existing mask and a short summary. Pass mask="empty" to answer that nothing changed. Subsequent calls in this reply are skipped.',
+           dict(mask=arg('string', description='An existing mask#k handle, or "empty".'), summary=S), ['mask', 'summary']),
 ]
 # Offered only when the status harness is on, so runs without it keep their exact tool list.
 PLAN_SCHEMA = schema('plan', 'Write or replace your own short to-do list for this image. Each item has a text and a status. The list is only your notes: it runs nothing and adds no evidence.',
     dict(items=arg('array', minItems=1, maxItems=12, items=dict(type='object', properties=dict(
         text=dict(type='string'), status=dict(type='string', enum=['todo', 'doing', 'done', 'dropped'])),
         required=['text', 'status'], additionalProperties=False))), ['items'])
-SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA]}
+# Offered only when skills are on, so runs without them keep their exact tool list.
+SKILL_SCHEMA = schema('load_skill', 'Read the full text of one skill from the index in the system prompt.', dict(name=S), ['name'])
+SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA]}
+SKILLS = Path(__file__).parent / 'skills'
+
+
+def skill_index(names):
+    """One line per skill for the system prompt: its name and when to use it."""
+    lines = []
+    for name in names:
+        head = (SKILLS / name / 'SKILL.md').read_text().split('---')[1]
+        when = next(l.split(':', 1)[1].strip() for l in head.splitlines() if l.startswith('when:'))
+        lines.append(f'- {name}: {when}')
+    return '\n'.join(lines)
 
 
 def validate(value, spec, path='arguments'):
@@ -187,8 +201,11 @@ class Toolbox:
         self.allowed = None
         self.meta = {}
         # Verifier answers by exact component outline, so they survive renumbering and lapse when an outline changes.
+        # Each entry keeps every answer, because a later answer may contradict an earlier one.
         self.asked = {}
+        self.proposal = None
         self.todo = []
+        self.skills = ()
 
     def get(self, key, kind=None):
         return self.session.get(key, kind, self.allowed)
@@ -264,12 +281,15 @@ class Toolbox:
         return dict(mask=mask, total_components=len(rows), returned=len(selected),
                     has_more=offset + len(selected) < len(rows), components=selected)
 
-    def segment_text(self, time, text, tile=512, score_thr=0.5):
+    def segment_text(self, time, text, tile=512, score_thr=0.5, region=None):
         text = ' '.join(text.lower().split())
         if not text:
             raise ToolError('bad_args', 'text must name an object class.')
         rows, meta = self._backend(self.segment_backend, time, text, tile, score_thr)
         self.meta.update(meta)
+        if region is not None:
+            x0, y0, x1, y1 = box_pixels(region, self.session.shape, 'region')
+            rows = [r for r in rows if r['bbox'][0] < x1 and x0 < r['bbox'][2] and r['bbox'][1] < y1 and y0 < r['bbox'][3]]
         key = self.session.add_instances(rows, time)
         scores = [r['score'] for r in rows if r.get('score') is not None]
         return dict(inst=key, n=len(rows), area=int(instances.to_mask(rows, self.session.shape).sum()),
@@ -313,32 +333,48 @@ class Toolbox:
         self.meta['match_basis'] = MATCH_BASIS
         return out
 
-    def ask(self, regions):
-        expanded = []
+    def ask(self, regions=None, level='L1'):
+        if regions is None:
+            if self.session.current_mask is None:
+                raise ToolError('bad_args', 'There is no current answer; pass regions with a mask handle.')
+            regions = [dict(mask=self.session.current_mask)]
+        expanded, left = [], 0
         for entry in regions:
             item = self.get(entry['mask'], Mask)
-            ids = chosen_ids(item.components, entry['ids'])
-            expanded.extend((entry['mask'], item, c) for c in item.components if c['id'] in ids)
+            if entry.get('ids') is None:
+                # The default is everything still unanswered, largest first; the cap applies per call.
+                todo = self.pending(item)
+                room = max(0, MAX_ASK - len(expanded))
+                expanded.extend((entry['mask'], item, c) for c in todo[:room])
+                left += len(todo[room:])
+            else:
+                ids = chosen_ids(item.components, entry['ids'])
+                expanded.extend((entry['mask'], item, c) for c in item.components if c['id'] in ids)
         if len(expanded) > MAX_ASK:
             raise ToolError('bad_args', f'regions expands to more than {MAX_ASK} components.')
         if not expanded:
-            return dict(results=[])
+            return dict(results=[], remaining_unverified=left)
+        return dict(results=self.verify(expanded, 'ask', level), remaining_unverified=left)
+
+    def verify(self, expanded, source, level='L1'):
         context = getattr(self.ask_backend, 'context', False)
         pairs = [ask_images(self.rgb, item.labels == c['id'], c['bbox'], context) for _, item, c in expanded]
-        rows, meta = self._backend(self.ask_backend, pairs, VERIFY)
+        rows, meta = self._backend(self.ask_backend, pairs, VERIFY, **({} if level == 'L1' else dict(level=level)))
         self.meta.update(meta)
         self.meta['answers'] = rows
         if len(rows) != len(expanded):
             raise ValueError('backend returned the wrong answer count')
         results = []
-        for (key, _, c), row in zip(expanded, rows):
+        for (key, item, c), row in zip(expanded, rows):
             answer = row.get('answer')
             valid = answer in ('yes', 'no')
-            if valid:
-                self.asked[np.flatnonzero(self.get(key, Mask).labels == c['id']).tobytes()] = answer
-            results.append(dict(mask=key, id=c['id'], p_yes=row.get('p_yes'), answer=answer if valid else None,
+            outline = np.flatnonzero(item.labels == c['id'])
+            entry = self.asked.setdefault(outline.tobytes(), dict(outline=outline, area=c['area'], bbox=list(c['bbox']), records=[]))
+            entry['records'].append(dict(answer=answer if valid else None, type=row.get('type'), reason=row.get('reason'),
+                                         p_yes=row.get('p_yes'), level=level, source=source, mask=key, id=c['id']))
+            results.append(dict(mask=key, id=c['id'], level=level, p_yes=row.get('p_yes'), answer=answer if valid else None,
                 type=row.get('type'), reason=row.get('reason'), status='parsed' if valid else 'unparsed'))
-        return dict(results=results)
+        return results
 
     def select(self, set, ids=None, where=None, area_min=None, area_max=None):
         item = self.get(set, Instances)
@@ -410,57 +446,152 @@ class Toolbox:
         return self._mask(new, (mask,), set_current, item.data, old_bbox=list(comp['bbox']),
             new_bbox=bbox(local), old_area=comp['area'], new_area=int(local.sum()), roi=roi, sam_quality=quality)
 
+    def load_skill(self, name):
+        if name not in self.skills:
+            raise ToolError('bad_args', f'Unknown skill; available: {list(self.skills)}.')
+        return dict(name=name, text=(SKILLS / name / 'SKILL.md').read_text().split('---', 2)[2].strip())
+
     def plan(self, items):
         self.todo = [dict(item) for item in items]
         return dict(items=len(self.todo), done=sum(item['status'] == 'done' for item in self.todo))
 
+    def entry(self, item, c):
+        return self.asked.get(np.flatnonzero(item.labels == c['id']).tobytes())
+
+    def latest(self, entry):
+        answers = [r['answer'] for r in (entry or dict(records=[]))['records'] if r['answer'] is not None]
+        return answers[-1] if answers else None
+
     def records(self, item):
-        """Components of a mask by verifier record: yes, no, or none for an outline nobody asked about."""
-        answered = dict(yes=[], no=[], none=[])
+        """Components of a mask by latest verifier answer: yes, no, unparsed, or none for an outline nobody asked about."""
+        answered = dict(yes=[], no=[], unparsed=[], none=[])
         for c in sorted(item.components, key=lambda c: (-c['area'], c['id'])):
-            answered[self.asked.get(np.flatnonzero(item.labels == c['id']).tobytes(), 'none')].append(c)
+            entry = self.entry(item, c)
+            answered[self.latest(entry) or ('unparsed' if entry else 'none')].append(c)
         return answered
+
+    def pending(self, item):
+        """Components the verifier still owes an answer: never asked, or unparsed once and allowed one retry."""
+        rows = sorted(item.components, key=lambda c: (-c['area'], c['id']))
+        out = []
+        for c in rows:
+            entry = self.entry(item, c)
+            if entry is None or (self.latest(entry) is None and len(entry['records']) < 2):
+                out.append(c)
+        return out
+
+    def stage(self, key):
+        """The fixed verification stage: every component of this mask still without an answer. Never edits a mask."""
+        item = self.session.get(key, Mask)
+        todo = [(key, item, c) for c in self.pending(item)]
+        if self.session.initial_mask is not None:
+            # Given components the planner dropped unasked: the report must be able to say what they were.
+            start = self.session.get(self.session.initial_mask, Mask)
+            todo += [(self.session.initial_mask, start, c) for c in self.pending(start) if item.data[start.labels == c['id']].mean() < .5]
+        self.meta = {}
+        failed = False
+        if todo:
+            try:
+                self.verify(todo, 'stage')
+            except Exception as exc:
+                failed = True
+                self.meta.update(getattr(exc, 'backend_meta', {}))
+                self.meta['traceback'] = traceback.format_exc()
+        return len(todo), failed, dict(self.meta)
 
     def status(self, replies_left):
         """One short state line for each reply, from the session's own records."""
         key = self.session.current_mask
         lines = [f'Status: {replies_left} replies left.']
         if key is None:
-            lines.append('No current answer yet.')
+            lines.append('No current answer yet; a run that ends without a current answer returns an empty mask.')
         else:
             item = self.session.get(key, Mask)
             answered = self.records(item)
             lines.append(f"Current answer {key}: {int(item.data.sum())} pixels in {len(item.components)} components; "
-                         f"verifier records: {len(answered['yes'])} yes, {len(answered['no'])} no, {len(answered['none'])} none.")
+                         f"verifier answers: {len(answered['yes'])} yes, {len(answered['no'])} no, {len(answered['unparsed'])} unparsed, {len(answered['none'])} none.")
+        if self.proposal is not None and self.proposal != key:
+            lines.append(f'Last proposed: {self.proposal}.')
         if self.todo:
             done = sum(row['status'] in ('done', 'dropped') for row in self.todo)
             following = next((row['text'] for row in self.todo if row['status'] in ('doing', 'todo')), None)
             lines.append(f'Plan: {done}/{len(self.todo)} closed' + (f'; next: {following}' if following else '') + '.')
         return ' '.join(lines)
 
-    def review(self, key, replies_left):
-        """Pre-submission checklist from the session's own records: no new requests and no edits."""
+    def pre_submit(self, key, replies_left, stage=False):
+        """The response to a first submit: the proposal becomes the current answer, then the report. No edits."""
+        meta = {}
+        checked, failed = None, False
+        if stage:
+            checked, failed, meta = self.stage(key)
+        previous, self.proposal = self.proposal, key
+        self.session.current_mask = key
+        return Result(dict(ok=True, submitted=False, report=self.report(key, replies_left, checked, failed, previous)),
+                      internal=dict(meta, status='report'))
+
+    def report(self, key, replies_left, checked=None, failed=False, previous=None):
+        """What the session's own records say about a proposed mask, including what it no longer contains."""
         item = self.session.get(key, Mask)
         answered = self.records(item)
-        open_rows = answered['none']
         row = lambda c: f"id={c['id']} area={c['area']} bbox={list(c['bbox'])}"
-        lines = [f"Final review: nothing is submitted yet. Proposed answer {key}: {int(item.data.sum())} pixels in {len(item.components)} components.",
-                 f"Verifier records: {len(answered['yes'])} components answered yes; {len(answered['no'])} answered no and are still in this mask."]
-        lines += [f"  answered no: {row(c)}" for c in answered['no'][:20]]
-        if len(answered['no']) > 20:
-            lines.append(f"  and {len(answered['no']) - 20} more answered no.")
-        lines.append(f"No verifier record: {len(open_rows)} components, {sum(c['area'] for c in open_rows)} pixels. A record applies only to the exact outline it was asked about; a view is not a record.")
-        lines += [f"  no record: {row(c)}" for c in open_rows[:20]]
-        if len(open_rows) > 20:
-            lines.append(f"  and {len(open_rows) - 20} more without a record.")
-        lines.append(f"Views so far: {self.session.view_count}.")
+        def answer_row(c):
+            last = next(r for r in reversed(self.entry(item, c)['records']) if r['answer'] is not None)
+            return row(c) + f" level={last['level']} type={last['type']} p_yes={None if last['p_yes'] is None else round(last['p_yes'], 2)} reason={str(last['reason'])[:120]}"
+        lines = [f"Report before submission. Every run gets this report as the first response to submit; it does not judge the mask, and nothing has to change. {key} is now your current answer: {int(item.data.sum())} pixels in {len(item.components)} components."]
+        if checked is not None:
+            if failed:
+                lines.append('The verifier could not answer now; the answers below are the earlier ones.')
+            elif checked:
+                lines.append(f'The verifier has just checked the {checked} components that had no answer.')
+        lines.append(f"Verifier answers on {key}: {len(answered['yes'])} yes, {len(answered['no'])} no, {len(answered['unparsed'])} unparsed, {len(answered['none'])} with no answer. An answer applies only to the exact outline it was about; a view is not an answer.")
+        if answered['yes']:
+            lines.append(f"  IDs answered yes: {[c['id'] for c in answered['yes']]}")
+        if answered['no']:
+            lines.append(f"  IDs answered no: {[c['id'] for c in answered['no']]}")
+            lines += [f"  answered no: {answer_row(c)}" for c in answered['no'][:30]]
+            if len(answered['no']) > 30:
+                lines.append(f"  and {len(answered['no']) - 30} more answered no.")
+        mixed = [c for c in item.components if len({r['answer'] for r in (self.entry(item, c) or dict(records=[]))['records'] if r['answer']}) == 2]
+        if mixed:
+            lines.append(f"  answers disagree across repeats for IDs: {[c['id'] for c in mixed]}")
+        for name, label in (('none', 'no answer'), ('unparsed', 'unparsed')):
+            lines += [f"  {label}: {row(c)}" for c in answered[name][:20]]
+            if len(answered[name]) > 20:
+                lines.append(f"  and {len(answered[name]) - 20} more with {label}.")
+        present = item.data.ravel()
+        gone = [e for e in self.asked.values() if self.latest(e) == 'yes' and present[e['outline']].mean() < .5]
+        if gone:
+            gone.sort(key=lambda e: -e['area'])
+            lines.append(f"Answered yes and not in {key}: {len(gone)} regions, {sum(e['area'] for e in gone)} pixels.")
+            lines += [f"  area={e['area']} bbox={e['bbox']} reason={str(e['records'][-1]['reason'])[:120]}" for e in gone[:10]]
         if self.session.initial_mask is not None:
-            given = self.session.get(self.session.initial_mask, Mask).data
-            outside = item.data & ~given
+            start = self.session.get(self.session.initial_mask, Mask)
+            outside = item.data & ~start.data
             ids = sorted(set(int(v) for v in item.labels[outside]))
-            lines.append(f"Compared with the given mask: {int(outside.sum())} pixels added, in components {ids[:20]}; {int((given & ~item.data).sum())} pixels removed.")
-        lines.append(f"Decide for what this list shows: keep it, withdraw it or check further. One ask call takes up to {MAX_ASK} components. You may submit with open doubts; say in the summary what remains uncertain. Call submit to finish. You have {replies_left} replies left.")
+            lost = [c for c in start.components if item.data[start.labels == c['id']].mean() < .5]
+            verdicts = [self.latest(self.entry(start, c)) for c in lost]
+            lines.append(f"Compared with the given mask: {int(outside.sum())} pixels added, in components {ids[:20]}; {int((start.data & ~item.data).sum())} pixels removed; "
+                         f"{len(lost)} given components are gone: {verdicts.count('no')} answered no, {verdicts.count('yes')} answered yes, {verdicts.count(None)} with no answer. Removed pixels are not the same as corrected errors.")
+            lines += [f"  gone with no answer: {row(c)}" for c in sorted(lost, key=lambda c: -c['area']) if self.latest(self.entry(start, c)) is None][:10]
+            back = [c['id'] for c, v in zip(lost, verdicts) if v == 'yes']
+            if back:
+                lines.append(f"  gone and answered yes, IDs on {self.session.initial_mask}: {back}. add_region with other={self.session.initial_mask} and these ids brings any of them back.")
+        if previous is not None and previous != key:
+            before = self.session.get(previous, Mask).data
+            lines.append(f"Compared with your previous proposal {previous}: {int((item.data & ~before).sum())} pixels added, {int((before & ~item.data).sum())} pixels removed.")
+        lines.append(f"A verifier answer is evidence, not an order, and it can be wrong in both directions. No answer is not an error. To finish with this mask, call submit with {key} again. To change it, edit and submit the new handle; components the verifier has not seen will be reported again. In the summary, say what you changed, and why you went against any verifier answer. You have {replies_left} replies left.")
         return '\n'.join(lines)
+
+    def ledger(self, final_key):
+        """Per outline: every verifier answer and what the planner finally did with it. For the trace only."""
+        present = self.session.get(final_key, Mask).data.ravel() if final_key else None
+        rows = []
+        for entry in self.asked.values():
+            kept = bool(present[entry['outline']].mean() >= .5) if present is not None else None
+            latest = self.latest(entry)
+            rows.append(dict(area=entry['area'], bbox=entry['bbox'], runs=runs(entry['outline']), records=entry['records'], latest=latest,
+                             kept=kept, differs_from_rule=None if latest is None or kept is None else (kept != (latest == 'yes'))))
+        return rows
 
     def submit(self, mask, summary):
         item = self.get(mask, Mask)
@@ -471,6 +602,12 @@ class Toolbox:
         self.session.summary = summary
         return dict(mask=mask, area=int(item.data.sum()), component_count=len(item.components),
                     current_mask=dict(before=before, after=mask), submitted=True)
+
+
+def runs(outline):
+    """Flat pixel indices as [start, length] runs."""
+    breaks = np.flatnonzero(np.diff(outline) != 1) + 1
+    return [[int(part[0]), int(part.size)] for part in np.split(outline, breaks) if part.size]
 
 
 def bbox(data):

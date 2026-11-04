@@ -42,8 +42,8 @@ def one(arguments):
     return name, mask
 
 
-def run(split, procs, threshold=.5, save=False, pixel_thr=.5, init_name='sam3_imc'):
-    todo = [(split, name, threshold, save, pixel_thr, init_name) for name in names(split)]
+def run(split, procs, threshold=.5, save=False, pixel_thr=.5, init_name='sam3_imc', listed=None):
+    todo = [(split, name, threshold, save, pixel_thr, init_name) for name in (listed or names(split))]
     with ProcessPoolExecutor(max_workers=procs) as pool:
         preds = dict(pool.map(one, todo))
     metrics, per = evaluate(preds, split)
@@ -53,14 +53,16 @@ def run(split, procs, threshold=.5, save=False, pixel_thr=.5, init_name='sam3_im
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('route', choices=['imc', 'tune'])
-    parser.add_argument('--split', choices=['val','test'], default='val')
+    parser.add_argument('--split', choices=['val','test','train'], default='val')
+    parser.add_argument('--names-file')
     parser.add_argument('--procs', type=int, default=1)
     parser.add_argument('--pixel-thr', type=float, default=.5)
     parser.add_argument('--init-name', default='sam3_imc')
     parser.add_argument('--apply-test', action='store_true', help='Apply frozen val selection, without retuning.')
     args = parser.parse_args()
     if args.route == 'imc':
-        result = run(args.split, args.procs, save=True, pixel_thr=args.pixel_thr, init_name=args.init_name)
+        listed = Path(args.names_file).read_text().split() if args.names_file else None
+        result = run(args.split, args.procs, save=True, pixel_thr=args.pixel_thr, init_name=args.init_name, listed=listed)
         tag = '' if args.init_name == 'sam3_imc' else '_' + args.init_name
         write_json(RUN / 'fixed' / f'imc{tag}_{args.split}.json', result)
     elif args.apply_test:

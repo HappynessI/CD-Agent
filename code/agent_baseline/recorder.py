@@ -7,7 +7,6 @@ from pathlib import Path
 import numpy as np
 from common import load_gt, confusion, image_f1, object_counts, scores, save_mask_png, write_json
 from .state import Mask
-from .planner import PRICE, token_cost
 
 
 def json_default(obj):
@@ -33,6 +32,7 @@ class Recorder:
         self.started = time.monotonic()
         self.steps = []
         self.ask_tokens = dict(input=0, cached=0, output=0)
+        self.ask_cost = 0.
         self.ask_attempts = 0
         self.asset_number = 0
         for filename in ('steps.jsonl', 'messages.jsonl'):
@@ -84,7 +84,7 @@ class Recorder:
             precision=0., recall=0., planning_rounds=0, api_attempts=0,
             planner_api_attempts=0, ask_api_attempts=0, tool_calls=0,
             tokens=dict(input=0, cached=0, output=0), cost_cny=0.,
-            price_cny_per_million=PRICE, elapsed_seconds=time.monotonic()-self.started,
+            elapsed_seconds=time.monotonic()-self.started,
             identical_to_init=None, added_px=None, removed_px=None, view_calls=0, ask_calls=0,
             initial_images_present=False, error=error)
         write_json(self.directory / 'final.json', row)
@@ -129,6 +129,18 @@ class Recorder:
         metric['delta_f1'] = (0. if after == before else metric['f1'] - prior['f1']) if prior else None
         return metric
 
+    def ask_spending(self, meta, tool_call_id):
+        for k, n in meta.get('tokens', {}).items():
+            self.ask_tokens[k] += n
+        self.ask_cost += meta.get('cost_cny', 0.)
+        self.ask_attempts += len(meta.get('attempts', []))
+        for event in meta.get('attempts', []):
+            self.append('messages.jsonl', dict(event, backend='api_ask', tool_call_id=tool_call_id))
+
+    def note(self, number, result):
+        """A report the harness sent on its own, outside any tool call."""
+        self.append('steps.jsonl', dict(step=number, note='report', report=result.public['report'], calls=[], planner=None))
+
     def step(self, session, number, planner, calls):
         self.assets(session)
         calls = self.archive_images(copy.deepcopy(calls))
@@ -145,12 +157,7 @@ class Recorder:
                         row['delta_f1_from_parent'] = row['f1'] - self.metric(session, parent)['f1']
                     scored.append(row)
             call['candidate_eval'] = scored
-            meta = call.get('provenance', {})
-            for k, n in meta.get('tokens', {}).items():
-                self.ask_tokens[k] += n
-            self.ask_attempts += len(meta.get('attempts', []))
-            for event in meta.get('attempts', []):
-                self.append('messages.jsonl', dict(event, backend='api_ask', tool_call_id=call['tool_call_id']))
+            self.ask_spending(call.get('provenance', {}), call['tool_call_id'])
         row = dict(step=number, planner=planner, calls=calls, current_mask=session.current_mask,
                    eval=self.edge(session, session.current_mask, self.previous))
         self.previous = session.current_mask
@@ -175,7 +182,7 @@ class Recorder:
             planning_rounds=rounds, api_attempts=planner.attempts + self.ask_attempts,
             planner_api_attempts=planner.attempts, ask_api_attempts=self.ask_attempts,
             tool_calls=len(calls), tokens=tokens, planner_tokens=planner.tokens, ask_tokens=self.ask_tokens,
-            cost_cny=planner.cost + token_cost(self.ask_tokens), planner_model=planner.parameters.get('model'), price_cny_per_million=PRICE, elapsed_seconds=time.monotonic()-self.started,
+            cost_cny=planner.cost + self.ask_cost, planner_cost_cny=planner.cost, ask_cost_cny=self.ask_cost, planner_model=planner.parameters.get('model'), elapsed_seconds=time.monotonic()-self.started,
             identical_to_init=bool(np.array_equal(mask.data, initial)) if initial is not None else None,
             added_px=int((mask.data & ~initial).sum()) if initial is not None else None,
             removed_px=int((initial & ~mask.data).sum()) if initial is not None else None,

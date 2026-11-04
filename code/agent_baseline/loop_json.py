@@ -14,9 +14,9 @@ import os
 from pathlib import Path
 import traceback
 import numpy as np
-from common import names, load_rgb, load_mask_png, WORKSPACE
+from common import names, load_rgb, load_mask_png, write_json, WORKSPACE
 from prompts import SCOPE_CARD
-from .tools import Toolbox, SCHEMAS, PLAN_SCHEMA, Result, failure
+from .tools import Toolbox, SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, Result, failure, skill_index
 from . import tools as tool_module
 from .state import Mask
 from .planner import Planner, RunGuard, RunStopped, usage_tokens
@@ -91,17 +91,21 @@ def referenced_handles(args):
 REVIEW_REPLIES = 3
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False):
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=()):
     session = toolbox.session
     rounds, no_tools = 0, 0
     previous_calls = None
     reason, error = 'budget', None
-    reviewed = not review
-    schemas = [*SCHEMAS, PLAN_SCHEMA] if status else SCHEMAS
+    reviewed = not (review or verify)
+    schemas = [*SCHEMAS, *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
+    toolbox.skills = tuple(skills)
     messages = []
     planner.record = recorder.request
     try:
         path, template, system = system_prompt(prompt_version, budget)
+        if skills:
+            # Index only; a skill's text enters the conversation when the planner loads it.
+            system += '\n\nSkills\nThese notes hold working methods. Call load_skill with a name when its description fits what you are doing.\n' + skill_index(skills)
         instruction = INSTRUCTIONS[task]
         initial = toolbox.execute('view', dict(overlay=session.initial_mask) if session.initial_mask else {})
         if not initial.public['ok']:
@@ -155,14 +159,17 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     except (json.JSONDecodeError, TypeError):
                         result = failure('bad_args', 'function.arguments must be a valid JSON object; check its fields and quoting.')
                     else:
+                        if name == 'submit' and isinstance(args, dict) and args.get('mask') == 'empty':
+                            args = dict(args, mask=session.add_mask(np.zeros(session.shape, bool)))
+                            allowed = allowed | {args['mask']}
                         handle = args.get('mask') if isinstance(args, dict) else None
-                        # The first valid submit opens one review. The last reply can only submit.
-                        if (name == 'submit' and not reviewed and number < budget and handle in allowed
-                                and isinstance(session.handles[handle], Mask)):
+                        # The first valid submit opens one report, and with the verifier stage so does any
+                        # submit of a mask with unchecked components. The last reply can only submit.
+                        if (name == 'submit' and number < budget and handle in allowed and isinstance(session.handles[handle], Mask)
+                                and (not reviewed or (verify and toolbox.pending(session.handles[handle])))):
                             reviewed = True
                             previous_calls = None
-                            result = Result(dict(ok=True, submitted=False, review=toolbox.review(handle, budget - number)),
-                                            internal=dict(status='review'))
+                            result = toolbox.pre_submit(handle, budget - number, verify)
                         else:
                             result = toolbox.execute(name, args, allowed)
                 messages.append(dict(role='tool', tool_call_id=call['id'], content=result.text))
@@ -202,9 +209,12 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             else:
                 no_tools = 0
             left = budget - number
-            if left == REVIEW_REPLIES and not reviewed and session.current_mask is not None:
+            if 0 < left <= REVIEW_REPLIES and not reviewed and session.current_mask is not None:
                 reviewed = True
-                messages.append(dict(role='user', content=toolbox.review(session.current_mask, left)))
+                late = toolbox.pre_submit(session.current_mask, left, verify)
+                recorder.ask_spending(late.internal, f'report-{number}')
+                recorder.note(number, late)
+                messages.append(dict(role='user', content=late.public['report']))
             elif 0 < left <= REVIEW_REPLIES:
                 messages.append(dict(role='user', content=f'You have {left} replies left. Submit your best mask before they run out.'))
             if status and left > 0:
@@ -222,13 +232,18 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             session.current_mask = session.add_mask(np.zeros(session.shape, bool))
         session.submitted = session.current_mask
         session.summary = f'系统兜底：{reason}；使用当前掩码。' if fallback == 'current' else f'系统兜底：{reason}；使用空掩码。'
+    if verify and reason != 'error':
+        # Whatever ended the run, the trace holds an answer for every component of the final mask.
+        _, _, meta = toolbox.stage(session.submitted)
+        recorder.ask_spending(meta, 'final-stage')
+    write_json(toolbox.directory / 'verification.json', toolbox.ledger(session.submitted))
     return recorder.final(session, task, submitted_by, reason, fallback, rounds, planner, error)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', choices=list(INSTRUCTIONS), required=True)
-    parser.add_argument('--split', default='val', choices=['val', 'test'])
+    parser.add_argument('--split', default='val', choices=['val', 'test', 'train'])
     parser.add_argument('--config', required=True)
     parser.add_argument('--names-file')
     parser.add_argument('--limit', type=int)
@@ -238,16 +253,20 @@ def main():
     parser.add_argument('--ask-worker')
     parser.add_argument('--planner-model', default='qwen3.7-plus')
     parser.add_argument('--review', action='store_true', help='One pre-submission review from the session records.')
-    parser.add_argument('--status', action='store_true', help='A state line in every reply, and the plan tool.')
+    parser.add_argument('--status', action='store_true', help='A state line in every reply.')
+    parser.add_argument('--plan', action='store_true', help='Offer the plan tool.')
+    parser.add_argument('--skills', default='', help='Comma-separated skill names, or all.')
+    parser.add_argument('--verify-stage', action='store_true', help='Each submit first verifies every unchecked component and reports all answers.')
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
     parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
-    parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2', 'v3'])
+    parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2', 'v3', 'v4'])
     parser.add_argument('--seed-offset', type=int, default=0, help='Repeat runs of one configuration.')
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    skills = sorted(p.name for p in tool_module.SKILLS.iterdir() if (p / 'SKILL.md').exists()) if args.skills == 'all' else [x for x in args.skills.split(',') if x]
     guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
         raise SystemExit(f'{guard.active_stop()} exists; check quota or budget, then delete it before running: {guard.active_stop().read_text()}')
@@ -282,12 +301,12 @@ def main():
         toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr),
             shared.for_image(args.split, name), ask, init_mask=init)
         try:
-          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version, review=args.review, status=args.status,
+          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills,
             metadata=dict(session_id=Path(name).stem, source_images=[str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')],
                 init_mask_path=str(init_path) if args.task == 'T5.1' else None,
                 init_config=dict(route=args.init_name, text='building', tile=512, score_thr=.5,
                                  overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if args.task == 'T5.1' else None,
-                backends=dict(ask=args.ask_backend, review=args.review, status=args.status, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
+                backends=dict(ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage, plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
                     else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                     sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
                 init_error=init_error))
