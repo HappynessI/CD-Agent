@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CD-Agent 工具调度 Baseline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; each section = one exhibit (diagram or chart) + 1–2 lines of reading. */
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#1d2321; --muted:#5f6a66; --line:#d5dbd8;
+  --accent:#0f7a6a;          /* agent / new */
+  --old:#9a6b2f;             /* fixed pipeline / old */
+  --c-see:#5b6bd6; --c-seg:#0f7a6a; --c-feat:#b0541c; --c-cmp:#a33a6b; --c-sem:#6f7f12; --c-op:#56616b; --c-edit:#c2410c;
+  --soft:#e8eeeb;
+  --f-display:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121615; --panel:#1a201e; --fg:#e4ebe8; --muted:#9aa7a2; --line:#2f3936;
+  --accent:#3cc4ad; --old:#d6a35e;
+  --c-see:#8f9cff; --c-seg:#3cc4ad; --c-feat:#f08a4b; --c-cmp:#e77aa9; --c-sem:#b5c94a; --c-op:#9aa6b0; --c-edit:#ff8a4c;
+  --soft:#222a27; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121615; --panel:#1a201e; --fg:#e4ebe8; --muted:#9aa7a2; --line:#2f3936;
+  --accent:#3cc4ad; --old:#d6a35e;
+  --c-see:#8f9cff; --c-seg:#3cc4ad; --c-feat:#f08a4b; --c-cmp:#e77aa9; --c-sem:#b5c94a; --c-op:#9aa6b0; --c-edit:#ff8a4c;
+  --soft:#222a27; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,4vw,36px);margin:0;letter-spacing:.01em;text-wrap:balance}
+h2{font-size:20px;margin:0 0 6px;font-weight:700;text-wrap:balance;display:flex;gap:10px;align-items:baseline}
+h2 .k{font-family:var(--f-mono);font-size:13px;color:var(--accent);font-weight:600}
+.lead{color:var(--muted);max-width:68ch;margin:6px 0 0}
+.read{color:var(--muted);font-size:14px;max-width:72ch;margin:10px 0 0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.scroll{overflow-x:auto}
+svg text{font-family:var(--f-body);fill:var(--fg)}
+svg .m{fill:var(--muted)} svg .mono{font-family:var(--f-mono)}
+code,.mono{font-family:var(--f-mono);font-size:.92em}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;border:1px solid currentColor;line-height:1.6}
+/* tool board */
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cat{border-top:3px solid var(--c);padding-top:8px;min-width:0}
+.cat h3{margin:0 0 6px;font-size:13px;color:var(--c);letter-spacing:.06em}
+.chip{display:block;font-family:var(--f-mono);font-size:12.5px;background:var(--soft);border-radius:6px;padding:5px 8px;margin-bottom:6px;overflow-wrap:anywhere}
+.chip small{display:block;font-family:var(--f-body);color:var(--muted);font-size:11.5px}
+.routes{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.route{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.route .name{font-weight:700;font-size:13px;width:120px;flex:none}
+.step{font-family:var(--f-mono);font-size:12px;padding:3px 8px;border-radius:5px;color:#fff;background:var(--c)}
+:root .step{color:var(--panel)}
+.arrow{color:var(--muted);font-size:12px}
+/* compare */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:720px){.two{grid-template-columns:1fr}}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+.todo{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.todo li{display:flex;gap:10px;align-items:flex-start}
+.todo li::before{content:"";flex:none;width:14px;height:14px;margin-top:5px;border:2px solid var(--accent);border-radius:3px}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.rules{grid-template-columns:1fr}}
+.rule{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.rule b{color:var(--accent);font-size:15px}
+.rule span{color:var(--muted);font-size:13.5px;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <h1>变化检测 Agent · LEVIR-CD baseline</h1>
+  <p class="lead">把变化检测整件事交给 Agent：它拿到两期影像和一句指令，自己调用原子工具生成 building 变化掩码，再自己决定要不要核实和修正。</p>
+  <p class="read">2026-11-03 建立 · 给 AI 看的版本：<code>doc/agent_baseline/README_ai.md</code>（两份同步更新）</p>
+</header>
+
+<section class="panel">
+  <h2><span class="k">BF</span>第一版结果（验证集 64 对，F1^c，条形从 75 起画）</h2>
+  <div style="display:grid;grid-template-columns:minmax(150px,220px) 1fr 52px;gap:10px;align-items:center;margin:7px 0"><span style="font-size:13px">固定路线（不用 Agent）</span><div style="background:var(--soft);height:16px"><div style="width:47.6%;height:100%;background:var(--old)"></div></div><span class="mono" style="font-size:13px">82.14</span></div><div style="display:grid;grid-template-columns:minmax(150px,220px) 1fr 52px;gap:10px;align-items:center;margin:7px 0"><span style="font-size:13px">调门限 0.45（不用 Agent）</span><div style="background:var(--soft);height:16px"><div style="width:50.1%;height:100%;background:var(--old)"></div></div><span class="mono" style="font-size:13px">82.52</span></div><div style="display:grid;grid-template-columns:minmax(150px,220px) 1fr 52px;gap:10px;align-items:center;margin:7px 0"><span style="font-size:13px">T1.1 Agent（3 次均值）</span><div style="background:var(--soft);height:16px"><div style="width:47.8%;height:100%;background:var(--accent)"></div></div><span class="mono" style="font-size:13px">82.17</span></div><div style="display:grid;grid-template-columns:minmax(150px,220px) 1fr 52px;gap:10px;align-items:center;margin:7px 0"><span style="font-size:13px">T5.1 Agent（3 次均值）</span><div style="background:var(--soft);height:16px"><div style="width:55.1%;height:100%;background:var(--accent)"></div></div><span class="mono" style="font-size:13px">83.27</span></div><div style="display:grid;grid-template-columns:minmax(150px,220px) 1fr 52px;gap:10px;align-items:center;margin:7px 0"><span style="font-size:13px">T5.1 理想删除上限</span><div style="background:var(--soft);height:16px"><div style="width:85.7%;height:100%;background:var(--muted)"></div></div><span class="mono" style="font-size:13px">87.86</span></div>
+  <div class="scroll"><table>
+    <thead><tr><th>配置（3 次重复）</th><th>T1.1×C0</th><th>T5.1</th></tr></thead>
+    <tbody><tr><td>BF：提示 v2</td><td class="num">82.17 ± 0.51</td><td class="num">83.27 ± 0.28</td></tr>
+    <tr><td>r3a：组件编号修复</td><td class="num">83.47 ± 0.09</td><td class="num">82.61 ± 1.59</td></tr>
+    <tr><td><b>r3b：再换 qwen3.7-plus 四图核验</b></td><td class="num"><b>83.56 ± 0.54</b></td><td class="num"><b>83.92 ± 0.16</b></td></tr>
+    <tr><td>对照：不用 Agent，新核验答否就删</td><td class="num">84.23</td><td class="num">84.23</td></tr>
+    <tr><td><b>r4：再加像素门限 0.85</b>（T5.1 给定掩码同步换新）</td><td class="num"><b>83.45 ± 0.54</b></td><td class="num"><b>84.80 ± 0.60</b></td></tr>
+    <tr><td>对照：新候选原样提交</td><td class="num">83.15</td><td class="num">83.15</td></tr>
+    <tr><td>对照：新候选，答否就删</td><td class="num">85.45</td><td class="num">85.45</td></tr>
+    <tr><td>r5：提示 v3（已回滚）</td><td class="num">82.84 ± 0.51</td><td class="num">84.49 ± 0.68</td></tr>
+    <tr><td>规划器换 flash，其余同 r4（不采用）</td><td class="num">80.91 ± 1.77</td><td class="num">83.79 ± 0.91</td></tr>
+    <tr><td>对照：flash + 对应问法，答否就删</td><td class="num">86.35</td><td class="num">86.35</td></tr>
+    <tr><td><b>r6：<code>ask</code> 换 flash + 对应问法</b></td><td class="num"><b>83.77 ± 0.53</b></td><td class="num"><b>85.19 ± 0.53</b></td></tr></tbody>
+  </table></div>
+  <p class="read">工具改进有效，Agent 决策还没有证明增加价值：同样工具下，规则对照比 T5.1 高 1.16，比 T1.1 高 2.58。这些都在同一验证集上选出，不是泛化证据。</p>
+  <p class="read">下面的条形是 BF 结果：T5.1 稳定高于不用 Agent 的对照，但只拿到理想上限的约 20%。T1.1 追平固定路线，没有超过。Agent 删误检有效，也会删多。详情见 <a href="../../results/agent_baseline/levir_analysis.md">levir_analysis.md</a>；可视化示例见 <a href="../../results/agent_baseline/demo/README.md">demo/</a>，是挑出来的样例，不代表平均水平。</p>
+</section>
+
+<section class="panel" style="border-color:var(--accent)">
+  <h2><span class="k">00</span>组会和任务体系定稿后的调整（11-03）</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>变化</th><th>原计划</th><th>现在</th></tr></thead>
+    <tbody>
+      <tr><td>第一版节奏</td><td>B0→B5，约一周多</td><td>先做 <b>BF 快速版，2 天</b>：只用核心工具、JSON 循环、qwen3.7-plus，跑验证集 64 对</td></tr>
+      <tr><td>工具</td><td>M-C-I 拆出的原子工具全上</td><td>★ 核心档：SAM3 为主 + 裁剪、过滤等轻量工具 + 看图、核实、修改；M-C-I 原子工具放到之后作扩展对照</td></tr>
+      <tr><td>可视化示例</td><td>测试集评完后（B5）</td><td>BF 就产出一份：输入 → 每步推理和工具调用 → 输出 + 指标，用于向导师汇报</td></tr>
+      <tr><td>CodeAgent、本地模型、测试集</td><td>并行</td><td>放在 BF 之后，顺序不变</td></tr>
+      <tr><td>规划器</td><td>百炼 + 本地开源模型并行</td><td><b>只调百炼 API</b>，本地模型推迟；按图并行，起步 16 路，可加到 32 路以上；费用报给 Ethan 后不等确认</td></tr>
+      <tr><td>任务范围</td><td>只做从零生成</td><td><b>两个任务</b>：T1.1 × C0（从零生成建筑变化掩码）和 T5.1 自主修正（输入 SAM3 的变化掩码，Agent 检查并修正）。同一套工具、同一个循环，只差有没有初始掩码</td></tr>
+      <tr><td>不用 MLLM 的对照</td><td>固定路线</td><td>T1.1：M-C-I、I-M-C(SAM3) 固定路线；T5.1：SAM3 掩码原样提交、验证集调门限后提交</td></tr>
+      <tr><td>输出</td><td>掩码</td><td>掩码 + 文字说明 + 变化个数和面积；第一版只给掩码打分</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 1. old vs new -->
+<section>
+  <h2><span class="k">01</span>和之前 ovcd_v0 的区别</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 940 300" width="100%" style="min-width:720px" role="img" aria-label="旧的固定流程与新的 Agent 接管流程对比">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker>
+      <marker id="ha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" style="fill:var(--accent)"/></marker>
+    </defs>
+    <!-- old -->
+    <text x="0" y="22" font-size="14" font-weight="700" style="fill:var(--old)">之前：程序编排（ovcd_v0，11 轮）</text>
+    <g font-size="13">
+      <rect x="0" y="40" width="150" height="54" rx="8" style="fill:var(--soft);stroke:var(--old)"/>
+      <text x="75" y="63" text-anchor="middle">初始化（写死）</text>
+      <text x="75" y="82" text-anchor="middle" font-size="11" class="m">M-C-I / I-M-C / ReA</text>
+      <line x1="150" y1="67" x2="186" y2="67" style="stroke:var(--muted)" marker-end="url(#ah)"/>
+      <rect x="188" y="40" width="96" height="54" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="236" y="72" text-anchor="middle">A 去误检</text>
+      <line x1="284" y1="67" x2="306" y2="67" style="stroke:var(--muted)" marker-end="url(#ah)"/>
+      <rect x="308" y="40" width="80" height="54" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="348" y="72" text-anchor="middle">B 补漏</text>
+      <line x1="388" y1="67" x2="410" y2="67" style="stroke:var(--muted)" marker-end="url(#ah)"/>
+      <rect x="412" y="40" width="90" height="54" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="457" y="72" text-anchor="middle">C 修边界</text>
+      <rect x="188" y="112" width="314" height="34" rx="6" style="fill:none;stroke:var(--line);stroke-dasharray:4 4"/>
+      <text x="345" y="134" text-anchor="middle" font-size="12" class="m">MLLM 只回答 yes/no、画框；顺序和阈值由程序定</text>
+    </g>
+    <!-- new -->
+    <text x="0" y="190" font-size="14" font-weight="700" style="fill:var(--accent)">现在：Agent 接管工作流</text>
+    <g font-size="13">
+      <rect x="0" y="206" width="150" height="70" rx="8" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="75" y="232" text-anchor="middle">T1、T2</text>
+      <text x="75" y="252" text-anchor="middle" font-size="12" class="m">+“找出变化的建筑”</text>
+      <line x1="150" y1="241" x2="196" y2="241" style="stroke:var(--accent)" marker-end="url(#ha)"/>
+      <rect x="198" y="200" width="304" height="82" rx="10" style="fill:none;stroke:var(--accent);stroke-width:2"/>
+      <text x="350" y="228" text-anchor="middle" font-weight="700" style="fill:var(--accent)">Agent（LLM 规划器）</text>
+      <text x="350" y="250" text-anchor="middle" font-size="12" class="m">自己选工具组合出初始掩码</text>
+      <text x="350" y="268" text-anchor="middle" font-size="12" class="m">自己决定核实、补漏、修边界、何时停</text>
+      <line x1="502" y1="241" x2="548" y2="241" style="stroke:var(--accent)" marker-end="url(#ha)"/>
+      <rect x="550" y="214" width="130" height="54" rx="8" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="615" y="238" text-anchor="middle">变化掩码</text><text x="615" y="256" text-anchor="middle" font-size="11" class="m">+ 调用轨迹</text>
+    </g>
+    <!-- right: what it buys -->
+    <g font-size="13">
+      <line x1="720" y1="30" x2="720" y2="290" style="stroke:var(--line)"/>
+      <text x="740" y="44" font-weight="700">对应的创新点</text>
+      <text x="740" y="78">1 · Agent 接管 CD 工作流</text><text x="740" y="96" font-size="11.5" class="m">任务 T1.1 × C0：从零生成掩码</text>
+      <text x="740" y="130">2 · Agent 自己修掩码</text><text x="740" y="148" font-size="11.5" class="m">任务 T5.1：修正已有掩码</text>
+      <text x="740" y="182">3 · benchmark</text><text x="740" y="200" font-size="11.5" class="m">同一套工具，换数据集与指令</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">原来的“初始化”是一个写死的黑盒，现在拆开，变成 Agent 可以自由组合的工具；原来的 A/B/C 三阶段也不再是固定顺序。</p>
+</section>
+
+<!-- 2. loop -->
+<section>
+  <h2><span class="k">02</span>Agent 一张图怎么跑</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 940 330" width="100%" style="min-width:720px" role="img" aria-label="Agent 推理循环">
+    <defs>
+      <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker>
+    </defs>
+    <g font-size="13">
+      <!-- inputs -->
+      <rect x="0" y="40" width="170" height="160" rx="8" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="14" y="64" font-weight="700">系统提示</text>
+      <text x="14" y="90" font-size="12" class="m">· 工具说明（JSON schema）</text>
+      <text x="14" y="112" font-size="12" class="m">· building 口径卡</text>
+      <text x="14" y="134" font-size="12" class="m">· 预算：≤30 步、≤8 张图</text>
+      <text x="14" y="164" font-weight="700">用户输入</text>
+      <text x="14" y="186" font-size="12" class="m">T1、T2（1024²）+ 指令</text>
+      <line x1="170" y1="120" x2="226" y2="120" style="stroke:var(--muted)" marker-end="url(#ah2)"/>
+      <!-- planner -->
+      <rect x="228" y="70" width="200" height="100" rx="10" style="fill:none;stroke:var(--accent);stroke-width:2"/>
+      <text x="328" y="106" text-anchor="middle" font-weight="700" style="fill:var(--accent)">规划器 LLM</text>
+      <text x="328" y="128" text-anchor="middle" font-size="12" class="m">看历史 + 上一步结果</text>
+      <text x="328" y="148" text-anchor="middle" font-size="12" class="m">输出下一个工具调用</text>
+      <!-- call / return arrows -->
+      <path d="M428,100 L560,100" style="stroke:var(--accent);fill:none" marker-end="url(#ah2)"/>
+      <text x="494" y="92" text-anchor="middle" font-size="11.5" class="mono">tool_call</text>
+      <path d="M560,140 L430,140" style="stroke:var(--muted);fill:none;stroke-dasharray:5 4" marker-end="url(#ah2)"/>
+      <text x="494" y="160" text-anchor="middle" font-size="11.5" class="m">文字结果 / 放大图</text>
+      <!-- tool server -->
+      <rect x="562" y="40" width="200" height="160" rx="8" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="662" y="64" text-anchor="middle" font-weight="700">工具服务</text>
+      <text x="662" y="90" text-anchor="middle" font-size="12" class="m">SAM / SAM3 / DINOv2</text>
+      <text x="662" y="110" text-anchor="middle" font-size="12" class="m">SegEarth-OV / Qwen3.5-4B</text>
+      <line x1="578" y1="124" x2="746" y2="124" style="stroke:var(--line)"/>
+      <text x="662" y="146" text-anchor="middle" font-size="12">状态仓库</text>
+      <text x="662" y="166" text-anchor="middle" font-size="11.5" class="m mono">mask#3  feat#1  props#2</text>
+      <text x="662" y="186" text-anchor="middle" font-size="11.5" class="m">大对象只回编号和统计</text>
+      <!-- submit -->
+      <path d="M328,170 L328,250 L560,250" style="stroke:var(--accent);fill:none" marker-end="url(#ah2)"/>
+      <text x="440" y="242" text-anchor="middle" font-size="11.5" class="mono" style="fill:var(--accent)">submit(mask)</text>
+      <rect x="562" y="226" width="200" height="50" rx="8" style="fill:none;stroke:var(--accent)"/>
+      <text x="662" y="256" text-anchor="middle">最终掩码 + 轨迹 JSON</text>
+      <line x1="762" y1="251" x2="812" y2="251" style="stroke:var(--muted)" marker-end="url(#ah2)"/>
+      <rect x="814" y="226" width="126" height="50" rx="8" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="877" y="248" text-anchor="middle">评测</text><text x="877" y="266" text-anchor="middle" font-size="11" class="m">common.evaluate</text>
+      <!-- budget guard -->
+      <text x="0" y="306" font-size="12" class="m">超出步数或图数：强制提交当前掩码，并记为“超预算”。每一步都写入轨迹：工具、参数、返回、操作前后的 F1。</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">框架自己写，约 300 行 ReAct 循环，用 OpenAI 兼容的 function calling。本地 vLLM 和百炼接口共用一套代码。</p>
+</section>
+
+<!-- 3. tools -->
+<section>
+  <h2><span class="k">03</span>工具集：只给原子操作，路线由 Agent 拼</h2>
+  <div class="panel">
+    <div class="board">
+      <div class="cat" style="--c:var(--c-see)"><h3>看</h3>
+        <span class="chip">view<small>全图或放大，叠加轮廓和编号</small></span>
+        <span class="chip">inspect<small>连通域清单：面积、外接框、分数</small></span></div>
+      <div class="cat" style="--c:var(--c-seg)"><h3>分割</h3>
+        <span class="chip">segment_everything<small>SAM 全图无类别提议</small></span>
+        <span class="chip">segment_text<small>SAM3 按文本分割，可 512² 分块</small></span>
+        <span class="chip">segment_prompt<small>SAM 框 / 点提示</small></span></div>
+      <div class="cat" style="--c:var(--c-feat)"><h3>特征 · 比较</h3>
+        <span class="chip">extract_features<small>DINOv2 稠密特征</small></span>
+        <span class="chip">compare_features<small>每个提议的两期差异分数</small></span>
+        <span class="chip">match_instances<small>两期实例匹配：出现 / 消失 / 不变</small></span></div>
+      <div class="cat" style="--c:var(--c-sem)"><h3>语义</h3>
+        <span class="chip">classify<small>SegEarth-OV 类别概率</small></span>
+        <span class="chip">ask<small>Qwen3.5-4B 看近景答 P(yes)</small></span></div>
+      <div class="cat" style="--c:var(--c-op)"><h3>掩码运算</h3>
+        <span class="chip">filter · threshold<small>按分数、面积、覆盖率</small></span>
+        <span class="chip">union · intersect · subtract</span>
+        <span class="chip">morph<small>开闭运算</small></span></div>
+      <div class="cat" style="--c:var(--c-edit)"><h3>修改 · 结束</h3>
+        <span class="chip">add_region · remove_region</span>
+        <span class="chip">refine_region<small>SAM 重分一个连通域</small></span>
+        <span class="chip">submit</span></div>
+      <div class="cat" style="--c:var(--muted);grid-column:span 2"><h3>不放进主设定</h3>
+        <span class="chip">SChanger 等全监督检测器<small>在 LEVIR 上训练过，调一次就 92 分，任务就没了。可作为“专家工具”另设一档</small></span></div>
+    </div>
+
+    <div class="routes">
+      <div class="route"><span class="name" style="color:var(--old)">M-C-I 这条路</span>
+        <span class="step" style="--c:var(--c-seg)">segment_everything</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-feat)">extract_features</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-feat)">compare_features</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-sem)">classify</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-op)">threshold</span></div>
+      <div class="route"><span class="name" style="color:var(--old)">I-M-C 这条路（SAM3 版）</span>
+        <span class="step" style="--c:var(--c-seg)">segment_text ×2</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-feat)">match_instances</span></div>
+      <div class="route"><span class="name" style="color:var(--accent)">Agent 可能走的</span>
+        <span class="step" style="--c:var(--c-seg)">segment_text ×2</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-feat)">match_instances</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-see)">view</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-sem)">ask</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-edit)">remove_region</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-edit)">refine_region</span><span class="arrow">→</span>
+        <span class="step" style="--c:var(--c-edit)">submit</span></div>
+    </div>
+  </div>
+  <p class="read">DynamicEarth 的两种方法都只是这些工具的一条固定路线。Agent 能不能重新找到它们、能不能混着用、修改类工具能带来多少，就是“接管工作流”可以量化的地方。工具实现基本都在 <code>code/ovcd_v0/</code> 里，M-C-I 的提议和分数也已缓存。</p>
+</section>
+
+<!-- 4. where it should land -->
+<section>
+  <h2><span class="k">04</span>新 baseline 要落在哪里（LEVIR 测试集 F1^c）</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 900 290" width="100%" style="min-width:640px" role="img" aria-label="LEVIR 测试集已有方法的 F1 与新 baseline 的位置">
+    <!-- scale: x = 230 + (v-40)*11  (40..95) -->
+    <g font-size="11" class="m">
+      <line x1="230" y1="20" x2="230" y2="240" style="stroke:var(--line)"/>
+      <line x1="340" y1="20" x2="340" y2="240" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="450" y1="20" x2="450" y2="240" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="560" y1="20" x2="560" y2="240" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="670" y1="20" x2="670" y2="240" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="780" y1="20" x2="780" y2="240" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <text x="230" y="258" text-anchor="middle" class="m">40</text><text x="340" y="258" text-anchor="middle" class="m">50</text>
+      <text x="450" y="258" text-anchor="middle" class="m">60</text><text x="560" y="258" text-anchor="middle" class="m">70</text>
+      <text x="670" y="258" text-anchor="middle" class="m">80</text><text x="780" y="258" text-anchor="middle" class="m">90</text>
+    </g>
+    <!-- target band 53.76..85.37 -->
+    <rect x="381" y="20" width="348" height="220" style="fill:var(--accent);opacity:.08"/>
+    <text x="555" y="282" text-anchor="middle" font-size="12" style="fill:var(--accent)">新 baseline 第一版预计落在这一段</text>
+    <g font-size="13">
+      <text x="220" y="45" text-anchor="end">M-C-I（固定流程）</text>
+      <rect x="230" y="32" width="151" height="20" rx="3" style="fill:var(--old)"/><text x="389" y="47" class="mono" font-size="12">53.76</text>
+      <text x="220" y="85" text-anchor="end">I-M-C（固定流程）</text>
+      <rect x="230" y="72" width="326" height="20" rx="3" style="fill:var(--old)"/><text x="564" y="87" class="mono" font-size="12">69.67</text>
+      <text x="220" y="125" text-anchor="end">ReA-OVCD</text>
+      <rect x="230" y="112" width="490" height="20" rx="3" style="fill:var(--old)"/><text x="728" y="127" class="mono" font-size="12">84.52</text>
+      <text x="220" y="165" text-anchor="end">ReA + 编排式 v0（r10）</text>
+      <rect x="230" y="152" width="499" height="20" rx="3" style="fill:var(--old);opacity:.75"/><text x="737" y="167" class="mono" font-size="12">85.37</text>
+      <text x="220" y="205" text-anchor="end">SChanger-base（全监督）</text>
+      <rect x="230" y="192" width="582" height="20" rx="3" style="fill:none;stroke:var(--muted);stroke-dasharray:4 3"/><text x="820" y="207" class="mono" font-size="12">92.88</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">第一版不追 85，要回答的是“Agent 自己组织工具能到哪、和固定流程差多少、错在哪一步”。除 F1 外还报每图调用次数、token、失败率，以及 Agent 选了哪条路线、各路线的 F1。</p>
+</section>
+
+<!-- 5. rules -->
+<section>
+  <h2><span class="k">05</span>开发规范（Ethan 2026-11-03 定）</h2>
+  <div class="rules">
+    <div class="rule"><b>两份文档</b><span>给 AI：<code>README_ai.md</code>，怎么上手、接口、格式。<br>给 Ethan：本页，图 &gt; 表 &gt; 文。每个里程碑后两份一起更新。</span></div>
+    <div class="rule"><b>完整轨迹</b><span>输入图 + 指令 → 规划器每步输入输出 → 工具输入输出 → 最终掩码和评测，全部存服务器。挑一份高质量轨迹放进仓库展示。</span></div>
+    <div class="rule"><b>目录</b><span>文档 <code>doc/agent_baseline/</code><br>代码 <code>code/agent_baseline/</code><br>结果 <code>results/agent_baseline/</code></span></div>
+    <div class="rule"><b>和 GPT 合作</b><span>服务器会话在三个节点找 Codex 讨论（见 07），讨论要点写进文档。</span></div>
+    <div class="rule"><b>数据</b><span>只用 LEVIR-CD。验证 64 对用于一切选择，测试 128 对每个配置只评一次。</span></div>
+    <div class="rule"><b>规划器</b><span>只调百炼 qwen3.7-plus，按图高并发；费用报给 Ethan 后不等确认。</span></div>
+  </div>
+</section>
+
+<!-- 6. trajectory -->
+<section>
+  <h2><span class="k">06</span>一条轨迹存什么</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 940 250" width="100%" style="min-width:720px" role="img" aria-label="一张图的轨迹由哪些文件组成">
+    <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker></defs>
+    <g font-size="13">
+      <rect x="0" y="30" width="150" height="80" rx="8" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="75" y="58" text-anchor="middle" font-weight="700">input.json</text>
+      <text x="75" y="80" text-anchor="middle" font-size="11.5" class="m">两期图、指令</text>
+      <text x="75" y="97" text-anchor="middle" font-size="11.5" class="m">系统提示全文</text>
+      <line x1="150" y1="70" x2="186" y2="70" style="stroke:var(--muted)" marker-end="url(#ah3)"/>
+      <!-- steps -->
+      <rect x="188" y="14" width="520" height="112" rx="10" style="fill:none;stroke:var(--accent);stroke-width:2"/>
+      <text x="200" y="36" font-weight="700" style="fill:var(--accent)">steps.jsonl · 每一步一行</text>
+      <rect x="200" y="50" width="150" height="62" rx="6" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="275" y="74" text-anchor="middle">规划器</text>
+      <text x="275" y="94" text-anchor="middle" font-size="11" class="m">推理、原始回复、代码、token</text>
+      <line x1="350" y1="81" x2="372" y2="81" style="stroke:var(--muted)" marker-end="url(#ah3)"/>
+      <rect x="374" y="50" width="160" height="62" rx="6" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="454" y="74" text-anchor="middle">工具调用</text>
+      <text x="454" y="94" text-anchor="middle" font-size="11" class="m">名字、参数、返回、图、耗时</text>
+      <line x1="534" y1="81" x2="556" y2="81" style="stroke:var(--muted)" marker-end="url(#ah3)"/>
+      <rect x="558" y="50" width="140" height="62" rx="6" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="628" y="74" text-anchor="middle">当前掩码</text>
+      <text x="628" y="94" text-anchor="middle" font-size="11" class="m">句柄 + 本步 F1、ΔF1</text>
+      <path d="M628,126 C628,150 275,150 275,126" style="stroke:var(--accent);fill:none;stroke-dasharray:5 4" marker-end="url(#ah3)"/>
+      <text x="452" y="162" text-anchor="middle" font-size="11.5" style="fill:var(--accent)">下一步，最多 30 步</text>
+      <line x1="708" y1="70" x2="744" y2="70" style="stroke:var(--muted)" marker-end="url(#ah3)"/>
+      <rect x="746" y="30" width="194" height="80" rx="8" style="fill:none;stroke:var(--accent)"/>
+      <text x="843" y="58" text-anchor="middle" font-weight="700">final.json</text>
+      <text x="843" y="80" text-anchor="middle" font-size="11.5" class="m">最终掩码、F1/IoU/P/R</text>
+      <text x="843" y="97" text-anchor="middle" font-size="11.5" class="m">谁提交的：Agent / 预算</text>
+      <!-- side stores -->
+      <rect x="188" y="186" width="250" height="50" rx="6" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="313" y="208" text-anchor="middle">messages.jsonl</text><text x="313" y="226" text-anchor="middle" font-size="11" class="m">完整对话，能逐字复现</text>
+      <rect x="458" y="186" width="250" height="50" rx="6" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="583" y="208" text-anchor="middle">images/ · masks/</text><text x="583" y="226" text-anchor="middle" font-size="11" class="m">每次看图、每个掩码的 PNG</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">本步 F1 只由记录器根据真值计算，用来画曲线，<b>绝不</b>传给 Agent，代码里有单元测试检查这一点。展示用的轨迹从测试集挑：正常提交、用到 3 类以上工具、至少一次看图后修正且变好、步数 8–20；同时附一份典型失败轨迹作对照。</p>
+</section>
+
+<!-- 7. milestones -->
+<section>
+  <h2><span class="k">07</span>里程碑与 Codex 讨论节点</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 940 200" width="100%" style="min-width:720px" role="img" aria-label="B0 到 B5 六个里程碑">
+    <g font-size="13">
+      <line x1="40" y1="70" x2="900" y2="70" style="stroke:var(--line);stroke-width:2"/>
+      <g>
+        <circle cx="60" cy="70" r="9" style="fill:var(--accent)"/><text x="60" y="44" text-anchor="middle" font-weight="700">B0</text>
+        <text x="60" y="102" text-anchor="middle">工具层</text><text x="60" y="120" text-anchor="middle" font-size="11" class="m">拼出 M-C-I</text><text x="60" y="136" text-anchor="middle" font-size="11" class="m">复现 53.76</text>
+        <circle cx="228" cy="70" r="9" style="fill:var(--accent)"/><text x="228" y="44" text-anchor="middle" font-weight="700">B1</text>
+        <text x="228" y="102" text-anchor="middle">JSON 循环</text><text x="228" y="120" text-anchor="middle" font-size="11" class="m">5 张验证图</text><text x="228" y="136" text-anchor="middle" font-size="11" class="m">量 token、报费用</text>
+        <circle cx="396" cy="70" r="9" style="fill:var(--accent)"/><text x="396" y="44" text-anchor="middle" font-weight="700">B2</text>
+        <text x="396" y="102" text-anchor="middle">CodeAgent</text><text x="396" y="120" text-anchor="middle" font-size="11" class="m">同一套工具</text><text x="396" y="136" text-anchor="middle" font-size="11" class="m">同 5 张图</text>
+        <circle cx="564" cy="70" r="9" style="fill:var(--accent)"/><text x="564" y="44" text-anchor="middle" font-weight="700">B3</text>
+        <text x="564" y="102" text-anchor="middle">验证集 64 对</text><text x="564" y="120" text-anchor="middle" font-size="11" class="m">2 形态 × 2 模型</text><text x="564" y="136" text-anchor="middle" font-size="11" class="m">只改提示和工具说明</text>
+        <circle cx="732" cy="70" r="9" style="fill:var(--accent)"/><text x="732" y="44" text-anchor="middle" font-weight="700">B4</text>
+        <text x="732" y="102" text-anchor="middle">测试集 128 对</text><text x="732" y="120" text-anchor="middle" font-size="11" class="m">每个配置评一次</text>
+        <circle cx="880" cy="70" r="9" style="fill:var(--accent)"/><text x="880" y="44" text-anchor="middle" font-weight="700">B5</text>
+        <text x="880" y="102" text-anchor="middle">展示轨迹</text><text x="880" y="120" text-anchor="middle" font-size="11" class="m">回放页</text><text x="880" y="136" text-anchor="middle" font-size="11" class="m">两份文档定稿</text>
+      </g>
+      <!-- codex gates -->
+      <g style="fill:var(--c-cmp)">
+        <path d="M144,62 l8,8 l-8,8 l-8,-8z"/><path d="M480,62 l8,8 l-8,8 l-8,-8z"/><path d="M648,62 l8,8 l-8,8 l-8,-8z"/>
+      </g>
+      <text x="144" y="170" text-anchor="middle" font-size="11.5" style="fill:var(--c-cmp)">Codex：工具接口定稿</text>
+      <text x="480" y="170" text-anchor="middle" font-size="11.5" style="fill:var(--c-cmp)">Codex：验证集首次跑通</text>
+      <text x="648" y="190" text-anchor="middle" font-size="11.5" style="fill:var(--c-cmp)">Codex：测试前冻结配置</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">B0 之前先做 BF 快速版（2 天）。之后 B0–B2 预计 4–5 天，B3–B5 预计 2–3 天。百炼全量跑之前停一次，等 Ethan 确认费用。</p>
+</section>
+
+<!-- 7b. optimization loop -->
+<section>
+  <h2><span class="k">07+</span>优化外循环：跑通之后持续调到足够好</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 940 300" width="100%" style="min-width:720px" role="img" aria-label="Claude 优化外循环">
+    <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" style="fill:var(--muted)"/></marker></defs>
+    <g font-size="13">
+      <rect x="20" y="40" width="170" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="105" y="70" text-anchor="middle" font-weight="700">① 跑验证集 64 对</text>
+      <text x="105" y="92" text-anchor="middle" font-size="11.5" class="m">完整轨迹按轮次单独存</text>
+      <line x1="190" y1="80" x2="246" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
+      <rect x="248" y="40" width="200" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="348" y="70" text-anchor="middle" font-weight="700">② 诊断</text>
+      <text x="348" y="92" text-anchor="middle" font-size="11.5" class="m">每张错图标主因</text>
+      <text x="348" y="108" text-anchor="middle" font-size="11.5" class="m">统计图数和 F1 损失</text>
+      <line x1="448" y1="80" x2="504" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
+      <rect x="506" y="40" width="200" height="80" rx="10" style="fill:none;stroke:var(--accent);stroke-width:2"/>
+      <text x="606" y="70" text-anchor="middle" font-weight="700" style="fill:var(--accent)">③ 选改动</text>
+      <text x="606" y="92" text-anchor="middle" font-size="11.5" class="m">调参、换工具、改架构都行</text>
+      <text x="606" y="108" text-anchor="middle" font-size="11.5" class="m">写明依据哪些轨迹</text>
+      <line x1="706" y1="80" x2="762" y2="80" style="stroke:var(--muted)" marker-end="url(#ah4)"/>
+      <rect x="764" y="40" width="160" height="80" rx="10" style="fill:var(--soft);stroke:var(--line)"/>
+      <text x="844" y="70" text-anchor="middle" font-weight="700">④ 重跑对比</text>
+      <text x="844" y="92" text-anchor="middle" font-size="11.5" class="m">变好保留</text>
+      <text x="844" y="108" text-anchor="middle" font-size="11.5" class="m">没变好回滚</text>
+      <path d="M844,120 C844,150 105,150 105,122" style="stroke:var(--accent);fill:none;stroke-dasharray:5 4" marker-end="url(#ah4)"/>
+      <text x="474" y="178" text-anchor="middle" font-size="12" style="fill:var(--accent)">下一轮 · BF 期间 2 轮，之后不设上限 · 连续 3 轮小改无效就必须做结构性改动</text>
+      <!-- two layers -->
+      <rect x="248" y="200" width="300" height="80" rx="8" style="fill:none;stroke:var(--c-seg)"/>
+      <text x="398" y="226" text-anchor="middle" font-weight="700" style="fill:var(--c-seg)">工具层</text>
+      <text x="398" y="248" text-anchor="middle" font-size="11.5" class="m">SAM3 分块与门限、匹配门限、SAM 提示、ask 提示</text>
+      <text x="398" y="266" text-anchor="middle" font-size="11.5" class="m">每个工具有自己的单项指标，离线直接算</text>
+      <rect x="568" y="200" width="300" height="80" rx="8" style="fill:none;stroke:var(--accent)"/>
+      <text x="718" y="226" text-anchor="middle" font-weight="700" style="fill:var(--accent)">系统层</text>
+      <text x="718" y="248" text-anchor="middle" font-size="11.5" class="m">系统提示、工具说明、工具增删、停止规则</text>
+      <text x="718" y="266" text-anchor="middle" font-size="11.5" class="m">看整套 Agent 的 F1、步数、失败率</text>
+      <text x="20" y="220" font-size="12" class="m">只看验证集</text>
+      <text x="20" y="240" font-size="12" class="m">测试集最后评一次</text>
+      <text x="20" y="260" font-size="12" class="m">每两轮找 Codex 看一次</text>
+    </g>
+  </svg>
+  </div>
+  <p class="read">提示里只允许写通用的方法性指导，不能写数据集名或针对 LEVIR 的规则。这一步是工程调优，相当于把人工调提示交给 Claude 来做，论文里如实写「经过 N 轮验证集迭代」，不作为方法贡献。</p>
+
+  <div class="two" style="margin-top:16px">
+    <div class="panel"><b style="color:var(--accent)">不用向 Ethan 确认就能做</b>
+      <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px">
+        <li>换工具、加工具：SimpleClick、AnyChange、RemoteCLIP、APE、Grounding DINO 等</li>
+        <li>自主下载权重和代码、配环境</li>
+        <li>改架构或转换方向：CodeAgent 当主线、加反思步骤、推翻现有设计</li>
+        <li>API 和 GPU 按需用，费用只报告</li></ul></div>
+    <div class="panel"><b style="color:var(--old)">结果可信的底线，不能碰</b>
+      <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:14px">
+        <li>不用在 LEVIR 上训练过的模型，也不在 LEVIR 上训练</li>
+        <li>真值、数据集名、针对 LEVIR 的规则不进 Agent 输入</li>
+        <li>测试集只在冻结配置时评，评完不回头改</li>
+        <li>新工具先登记来源、许可、训练数据和单项指标</li></ul></div>
+  </div>
+  <p class="read">另外持续维护一份 LEVIR 分析：什么在限制 F1（工具上界、决策错误、停止错误各占多少），每类错误在各轮里怎么变化，哪些工具换了有效、为什么。</p>
+
+  <h3 style="margin:22px 0 8px;font-size:15px">优化轮次记录</h3>
+  <div class="panel scroll"><table>
+    <thead><tr><th>轮次</th><th>层</th><th>诊断</th><th>改动</th><th>验证集 F1^c</th><th>步数 / 失败率</th><th>结果</th></tr></thead>
+    <tbody><tr><td>r6</td><td>工具</td><td>同一栋建筑外观变化时核验仍判新建</td><td><code>ask</code> 换 flash + 对应问法</td><td>T1.1 83.45→83.77；T5.1 84.80→85.19（差值跨零）</td><td>费用持平</td><td>保留，目前最好</td></tr><tr><td>规划器换 flash</td><td>模型</td><td>费用</td><td>配置同 r4，只换规划器</td><td>T1.1 83.45→80.91；T5.1 84.80→83.79</td><td>一遍约 6.9 元（plus 约 23.6 元）；很少调用 <code>ask</code></td><td>规划器不换</td></tr><tr><td>r5</td><td>系统</td><td>候选被错误采纳</td><td>提示 v3：采纳要有具体证据</td><td>T1.1 83.45→82.84；T5.1 84.80→84.49</td><td>错误新增没有减少</td><td>回滚</td></tr><tr><td>r4</td><td>工具</td><td>与真值相连的误检多，SAM3 软输出离线有效</td><td>像素门限 0.5→0.85，T5.1 给定掩码同步换新</td><td>3 次均值：T1.1 83.56→83.45；T5.1 83.92→84.80（差值跨零，增益主要来自掩码）</td><td>T5.1 标准差 0.16→0.60</td><td>保留；仍低于规则对照 85.45</td></tr><tr><td>r3b</td><td>工具</td><td><code>ask</code> 答否误删多</td><td>换 qwen3.7-plus 独立请求，近景 + 大范围四张图</td><td>3 次均值，对比 r3a：T1.1 83.47→83.56；T5.1 82.61→83.92</td><td>T5.1 标准差 1.59→0.16</td><td>保留；仍低于规则对照 84.23</td></tr><tr><td>r3a</td><td>工具</td><td>分批删除时旧编号用到新句柄（val_21）</td><td><code>remove_region</code> 保持编号；<code>ask</code> 上限 64</td><td>3 次均值，对比 v2：T1.1 82.17→83.47；T5.1 83.27→82.61</td><td>差值都跨零，集中在个别图</td><td>保留修复；不能归因</td></tr><tr><td>r2</td><td>系统</td><td>单期证据判定变化、整体重建掩码</td><td>提示 v2、无工具回复重试、重复调用不执行</td><td>3 次均值 T1.1 81.83→82.17；T5.1 81.93→83.27</td><td>T5.1 标准差 1.59→0.28</td><td>保留</td></tr><tr><td>r1</td><td>系统</td><td>无工具回复、句柄类型错误</td><td>接口修复、强制调用</td><td>T1.1 79.55→81.06；T5.1 83.34→80.68（在运行波动内）</td><td>17.8 / 4.7%；17.5 / 3.1%</td><td>接口修复保留，效果未定</td></tr><tr><td>r0</td><td>—</td><td>基线</td><td>—</td><td>T1.1 79.55；T5.1 83.34</td><td>17.2 / 9.4%；17.6 / 3.1%</td><td>—</td></tr></tbody>
+  </table></div>
+
+  <h3 style="margin:22px 0 8px;font-size:15px">工具质量卡</h3>
+  <div class="panel scroll"><table>
+    <thead><tr><th>工具</th><th>当前配置</th><th>单项指标</th><th>单项指标值</th><th>已知弱点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">segment_text</td><td>SAM3，512² 分块，实例门限 0.5，像素门限 0.85（r4 起）</td><td>固定路线 F1^c（召回待测）</td><td>像素 0.85：83.15；像素 0.5：82.14；实例 0.45：82.52；0.6：76.91；重叠分块 81.93；256 分块 79.39</td><td>密集小住宅区几乎检不出</td></tr>
+      <tr><td class="mono">match_instances</td><td>单向覆盖 0.25</td><td>出现 ∪ 消失的 F1^c</td><td>验证集 82.14</td><td>同位置拆除重建判为未变</td></tr>
+      <tr><td class="mono">segment_prompt / refine_region</td><td>SAM ViT-H 框提示</td><td>GT 框 / 扰动框下的 mIoU</td><td>单项待测；框替换 SAM3 掩码：79.38，求交：82.20</td><td>框替换会外溢</td></tr>
+      <tr><td class="mono">ask</td><td>r6 起：qwen3.7-flash，四张图，跨时相对象对应问法</td><td>0.85 候选池 3,295 个组件上按答否删除的规则 F1^c</td><td>86.35（plus 四图 85.45，plus 对应问法 86.26，flash 四图 85.74）</td><td>flash 约 45% 的请求有 <code>p_yes</code>；问法在验证集上选出</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 7c. harness -->
+<section>
+  <h2><span class="k">07++</span>变化检测专用 harness 与 skill（Ethan 11-04）</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 900 330" width="100%" style="min-width:640px" role="img" aria-label="验证集 F1：固定组合与 Agent">
+    <g font-size="11" class="m">
+      <line x1="250" y1="16" x2="250" y2="280" style="stroke:var(--line)"/>
+      <line x1="370" y1="16" x2="370" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="490" y1="16" x2="490" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="610" y1="16" x2="610" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="730" y1="16" x2="730" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <text x="250" y="298" text-anchor="middle" class="m">50</text><text x="370" y="298" text-anchor="middle" class="m">60</text>
+      <text x="490" y="298" text-anchor="middle" class="m">70</text><text x="610" y="298" text-anchor="middle" class="m">80</text>
+      <text x="730" y="298" text-anchor="middle" class="m">90</text>
+    </g>
+    <!-- x = 250 + (v-50)*12 -->
+    <g font-size="13">
+      <text x="240" y="40" text-anchor="end">DynamicEarth M-C-I</text>
+      <rect x="250" y="27" width="94" height="20" rx="3" style="fill:var(--old)"/><text x="352" y="42" class="mono" font-size="12">57.82</text>
+      <text x="240" y="76" text-anchor="end">DynamicEarth I-M-C（APE）</text>
+      <rect x="250" y="63" width="276" height="20" rx="3" style="fill:var(--old)"/><text x="534" y="78" class="mono" font-size="12">73.01</text>
+      <text x="240" y="112" text-anchor="end">I-M-C(SAM3) 固定路线</text>
+      <rect x="250" y="99" width="386" height="20" rx="3" style="fill:var(--old);opacity:.8"/><text x="644" y="114" class="mono" font-size="12">82.14</text>
+      <text x="240" y="148" text-anchor="end">同上，像素门限 0.85</text>
+      <rect x="250" y="135" width="398" height="20" rx="3" style="fill:var(--old);opacity:.8"/><text x="656" y="150" class="mono" font-size="12">83.15</text>
+      <text x="240" y="196" text-anchor="end" font-weight="700" style="fill:var(--accent)">Agent T1.1（r6）</text>
+      <rect x="250" y="183" width="405" height="20" rx="3" style="fill:var(--accent)"/><text x="663" y="198" class="mono" font-size="12">83.77</text>
+      <text x="240" y="232" text-anchor="end" font-weight="700" style="fill:var(--accent)">Agent T5.1（r6）</text>
+      <rect x="250" y="219" width="422" height="20" rx="3" style="fill:var(--accent)"/><text x="680" y="234" class="mono" font-size="12">85.19</text>
+      <text x="240" y="268" text-anchor="end" class="m">参照：答否就删 / ReA 调门限</text>
+      <rect x="250" y="255" width="436" height="20" rx="3" style="fill:none;stroke:var(--muted);stroke-dasharray:4 3"/><text x="694" y="270" class="mono m" font-size="12">86.35 / 87.33</text>
+    </g>
+    <text x="250" y="320" font-size="11.5" class="m">LEVIR 验证集 64 对，Agent 为 3 次重复的均值。</text>
+  </svg>
+  </div>
+  <p class="read">相对 DynamicEarth 的固定组合，Agent 高出 10 到 27 分，但大部分来自换成 SAM3 这个更强的基础模型。真正属于 Agent 调度的，是同一套工具下「固定路线 → Agent」这一段：T1.1 约 +0.6，T5.1 约 +2.0（相对给定掩码）。harness 和 skill 的目标就是把这一段做大。</p>
+
+  <div class="panel scroll" style="margin-top:14px"><table>
+    <thead><tr><th>harness 能力</th><th>做法</th><th>现状</th></tr></thead>
+    <tbody>
+      <tr><td><b>skill</b></td><td>系统提示只放 skill 索引，Agent 按需 <code>load_skill</code> 读全文。首批：核验、掩码修正、修边界、找漏检、提交前自查</td><td>待做</td></tr>
+      <tr><td><b>python 工具</b></td><td>通用计算的补充：只读访问句柄数组，可存新掩码；统计、缓冲区、自定义筛选。读不到真值。反复出现的用法升级成正式工具</td><td>待做</td></tr>
+      <tr><td>规划</td><td><code>plan</code> 工具：开局写待办清单，过程中更新，复核时对照</td><td>待做</td></tr>
+      <tr><td>状态摘要</td><td>每轮附当前掩码、已核验和未核验数、剩余预算、清单进度</td><td>部分有</td></tr>
+      <tr><td>上下文管理</td><td>留图策略已有；补上把旧工具结果压成摘要</td><td>部分有</td></tr>
+      <tr><td>提交前复核</td><td>r7</td><td>有</td></tr>
+      <tr><td>换任务、换数据集</td><td>只改配置不改代码：T1.1、T5.1，以后 T1.2、T2.x</td><td>待做</td></tr>
+    </tbody>
+  </table></div>
+  <p class="read">skill 只能写通用的变化检测方法，不写数据集名或 LEVIR 特有的规则。它等同于人写的提示，属于 harness，论文里要做「去掉 skill」的消融。</p>
+</section>
+
+<!-- 8. progress -->
+<section>
+  <h2><span class="k">08</span>进度（新的在上）</h2>
+  <div class="panel scroll">
+    <table>
+      <thead><tr><th>日期</th><th>里程碑</th><th>做了什么</th><th>结果</th><th>下一步</th></tr></thead>
+      <tbody>
+        <tr><td class="num">2026-11-04</td><td>第 6 轮</td><td><code>ask</code> 换 flash + 对应问法，3 次重复；分析脚本移入仓库</td><td>T1.1 83.77±0.53；T5.1 85.19±0.53；规则对照 86.35；累计约 658 元</td><td>Codex 第 5 次讨论，定第 7 轮</td></tr>
+        <tr><td class="num">2026-11-04</td><td>第 5 轮和模型比较</td><td>提示 v3 回滚；flash 规划器 3 次重复；对应问法离线评测；预算熔断改为只停对应批次</td><td>规则对照 86.35（flash + 对应问法）；Agent 最好仍是 r4；累计约 593 元</td><td>第 6 轮：规划器 plus，<code>ask</code> 换 flash + 对应问法</td></tr>
+        <tr><td class="num">2026-11-04</td><td>第 4 轮</td><td>SAM3 像素门限 0.85，T5.1 给定掩码同步换新；各 3 次重复；Codex 第 4 次讨论</td><td>T1.1 83.45±0.54；T5.1 84.80±0.60；规则对照 85.45；约 80.8 元</td><td>第 5 轮：提示 v3；离线测对应问法和 flash</td></tr>
+        <tr><td class="num">2026-11-04</td><td>第 3 轮</td><td>离线比较边界方案和 5 种核验；修复组件编号和预算账本；<code>ask</code> 换成 qwen3.7-plus 四图请求；各 3 次重复</td><td>T1.1 83.56±0.54；T5.1 83.92±0.16（固定路线 82.14）；约 168.7 元</td><td>第 4 轮：像素门限 0.85</td></tr>
+        <tr><td class="num">2026-11-03</td><td>BF 完成</td><td>v1、v2 提示各重复 3 次；修复缓存、熔断；重做可视化示例</td><td>T1.1 82.17±0.51（固定路线 82.14）；T5.1 83.27±0.28（原样 82.14，调门限 82.52）；累计约 227 元</td><td>第 3 轮结构性改动</td></tr>
+        <tr><td class="num">2026-11-03</td><td>BF（r1；重复实验作废）</td><td>r1 跑完；v1、v2 各 3 组重复实验中途配额用尽，全部作废</td><td>r1：T1.1 81.06，T5.1 80.68。<b>更正：T5.1 相对原样 r0 +1.20、r1 −1.46，没有稳定优势</b>。累计估算约 90 元</td><td>等 Ethan 决定配额和预算</td></tr>
+        <tr><td class="num">2026-11-03</td><td>BF（r0）</td><td>验证集 64 对 × 2 任务跑通；第一版可视化示例（<a href="../../results/agent_baseline/demo/">demo/</a>）</td><td>T1.1 79.55（固定路线 82.14）；T5.1 83.34（原样 82.14，调门限 82.52）；费用 23.33 元</td><td>第 1 轮优化</td></tr>
+        <tr><td class="num">2026-11-03</td><td>B0、B1</td><td>工具层、JSON 循环和轨迹记录落地；与 Codex 讨论接口；5 张图 × 2 任务跑通</td><td>I-M-C(SAM3) 验证集 82.14，调门限后 82.52；预计 64 张 × 2 任务约 24.4 元</td><td>跑验证集 64 对</td></tr>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>扩大自主权：可换工具、下载、改架构，不用确认；加 LEVIR 分析</td><td>—</td><td>BF</td></tr>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>加入优化外循环、轮次记录和工具质量卡</td><td>—</td><td>BF</td></tr>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>只调 API、不等本地模型、提高并发</td><td>—</td><td>BF</td></tr>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>对照任务体系定稿：第一版 = T1.1 × C0 + T5.1（修正 SAM3 输出）</td><td>—</td><td>BF</td></tr>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>组会后调整：新增 BF 快速版（2 天），工具分核心档与扩展档，可视化示例提前</td><td>—</td><td>BF</td></tr>
+        <tr><td class="num">2026-11-03</td><td>—</td><td>建立两份文档；方案和开发规范与 Ethan 确认</td><td>—</td><td>B0</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div>
+</body>
+</html>
