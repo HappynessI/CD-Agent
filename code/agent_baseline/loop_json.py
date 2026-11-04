@@ -16,7 +16,7 @@ import traceback
 import numpy as np
 from common import names, load_rgb, load_mask_png, WORKSPACE
 from prompts import SCOPE_CARD
-from .tools import Toolbox, SCHEMAS, failure
+from .tools import Toolbox, SCHEMAS, Result, failure
 from . import tools as tool_module
 from .state import Mask
 from .planner import Planner, RunGuard, RunStopped, usage_tokens
@@ -88,11 +88,15 @@ def referenced_handles(args):
     return []
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None):
+REVIEW_REPLIES = 3
+
+
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False):
     session = toolbox.session
     rounds, no_tools = 0, 0
     previous_calls = None
     reason, error = 'budget', None
+    reviewed = not review
     messages = []
     planner.record = recorder.request
     try:
@@ -150,7 +154,16 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     except (json.JSONDecodeError, TypeError):
                         result = failure('bad_args', 'function.arguments must be a valid JSON object; check its fields and quoting.')
                     else:
-                        result = toolbox.execute(name, args, allowed)
+                        handle = args.get('mask') if isinstance(args, dict) else None
+                        # The first valid submit opens one review. The last reply can only submit.
+                        if (name == 'submit' and not reviewed and number < budget and handle in allowed
+                                and isinstance(session.handles[handle], Mask)):
+                            reviewed = True
+                            previous_calls = None
+                            result = Result(dict(ok=True, submitted=False, review=toolbox.review(handle, budget - number)),
+                                            internal=dict(status='review'))
+                        else:
+                            result = toolbox.execute(name, args, allowed)
                 messages.append(dict(role='tool', tool_call_id=call['id'], content=result.text))
                 images.extend(image_blocks(result) if result.images else [])
                 internal = result.internal
@@ -188,7 +201,10 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             else:
                 no_tools = 0
             left = budget - number
-            if 0 < left <= 3:
+            if left == REVIEW_REPLIES and not reviewed and session.current_mask is not None:
+                reviewed = True
+                messages.append(dict(role='user', content=toolbox.review(session.current_mask, left)))
+            elif 0 < left <= REVIEW_REPLIES:
                 messages.append(dict(role='user', content=f'You have {left} replies left. Submit your best mask before they run out.'))
     except RunStopped:
         raise
@@ -218,6 +234,7 @@ def main():
     parser.add_argument('--sam3-worker')
     parser.add_argument('--ask-worker')
     parser.add_argument('--planner-model', default='qwen3.7-plus')
+    parser.add_argument('--review', action='store_true', help='One pre-submission review from the session records.')
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
@@ -261,12 +278,12 @@ def main():
         toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr),
             shared.for_image(args.split, name), ask, init_mask=init)
         try:
-          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version,
+          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version, review=args.review,
             metadata=dict(session_id=Path(name).stem, source_images=[str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')],
                 init_mask_path=str(init_path) if args.task == 'T5.1' else None,
                 init_config=dict(route=args.init_name, text='building', tile=512, score_thr=.5,
                                  overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if args.task == 'T5.1' else None,
-                backends=dict(ask=args.ask_backend, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
+                backends=dict(ask=args.ask_backend, review=args.review, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
                     else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                     sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
                 init_error=init_error))

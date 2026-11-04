@@ -181,6 +181,8 @@ class Toolbox:
         self.segment_backend, self.prompt_backend, self.ask_backend = segment, prompt, ask
         self.allowed = None
         self.meta = {}
+        # Verifier answers by exact component outline, so they survive renumbering and lapse when an outline changes.
+        self.asked = {}
 
     def get(self, key, kind=None):
         return self.session.get(key, kind, self.allowed)
@@ -326,6 +328,8 @@ class Toolbox:
         for (key, _, c), row in zip(expanded, rows):
             answer = row.get('answer')
             valid = answer in ('yes', 'no')
+            if valid:
+                self.asked[np.flatnonzero(self.get(key, Mask).labels == c['id']).tobytes()] = answer
             results.append(dict(mask=key, id=c['id'], p_yes=row.get('p_yes'), answer=answer if valid else None,
                 type=row.get('type'), reason=row.get('reason'), status='parsed' if valid else 'unparsed'))
         return dict(results=results)
@@ -399,6 +403,33 @@ class Toolbox:
         new = (item.data & (item.labels != id)) | local
         return self._mask(new, (mask,), set_current, item.data, old_bbox=list(comp['bbox']),
             new_bbox=bbox(local), old_area=comp['area'], new_area=int(local.sum()), roi=roi, sam_quality=quality)
+
+    def review(self, key, replies_left):
+        """Pre-submission checklist from the session's own records: no new requests and no edits."""
+        item = self.session.get(key, Mask)
+        answered = dict(yes=[], no=[])
+        open_rows = []
+        for c in sorted(item.components, key=lambda c: (-c['area'], c['id'])):
+            answer = self.asked.get(np.flatnonzero(item.labels == c['id']).tobytes())
+            (answered[answer] if answer else open_rows).append(c)
+        row = lambda c: f"id={c['id']} area={c['area']} bbox={list(c['bbox'])}"
+        lines = [f"Final review: nothing is submitted yet. Proposed answer {key}: {int(item.data.sum())} pixels in {len(item.components)} components.",
+                 f"Verifier records: {len(answered['yes'])} components answered yes; {len(answered['no'])} answered no and are still in this mask."]
+        lines += [f"  answered no: {row(c)}" for c in answered['no'][:20]]
+        if len(answered['no']) > 20:
+            lines.append(f"  and {len(answered['no']) - 20} more answered no.")
+        lines.append(f"No verifier record: {len(open_rows)} components, {sum(c['area'] for c in open_rows)} pixels. A record applies only to the exact outline it was asked about; a view is not a record.")
+        lines += [f"  no record: {row(c)}" for c in open_rows[:20]]
+        if len(open_rows) > 20:
+            lines.append(f"  and {len(open_rows) - 20} more without a record.")
+        lines.append(f"Views so far: {self.session.view_count}.")
+        if self.session.initial_mask is not None:
+            given = self.session.get(self.session.initial_mask, Mask).data
+            outside = item.data & ~given
+            ids = sorted(set(int(v) for v in item.labels[outside]))
+            lines.append(f"Compared with the given mask: {int(outside.sum())} pixels added, in components {ids[:20]}; {int((given & ~item.data).sum())} pixels removed.")
+        lines.append(f"Decide for what this list shows: keep it, withdraw it or check further. One ask call takes up to {MAX_ASK} components. You may submit with open doubts; say in the summary what remains uncertain. Call submit to finish. You have {replies_left} replies left.")
+        return '\n'.join(lines)
 
     def submit(self, mask, summary):
         item = self.get(mask, Mask)

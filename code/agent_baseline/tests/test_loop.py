@@ -34,6 +34,45 @@ class LoopTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root=Path(self.tmp.name)
 
+    def test_review_opens_once_and_the_same_submit_then_finishes(self):
+        submit=call('submit',dict(mask='mask#0',summary='Retain.'))
+        final,box,client,recorder=run(self.root,[response([submit]),response([submit])],init=mask(),review=True)
+        self.assertEqual(final['submitted_by'],'model')
+        self.assertEqual(final['planning_rounds'],2)
+        first=recorder.steps[0]['calls'][0]
+        self.assertEqual(first['status'],'review')
+        self.assertIn('nothing is submitted yet',first['result_text'])
+        assert_no_evidence(self,json.loads(first['result_text']))
+        self.assertEqual(recorder.steps[1]['calls'][0]['status'],'executed')
+
+    def test_review_reports_records_by_outline_and_additions(self):
+        init=mask()|mask((30,20,35,25))
+        script=[response([call('ask',dict(regions=[dict(mask='mask#0',ids=[1])]))]),
+                response([call('segment_prompt',dict(time='t1',box=[12,0,18,3]))]),
+                response([call('combine',dict(op='union',a='mask#0',b='mask#1'))]),
+                response([call('submit',dict(mask='mask#2',summary='Add.'))]),
+                response([call('submit',dict(mask='mask#2',summary='Add.'))])]
+        _,box,_,recorder=run(self.root,script,init=init,review=True)
+        text=json.loads(recorder.steps[3]['calls'][0]['result_text'])['review']
+        self.assertIn('1 components answered yes',text)
+        self.assertIn('No verifier record: 2 components',text)
+        self.assertRegex(text,r'[1-9][0-9]* pixels added')
+        self.assertEqual(box.session.submitted,'mask#2')
+
+    def test_review_at_three_replies_left_and_on_the_last_reply(self):
+        view=lambda i:response([call('view',dict(region=[0,0,10+i,10+i]),f'v{i}')])
+        script=[view(0),view(1),view(2),response([call('submit',dict(mask='mask#0',summary='Retain.'))])]
+        final,_,client,recorder=run(self.root,script,init=mask(),budget=5,review=True)
+        # Reply 2 leaves 3 replies, so the checklist arrives there and the later submit is not intercepted.
+        self.assertEqual(final['planning_rounds'],4)
+        self.assertEqual(recorder.steps[3]['calls'][0]['status'],'executed')
+        texts=[m['content'] for m in client.requests[2]['messages'] if m['role']=='user' and isinstance(m['content'],str)]
+        self.assertTrue(any('Final review' in t for t in texts))
+        last=[response([call('submit',dict(mask='mask#0',summary='Retain.'))])]
+        (self.root/'one').mkdir()
+        final,_,_,_=run(self.root/'one',last,init=mask(),budget=1,review=True)
+        self.assertEqual(final['submitted_by'],'model')
+
     def test_budget_uses_current_last_round_executes(self):
         script=[response([call('remove_region',dict(mask='mask#0',ids=[1]))])]
         final, box, client, recorder = run(self.root,script,init=mask(),budget=1)
