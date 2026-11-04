@@ -73,6 +73,23 @@ class LoopTests(unittest.TestCase):
         final,_,_,_=run(self.root/'one',last,init=mask(),budget=1,review=True)
         self.assertEqual(final['submitted_by'],'model')
 
+    def test_status_line_and_plan_only_when_on(self):
+        plan=call('plan',dict(items=[dict(text='Look at both dates',status='done'),dict(text='Check components',status='todo')]))
+        script=[response([plan]),response([call('submit',dict(mask='mask#0',summary='Retain.'))])]
+        final,box,client,recorder=run(self.root,script,init=mask(),status=True)
+        self.assertEqual(final['submitted_by'],'model')
+        names=[t['function']['name'] for t in client.requests[0]['tools']]
+        self.assertIn('plan',names)
+        texts=[m['content'] for m in client.requests[1]['messages'] if m['role']=='user' and isinstance(m['content'],str)]
+        self.assertEqual(len(texts),1)
+        self.assertIn('29 replies left',texts[0])
+        self.assertIn('0 yes, 0 no, 1 none',texts[0])
+        self.assertIn('Plan: 1/2 closed; next: Check components',texts[0])
+        assert_no_evidence(self,dict(content=texts[0]))
+        (self.root/'off').mkdir()
+        _,_,client,_=run(self.root/'off',[response([call('submit',dict(mask='mask#0',summary='Retain.'))])],init=mask())
+        self.assertNotIn('plan',[t['function']['name'] for t in client.requests[0]['tools']])
+
     def test_budget_uses_current_last_round_executes(self):
         script=[response([call('remove_region',dict(mask='mask#0',ids=[1]))])]
         final, box, client, recorder = run(self.root,script,init=mask(),budget=1)

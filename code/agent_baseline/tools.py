@@ -80,7 +80,12 @@ SCHEMAS = [
     schema('submit', 'Finish with any existing mask (including an old or empty mask) and a short summary. Subsequent calls in this reply are skipped.',
            dict(mask=M, summary=S), ['mask', 'summary']),
 ]
-SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in SCHEMAS}
+# Offered only when the status harness is on, so runs without it keep their exact tool list.
+PLAN_SCHEMA = schema('plan', 'Write or replace your own short to-do list for this image. Each item has a text and a status. The list is only your notes: it runs nothing and adds no evidence.',
+    dict(items=arg('array', minItems=1, maxItems=12, items=dict(type='object', properties=dict(
+        text=dict(type='string'), status=dict(type='string', enum=['todo', 'doing', 'done', 'dropped'])),
+        required=['text', 'status'], additionalProperties=False))), ['items'])
+SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA]}
 
 
 def validate(value, spec, path='arguments'):
@@ -183,6 +188,7 @@ class Toolbox:
         self.meta = {}
         # Verifier answers by exact component outline, so they survive renumbering and lapse when an outline changes.
         self.asked = {}
+        self.todo = []
 
     def get(self, key, kind=None):
         return self.session.get(key, kind, self.allowed)
@@ -404,14 +410,39 @@ class Toolbox:
         return self._mask(new, (mask,), set_current, item.data, old_bbox=list(comp['bbox']),
             new_bbox=bbox(local), old_area=comp['area'], new_area=int(local.sum()), roi=roi, sam_quality=quality)
 
+    def plan(self, items):
+        self.todo = [dict(item) for item in items]
+        return dict(items=len(self.todo), done=sum(item['status'] == 'done' for item in self.todo))
+
+    def records(self, item):
+        """Components of a mask by verifier record: yes, no, or none for an outline nobody asked about."""
+        answered = dict(yes=[], no=[], none=[])
+        for c in sorted(item.components, key=lambda c: (-c['area'], c['id'])):
+            answered[self.asked.get(np.flatnonzero(item.labels == c['id']).tobytes(), 'none')].append(c)
+        return answered
+
+    def status(self, replies_left):
+        """One short state line for each reply, from the session's own records."""
+        key = self.session.current_mask
+        lines = [f'Status: {replies_left} replies left.']
+        if key is None:
+            lines.append('No current answer yet.')
+        else:
+            item = self.session.get(key, Mask)
+            answered = self.records(item)
+            lines.append(f"Current answer {key}: {int(item.data.sum())} pixels in {len(item.components)} components; "
+                         f"verifier records: {len(answered['yes'])} yes, {len(answered['no'])} no, {len(answered['none'])} none.")
+        if self.todo:
+            done = sum(row['status'] in ('done', 'dropped') for row in self.todo)
+            following = next((row['text'] for row in self.todo if row['status'] in ('doing', 'todo')), None)
+            lines.append(f'Plan: {done}/{len(self.todo)} closed' + (f'; next: {following}' if following else '') + '.')
+        return ' '.join(lines)
+
     def review(self, key, replies_left):
         """Pre-submission checklist from the session's own records: no new requests and no edits."""
         item = self.session.get(key, Mask)
-        answered = dict(yes=[], no=[])
-        open_rows = []
-        for c in sorted(item.components, key=lambda c: (-c['area'], c['id'])):
-            answer = self.asked.get(np.flatnonzero(item.labels == c['id']).tobytes())
-            (answered[answer] if answer else open_rows).append(c)
+        answered = self.records(item)
+        open_rows = answered['none']
         row = lambda c: f"id={c['id']} area={c['area']} bbox={list(c['bbox'])}"
         lines = [f"Final review: nothing is submitted yet. Proposed answer {key}: {int(item.data.sum())} pixels in {len(item.components)} components.",
                  f"Verifier records: {len(answered['yes'])} components answered yes; {len(answered['no'])} answered no and are still in this mask."]

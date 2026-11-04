@@ -54,13 +54,18 @@ for sock in sockets:
     sock.close()
 PY
     )
-    "$WORKSPACE/conda_envs/vlm-vs-onejev-env/bin/python" -B workers/ask_worker.py --port "$ASK_PORT" \
-        >"$AGENT_RUN/logs/ask-${SLURM_JOB_ID:-manual}.log" 2>&1 &
-    pids+=("$!")
+    # An API verifier needs no local model, which saves GPU memory and loading time.
+    if [[ ${USE_ASK_WORKER:-1} == 1 ]]; then
+        "$WORKSPACE/conda_envs/vlm-vs-onejev-env/bin/python" -B workers/ask_worker.py --port "$ASK_PORT" \
+            >"$AGENT_RUN/logs/ask-${SLURM_JOB_ID:-manual}.log" 2>&1 &
+        pids+=("$!")
+    fi
     "$WORKSPACE/conda_envs/omniovcd-env/bin/python" -B workers/sam3_worker.py --port "$SAM3_PORT" \
         >"$AGENT_RUN/logs/sam3-${SLURM_JOB_ID:-manual}.log" 2>&1 &
     pids+=("$!")
-    "$PY" - "$ASK_PORT" "$SAM3_PORT" <<'PY'
+    wait_ports=("$SAM3_PORT")
+    [[ ${USE_ASK_WORKER:-1} == 1 ]] && wait_ports+=("$ASK_PORT")
+    "$PY" - "${wait_ports[@]}" <<'PY'
 import json
 import sys
 import time
@@ -80,7 +85,8 @@ while pending and time.monotonic() < deadline:
 if pending:
     raise SystemExit('Worker readiness deadline exceeded; inspect worker logs.')
 PY
-    worker_args=(--ask-worker "http://127.0.0.1:$ASK_PORT" --sam3-worker "http://127.0.0.1:$SAM3_PORT")
+    worker_args=(--sam3-worker "http://127.0.0.1:$SAM3_PORT")
+    [[ ${USE_ASK_WORKER:-1} == 1 ]] && worker_args+=(--ask-worker "http://127.0.0.1:$ASK_PORT")
 fi
 run_group() {
     "$PY" "$WORKSPACE/Chang-Agent/tools/run_with_bailian_csv.py" "$BAILIAN_CSV" \

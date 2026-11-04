@@ -16,7 +16,7 @@ import traceback
 import numpy as np
 from common import names, load_rgb, load_mask_png, WORKSPACE
 from prompts import SCOPE_CARD
-from .tools import Toolbox, SCHEMAS, Result, failure
+from .tools import Toolbox, SCHEMAS, PLAN_SCHEMA, Result, failure
 from . import tools as tool_module
 from .state import Mask
 from .planner import Planner, RunGuard, RunStopped, usage_tokens
@@ -91,12 +91,13 @@ def referenced_handles(args):
 REVIEW_REPLIES = 3
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False):
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False):
     session = toolbox.session
     rounds, no_tools = 0, 0
     previous_calls = None
     reason, error = 'budget', None
     reviewed = not review
+    schemas = [*SCHEMAS, PLAN_SCHEMA] if status else SCHEMAS
     messages = []
     planner.record = recorder.request
     try:
@@ -113,7 +114,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     dict(role='user', content=[dict(type='text', text=text)] + image_blocks(initial))]
         recorder.start(session, dict(metadata or {}, task_id=task, instruction=instruction,
             image_shape=list(session.shape), system_prompt_version=prompt_version, system_prompt_path=str(path),
-            system_prompt_template=template, system_prompt=system, tool_schema_version='v2', schemas=SCHEMAS,
+            system_prompt_template=template, system_prompt=system, tool_schema_version='v2', schemas=schemas,
             model_parameters=planner.parameters, seed=planner.parameters['seed'], seed_acceptance='not_reported',
             budget=budget, max_calls_per_reply=8, total_attempt_limit=planner.max_attempts,
             initial_view=initial.public, initial_handle=session.initial_mask))
@@ -122,7 +123,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
         for number in range(1, budget + 1):
             # Default auto keeps the model's one-line reasons (required returns empty content); after a
             # reply without a function call, the next request forces one and changes the seed.
-            response = planner.complete(messages, SCHEMAS, number, 'required' if no_tools else None, no_tools)
+            response = planner.complete(messages, schemas, number, 'required' if no_tools else None, no_tools)
             rounds += 1
             original = response['message']
             assistant = {k: copy.deepcopy(original[k]) for k in ('role', 'content', 'tool_calls') if k in original}
@@ -206,6 +207,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 messages.append(dict(role='user', content=toolbox.review(session.current_mask, left)))
             elif 0 < left <= REVIEW_REPLIES:
                 messages.append(dict(role='user', content=f'You have {left} replies left. Submit your best mask before they run out.'))
+            if status and left > 0:
+                messages.append(dict(role='user', content=toolbox.status(left)))
     except RunStopped:
         raise
     except Exception:
@@ -235,6 +238,7 @@ def main():
     parser.add_argument('--ask-worker')
     parser.add_argument('--planner-model', default='qwen3.7-plus')
     parser.add_argument('--review', action='store_true', help='One pre-submission review from the session records.')
+    parser.add_argument('--status', action='store_true', help='A state line in every reply, and the plan tool.')
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
@@ -278,12 +282,12 @@ def main():
         toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr),
             shared.for_image(args.split, name), ask, init_mask=init)
         try:
-          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version, review=args.review,
+          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version, review=args.review, status=args.status,
             metadata=dict(session_id=Path(name).stem, source_images=[str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')],
                 init_mask_path=str(init_path) if args.task == 'T5.1' else None,
                 init_config=dict(route=args.init_name, text='building', tile=512, score_thr=.5,
                                  overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if args.task == 'T5.1' else None,
-                backends=dict(ask=args.ask_backend, review=args.review, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
+                backends=dict(ask=args.ask_backend, review=args.review, status=args.status, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
                     else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                     sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
                 init_error=init_error))
