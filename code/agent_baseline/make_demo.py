@@ -282,7 +282,7 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
              ('耗时', f'{final["elapsed_seconds"]:.1f} 秒' if final.get('elapsed_seconds') is not None else '未记录'),
              ('费用', f'¥{final["cost_cny"]:.4f}' if final.get('cost_cny') is not None else '未记录')]
     head = f'<header><div class="headtop"><div><div class="eyebrow">变化检测 · Agent 轨迹展示 / {esc(split)} / {esc(name)}</div><h1>{title}</h1></div><label class="js-only">外观 <select id="theme"><option value="auto">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label></div>'
-    head += '<div class="warning">这是挑出来的展示样例，不代表平均水平</div>'
+    head += '<div class="warning">这是挑出来的样例，不代表平均水平</div>'
     head += '<div class="metrics">' + ''.join(f'<div class="metric"><strong>{esc(v)}</strong><span>{k}</span></div>' for k, v in stats) + '</div>'
     if task == 'T5.1':
         head += f'<p><strong>初始 F1 {pct(initial_f1)} → 最终 F1 {pct(final_f1)}</strong></p>'
