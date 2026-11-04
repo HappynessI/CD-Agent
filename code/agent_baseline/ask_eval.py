@@ -40,8 +40,15 @@ CONTEXT_QUESTION = ('The first two images are close-ups and the last two show th
                     'surroundings. ' + VERIFY)
 
 
+INIT = 'sam3_imc'
+
+
 def load_init(split, stem):
-    return np.asarray(Image.open(RUN / 'init' / 'sam3_imc' / split / f'{stem}.png')) > 0
+    return np.asarray(Image.open(RUN / 'init' / INIT / split / f'{stem}.png')) > 0
+
+
+def folder(split):
+    return RUN / 'ask_eval' / (split if INIT == 'sam3_imc' else f'{split}_{INIT}')
 
 
 def pool(split):
@@ -110,7 +117,7 @@ def presence_answer(rgb, labels, row, spec, guard, seed):
 
 
 def answers(args):
-    out = RUN / 'ask_eval' / args.split / f'{args.variant}.jsonl'
+    out = folder(args.split) / f'{args.variant}.jsonl'
     out.parent.mkdir(parents=True, exist_ok=True)
     done = set()
     if out.exists():
@@ -118,7 +125,7 @@ def answers(args):
     rows = [row for row in pool(args.split) if row['uid'] not in done]
     if args.limit:
         rows = rows[:args.limit]
-    guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'ask_eval_{args.variant}.txt', args.max_cost_cny)
+    guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'ask_eval_{INIT}_{args.variant}.txt', args.max_cost_cny)
     guard.check()
     lock, images = threading.Lock(), {}
 
@@ -199,7 +206,7 @@ def truth(split):
 def report(args):
     table, base = truth(args.split)
     result = dict(pool=len(table), base_f1=f1(base['tp'], base['fp'], base['fn']), variants={})
-    for path in sorted((RUN / 'ask_eval' / args.split).glob('*.jsonl')):
+    for path in sorted(folder(args.split).glob('*.jsonl')):
         rows = {}
         for line in path.read_text().splitlines():
             row = json.loads(line)
@@ -248,6 +255,7 @@ def main():
     sub = parser.add_subparsers(dest='command', required=True)
     one = sub.add_parser('answers')
     one.add_argument('--split', default='val')
+    one.add_argument('--init-name', default='sam3_imc')
     one.add_argument('--variant', required=True, choices=['local', *VARIANTS])
     one.add_argument('--concurrency', type=int, default=8)
     one.add_argument('--limit', type=int)
@@ -255,8 +263,11 @@ def main():
     one.add_argument('--max-cost-cny', type=float, default=20)
     two = sub.add_parser('report')
     two.add_argument('--split', default='val')
+    two.add_argument('--init-name', default='sam3_imc')
     two.add_argument('--out')
     args = parser.parse_args()
+    global INIT
+    INIT = args.init_name
     (answers if args.command == 'answers' else report)(args)
 
 
