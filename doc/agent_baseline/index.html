@@ -89,9 +89,12 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
     <tbody><tr><td>BF：提示 v2</td><td class="num">82.17 ± 0.51</td><td class="num">83.27 ± 0.28</td></tr>
     <tr><td>r3a：组件编号修复</td><td class="num">83.47 ± 0.09</td><td class="num">82.61 ± 1.59</td></tr>
     <tr><td><b>r3b：再换 qwen3.7-plus 四图核验</b></td><td class="num"><b>83.56 ± 0.54</b></td><td class="num"><b>83.92 ± 0.16</b></td></tr>
-    <tr><td>对照：不用 Agent，新核验答否就删</td><td class="num">84.23</td><td class="num">84.23</td></tr></tbody>
+    <tr><td>对照：不用 Agent，新核验答否就删</td><td class="num">84.23</td><td class="num">84.23</td></tr>
+    <tr><td><b>r4：再加像素门限 0.85</b>（T5.1 给定掩码同步换新）</td><td class="num"><b>83.45 ± 0.54</b></td><td class="num"><b>84.80 ± 0.60</b></td></tr>
+    <tr><td>对照：新候选原样提交</td><td class="num">83.15</td><td class="num">83.15</td></tr>
+    <tr><td>对照：新候选，答否就删</td><td class="num">85.45</td><td class="num">85.45</td></tr></tbody>
   </table></div>
-  <p class="read">第 3 轮后 T5.1 相对固定路线的区间是 [+0.46, +3.53]。Agent 目前还低于不用 Agent 的规则对照。</p>
+  <p class="read">工具改进有效，Agent 决策还没有证明增加价值：同样工具下，规则对照比 T5.1 高 0.65，比 T1.1 高 2.00。</p>
   <p class="read">下面的条形是 BF 结果：T5.1 稳定高于不用 Agent 的对照，但只拿到理想上限的约 20%。T1.1 追平固定路线，没有超过。Agent 删误检有效，也会删多。详情见 <a href="../../results/agent_baseline/levir_analysis.md">levir_analysis.md</a>；可视化示例见 <a href="../../results/agent_baseline/demo/README.md">demo/</a>，是挑出来的样例，不代表平均水平。</p>
 </section>
 
@@ -462,14 +465,14 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
   <h3 style="margin:22px 0 8px;font-size:15px">优化轮次记录</h3>
   <div class="panel scroll"><table>
     <thead><tr><th>轮次</th><th>层</th><th>诊断</th><th>改动</th><th>验证集 F1^c</th><th>步数 / 失败率</th><th>结果</th></tr></thead>
-    <tbody><tr><td>r3b</td><td>工具</td><td><code>ask</code> 答否误删多</td><td>换 qwen3.7-plus 独立请求，近景 + 大范围四张图</td><td>3 次均值，对比 r3a：T1.1 83.47→83.56；T5.1 82.61→83.92</td><td>T5.1 标准差 1.59→0.16</td><td>保留；仍低于规则对照 84.23</td></tr><tr><td>r3a</td><td>工具</td><td>分批删除时旧编号用到新句柄（val_21）</td><td><code>remove_region</code> 保持编号；<code>ask</code> 上限 64</td><td>3 次均值，对比 v2：T1.1 82.17→83.47；T5.1 83.27→82.61</td><td>差值都跨零，集中在个别图</td><td>保留修复；不能归因</td></tr><tr><td>r2</td><td>系统</td><td>单期证据判定变化、整体重建掩码</td><td>提示 v2、无工具回复重试、重复调用不执行</td><td>3 次均值 T1.1 81.83→82.17；T5.1 81.93→83.27</td><td>T5.1 标准差 1.59→0.28</td><td>保留</td></tr><tr><td>r1</td><td>系统</td><td>无工具回复、句柄类型错误</td><td>接口修复、强制调用</td><td>T1.1 79.55→81.06；T5.1 83.34→80.68（在运行波动内）</td><td>17.8 / 4.7%；17.5 / 3.1%</td><td>接口修复保留，效果未定</td></tr><tr><td>r0</td><td>—</td><td>基线</td><td>—</td><td>T1.1 79.55；T5.1 83.34</td><td>17.2 / 9.4%；17.6 / 3.1%</td><td>—</td></tr></tbody>
+    <tbody><tr><td>r4</td><td>工具</td><td>与真值相连的误检多，SAM3 软输出离线有效</td><td>像素门限 0.5→0.85，T5.1 给定掩码同步换新</td><td>3 次均值：T1.1 83.56→83.45；T5.1 83.92→84.80（差值跨零，增益主要来自掩码）</td><td>T5.1 标准差 0.16→0.60</td><td>保留；仍低于规则对照 85.45</td></tr><tr><td>r3b</td><td>工具</td><td><code>ask</code> 答否误删多</td><td>换 qwen3.7-plus 独立请求，近景 + 大范围四张图</td><td>3 次均值，对比 r3a：T1.1 83.47→83.56；T5.1 82.61→83.92</td><td>T5.1 标准差 1.59→0.16</td><td>保留；仍低于规则对照 84.23</td></tr><tr><td>r3a</td><td>工具</td><td>分批删除时旧编号用到新句柄（val_21）</td><td><code>remove_region</code> 保持编号；<code>ask</code> 上限 64</td><td>3 次均值，对比 v2：T1.1 82.17→83.47；T5.1 83.27→82.61</td><td>差值都跨零，集中在个别图</td><td>保留修复；不能归因</td></tr><tr><td>r2</td><td>系统</td><td>单期证据判定变化、整体重建掩码</td><td>提示 v2、无工具回复重试、重复调用不执行</td><td>3 次均值 T1.1 81.83→82.17；T5.1 81.93→83.27</td><td>T5.1 标准差 1.59→0.28</td><td>保留</td></tr><tr><td>r1</td><td>系统</td><td>无工具回复、句柄类型错误</td><td>接口修复、强制调用</td><td>T1.1 79.55→81.06；T5.1 83.34→80.68（在运行波动内）</td><td>17.8 / 4.7%；17.5 / 3.1%</td><td>接口修复保留，效果未定</td></tr><tr><td>r0</td><td>—</td><td>基线</td><td>—</td><td>T1.1 79.55；T5.1 83.34</td><td>17.2 / 9.4%；17.6 / 3.1%</td><td>—</td></tr></tbody>
   </table></div>
 
   <h3 style="margin:22px 0 8px;font-size:15px">工具质量卡</h3>
   <div class="panel scroll"><table>
     <thead><tr><th>工具</th><th>当前配置</th><th>单项指标</th><th>单项指标值</th><th>已知弱点</th></tr></thead>
     <tbody>
-      <tr><td class="mono">segment_text</td><td>SAM3，512² 分块，实例门限 0.5；r4 用像素门限 0.85</td><td>固定路线 F1^c（召回待测）</td><td>像素 0.85：83.15；像素 0.5：82.14；实例 0.45：82.52；0.6：76.91；重叠分块 81.93；256 分块 79.39</td><td>密集小住宅区几乎检不出</td></tr>
+      <tr><td class="mono">segment_text</td><td>SAM3，512² 分块，实例门限 0.5，像素门限 0.85（r4 起）</td><td>固定路线 F1^c（召回待测）</td><td>像素 0.85：83.15；像素 0.5：82.14；实例 0.45：82.52；0.6：76.91；重叠分块 81.93；256 分块 79.39</td><td>密集小住宅区几乎检不出</td></tr>
       <tr><td class="mono">match_instances</td><td>单向覆盖 0.25</td><td>出现 ∪ 消失的 F1^c</td><td>验证集 82.14</td><td>同位置拆除重建判为未变</td></tr>
       <tr><td class="mono">segment_prompt / refine_region</td><td>SAM ViT-H 框提示</td><td>GT 框 / 扰动框下的 mIoU</td><td>单项待测；框替换 SAM3 掩码：79.38，求交：82.20</td><td>框替换会外溢</td></tr>
       <tr><td class="mono">ask</td><td>qwen3.7-plus 独立请求，近景 + 大范围四张图</td><td>固定候选池 3,051 个组件的 AUC / 面积加权 AUC</td><td>0.915 / 0.881（Qwen3.5-4B：0.905 / 0.863；每期分问 0.740，放弃）</td><td>纯误检只拦下 45%；同一栋建筑外观变化时仍判新建</td></tr>
@@ -484,6 +487,7 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
     <table>
       <thead><tr><th>日期</th><th>里程碑</th><th>做了什么</th><th>结果</th><th>下一步</th></tr></thead>
       <tbody>
+        <tr><td class="num">2026-11-04</td><td>第 4 轮</td><td>SAM3 像素门限 0.85，T5.1 给定掩码同步换新；各 3 次重复；Codex 第 4 次讨论</td><td>T1.1 83.45±0.54；T5.1 84.80±0.60；规则对照 85.45；约 80.8 元</td><td>第 5 轮：提示 v3；离线测对应问法和 flash</td></tr>
         <tr><td class="num">2026-11-04</td><td>第 3 轮</td><td>离线比较边界方案和 5 种核验；修复组件编号和预算账本；<code>ask</code> 换成 qwen3.7-plus 四图请求；各 3 次重复</td><td>T1.1 83.56±0.54；T5.1 83.92±0.16（固定路线 82.14）；约 168.7 元</td><td>第 4 轮：像素门限 0.85</td></tr>
         <tr><td class="num">2026-11-03</td><td>BF 完成</td><td>v1、v2 提示各重复 3 次；修复缓存、熔断；重做可视化示例</td><td>T1.1 82.17±0.51（固定路线 82.14）；T5.1 83.27±0.28（原样 82.14，调门限 82.52）；累计约 227 元</td><td>第 3 轮结构性改动</td></tr>
         <tr><td class="num">2026-11-03</td><td>BF（r1；重复实验作废）</td><td>r1 跑完；v1、v2 各 3 组重复实验中途配额用尽，全部作废</td><td>r1：T1.1 81.06，T5.1 80.68。<b>更正：T5.1 相对原样 r0 +1.20、r1 −1.46，没有稳定优势</b>。累计估算约 90 元</td><td>等 Ethan 决定配额和预算</td></tr>
