@@ -66,7 +66,7 @@ import sys
 import time
 import urllib.request
 pending = set(sys.argv[1:])
-deadline = time.monotonic() + 300
+deadline = time.monotonic() + 900
 while pending and time.monotonic() < deadline:
     for port in list(pending):
         try:
