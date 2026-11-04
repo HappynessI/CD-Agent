@@ -11,7 +11,8 @@ chose to ask. Labels are used only by `report`; the prompts and crops never see 
 Variants: local = Qwen3.5-4B worker (the BF ask); q37 and vl = API with the BF crop;
 q37_ms = API with close-up and wider context crops; q37_think = q37 with thinking enabled;
 q37_pp = one question per date ("is there a building inside the contour?"), the answers are compared;
-q37_corr = q37_ms with a question about the correspondence of the object across the dates.
+q37_corr = q37_ms with a question about the correspondence of the object across the dates;
+f37_ms = q37_ms on qwen3.7-flash.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -34,7 +35,8 @@ RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp
 VARIANTS = dict(q37=dict(model='qwen3.7-plus'), q37_ms=dict(model='qwen3.7-plus', context=True),
                 q37_think=dict(model='qwen3.7-plus', think=True), vl=dict(model='qwen3-vl-plus'),
                 q37_pp=dict(model='qwen3.7-plus', presence=True),
-                q37_corr=dict(model='qwen3.7-plus', context=True, correspondence=True))
+                q37_corr=dict(model='qwen3.7-plus', context=True, correspondence=True),
+                f37_ms=dict(model='qwen3.7-flash', context=True))
 CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
     'The red contour marks the same region in all of them. First find the object inside the contour at the same '
     'position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence '
@@ -232,6 +234,7 @@ def report(args):
         row = dict(answered=len(usable), asked=len(rows), yes_rate=float(says_yes.mean()),
                    has_logprob=float(np.mean([r.get('p_yes') is not None for _, r in usable])),
                    auc=auc(score[real], score[~real]), auc_area=auc(score[real], score[~real], area[real], area[~real]),
+                   auc_binary=auc(says_yes[real].astype(float), says_yes[~real].astype(float)),
                    yes_purity=float(tp[says_yes].sum() / max(1, area[says_yes].sum())),
                    no_purity=float(tp[~says_yes].sum() / max(1, area[~says_yes].sum())),
                    no_removes_tp=removed_tp, no_removes_fp=removed_fp,
@@ -243,6 +246,7 @@ def report(args):
                                          no_rate=float((~says_yes[chosen]).mean()) if chosen.any() else None,
                                          no_area=float(area[chosen & ~says_yes].sum() / max(1, area[chosen].sum())))
         row['by_purity'] = bins
+        # An endpoint may return logprobs for the first token only; mixed scores are then not a ranking.
         # Thresholds on p_yes, for variants with logprobs: the best score any fixed threshold can reach.
         if row['has_logprob'] > .9:
             sweep = {}
