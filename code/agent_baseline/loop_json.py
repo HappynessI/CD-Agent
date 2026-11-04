@@ -228,7 +228,7 @@ def main():
     args = parser.parse_args()
     guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
-        raise SystemExit(f'{guard.stop_file} exists; check quota or budget, then delete it before running: {guard.stop_file.read_text()}')
+        raise SystemExit(f'{guard.active_stop()} exists; check quota or budget, then delete it before running: {guard.active_stop().read_text()}')
     todo = Path(args.names_file).read_text().split() if args.names_file else names(args.split)
     if args.limit is not None:
         todo = todo[:args.limit]

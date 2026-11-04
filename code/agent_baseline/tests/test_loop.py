@@ -199,7 +199,11 @@ class LoopTests(unittest.TestCase):
         planner=Planner(client=reply,guard=guard)
         with self.assertRaises(RunStopped):
             planner.complete([dict(role='user',content='x')],[],1)
-        self.assertTrue((self.root/'STOP.json').exists())
+        # A spent budget stops its own batch and leaves every other batch running.
+        self.assertFalse((self.root/'STOP.json').exists())
+        self.assertTrue((self.root/'budget'/'STOP.json').exists())
+        self.assertTrue(guard.stopped())
+        self.assertFalse(RunGuard(self.root/'STOP.json',self.root/'other.txt').stopped())
 
     def test_budget_ledger_sums_processes_and_survives_a_bad_peer(self):
         from agent_baseline.planner import RunGuard, RunStopped
@@ -212,11 +216,12 @@ class LoopTests(unittest.TestCase):
         (one.directory/'broken.txt').write_bytes(b'\x00\x00.1')
         one.checked=two.checked=0
         self.assertAlmostEqual(one.total(),.8)
-        self.assertFalse((self.root/'STOP.json').exists())
+        self.assertFalse(one.stopped())
         one.checked=0
         with self.assertRaises(RunStopped):
             one.charge(.3)
-        self.assertIn('budget',(self.root/'STOP.json').read_text())
+        self.assertIn('budget',(one.directory/'STOP.json').read_text())
+        self.assertFalse((self.root/'STOP.json').exists())
 
     def test_request_cost_by_model_and_tier(self):
         from agent_baseline.planner import request_cost, token_cost

@@ -73,7 +73,7 @@ def is_quota_error(code, body):
 
 
 class RunGuard:
-    """Stop switch shared by all sessions and all parallel jobs through one file, plus an optional budget ledger.
+    """Stop switch shared by all parallel jobs through one file, plus an optional budget ledger with its own batch stop.
 
     Each process writes only its own ledger file, replaced atomically, and the batch total is the sum of the files.
     A single shared file is unsafe here: jobs on different nodes append through a network filesystem with stale
@@ -95,16 +95,25 @@ class RunGuard:
             except (OSError, ValueError):
                 pass
 
+    def active_stop(self):
+        """The file that stops this guard: quota errors stop everything, a spent budget stops only its own batch."""
+        if self.stop_file.exists():
+            return self.stop_file
+        batch = self.directory and self.directory / 'STOP.json'
+        return batch if batch and batch.exists() else None
+
     def stopped(self):
-        return self.stop_file.exists()
+        return self.active_stop() is not None
 
     def check(self):
-        if self.stopped():
-            raise RunStopped(self.stop_file.read_text())
+        path = self.active_stop()
+        if path:
+            raise RunStopped(path.read_text())
 
-    def trip(self, reason):
-        self.stop_file.parent.mkdir(parents=True, exist_ok=True)
-        self.stop_file.write_text(json.dumps(dict(reason=reason, at=time.time()), ensure_ascii=False))
+    def trip(self, reason, batch_only=False):
+        target = self.directory / 'STOP.json' if batch_only else self.stop_file
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(dict(reason=reason, at=time.time()), ensure_ascii=False))
         raise RunStopped(reason)
 
     def total(self):
@@ -137,7 +146,7 @@ class RunGuard:
             self.checked = time.monotonic()
             total = self.total()
             if total > self.max_cost:
-                self.trip(f'budget: {total:.2f} > {self.max_cost:.2f} CNY')
+                self.trip(f'budget: {total:.2f} > {self.max_cost:.2f} CNY', batch_only=True)
 
 
 class Planner:

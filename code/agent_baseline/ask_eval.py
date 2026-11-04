@@ -12,7 +12,7 @@ Variants: local = Qwen3.5-4B worker (the BF ask); q37 and vl = API with the BF c
 q37_ms = API with close-up and wider context crops; q37_think = q37 with thinking enabled;
 q37_pp = one question per date ("is there a building inside the contour?"), the answers are compared;
 q37_corr = q37_ms with a question about the correspondence of the object across the dates;
-f37_ms = q37_ms on qwen3.7-flash.
+f37_ms and f37_corr = q37_ms and q37_corr on qwen3.7-flash.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -36,7 +36,8 @@ VARIANTS = dict(q37=dict(model='qwen3.7-plus'), q37_ms=dict(model='qwen3.7-plus'
                 q37_think=dict(model='qwen3.7-plus', think=True), vl=dict(model='qwen3-vl-plus'),
                 q37_pp=dict(model='qwen3.7-plus', presence=True),
                 q37_corr=dict(model='qwen3.7-plus', context=True, correspondence=True),
-                f37_ms=dict(model='qwen3.7-flash', context=True))
+                f37_ms=dict(model='qwen3.7-flash', context=True),
+                f37_corr=dict(model='qwen3.7-flash', context=True, correspondence=True))
 CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
     'The red contour marks the same region in all of them. First find the object inside the contour at the same '
     'position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence '
