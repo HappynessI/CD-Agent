@@ -484,6 +484,57 @@ td.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
   </table></div>
 </section>
 
+<!-- 7c. harness -->
+<section>
+  <h2><span class="k">07++</span>变化检测专用 harness 与 skill（Ethan 11-04）</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 900 330" width="100%" style="min-width:640px" role="img" aria-label="验证集 F1：固定组合与 Agent">
+    <g font-size="11" class="m">
+      <line x1="250" y1="16" x2="250" y2="280" style="stroke:var(--line)"/>
+      <line x1="370" y1="16" x2="370" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="490" y1="16" x2="490" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="610" y1="16" x2="610" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <line x1="730" y1="16" x2="730" y2="280" style="stroke:var(--line);stroke-dasharray:2 4"/>
+      <text x="250" y="298" text-anchor="middle" class="m">50</text><text x="370" y="298" text-anchor="middle" class="m">60</text>
+      <text x="490" y="298" text-anchor="middle" class="m">70</text><text x="610" y="298" text-anchor="middle" class="m">80</text>
+      <text x="730" y="298" text-anchor="middle" class="m">90</text>
+    </g>
+    <!-- x = 250 + (v-50)*12 -->
+    <g font-size="13">
+      <text x="240" y="40" text-anchor="end">DynamicEarth M-C-I</text>
+      <rect x="250" y="27" width="94" height="20" rx="3" style="fill:var(--old)"/><text x="352" y="42" class="mono" font-size="12">57.82</text>
+      <text x="240" y="76" text-anchor="end">DynamicEarth I-M-C（APE）</text>
+      <rect x="250" y="63" width="276" height="20" rx="3" style="fill:var(--old)"/><text x="534" y="78" class="mono" font-size="12">73.01</text>
+      <text x="240" y="112" text-anchor="end">I-M-C(SAM3) 固定路线</text>
+      <rect x="250" y="99" width="386" height="20" rx="3" style="fill:var(--old);opacity:.8"/><text x="644" y="114" class="mono" font-size="12">82.14</text>
+      <text x="240" y="148" text-anchor="end">同上，像素门限 0.85</text>
+      <rect x="250" y="135" width="398" height="20" rx="3" style="fill:var(--old);opacity:.8"/><text x="656" y="150" class="mono" font-size="12">83.15</text>
+      <text x="240" y="196" text-anchor="end" font-weight="700" style="fill:var(--accent)">Agent T1.1（r6）</text>
+      <rect x="250" y="183" width="405" height="20" rx="3" style="fill:var(--accent)"/><text x="663" y="198" class="mono" font-size="12">83.77</text>
+      <text x="240" y="232" text-anchor="end" font-weight="700" style="fill:var(--accent)">Agent T5.1（r6）</text>
+      <rect x="250" y="219" width="422" height="20" rx="3" style="fill:var(--accent)"/><text x="680" y="234" class="mono" font-size="12">85.19</text>
+      <text x="240" y="268" text-anchor="end" class="m">参照：答否就删 / ReA 调门限</text>
+      <rect x="250" y="255" width="436" height="20" rx="3" style="fill:none;stroke:var(--muted);stroke-dasharray:4 3"/><text x="694" y="270" class="mono m" font-size="12">86.35 / 87.33</text>
+    </g>
+    <text x="250" y="320" font-size="11.5" class="m">LEVIR 验证集 64 对，Agent 为 3 次重复的均值。</text>
+  </svg>
+  </div>
+  <p class="read">相对 DynamicEarth 的固定组合，Agent 高出 10 到 27 分，但大部分来自换成 SAM3 这个更强的基础模型。真正属于 Agent 调度的，是同一套工具下「固定路线 → Agent」这一段：T1.1 约 +0.6，T5.1 约 +2.0（相对给定掩码）。harness 和 skill 的目标就是把这一段做大。</p>
+
+  <div class="panel scroll" style="margin-top:14px"><table>
+    <thead><tr><th>harness 能力</th><th>做法</th><th>现状</th></tr></thead>
+    <tbody>
+      <tr><td><b>skill</b></td><td>系统提示只放 skill 索引，Agent 按需 <code>load_skill</code> 读全文。首批：核验、掩码修正、修边界、找漏检、提交前自查</td><td>待做</td></tr>
+      <tr><td>规划</td><td><code>plan</code> 工具：开局写待办清单，过程中更新，复核时对照</td><td>待做</td></tr>
+      <tr><td>状态摘要</td><td>每轮附当前掩码、已核验和未核验数、剩余预算、清单进度</td><td>部分有</td></tr>
+      <tr><td>上下文管理</td><td>留图策略已有；补上把旧工具结果压成摘要</td><td>部分有</td></tr>
+      <tr><td>提交前复核</td><td>r7</td><td>有</td></tr>
+      <tr><td>换任务、换数据集</td><td>只改配置不改代码：T1.1、T5.1，以后 T1.2、T2.x</td><td>待做</td></tr>
+    </tbody>
+  </table></div>
+  <p class="read">skill 只能写通用的变化检测方法，不写数据集名或 LEVIR 特有的规则。它等同于人写的提示，属于 harness，论文里要做「去掉 skill」的消融。</p>
+</section>
+
 <!-- 8. progress -->
 <section>
   <h2><span class="k">08</span>进度（新的在上）</h2>
