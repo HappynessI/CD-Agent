@@ -1323,6 +1323,56 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 </div>
 <fieldset class="am-ask" data-ask="am2"><legend class="am-ask-q">规划器接下来用哪个？</legend><label class="am-ask-opt"><input type="radio" name="am2" value="plus r7 作主结果，flash F0 一起报告" checked data-suggested><span class="am-ask-body"><span class="am-ask-label">plus r7 作主结果，flash F0 一起报告</span> <span class="am-ask-tag">建议</span><small class="am-ask-note">主结果明确高于固定组合；费用差异如实报告</small></span></label><label class="am-ask-opt"><input type="radio" name="am2" value="只用 flash"><span class="am-ask-body"><span class="am-ask-label">只用 flash</span><small class="am-ask-note">每遍约 8 元；还不能说超过固定组合</small></span></label><label class="am-ask-opt"><input type="radio" name="am2" value="先修复 flash 上的复核，重跑 F1"><span class="am-ask-body"><span class="am-ask-label">先修复 flash 上的复核，重跑 F1</span><small class="am-ask-note">约 25 元；跑完就冻结</small></span></label></fieldset></div>
 </section>
+<section class="am-panel am-span-wide" id="panel-I" style="grid-column: span 2">
+<header class="am-panel-head"><span class="am-panel-id">I</span><h2>优化方向 v2：规划器和验证器解耦（待 Ethan 审核）</h2></header>
+<div class="am-panel-body"><figure class="am-diagram am-flow"><svg viewBox="0 0 840 190" width="840" height="190" role="img" aria-label="流程图：两期影像和指令、规划器、工具、待提交掩码、验证器固定阶段、规划器决定、提交；规划器决定可以回到规划器" xmlns="http://www.w3.org/2000/svg"><defs><marker id="am9-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="am-arrow" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<g>
+<path class="am-edge" d="M120,100 L158,100" marker-end="url(#am9-arrow)"/>
+<path class="am-edge" d="M187,82 L187,48" marker-end="url(#am9-arrow)"/>
+<path class="am-edge am-edge--dashed" d="M203,46 L203,80" marker-end="url(#am9-arrow)"/>
+<path class="am-edge" d="M230,100 L268,100" marker-end="url(#am9-arrow)"/>
+<path class="am-edge" d="M370,100 L408,100" marker-end="url(#am9-arrow)"/>
+<path class="am-edge" d="M550,100 L588,100" marker-end="url(#am9-arrow)"/>
+<path class="am-edge" d="M700,100 L738,100" marker-end="url(#am9-arrow)"/>
+<path class="am-edge am-edge--dashed" d="M645,118 L645,160 L195,160 L195,120" marker-end="url(#am9-arrow)"/>
+<g class="am-edge-label"><rect x="330" y="151" width="180" height="18" rx="3"/><text x="420" y="160" text-anchor="middle" dominant-baseline="central">升级 L2、补漏或精修后再提交</text></g>
+<g class="am-edge-label"><rect x="250" y="19" width="110" height="18" rx="3"/><text x="305" y="28" text-anchor="middle" dominant-baseline="central">工具调用和结果</text></g>
+</g>
+<g>
+<g class="am-node am-node--round"><rect class="am-node-shape" x="10" y="82" width="110" height="36" rx="18"/><text x="65" y="100" text-anchor="middle" dominant-baseline="central" class="am-node-text">两期影像和指令</text></g>
+<g class="am-node am-node--rect am-node--hi"><rect class="am-node-shape" x="160" y="82" width="70" height="36" rx="3"/><text x="195" y="100" text-anchor="middle" dominant-baseline="central" class="am-node-text">规划器</text></g>
+<g class="am-node am-node--rect"><rect class="am-node-shape" x="160" y="10" width="70" height="36" rx="3"/><text x="195" y="28" text-anchor="middle" dominant-baseline="central" class="am-node-text">工具</text></g>
+<g class="am-node am-node--rect"><rect class="am-node-shape" x="270" y="82" width="100" height="36" rx="3"/><text x="320" y="100" text-anchor="middle" dominant-baseline="central" class="am-node-text">待提交掩码</text></g>
+<g class="am-node am-node--rect am-node--hi"><rect class="am-node-shape" x="410" y="82" width="140" height="36" rx="3"/><text x="480" y="100" text-anchor="middle" dominant-baseline="central" class="am-node-text">验证器（固定阶段）</text></g>
+<g class="am-node am-node--rect"><rect class="am-node-shape" x="590" y="82" width="110" height="36" rx="3"/><text x="645" y="100" text-anchor="middle" dominant-baseline="central" class="am-node-text">规划器逐个决定</text></g>
+<g class="am-node am-node--round"><rect class="am-node-shape" x="740" y="82" width="90" height="36" rx="18"/><text x="785" y="100" text-anchor="middle" dominant-baseline="central" class="am-node-text">提交和理由</text></g>
+</g></svg><figcaption>验证器自动核验所有未核验的组件，包括新加的。删不删仍由规划器决定，不自动删除。</figcaption></figure>
+<div class="am-md">
+<div class="am-table-wrap"><table>
+<thead><tr><th>部件</th><th>现在（r7）</th><th>改成</th></tr></thead>
+<tbody>
+<tr><td>何时核验</td><td>规划器自己决定是否调 <code>ask</code></td><td>每次准备提交时自动核验全部未核验组件；<code>ask()</code> 默认也核验全部</td></tr>
+<tr><td>谁决定删除</td><td>规划器</td><td>仍是规划器，逐个写理由；自动删除只作消融</td></tr>
+<tr><td>核验强度</td><td>一档</td><td>L1 快速（现在的 flash 对应问法）；L2 仔细（示例 + 投票），规划器对有疑问的组件调用</td></tr>
+<tr><td>主结果</td><td>Agent 对固定组合</td><td>规则 86.35 成为下限；报告 Agent − 规则，以及规划器偏离规则的次数和净收益</td></tr>
+</tbody></table></div>
+<div class="am-table-wrap"><table>
+<thead><tr><th>验证器变体（不训练，先离线）</th><th>做法</th><th>针对的错误</th></tr></thead>
+<tbody>
+<tr><td>V1 示例</td><td>训练集 6–8 对带答案的示例，作为固定前缀</td><td>同一栋楼外观变了被判新建（约 44%）</td></tr>
+<tr><td>V2 投票</td><td>多种裁剪各问一次，或采样 3 次</td><td>单次回答不稳</td></tr>
+<tr><td>V3 模型分歧</td><td>flash 和 plus 都问，不一致的升级</td><td>难例</td></tr>
+<tr><td>V4 置信读数</td><td>修 flash 只有约 45% 有 <code>p_yes</code></td><td>规划器需要可靠的不确定度</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>规划器发挥的地方</strong>：升级核验（规则删掉了 39,344 个真变化像素）；密集小楼区放大重新分割；单个组件的边界。T1.1 以固定路线为默认起点。</li>
+<li><strong>Skill</strong>：default-chain、change-verification、mask-correction、boundary-refinement、candidate-search、submit-review。只写通用方法，不写验证集调出来的数字。</li>
+<li><strong>评测</strong>：训练集抽 150–200 张做 dev2，选型在 dev2 上做，验证集只报告。</li>
+<li><strong>不做</strong>：训练 MLP。Qwen 视觉模型微调只在不训练的方法全部无效时作为旁支。</li>
+</ul>
+<p>详细内容见 README_ai.md 第 10.5 节。</p>
+</div></div>
+</section>
 <section class="am-panel am-span-wide" id="panel-H" style="grid-column: span 2">
 <header class="am-panel-head"><span class="am-panel-id">H</span><h2>里程碑和规范</h2></header>
 <div class="am-panel-body"><div class="am-md"><div class="am-table-wrap"><table>
