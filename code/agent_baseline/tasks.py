@@ -21,6 +21,8 @@ def instruction_for(task, session):
         if session.change_direction != 'any':
             text = text.replace('(newly built or demolished)', f'({session.change_direction} only)')
             text += f' Count only changes in the {session.change_direction} direction.'
+        elif session.target != 'building':
+            text = text.replace('(newly built or demolished)', '(appeared or disappeared)')
     if session.constraint:
         constraint = session.constraint if isinstance(session.constraint, str) else json.dumps(session.constraint, ensure_ascii=False)
         text += '\nConstraint: ' + constraint

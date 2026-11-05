@@ -48,6 +48,9 @@ class GeneralizeTests(unittest.TestCase):
                 self.assertEqual(question['parameters'], SCHEMAS[5]['function']['parameters'])
         tree = verifier_prompts('tree')
         self.assertNotIn('building', json.dumps(tree))
+        text = instruction_for('T1.1xC0', Session((32, 48), mask(), target='tree'))
+        self.assertIn('(appeared or disappeared)', text)
+        self.assertNotIn('built', text)
         with self.assertRaisesRegex(ValueError, 'Missing scope card'):
             Session((2, 2), target='category_without_a_card')
         with self.assertRaisesRegex(ValueError, 'change_direction'):
