@@ -19,6 +19,7 @@ from urllib.parse import quote
 import numpy as np
 from PIL import Image
 from common import load_rgb
+from ..segment_cache import manifest_cache_path
 
 
 class Segmenter:
@@ -35,7 +36,7 @@ class Segmenter:
         if image_path is not None:
             source = Path(image_path).resolve()
             # Separate namespace for explicit image files; legacy cache names stay unchanged.
-            path = self.run / 'sam3_manifest_cache' / f'{slug}_t{tile}_c{conf:g}_p{pixel_thr:g}' / source.relative_to(source.anchor) / 'instances.npz'
+            path = manifest_cache_path(self.run, source, text, tile, conf, pixel_thr)
         started = __import__('time').monotonic()
         with self.lock:
             queued = __import__('time').monotonic() - started

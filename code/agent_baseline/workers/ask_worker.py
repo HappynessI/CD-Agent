@@ -112,11 +112,12 @@ def main():
     parser.add_argument('--port', type=int, required=True)
     parser.add_argument('--target', default='building')
     parser.add_argument('--change-direction', default='any', choices=['any', 'appeared', 'disappeared'])
+    parser.add_argument('--scope', help='Scope card name for this worker.')
     args = parser.parse_args()
     from common import QWEN
     from mllm import Qwen
     import prompts as verifier
-    settings = verifier.verifier_prompts(args.target, args.change_direction)
+    settings = verifier.verifier_prompts(args.target, args.change_direction, args.scope)
     # One local worker serves one task scope; its existing microbatch stays homogeneous.
     global VERIFY
     VERIFY = settings['VERIFY']

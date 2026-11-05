@@ -336,6 +336,92 @@ class LoopTests(unittest.TestCase):
         for before,after in zip(client.requests[:6],client.requests[1:7]):
             self.assertEqual(json.dumps(before['messages']),json.dumps(after['messages'][:len(before['messages'])]))
 
+    def yes_to_all(self, seen=None):
+        def reply(pairs,question):
+            if seen is not None:
+                seen.append(len(pairs))
+            return [dict(answer='yes',type='new_building',reason='New.',p_yes=.9) for _ in pairs],{}
+        return reply
+
+    def test_gate2_no_current_answer_gets_a_report_on_the_latest_mask(self):
+        view=lambda i:response([call('view',dict(region=[0,0,10+i,10+i]),f'v{i}')])
+        make=response([call('segment_text',dict(time='t2',text='building',tile=512),'s')])
+        script=[make,response([call('to_mask',dict(sets=['inst#0'],set_current=False),'m')]),view(0),view(1),response([call('submit',dict(mask='mask#1',summary='One.'),'x')]),response([call('submit',dict(mask='mask#1',summary='One.'),'y')])]
+        final,box,client,recorder=run(self.root,script,verify=True,ask_backend=self.yes_to_all(),gate2=True,budget=6)
+        texts=[m['content'] for r in client.requests for m in r['messages'] if m['role']=='user' and isinstance(m['content'],str)]
+        self.assertTrue(any('You have no current answer yet' in t and 'Report before submission' in t for t in texts))
+        self.assertEqual(final['submitted_by'],'model')
+
+    def test_gate2_last_reply_submit_gets_a_report_and_two_replies_once(self):
+        submit=lambda i:response([call('submit',dict(mask='mask#0',summary='Keep.'),f's{i}')])
+        final,_,client,recorder=run(self.root,[submit(0),submit(1),submit(2)],init=mask(),verify=True,ask_backend=self.yes_to_all(),gate2=True,budget=1)
+        self.assertEqual(recorder.steps[0]['calls'][0]['status'],'report')
+        self.assertEqual(recorder.steps[1]['calls'][0]['status'],'executed')
+        self.assertEqual(final['submitted_by'],'model')
+        gate=json.loads((self.root/'gate.json').read_text())
+        self.assertEqual(gate['grant']['kind'],'last_reply')
+        self.assertEqual(gate['extra_used'],1)
+
+    def test_gate2_stopping_without_tools_gets_a_report_once(self):
+        final,_,client,recorder=run(self.root,[response([],'a'),response([],'b'),response([],'c'),response([],'d'),response([call('submit',dict(mask='mask#0',summary='Keep.'),'s')])],init=mask(),verify=True,ask_backend=self.yes_to_all(),gate2=True)
+        gate=json.loads((self.root/'gate.json').read_text())
+        self.assertEqual(gate['grant']['kind'],'no_tools')
+        self.assertEqual(gate['grant']['at_reply'],3)
+        self.assertEqual(final['submitted_by'],'model')
+        self.assertIn('Report before submission',json.dumps(client.requests[3]['messages'][-2:]))
+
+    def test_gate2_budget_ending_with_unchecked_components_gets_a_report(self):
+        view=lambda i:response([call('view',dict(region=[0,0,10+i,10+i]),f'v{i}')])
+        script=[response([call('segment_text',dict(time='t2',text='building',tile=512),'g')]),
+                response([call('add_region',dict(mask='mask#0',other='inst#1'),'a')]),view(0),
+                response([call('submit',dict(mask='mask#2',summary='Keep.'),'s')]),response([call('submit',dict(mask='mask#2',summary='Keep.'),'t')])]
+        final,_,_,_=run(self.root,script,init=mask(),verify=True,ask_backend=self.yes_to_all(),gate2=True,budget=3)
+        gate=json.loads((self.root/'gate.json').read_text())
+        self.assertEqual(gate['grant']['kind'],'budget')
+        self.assertEqual(final['submitted_by'],'model')
+
+    def test_gate2_resubmit_that_drops_unasked_given_components_goes_back_to_the_gate(self):
+        init=mask()|mask((30,20,35,25))
+        calls=[]
+        def flaky(pairs,question):
+            calls.append(len(pairs))
+            if len(calls)==2:
+                raise RuntimeError('verifier down')
+            return [dict(answer='yes',type='new_building',reason='New.',p_yes=.9) for _ in pairs],{}
+        script=lambda:[response([call('ask',dict(regions=[dict(mask='mask#0',ids=[1])]),'a')]),
+                response([call('remove_region',dict(mask='mask#0',ids=[2]),'r')]),
+                response([call('submit',dict(mask='mask#1',summary='One.'),'s')]),
+                response([call('submit',dict(mask='mask#1',summary='One.'),'t')]),
+                response([call('submit',dict(mask='mask#1',summary='One.'),'u')])]
+        final,_,_,recorder=run(self.root,script(),init=init,verify=True,ask_backend=flaky,gate2=True)
+        self.assertEqual(recorder.steps[3]['calls'][0]['status'],'report')
+        self.assertEqual(final['planning_rounds'],5)
+        (self.root/'g1').mkdir()
+        calls.clear()
+        final,_,_,recorder=run(self.root/'g1',script(),init=init,verify=True,ask_backend=flaky)
+        self.assertEqual(recorder.steps[3]['calls'][0]['status'],'executed')
+        self.assertEqual(final['planning_rounds'],4)
+
+    def test_gate2_lets_the_next_ask_batch_through_and_still_blocks_a_true_repeat(self):
+        init=np.zeros((32,48),bool)
+        for k in range(3):
+            init[2,2+4*k:4+4*k]=True
+        ask=lambda i:response([call('ask',{},f'a{i}')])
+        submit=lambda i:response([call('submit',dict(mask='mask#0',summary='All.'),f's{i}')])
+        import agent_baseline.tools as tools_module
+        seen=[]
+        with patch.object(tools_module,'MAX_ASK',2):
+            final,_,_,recorder=run(self.root,[ask(0),ask(1),ask(2),submit(0),submit(1)],init=init,verify=True,ask_backend=self.yes_to_all(seen),gate2=True)
+        self.assertEqual(seen,[2,1])
+        self.assertEqual(len(recorder.steps[1]['calls']),1)
+        self.assertEqual(recorder.steps[2]['calls'],[])
+        self.assertEqual(final['submitted_by'],'model')
+        (self.root/'g1').mkdir()
+        seen.clear()
+        with patch.object(tools_module,'MAX_ASK',2):
+            _,_,_,recorder=run(self.root/'g1',[ask(0),ask(1),submit(0),submit(1)],init=init,verify=True,ask_backend=self.yes_to_all(seen))
+        self.assertEqual(recorder.steps[1]['calls'],[])
+
     def test_repeated_call_does_not_run_or_stay_in_context(self):
         same=lambda i:response([call('inspect',dict(mask='mask#0'),f'r{i}')])
         final,_,client,recorder=run(self.root,[same(0),same(1),response([call('submit',dict(mask='mask#0',summary='Retain.'))])],init=mask())

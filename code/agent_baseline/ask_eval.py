@@ -27,7 +27,7 @@ import numpy as np
 from PIL import Image
 from common import components, load_rgb, names
 from mllm import parse_json
-from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
+from prompts import PSEUDO_TYPES, SYSTEM, VERIFY, verifier_prompts
 from .backends import CORRESPONDENCE, encode_image, example_blocks, post, yes_probability
 from .planner import Planner, RunGuard, RunStopped, request_cost, token_cost, usage_tokens
 from .view import ask_images
@@ -94,9 +94,16 @@ def crops(rgb, labels, row, context):
     return ask_images(rgb, labels == row['id'], row['bbox'], context)
 
 
-def api_answer(images, spec, guard, seed):
+def api_answer(images, spec, guard, seed, session=None):
     words = ['T1 close-up', 'T2 close-up', 'T1 wider view', 'T2 wider view']
     question = CORRESPONDENCE if spec.get('correspondence') else CONTEXT_QUESTION if spec.get('context') else VERIFY
+    system = SYSTEM
+    if session is not None:
+        settings = verifier_prompts(session.target, session.change_direction, session.scope)
+        system = settings['SYSTEM']
+        question = settings['CORRESPONDENCE'] if spec.get('correspondence') else settings['VERIFY']
+        if spec.get('context') and not spec.get('correspondence'):
+            question = 'The first two images are close-ups and the last two show the same place with more surroundings. ' + question
     if spec.get('only'):
         keep = (0, 1) if spec['only'] == 'close' else (2, 3)
         words = [words[i] for i in keep]
@@ -121,7 +128,7 @@ def api_answer(images, spec, guard, seed):
             parameters['response_format'] = {'type': 'json_object'}
     # The guard stops every thread on a quota error or when the batch budget is spent.
     planner = Planner(seed=seed, guard=guard, parameters=parameters, max_attempts=12)
-    result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], 1)
+    result = planner.complete([dict(role='system', content=system), dict(role='user', content=content)], [], 1)
     tokens = usage_tokens(result['usage'])
     raw = result['message'].get('content') or ''
     if spec.get('first_token'):

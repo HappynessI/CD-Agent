@@ -23,7 +23,7 @@ from .planner import Planner, RunGuard, RunStopped, usage_tokens
 from .recorder import Recorder
 from .backends import SegmentBackend, SharedPrompter, LocalAsk, ApiAsk
 
-from .tasks import INSTRUCTIONS, instruction_for, seed_for, read_tasks, image_name, load_pair
+from .tasks import INSTRUCTIONS, instruction_for, seed_for, read_tasks, image_name, load_pair, needs_init
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
 
@@ -33,7 +33,7 @@ def system_prompt(version, budget, session=None):
     template = path.read_text()
     target = session.target if session else 'building'
     direction = session.change_direction if session else 'any'
-    card = scope_card(target, direction)
+    card = scope_card(target, direction, session.scope if session else None)
     # Earlier templates retain their text on the default route too.
     rendered = template.replace('buildings', card['plural']).replace('building', target)
     text = rendered.format(counts='\n'.join('- ' + s for s in card['counts']),
@@ -96,10 +96,18 @@ def referenced_handles(args):
 
 
 REVIEW_REPLIES = 3
+EXTRA_REPLIES = 2  # G2: one grant per session to act on a report that would otherwise come too late.
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=()):
+def latest_mask(session):
+    masks = [key for key, value in session.handles.items() if isinstance(value, Mask)]
+    return masks[-1] if masks else None
+
+
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False):
     session = toolbox.session
+    gate2 = gate2 and verify
+    limit, grant = budget, None
     rounds, no_tools = 0, 0
     previous_calls = None
     reason, error = 'budget', None
@@ -130,9 +138,11 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             model_parameters=planner.parameters, seed=planner.parameters['seed'], seed_acceptance='not_reported',
             budget=budget, max_calls_per_reply=8, total_attempt_limit=planner.max_attempts,
             initial_view=initial.public, initial_handle=session.initial_mask))
-        if task == 'T5.1' and session.initial_mask is None:
+        if needs_init(task) and session.initial_mask is None:
             raise ValueError('T5.1 requires the fixed initial mask')
-        for number in range(1, budget + 1):
+        number = 0
+        while number < limit:
+            number += 1
             # Default auto keeps the model's one-line reasons (required returns empty content); after a
             # reply without a function call, the next request forces one and changes the seed.
             response = planner.complete(messages, schemas, number, 'required' if no_tools else None, no_tools)
@@ -151,6 +161,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 previous_calls = signature
             call_records, images = [], []
             allowed = frozenset(session.handles)
+            more_to_check = False
             for index, call in enumerate(calls):
                 fun = call.get('function') or {}
                 name, raw_args = fun.get('name', ''), fun.get('arguments', '')
@@ -173,13 +184,23 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                         handle = args.get('mask') if isinstance(args, dict) else None
                         # The first valid submit opens one report, and with the verifier stage so does any
                         # submit of a mask with unchecked components. The last reply can only submit.
-                        if (name == 'submit' and number < budget and handle in allowed and isinstance(session.handles[handle], Mask)
-                                and (not reviewed or (verify and toolbox.pending(session.handles[handle])))):
+                        known = name == 'submit' and handle in allowed and isinstance(session.handles[handle], Mask)
+                        owed = known and (toolbox.owed if gate2 else toolbox.pending)(session.handles[handle])
+                        if known and number < limit and (not reviewed or (verify and owed)):
                             reviewed = True
                             previous_calls = None
-                            result = toolbox.pre_submit(handle, budget - number, verify)
+                            result = toolbox.pre_submit(handle, limit - number, verify)
+                        elif known and gate2 and grant is None and number == limit and owed:
+                            # The last reply: its report still reaches the planner, with replies to act on it.
+                            grant = dict(kind='last_reply', at_reply=number)
+                            limit += EXTRA_REPLIES
+                            reviewed = True
+                            previous_calls = None
+                            result = toolbox.pre_submit(handle, EXTRA_REPLIES, verify)
                         else:
                             result = toolbox.execute(name, args, allowed)
+                            # ask checks a batch per call, so the same empty call is the way to get the next batch.
+                            more_to_check = more_to_check or (gate2 and name == 'ask' and bool(result.public.get('remaining_unverified')))
                 messages.append(dict(role='tool', tool_call_id=call['id'], content=result.text))
                 images.extend(image_blocks(result) if result.images else [])
                 internal = result.internal
@@ -192,6 +213,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     status=internal.get('status', 'executed'), provenance=internal,
                     set_current=args.get('set_current', True) if isinstance(args, dict) and name in
                         ('to_mask','combine','morph','remove_region','add_region','refine_region','python') else None))
+            if more_to_check:
+                previous_calls = None
             if images:
                 messages.append(dict(role='user', content=images))
             trim_images(messages)
@@ -202,22 +225,46 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             if session.submitted is not None:
                 reason = 'submit'
                 break
+            late_key = None
             if not calls:
                 no_tools += 1
                 if no_tools == 3:
-                    reason = 'no_submit'
-                    break
+                    key = session.current_mask if session.current_mask is not None else latest_mask(session)
+                    if not (gate2 and grant is None and key is not None and toolbox.owed(session.get(key, Mask))):
+                        reason = 'no_submit'
+                        break
+                    grant = dict(kind='no_tools', at_reply=number)
+                    limit = max(limit, number + EXTRA_REPLIES)
+                    no_tools, late_key = 0, key
                 # Pseudo-calls written as text prime the next reply to do the same, even under
                 # tool_choice=required, so the reply stays in the trace but leaves the context.
                 messages.pop()
-                if repeated:
+                if late_key is not None:
+                    pass
+                elif repeated:
                     messages.append(dict(role='user', content='You repeated your previous tool call, so it did not run again. Its result is above. Choose a different action, or call submit with an existing mask and a summary.'))
                 elif no_tools == 1:
                     messages.append(dict(role='user', content='Your last reply contained no function call, so nothing ran. Writing a tool call as text does not execute it. Make a function call now, or call submit with an existing mask and a summary.'))
             else:
                 no_tools = 0
-            left = budget - number
-            if 0 < left <= REVIEW_REPLIES and not reviewed and session.current_mask is not None:
+            left = limit - number
+            note = ''
+            if gate2 and left == 0 and grant is None and session.current_mask is not None and toolbox.owed(session.get(session.current_mask, Mask)):
+                # The budget ran out with unchecked components in the current answer.
+                grant = dict(kind='budget', at_reply=number)
+                limit += EXTRA_REPLIES
+                left, late_key = EXTRA_REPLIES, session.current_mask
+            if gate2 and late_key is None and 0 < left <= REVIEW_REPLIES and not reviewed and session.current_mask is None and latest_mask(session) is not None:
+                late_key = latest_mask(session)
+                note = 'You have no current answer yet. This is the mask you generated most recently.\n'
+            if late_key is not None:
+                reviewed = True
+                previous_calls = None
+                late = toolbox.pre_submit(late_key, left, verify)
+                recorder.ask_spending(late.internal, f'report-{number}')
+                recorder.note(number, late)
+                messages.append(dict(role='user', content=note + late.public['report']))
+            elif 0 < left <= REVIEW_REPLIES and not reviewed and session.current_mask is not None:
                 reviewed = True
                 late = toolbox.pre_submit(session.current_mask, left, verify)
                 recorder.ask_spending(late.internal, f'report-{number}')
@@ -245,6 +292,9 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
         _, _, meta = toolbox.stage(session.submitted)
         recorder.ask_spending(meta, 'final-stage')
     write_json(toolbox.directory / 'verification.json', toolbox.ledger(session.submitted))
+    if gate2:
+        write_json(toolbox.directory / 'gate.json', dict(grant=grant, rounds=rounds, budget=budget,
+            extra_used=rounds - grant['at_reply'] if grant else 0))
     return recorder.final(session, task, submitted_by, reason, fallback, rounds, planner, error)
 
 
@@ -267,6 +317,7 @@ def main():
     parser.add_argument('--plan', action='store_true', help='Offer the plan tool.')
     parser.add_argument('--skills', default='', help='Comma-separated skill names, or all.')
     parser.add_argument('--verify-stage', action='store_true', help='Each submit first verifies every unchecked component and reports all answers.')
+    parser.add_argument('--gate2', action='store_true', help='Close the gaps where verifier answers never reach the planner (G2). Needs --verify-stage.')
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
@@ -285,6 +336,10 @@ def main():
     todo = read_tasks(args.tasks, args.task) if args.tasks else (Path(args.names_file).read_text().split() if args.names_file else names(args.split))
     if args.limit is not None:
         todo = todo[:args.limit]
+    if args.tasks:
+        keys = [(r['task_type'], Path(r['id']).stem) for r in todo]
+        if len(set(keys)) != len(keys):
+            parser.error('Run each direction in a separate config/manifest to avoid output collisions.')
     shared = SharedPrompter()
     def identity(item):
         if isinstance(item, dict):
@@ -313,14 +368,15 @@ def main():
         init_path = Path(row['init_mask']) if row and row['init_mask'] else RUN / 'init' / args.init_name / args.split / (Path(name).stem + '.png')
         planner = Planner(guard=guard, parameters=dict(model=args.planner_model), seed=seed_for(name, args.seed_offset))
         init, init_error = None, None
-        if task == 'T5.1' or (row and row['init_mask']):
+        if needs_init(task) or (row and row['init_mask']):
             try:
                 init = load_mask_png(init_path)
             except Exception:
                 init_error = traceback.format_exc()
         session = Session(rgb[0].shape[:2], init, target=row['target'] if row else 'building',
             change_direction=row['change_direction'] if row else 'any',
-            instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None)
+            instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None,
+            scope=row.get('scope') if row else None)
         ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence, session=session) if args.ask_backend == 'api' else None
         source_images = [str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')]
         custom_images = row is not None and [row['image_t1'], row['image_t2']] != source_images
@@ -329,12 +385,12 @@ def main():
             target=session.target, image_paths=image_paths),
             shared.for_image(args.split, name, rgb=rgb if custom_images else None), ask, session=session, python=args.python)
         try:
-            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills,
-                metadata=dict(session_id=stem, source_images=image_paths or source_images,
-                    init_mask_path=str(init_path) if init is not None or task == 'T5.1' else None,
+            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2,
+                metadata=dict(**({'scope': session.scope} if session.scope else {}), session_id=stem, source_images=image_paths or source_images,
+                    init_mask_path=str(init_path) if init is not None or needs_init(task) else None,
                     init_config=dict(route=args.init_name, text=session.target, tile=512, score_thr=.5,
-                        overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if task == 'T5.1' else None,
-                    backends=dict(ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage,
+                        overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if needs_init(task) else None,
+                    backends=dict(**({'gate2': True} if args.gate2 else {}), ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage,
                         plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence,
                         ask_model=args.ask_model if args.ask_backend == 'api' else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                         sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),

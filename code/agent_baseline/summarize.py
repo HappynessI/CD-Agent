@@ -8,6 +8,7 @@ if __package__ in (None, ''):
 
 import argparse
 from collections import Counter
+from .tasks import INSTRUCTIONS, needs_init
 import json
 import os
 from pathlib import Path
@@ -55,7 +56,7 @@ def summarize(directory, split, task, errors=False, gts=None):
         modification_delta.append(sum(deltas))
         row['called_modification'] = bool(edits)
         rows.append(row)
-        if task == 'T5.1':
+        if needs_init(task):
             init_path = path.parent / 'masks' / 'mask_0.png'
             if row.get('initial_eval') is None or not init_path.exists():
                 # Missing init must not be silently substituted with a generated error fallback.
@@ -88,14 +89,14 @@ def summarize(directory, split, task, errors=False, gts=None):
         python_calls=python_calls, python_success_calls=python_success,
         python_success_rate=python_success / python_calls if python_calls else None,
         python_session_success_rate=python_success_sessions / python_sessions if python_sessions else None)
-    if task == 'T5.1' and len(initial) == len(preds):
+    if needs_init(task) and len(initial) == len(preds):
         base, base_per = evaluate(initial, split, references)
         delta = {name: per[name]-base_per[name] for name in per}
         summary.update(initial=base, delta_f1_c=metrics['f1']-base['f1'],
             unchanged_submission_rate=mean([np.array_equal(preds[n],initial[n]) for n in preds]),
             improved=sum(v>1e-12 for v in delta.values()), worsened=sum(v< -1e-12 for v in delta.values()),
             unchanged=sum(abs(v)<=1e-12 for v in delta.values()))
-    elif task == 'T5.1':
+    elif needs_init(task):
         summary.update(initial=None, delta_f1_c=None, unchanged_submission_rate=None,
             improved=None, worsened=None, unchanged=None,
             missing_initial_images=sorted(set(preds) - set(initial)),
@@ -109,7 +110,7 @@ def summarize(directory, split, task, errors=False, gts=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', required=True)
-    parser.add_argument('--task', choices=['T1.1xC0','T5.1'], required=True)
+    parser.add_argument('--task', choices=list(INSTRUCTIONS), required=True)
     parser.add_argument('--split', default='val', choices=['val','test'])
     parser.add_argument('--errors', action='store_true')
     parser.add_argument('--tasks', help='Manifest used for this run, for the expected session count.')

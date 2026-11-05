@@ -19,7 +19,8 @@ def generate(output, dataset=LEVIR, init_root=None):
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open('w') as file:
         for path in sorted((dataset / 'val_original' / 'A').glob('*.png')):
-            for task, instruction in INSTRUCTIONS.items():
+            for task in ('T1.1xC0', 'T5.1'):
+                instruction = INSTRUCTIONS[task]
                 row = dict(id=path.name, image_t1=str(path.resolve()),
                     image_t2=str((dataset / 'val_original' / 'B' / path.name).resolve()),
                     instruction=instruction, task_type=task, constraint=None,

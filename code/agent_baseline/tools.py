@@ -101,6 +101,11 @@ def session_schemas(session, python=False):
         ask['description'] = ask['description'].replace('building change', f'{session.target} change')
         if session.change_direction != 'any':
             ask['description'] += f' Count only the {session.change_direction} direction.'
+    if session.scope:
+        from prompts import scope_card
+        card = scope_card(session.target, session.change_direction, session.scope)
+        ask = next(s['function'] for s in schemas if s['function']['name'] == 'ask')
+        ask['description'] += ' Scope: ' + '; '.join(card['counts'] + card['not_counts'])
     if python:
         schemas.append(copy.deepcopy(PYTHON_SCHEMA))
     return schemas
@@ -372,7 +377,7 @@ class Toolbox:
     def verify(self, expanded, source):
         context = getattr(self.ask_backend, 'context', False)
         pairs = [ask_images(self.rgb, item.labels == c['id'], c['bbox'], context) for _, item, c in expanded]
-        question = verifier_prompts(self.session.target, self.session.change_direction)['VERIFY']
+        question = verifier_prompts(self.session.target, self.session.change_direction, self.session.scope)['VERIFY']
         if hasattr(self.ask_backend, 'session'):
             self.ask_backend.session = self.session
         rows, meta = self._backend(self.ask_backend, pairs, question)
@@ -518,6 +523,14 @@ class Toolbox:
             if entry is None or (self.latest(entry) is None and len(entry['records']) < 2):
                 out.append(c)
         return out
+
+    def owed(self, item):
+        """What the stage would check for this mask: its pending components and given components it dropped unasked."""
+        rows = self.pending(item)
+        if self.session.initial_mask is not None:
+            start = self.session.get(self.session.initial_mask, Mask)
+            rows = rows + [c for c in self.pending(start) if item.data[start.labels == c['id']].mean() < .5]
+        return rows
 
     def stage(self, key):
         """The fixed verification stage: every component of this mask still without an answer. Never edits a mask."""

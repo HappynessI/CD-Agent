@@ -13,6 +13,7 @@ import urllib.request
 import numpy as np
 from prompts import PSEUDO_TYPES, SYSTEM, VERIFY, scope_card, verifier_prompts
 from . import instances
+from .segment_cache import manifest_cache_path, read_instances
 from .state import ToolError
 from .planner import Planner
 
@@ -67,7 +68,13 @@ class SegmentBackend:
         cached_class = ''.join(text.lower().split()) == ''.join(self.target.lower().split())
         cache = self.cache_config if cached_class else {}
         if self.image_paths is not None:
-            cache = {}  # Dataset caches are indexed by split/name, not arbitrary manifest images.
+            cache = {}  # Explicit images use the worker's source-path namespace.
+            conf = min(.1, score_thr)
+            root = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
+            path = manifest_cache_path(root, self.image_paths[index], text, tile, conf, self.pixel_thr)
+            if path.is_file():
+                return read_instances(path, score_thr), dict(cache_hit=True, backend='sam3_manifest_cache',
+                    tile=tile, conf=conf, pixel_thr=self.pixel_thr)
         if self.pixel_thr != .5:
             # The soft cache holds scores from 0.3 and values from 0.2.
             if cache and tile == 512 and score_thr >= cache['soft_min_score']:
@@ -230,7 +237,7 @@ class ApiAsk:
         for word, image in zip(CROP_WORDS, images):
             content += [dict(type='text', text=word), dict(type='image_url',
                         image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
-        settings = verifier_prompts(self.session.target, self.session.change_direction) if self.session else verifier_prompts()
+        settings = verifier_prompts(self.session.target, self.session.change_direction, self.session.scope) if self.session else verifier_prompts()
         content.append(dict(type='text', text=settings['CORRESPONDENCE'] if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
         try:
             with ASK_SLOTS:

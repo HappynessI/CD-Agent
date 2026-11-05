@@ -8,14 +8,16 @@ SCOPES = Path(__file__).resolve().parents[1] / 'agent_baseline' / 'scopes'
 DIRECTIONS = ('any', 'appeared', 'disappeared')
 
 
-def scope_card(target='building', change_direction='any'):
+def scope_card(target='building', change_direction='any', scope=None):
     if change_direction not in DIRECTIONS:
         raise ValueError(f'Unknown change_direction: {change_direction}')
     # A category must have an explicit scope; never silently borrow building's rules.
-    path = SCOPES / (target + '.json')
+    path = SCOPES / ((scope or target).removesuffix('.json') + '.json')
     if path.parent != SCOPES or not path.is_file():
         raise ValueError(f'Missing scope card for target {target!r}')
     card = json.loads(path.read_text())
+    if card['target'] != target:
+        raise ValueError('Scope card target differs from the session target')
     if change_direction != 'any':
         card['counts'] = card['direction_counts'][change_direction]
         excluded = 'disappeared' if change_direction == 'appeared' else 'appeared'
@@ -23,8 +25,8 @@ def scope_card(target='building', change_direction='any'):
     return card
 
 
-def verifier_prompts(target='building', change_direction='any'):
-    card = scope_card(target, change_direction)
+def verifier_prompts(target='building', change_direction='any', scope=None):
+    card = scope_card(target, change_direction, scope)
     scope = {key: card[key] for key in ('counts', 'not_counts')}
     types = card['pseudo_types']
     system = (

@@ -7,17 +7,18 @@
 
 ## 会话与范围卡
 
-`Session` 保存 `target`、`change_direction`、`instruction`、`constraint`。
+`Session` 保存 `target`、`change_direction`、`instruction`、`constraint` 和可选 `scope`。
 方向支持 `any`、`appeared`、`disappeared`。`ask` 的公开参数仍只有 `regions`。
 系统提示、工具说明、`ask` 与固定验证阶段从会话取目标和方向。
 `ovcd_v0.prompts` 的原有全局导出继续代表 building/any。
 
+`scope` 指定 `scopes/` 内的中性卡名（可省 `.json`）；缺省仍取 `scopes/<target>.json`。
 `scopes/<target>.json` 定义单复数名称、范围卡、方向专属 counts、伪变化类型、
 对应问法和 SAM3 缓存门限。缺卡报错。`building.json` 保留原有数值，
 `tree.json` 是未经过实验校准的示例；其缓存配置为空，必须调用匹配图像的 worker。
 现有 building 缓存的数据格式及目录不变；其他类别通过按文本命名的 worker 缓存。
 
-本地验证器 worker 可用 `--target` 与 `--change-direction` 固定一个任务范围；
+本地验证器 worker 可用 `--target` 与 `--change-direction`、可选 `--scope` 固定一个任务范围；
 请求中的问题必须与其范围一致。混合目标/方向的清单可使用逐会话配置的 API 验证器，
 或拆成范围一致的清单并使用对应本地 worker。默认本地 worker 的问题不变。
 
@@ -93,5 +94,7 @@ Python 开启的三次重复（P1）已完成，结果见 `doc/agent_baseline/RE
 
 ## 换新任务前要做的事
 
-- `fixed_routes.py` 固定 building 且合并两个方向，不能直接作为别的类别或单方向的固定对照。
+- `fixed_routes.py` 支持 `--direction any/appeared/disappeared` 和 `--tasks` / 显式图路径；类别仍固定 building。
+- `T1.1xC1`、`T5.1xC1` 清单需要方向，后者需要给定掩码。两个方向分别用不同配置目录。
+- SECOND 准备与评测见 `README_second.md`；新范围卡不改变默认 building 卡。
 - `code/ovcd_v0/prompts.py` 的 BOX 仍写 building；当前 Agent 的 SAM 提示工具不调用它。

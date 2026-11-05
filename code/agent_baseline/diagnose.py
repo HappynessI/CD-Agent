@@ -65,7 +65,7 @@ def tag(row, task):
         return 'no_function_call'
     if row['submitted_by'] in ('budget', 'error'):
         return 'stopped_by_' + row['submitted_by']
-    if task == 'T5.1':
+    if task in ('T5.1', 'T5.1xC1'):
         if row['same_as_init']:
             return 'kept_init'
         if row['added'] and row['removed']:
@@ -81,16 +81,24 @@ def main():
     p.add_argument('--config', required=True)
     p.add_argument('--task', required=True)
     p.add_argument('--split', default='val')
+    p.add_argument('--tasks', help='Manifest for non-default image IDs and reference masks.')
+    p.add_argument('--fixed-dir', type=Path, help='Fixed baseline mask directory for the requested direction.')
     a = p.parse_args()
     base = RUN / a.config / a.task / a.split
     rows = []
-    for name in names(a.split):
+    from .tasks import read_tasks
+    listed = read_tasks(a.tasks, a.task) if a.tasks else None
+    by_stem = {Path(r['id']).stem: r for r in listed} if listed is not None else {}
+    for name in ([r['id'] for r in listed] if listed is not None else names(a.split)):
         stem = Path(name).stem
         d = base / stem
         final = json.loads((d / 'final.json').read_text())
-        gt = load_gt(a.split, name)
+        info = json.loads((d / 'input.json').read_text()) if (d / 'input.json').exists() else {}
+        gt_path = by_stem[stem]['gt_mask'] if stem in by_stem else info.get('gt_mask_path')
+        gt = load_mask_png(gt_path) if gt_path else load_gt(a.split, name)
         pred = load_mask_png(d / final['mask_path'])
-        imc = load_mask_png(RUN / 'init' / 'sam3_imc' / a.split / name)
+        imc_path = a.fixed_dir / (stem + '.png') if a.fixed_dir else Path(info['init_mask_path']) if info.get('init_mask_path') else RUN / 'init' / 'sam3_imc' / a.split / name
+        imc = load_mask_png(imc_path)
         steps = read_jsonl(d / 'steps.jsonl')
         calls = [c for s in steps for c in s['calls'] if c['ok']]
         used = [c['tool'] for c in calls]

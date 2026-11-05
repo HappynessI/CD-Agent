@@ -60,7 +60,7 @@ def inspect_session(directory, summary, init_f1_from_final=False):
     count = final.get('planning_rounds', sum(row['step'] > 0 for row in rows))
     initial = next((metric_f1(row.get('eval')) for row in rows if row['step'] == 0), None)
     gt_pixels = final_metric.get('tp', 0) + final_metric.get('fn', 0) if 'tp' in final_metric and 'fn' in final_metric else None
-    if task == 'T5.1':
+    if task in ('T5.1', 'T5.1xC1'):
         if init_f1_from_final:
             initial = metric_f1(final.get('initial_eval'))
     else:
@@ -119,7 +119,7 @@ def report(config_dir, init_f1_from_final=False):
         lines.append('| ' + ' | '.join(md(cell) for cell in cells) + ' |')
     lines += ['', '## 典型失败候选（供人工检查，不自动选定）', '']
     t1 = [r for r in records if r['task'].startswith('T1.1') and r['f1'] is not None]
-    t5 = [r for r in records if r['task'] == 'T5.1' and r['delta'] is not None]
+    t5 = [r for r in records if r['task'] in ('T5.1', 'T5.1xC1') and r['delta'] is not None]
     if t1:
         values = list((summary or {}).get('per_image_f1', {}).values()) or [r['f1'] for r in t1]
         q1 = quartile(values)
@@ -127,11 +127,11 @@ def report(config_dir, init_f1_from_final=False):
         lines += [f'T1.1：{population}的 F1 下四分位为 {pct(q1)}；排除空 GT 后按距下四分位的绝对差取最多 3 张。', '']
         candidates = sorted((r for r in t1 if r['gt_pixels'] is not None and r['gt_pixels'] > 0), key=lambda r: (abs(r['f1'] - q1), r['name']))[:3]
         lines += [f'- {r["name"]}：F1 {pct(r["f1"])}，GT {r["gt_pixels"]} 像素，正常 submit：{mark(r["normal"])}。' for r in candidates] or ['- 没有可核验的非空 GT 候选。']
-    if any(r['task'] == 'T5.1' for r in records):
+    if any(r['task'] in ('T5.1', 'T5.1xC1') for r in records):
         lines += ['T5.1：最终比初始变差最多的最多 3 张（仅列 ΔF1<0）。', '']
         worse = sorted((r for r in t5 if r['delta'] < 0), key=lambda r: (r['delta'], r['name']))[:3]
         lines += [f'- {r["name"]}：{pct(r["initial"])} → {pct(r["f1"])}，ΔF1 {delta_text(r["delta"])}。' for r in worse] or ['- 当前有初始指标的轨迹中没有变差案例。']
-        unknown = sum(r['task'] == 'T5.1' and r['delta'] is None for r in records)
+        unknown = sum(r['task'] in ('T5.1', 'T5.1xC1') and r['delta'] is None for r in records)
         if unknown:
             lines += [f'- {unknown} 张缺初始或最终指标，无法判断是否变差。']
     return '\n'.join(lines) + '\n'

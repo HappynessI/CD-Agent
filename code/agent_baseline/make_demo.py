@@ -162,17 +162,17 @@ def system_figure(task=None, counts=None, stops=0, reports=None, answers=None, e
     # Input.
     box(16, 78, 170, 270)
     text(32, 103, '输入', 'head')
-    given = '给定掩码（仅 T5.1）' if task is None else '给定掩码 mask#0' if task == 'T5.1' else 'T1.1 无给定掩码'
+    given = '给定掩码（仅 T5.1）' if task is None else '给定掩码 mask#0' if task in ('T5.1', 'T5.1xC1') else 'T1.1 无给定掩码'
     items = ['T1 较早影像', 'T2 较晚影像', '指令（一句话任务）', given, '系统提示和工具定义']
     for n, item in enumerate(items):
         y = 116 + 44 * n
-        off = task is not None and task != 'T5.1' and n == 3
+        off = task is not None and task not in ('T5.1', 'T5.1xC1') and n == 3
         box(28, y, 146, 36, 'chip off' if off else 'chip')
         text(101, y + 23, item, 'small', 'middle')
     link([(186, 145), (250, 145)], 'main')
     text(218, 136, '首条消息', 'label', 'middle')
     link([(186, 322), (250, 322)], 'main')
-    text(218, 313, '两期影像' if task and task != 'T5.1' else '影像、掩码', 'label', 'middle')
+    text(218, 313, '两期影像' if task and task not in ('T5.1', 'T5.1xC1') else '影像、掩码', 'label', 'middle')
 
     # Planner, with the toolbox directly below it.
     box(250, 78, 470, 134, 'box plan')
@@ -435,7 +435,7 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
     rows = read_steps(directory)
     task = final.get('task_id', info.get('task_id', ''))
     name = directory.name
-    gt = load_gt(split, name + '.png')
+    gt = load_mask_png(resolve_asset(directory, info['gt_mask_path'])) if info.get('gt_mask_path') else load_gt(split, name + '.png')
     sources = [Image.open(resolve_asset(directory, p)).convert('RGB') for p in info['source_images']]
     t2 = sources[1].copy()
     t2.thumbnail((512, 512), Image.Resampling.LANCZOS)
@@ -461,7 +461,7 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
                               figure(jpeg(Image.fromarray(compare)), '与真值对比 · 运行时模型不可见'))
         return thumbs[handle]
 
-    title = 'T5.1 修正已有掩码' if task == 'T5.1' else 'T1.1 从零生成'
+    title = 'T5.1 修正已有掩码' if task in ('T5.1', 'T5.1xC1') else 'T1.1 从零生成'
     final_metric = final.get('eval') or {}
     pr = scores(final_metric) if all(k in final_metric for k in ('tp', 'fp', 'fn')) else {}
     final_f1 = metric_f1(final_metric)
@@ -478,7 +478,7 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
     head = f'<header><div class="headtop"><div><div class="eyebrow"><a href="index.html">回放列表</a> · 变化检测 · Agent 轨迹展示 / {esc(split)} / {esc(name)}</div><h1>{title}</h1></div><label class="js-only">外观 <select id="theme"><option value="auto">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label></div>'
     head += '<div class="warning">这是挑出来的样例，不代表平均水平</div>'
     head += '<div class="metrics">' + ''.join(f'<div class="metric"><strong>{esc(v)}</strong><span>{k}</span></div>' for k, v in stats) + '</div>'
-    if task == 'T5.1':
+    if task in ('T5.1', 'T5.1xC1'):
         head += f'<p><strong>初始 F1 {pct(initial_f1)} → 最终 F1 {pct(final_f1)}</strong></p>'
     head += summary_text(config_summary, name, final_f1) + fixed_text(fixed)
     head += f'<details open><summary>指令原文</summary>{text_block(info.get("instruction", "未记录"), threshold=100000)}</details>'
@@ -491,12 +491,12 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
     left += ''.join(figure(jpeg(im), label) for im, label in zip(sources, ['T1 · 较早影像', 'T2 · 较晚影像']))
     left += figure(jpeg(Image.fromarray(gt.astype('uint8') * 255)), '真值 · 运行时模型不可见')
     initial_handle = info.get('initial_handle')
-    if task == 'T5.1' and initial_handle and mask_path(directory, initial_handle).exists():
+    if task in ('T5.1', 'T5.1xC1') and initial_handle and mask_path(directory, initial_handle).exists():
         left += figure(mask_assets(initial_handle), '初始掩码')
-    elif task == 'T5.1' and info.get('init_mask_path') and resolve_asset(directory, info['init_mask_path']).exists():
+    elif task in ('T5.1', 'T5.1xC1') and info.get('init_mask_path') and resolve_asset(directory, info['init_mask_path']).exists():
         left += figure(jpeg(Image.open(resolve_asset(directory, info['init_mask_path']))), '初始掩码')
     else:
-        left += '<figure><div class="empty">' + ('初始掩码未归档' if task == 'T5.1' else '无初始掩码') + '</div><figcaption>' + ('初始掩码' if task == 'T5.1' else 'T1.1 从零生成') + '</figcaption></figure>'
+        left += '<figure><div class="empty">' + ('初始掩码未归档' if task in ('T5.1', 'T5.1xC1') else '无初始掩码') + '</div><figcaption>' + ('初始掩码' if task in ('T5.1', 'T5.1xC1') else 'T1.1 从零生成') + '</figcaption></figure>'
     left += '</div><p class="muted">图像均为缩小展示；点击图像可放大。真值及所有 F1 仅供事后评估。</p></section></aside>'
 
     timeline = ['<section aria-label="步骤时间线"><h2>Agent 做了什么</h2><p class="muted">按记录顺序回放。点卡片切步；← / → 切换。第 0 步是初始化。</p><noscript><p>JavaScript 未启用：时间线和最终结果仍可阅读。</p></noscript>']
