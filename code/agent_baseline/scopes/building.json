@@ -1,0 +1,41 @@
+{
+  "target": "building",
+  "plural": "buildings",
+  "counts": [
+    "a building newly constructed (absent in T1, present in T2)",
+    "a building demolished (present in T1, absent in T2)",
+    "a building demolished and rebuilt (a different building in T2)"
+  ],
+  "not_counts": [
+    "shadows",
+    "seasonal, illumination or color/tone differences of the same building",
+    "edge responses caused by misregistration between T1 and T2",
+    "vehicles and temporary piles or materials",
+    "changes of non-building land cover (roads, vegetation, bare soil)"
+  ],
+  "pseudo_types": [
+    "new_building",
+    "demolished",
+    "rebuilt",
+    "shadow",
+    "seasonal_or_color",
+    "misregistration",
+    "vehicle_or_temporary",
+    "non_building_change",
+    "no_change"
+  ],
+  "direction_counts": {
+    "appeared": [
+      "a building newly constructed (absent in T1, present in T2)"
+    ],
+    "disappeared": [
+      "a building demolished (present in T1, absent in T2)"
+    ]
+  },
+  "correspondence": "The first two images are close-ups and the last two show the same place with more surroundings. The red contour marks the same region in all of them. First find the object inside the contour at the same position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence that a building was newly constructed, demolished, or replaced by a different building? If both dates show the same building and only its color, shadow, occlusion or visibility differs, answer no. Do not read poor visibility as demolition. The reason must name the evidence of correspondence or change. Reply with JSON only: ",
+  "sam3_cache": {
+    "soft_min_score": 0.3,
+    "tile_min_score": 0.1,
+    "full_min_score": 0.5
+  }
+}

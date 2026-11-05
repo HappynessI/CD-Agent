@@ -14,9 +14,10 @@ import time as clock
 import traceback
 from dataclasses import dataclass, field
 from pathlib import Path
+import re
 import numpy as np
 from scipy import ndimage as ndi
-from prompts import VERIFY
+from prompts import VERIFY, verifier_prompts
 from . import instances
 from common import components
 from .state import Session, Mask, Instances, ToolError, chosen_ids
@@ -87,7 +88,22 @@ PLAN_SCHEMA = schema('plan', 'Write or replace your own short to-do list for thi
         required=['text', 'status'], additionalProperties=False))), ['items'])
 # Offered only when skills are on, so runs without them keep their exact tool list.
 SKILL_SCHEMA = schema('load_skill', 'Read the full text of one skill from the index in the system prompt.', dict(name=S), ['name'])
-SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA]}
+PYTHON_SCHEMA = schema('python', 'Run array calculations in an isolated Python subprocess with np and ndi. Inputs: masks[handle] (H,W bool), instances[handle] (N,H,W bool, only for handles written out in the code), images["t1"/"t2"] (H,W,3 uint8), all read-only. Call save_mask(array) for each output mask. No filesystem, network or submission access. New handles become usable in the next reply; submit them with submit. ' + CURRENT,
+    dict(code=S, set_current=SET_CURRENT), ['code'])
+SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, PYTHON_SCHEMA]}
+
+
+def session_schemas(session, python=False):
+    import copy
+    schemas = copy.deepcopy(SCHEMAS)
+    if (session.target, session.change_direction) != ('building', 'any'):
+        ask = next(s['function'] for s in schemas if s['function']['name'] == 'ask')
+        ask['description'] = ask['description'].replace('building change', f'{session.target} change')
+        if session.change_direction != 'any':
+            ask['description'] += f' Count only the {session.change_direction} direction.'
+    if python:
+        schemas.append(copy.deepcopy(PYTHON_SCHEMA))
+    return schemas
 SKILLS = Path(__file__).parent / 'skills'
 
 
@@ -192,11 +208,12 @@ def failure(code, message):
 
 
 class Toolbox:
-    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None):
+    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False):
         self.rgb = tuple(np.array(im, copy=True) for im in rgb)
         self.session = session or Session(self.rgb[0].shape[:2], init_mask)
         self.directory = Path(directory)
         self.segment_backend, self.prompt_backend, self.ask_backend = segment, prompt, ask
+        self.python_enabled = python
         self.allowed = None
         self.meta = {}
         # Verifier answers by exact component outline, so they survive renumbering and lapse when an outline changes.
@@ -216,7 +233,7 @@ class Toolbox:
         started_at = clock.time()
         self.allowed, self.meta = allowed, {}
         try:
-            if name not in SCHEMA_BY_NAME:
+            if name not in SCHEMA_BY_NAME or (name == 'python' and not self.python_enabled):
                 raise ToolError('bad_args', 'Unknown tool name.')
             validate(args, SCHEMA_BY_NAME[name])
             pyinspect.signature(getattr(self, name)).bind(**args)
@@ -355,7 +372,10 @@ class Toolbox:
     def verify(self, expanded, source):
         context = getattr(self.ask_backend, 'context', False)
         pairs = [ask_images(self.rgb, item.labels == c['id'], c['bbox'], context) for _, item, c in expanded]
-        rows, meta = self._backend(self.ask_backend, pairs, VERIFY)
+        question = verifier_prompts(self.session.target, self.session.change_direction)['VERIFY']
+        if hasattr(self.ask_backend, 'session'):
+            self.ask_backend.session = self.session
+        rows, meta = self._backend(self.ask_backend, pairs, question)
         self.meta.update(meta)
         self.meta['answers'] = rows
         if len(rows) != len(expanded):
@@ -441,6 +461,29 @@ class Toolbox:
         new = (item.data & (item.labels != id)) | local
         return self._mask(new, (mask,), set_current, item.data, old_bbox=list(comp['bbox']),
             new_bbox=bbox(local), old_area=comp['area'], new_area=int(local.sum()), roi=roi, sam_quality=quality)
+
+    def python(self, code, set_current=True):
+        from .python_sandbox import calculate
+        masks, insts = {}, {}
+        parents = []
+        # A dense instance set takes about 1 MB per instance, so only the sets the code names are sent.
+        named = set(re.findall(r'inst#\d+', code))
+        for key, item in self.session.handles.items():
+            if self.allowed is not None and key not in self.allowed:
+                continue
+            parents.append(key)
+            if isinstance(item, Mask):
+                masks[key] = item.data
+            else:
+                if key not in named:
+                    continue
+                dense = np.zeros((len(item.items), *self.session.shape), bool)
+                for row, data in zip(item.items, dense):
+                    data.ravel()[row['idx']] = True
+                insts[key] = dense
+        arrays, stdout = calculate(code, masks, insts, self.rgb, self.session.shape)
+        results = [self._mask(data, parents, set_current) for data in arrays]
+        return dict(masks=results, stdout=stdout)
 
     def load_skill(self, name):
         if name not in self.skills:

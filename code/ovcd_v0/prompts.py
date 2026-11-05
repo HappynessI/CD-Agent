@@ -1,36 +1,59 @@
 """Scope card (口径卡 v0, fixed) and the T3 verify / T5 box prompts."""
 
+import json
+from pathlib import Path
+
 CLASS = 'building'
+SCOPES = Path(__file__).resolve().parents[1] / 'agent_baseline' / 'scopes'
+DIRECTIONS = ('any', 'appeared', 'disappeared')
 
-SCOPE_CARD = {
-    'counts': ['a building newly constructed (absent in T1, present in T2)',
-               'a building demolished (present in T1, absent in T2)',
-               'a building demolished and rebuilt (a different building in T2)'],
-    'not_counts': ['shadows',
-                   'seasonal, illumination or color/tone differences of the same building',
-                   'edge responses caused by misregistration between T1 and T2',
-                   'vehicles and temporary piles or materials',
-                   'changes of non-building land cover (roads, vegetation, bare soil)'],
-}
 
-PSEUDO_TYPES = ['new_building', 'demolished', 'rebuilt', 'shadow', 'seasonal_or_color',
-                'misregistration', 'vehicle_or_temporary', 'non_building_change', 'no_change']
+def scope_card(target='building', change_direction='any'):
+    if change_direction not in DIRECTIONS:
+        raise ValueError(f'Unknown change_direction: {change_direction}')
+    # A category must have an explicit scope; never silently borrow building's rules.
+    path = SCOPES / (target + '.json')
+    if path.parent != SCOPES or not path.is_file():
+        raise ValueError(f'Missing scope card for target {target!r}')
+    card = json.loads(path.read_text())
+    if change_direction != 'any':
+        card['counts'] = card['direction_counts'][change_direction]
+        excluded = 'disappeared' if change_direction == 'appeared' else 'appeared'
+        card['not_counts'] = [*card['not_counts'], f'changes in the {excluded} direction; replacement alone is not evidence of the requested direction']
+    return card
 
-SYSTEM = (
-    'You verify changes of the class "building" between two co-registered remote sensing images '
-    'of the same place: T1 (earlier) and T2 (later).\n'
-    'Scope card for "building".\n'
-    'COUNTS as a building change:\n' + ''.join(f'- {x}\n' for x in SCOPE_CARD['counts']) +
-    'Does NOT count:\n' + ''.join(f'- {x}\n' for x in SCOPE_CARD['not_counts']) +
-    'Quote the scope card when you decide.')
 
+def verifier_prompts(target='building', change_direction='any'):
+    card = scope_card(target, change_direction)
+    scope = {key: card[key] for key in ('counts', 'not_counts')}
+    types = card['pseudo_types']
+    system = (
+        f'You verify changes of the class "{target}" between two co-registered remote sensing images '
+        'of the same place: T1 (earlier) and T2 (later).\n'
+        f'Scope card for "{target}".\n'
+        f'COUNTS as a {target} change:\n' + ''.join(f'- {x}\n' for x in scope['counts']) +
+        'Does NOT count:\n' + ''.join(f'- {x}\n' for x in scope['not_counts']) +
+        'Quote the scope card when you decide.')
+    suffix = ('{"change": "yes" or "no", "type": one of ' + str(types).replace("'", '"') +
+              ', "reason": one short sentence}')
+    verify = (
+        f'The red contour marks the same region in both close-ups. Is there a {target} change inside the '
+        'red contour according to the scope card? Reply with JSON only: ' + suffix)
+    correspondence = card['correspondence'] + suffix
+    if change_direction != 'any':
+        note = f' Only count changes in the {change_direction} direction according to the scope card.'
+        verify = verify.replace(' Reply with JSON only:', note + ' Reply with JSON only:')
+        correspondence = correspondence.replace(' Reply with JSON only:', note + ' Reply with JSON only:')
+    return dict(SCOPE_CARD=scope, PSEUDO_TYPES=types, SYSTEM=system, VERIFY=verify,
+                CORRESPONDENCE=correspondence)
+
+
+# Existing ovcd_v0 callers continue to get the frozen building / any prompts.
+_DEFAULT = verifier_prompts()
+SCOPE_CARD, PSEUDO_TYPES, SYSTEM, VERIFY = (_DEFAULT[key] for key in
+    ('SCOPE_CARD', 'PSEUDO_TYPES', 'SYSTEM', 'VERIFY'))
 FRAMING = ('T1 close-up (earlier):', 'T2 close-up (later):')
 
-VERIFY = (
-    'The red contour marks the same region in both close-ups. Is there a building change inside the '
-    'red contour according to the scope card? Reply with JSON only: '
-    '{"change": "yes" or "no", "type": one of ' + str(PSEUDO_TYPES).replace("'", '"') +
-    ', "reason": one short sentence}')
 PREFIX = '{"change": "'
 
 BOX = (

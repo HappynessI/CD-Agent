@@ -1,5 +1,8 @@
 # batch69 BF 实现与维护说明
 
+> 通用化接口的当前维护说明见 [README_generalization.md](README_generalization.md)。
+> 本文的验证记录属于 batch69；通用化改动只做源码编辑，测试与 G1 回放尚待在计算节点执行。
+
 交付目录为本目录 `agent_baseline/`。安装时整体放到 `CD-Agent/code/agent_baseline/`。
 本次只修改暂存目录；未安装到目标仓库，未提交作业、调用外部 API 或加载模型。
 开始与结束检查时，目标仓库均显示已有未跟踪的 `code/agent_baseline/`。

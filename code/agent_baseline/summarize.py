@@ -15,7 +15,7 @@ import numpy as np
 from common import evaluate, load_gt, load_mask_png, names, read_jsonl, write_json
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
-MODIFY = {'combine', 'morph', 'remove_region', 'add_region', 'refine_region'}
+MODIFY = {'python', 'combine', 'morph', 'remove_region', 'add_region', 'refine_region'}
 
 
 def route(calls):
@@ -33,14 +33,22 @@ def summarize(directory, split, task, errors=False, gts=None):
     preds, initial, rows, diagnostics, references = {}, {}, [], [], {}
     routes = Counter()
     modification_delta = []
+    python_sessions = python_success_sessions = python_calls = python_success = 0
     for path in finals:
         name = path.parent.name + '.png'
         row = json.loads(path.read_text())
-        gt = gts[name] if gts is not None else load_gt(split, name)
+        info_path = path.parent / 'input.json'
+        info = json.loads(info_path.read_text()) if info_path.exists() else {}
+        gt = gts[name] if gts is not None else load_mask_png(info['gt_mask_path']) if info.get('gt_mask_path') else load_gt(split, name)
         references[name] = gt
         mask_path = row.get('mask_path')
         preds[name] = load_mask_png(path.parent / mask_path) if mask_path else np.zeros_like(gt)
         calls = [c for step in read_jsonl(path.parent / 'steps.jsonl') for c in step.get('calls', [])]
+        py = [c for c in calls if c['tool'] == 'python' and c.get('status') != 'skipped_due_to_submit']
+        python_sessions += bool(py)
+        python_success_sessions += any(c['ok'] for c in py)
+        python_calls += len(py)
+        python_success += sum(c['ok'] for c in py)
         routes[route(calls)] += 1
         edits = [c for c in calls if c['tool'] in MODIFY and c.get('status') != 'skipped_due_to_submit']
         deltas = [c['eval']['delta_f1'] for c in edits if c['ok'] and c.get('eval') and c['eval']['delta_f1'] is not None]
@@ -75,7 +83,11 @@ def summarize(directory, split, task, errors=False, gts=None):
         submitted_by=dict(Counter(r['submitted_by'] for r in rows)),
         routes={k: routes[k] for k in ('mci_like','imc_like','mixed','other')},
         modification_rate=mean([r['called_modification'] for r in rows]),
-        mean_modification_delta_f1=mean(modification_delta))
+        mean_modification_delta_f1=mean(modification_delta),
+        python_sessions=python_sessions, python_success_sessions=python_success_sessions,
+        python_calls=python_calls, python_success_calls=python_success,
+        python_success_rate=python_success / python_calls if python_calls else None,
+        python_session_success_rate=python_success_sessions / python_sessions if python_sessions else None)
     if task == 'T5.1' and len(initial) == len(preds):
         base, base_per = evaluate(initial, split, references)
         delta = {name: per[name]-base_per[name] for name in per}
@@ -100,9 +112,11 @@ def main():
     parser.add_argument('--task', choices=['T1.1xC0','T5.1'], required=True)
     parser.add_argument('--split', default='val', choices=['val','test'])
     parser.add_argument('--errors', action='store_true')
+    parser.add_argument('--tasks', help='Manifest used for this run, for the expected session count.')
     args = parser.parse_args()
     found = len(list((RUN / args.config / args.task / args.split).glob('*/final.json')))
-    expected = len(names(args.split))
+    from .tasks import read_tasks
+    expected = len(read_tasks(args.tasks, args.task)) if args.tasks else len(names(args.split))
     if found != expected:
         parser.error(f'{found} of {expected} sessions have final.json; finish the run before summarizing.')
     print(json.dumps(summarize(RUN / args.config / args.task / args.split, args.split, args.task, args.errors), ensure_ascii=False))

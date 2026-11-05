@@ -27,7 +27,11 @@ class Instances:
 
 
 class Session:
-    def __init__(self, shape, init_mask=None):
+    def __init__(self, shape, init_mask=None, target="building", change_direction="any", instruction=None, constraint=None):
+        from prompts import scope_card
+        scope_card(target, change_direction)
+        self.target, self.change_direction = target, change_direction
+        self.instruction, self.constraint = instruction, constraint
         self.shape = tuple(shape)
         self.handles = {}
         self.next_id = 0

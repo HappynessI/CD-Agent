@@ -26,19 +26,23 @@ class Segmenter:
         self.processor, self.engine, self.run = processor, engine, Path(run)
         self.lock = threading.Lock()
 
-    def infer(self, split, name, time, text, tile, conf=.1, pixel_thr=.5):
+    def infer(self, split, name, time, text, tile, conf=.1, pixel_thr=.5, image_path=None):
         if time not in ('t1', 't2') or tile not in (0, 256, 512) or not 0 <= conf <= 1 or not 0 < pixel_thr < 1:
             raise ValueError('Invalid segmentation parameters')
         text = ' '.join(text.lower().split())
         slug = quote(text, safe='')
         path = self.run / 'sam3_cache' / (f'{slug}_t{tile}_c{conf:g}' + (f'_p{pixel_thr:g}' if pixel_thr != .5 else '')) / split / f'{Path(name).stem}_{time}.npz'
+        if image_path is not None:
+            source = Path(image_path).resolve()
+            # Separate namespace for explicit image files; legacy cache names stay unchanged.
+            path = self.run / 'sam3_manifest_cache' / f'{slug}_t{tile}_c{conf:g}_p{pixel_thr:g}' / source.relative_to(source.anchor) / 'instances.npz'
         started = __import__('time').monotonic()
         with self.lock:
             queued = __import__('time').monotonic() - started
             if path.exists():
                 return dict(ok=True, path=str(path), cache_hit=True, seconds=0, queue_seconds=queued)
             import torch
-            image = load_rgb(split, name)[0 if time == 't1' else 1]
+            image = np.asarray(Image.open(image_path).convert('RGB')) if image_path is not None else load_rgb(split, name)[0 if time == 't1' else 1]
             h, w = image.shape[:2]
             self.processor.confidence_threshold = conf
             step_y, step_x = (tile, tile) if tile else (h, w)

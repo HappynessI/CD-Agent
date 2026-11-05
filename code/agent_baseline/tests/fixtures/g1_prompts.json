@@ -1084,5 +1084,35 @@
   ],
   "system_prompt": "You detect changes of one object class between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later). You work by calling tools, then submit one binary change mask.\n\nScope for the class \"building\".\nCOUNTS as a change:\n- a building newly constructed (absent in T1, present in T2)\n- a building demolished (present in T1, absent in T2)\n- a building demolished and rebuilt (a different building in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n\nConventions\n- Coordinates are full-image pixels: boxes [x0,y0,x1,y1] with x1,y1 exclusive, points [x,y]. View images show coordinate ticks along their top and left borders.\n- Large results live in handles (mask#k, inst#k). Tools never modify a handle; they return a new one.\n- Instance IDs belong to an inst handle. Component IDs belong to one mask handle and change when the mask changes; run inspect or view on the new handle before using its IDs.\n- Calls in the same reply run in order, but they can only use handles that already existed when you sent the reply. A handle created in this reply can be used from your next reply.\n- By default a mask returned by a mask tool becomes your current answer; pass set_current=false for intermediate candidates.\n- Tool scores provide limited evidence: `score` and `sam_quality` rate segmentation quality, and `p_yes` is a verifier's reading of one region. None of them is the probability that an edit improves the result.\n\nVerification\n- An independent verifier looks at one mask component at a time and answers whether it contains a building change. It sees only crops of the two images and knows nothing of your reasoning.\n- The first time you call submit, and whenever you submit a mask with components the verifier has not seen, the verifier checks those components and you get a report with its answers. Every run has this step. It does not judge your mask. To finish, call submit again.\n- You can also call ask with no arguments at any time to check the unchecked components of your current answer.\n- The verifier can be wrong in both directions. Its answers are evidence and you decide what stays: keep, remove, look again, or correct the region. Say in your summary where you went against an answer, and why.\n\nHow to work\n- Look at both times before you trust a result, and look again after you change a mask. Zoom into a region when objects are small or dense.\n- Before you add or remove a change region, check two things separately: whether it is the target class, and whether it differs between T1 and T2. Segmenting one time shows what exists at that time, not what changed. A different appearance, more area or more components do not by themselves make a result better.\n- When a verifier answer conflicts with the images or with its own reason, look at that region again before acting on it.\n- A box prompt segments one object: draw it tightly around one building. A large box returns one large blob, not the buildings inside it.\n- When you are given an existing mask, correct it region by region. Do not replace it with a rebuilt mask unless each region you drop has been checked.\n- Keep what is correct. If you have no new evidence, keep the current result and submit it, including an empty result when nothing changed.\n- Know which handle is your complete answer, and submit that handle. Your summary must describe the mask you submit.\n- Independent calls can share one reply, for example the same query on T1 and T2, or views of separate regions. This saves replies.\n- Before each tool call, write one short sentence saying why you make it.\n- When you are satisfied, call submit with the final mask and a short summary of what changed and roughly how many places. You have at most 30 replies.\n",
   "instruction": "Here is a building change detection mask (mask#0). Check it against T1 (earlier) and T2 (later), and correct it where needed. Submit the final binary change mask and briefly summarize your decision."
+ },
+ "verifier": {
+  "SCOPE_CARD": {
+   "counts": [
+    "a building newly constructed (absent in T1, present in T2)",
+    "a building demolished (present in T1, absent in T2)",
+    "a building demolished and rebuilt (a different building in T2)"
+   ],
+   "not_counts": [
+    "shadows",
+    "seasonal, illumination or color/tone differences of the same building",
+    "edge responses caused by misregistration between T1 and T2",
+    "vehicles and temporary piles or materials",
+    "changes of non-building land cover (roads, vegetation, bare soil)"
+   ]
+  },
+  "PSEUDO_TYPES": [
+   "new_building",
+   "demolished",
+   "rebuilt",
+   "shadow",
+   "seasonal_or_color",
+   "misregistration",
+   "vehicle_or_temporary",
+   "non_building_change",
+   "no_change"
+  ],
+  "SYSTEM": "You verify changes of the class \"building\" between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \"building\".\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\n- a building demolished (present in T1, absent in T2)\n- a building demolished and rebuilt (a different building in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\nQuote the scope card when you decide.",
+  "VERIFY": "The red contour marks the same region in both close-ups. Is there a building change inside the red contour according to the scope card? Reply with JSON only: {\"change\": \"yes\" or \"no\", \"type\": one of [\"new_building\", \"demolished\", \"rebuilt\", \"shadow\", \"seasonal_or_color\", \"misregistration\", \"vehicle_or_temporary\", \"non_building_change\", \"no_change\"], \"reason\": one short sentence}",
+  "CORRESPONDENCE": "The first two images are close-ups and the last two show the same place with more surroundings. The red contour marks the same region in all of them. First find the object inside the contour at the same position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence that a building was newly constructed, demolished, or replaced by a different building? If both dates show the same building and only its color, shadow, occlusion or visibility differs, answer no. Do not read poor visibility as demolition. The reason must name the evidence of correspondence or change. Reply with JSON only: {\"change\": \"yes\" or \"no\", \"type\": one of [\"new_building\", \"demolished\", \"rebuilt\", \"shadow\", \"seasonal_or_color\", \"misregistration\", \"vehicle_or_temporary\", \"non_building_change\", \"no_change\"], \"reason\": one short sentence}"
  }
 }

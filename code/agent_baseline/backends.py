@@ -11,7 +11,7 @@ import time
 import urllib.error
 import urllib.request
 import numpy as np
-from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
+from prompts import PSEUDO_TYPES, SYSTEM, VERIFY, scope_card, verifier_prompts
 from . import instances
 from .state import ToolError
 from .planner import Planner
@@ -56,23 +56,28 @@ def read_soft(split, name, index, pixel_thr, score_thr, root=None):
 
 
 class SegmentBackend:
-    def __init__(self, split, name, worker=None, pixel_thr=.5):
+    def __init__(self, split, name, worker=None, pixel_thr=.5, target="building", image_paths=None):
+        self.target, self.image_paths = target, image_paths
+        self.cache_config = scope_card(target)["sam3_cache"]
         self.split, self.name, self.worker, self.pixel_thr = split, name, worker, pixel_thr
 
     def __call__(self, time, text, tile, score_thr):
         import sam3_t7
         index = 0 if time == 't1' else 1
-        building = ''.join(text.lower().split()) == 'building'
+        cached_class = ''.join(text.lower().split()) == ''.join(self.target.lower().split())
+        cache = self.cache_config if cached_class else {}
+        if self.image_paths is not None:
+            cache = {}  # Dataset caches are indexed by split/name, not arbitrary manifest images.
         if self.pixel_thr != .5:
             # The soft cache holds scores from 0.3 and values from 0.2.
-            if building and tile == 512 and score_thr >= .3:
+            if cache and tile == 512 and score_thr >= cache['soft_min_score']:
                 try:
                     return read_soft(self.split, self.name, index, self.pixel_thr, score_thr), dict(
                         cache_hit=True, backend='sam3_soft_cache', tile=tile, pixel_thr=self.pixel_thr)
                 except FileNotFoundError:
                     pass
-        elif building and ((tile == 512 and score_thr >= .1) or (tile == 0 and score_thr >= .5)):
-            conf = .1 if tile == 512 else .5
+        elif cache and ((tile == 512 and score_thr >= cache['tile_min_score']) or (tile == 0 and score_thr >= cache['full_min_score'])):
+            conf = cache['tile_min_score'] if tile == 512 else cache['full_min_score']
             try:
                 masks, scores = sam3_t7.read(self.split, self.name, tile, conf=conf, min_score=score_thr)[index]
                 return instances.from_dense(masks, scores), dict(cache_hit=True, backend='sam3_cache', tile=tile, conf=conf)
@@ -83,7 +88,10 @@ class SegmentBackend:
             raise ToolError('backend_unavailable', 'This text or threshold needs a SAM3 worker.')
         # A lower requested threshold must never read a cache truncated above it.
         conf = min(.1, score_thr)
-        response = post(self.worker, dict(split=self.split, name=self.name, time=time, text=text, tile=tile, conf=conf, pixel_thr=self.pixel_thr))
+        payload = dict(split=self.split, name=self.name, time=time, text=text, tile=tile, conf=conf, pixel_thr=self.pixel_thr)
+        if self.image_paths is not None:
+            payload['image_path'] = self.image_paths[index]
+        response = post(self.worker, payload)
         with np.load(response['path']) as z:
             h, w = (int(x) for x in z['shape'])
             scores = z['scores']
@@ -98,13 +106,28 @@ class SharedPrompter:
     def __init__(self, factory=None):
         self.lock = threading.Lock()
         self.model = None
+        self.image_model = None
         self.factory = factory
 
-    def for_image(self, split, name):
+    def for_image(self, split, name, rgb=None):
         def call(time, box=None, points=None, point_labels=None):
             start = time_module()
             with self.lock:
                 queued = time_module() - start
+                if rgb is not None:
+                    # Arbitrary images cannot use embeddings indexed by dataset split/name.
+                    if self.image_model is None:
+                        from sam_tools import build
+                        self.image_model = build('cpu')
+                    pred = self.image_model
+                    pred.set_image(rgb[0 if time == 't1' else 1])
+                    if box is not None:
+                        masks, quality, _ = pred.predict(box=np.asarray(box, float), multimask_output=False)
+                    else:
+                        masks, quality, _ = pred.predict(point_coords=np.asarray(points, float),
+                            point_labels=np.asarray(point_labels), multimask_output=True)
+                    i = int(np.argmax(quality))
+                    return np.array(masks[i], copy=True), float(quality[i]), dict(backend='sam_prompt', queue_seconds=queued)
                 if self.model is None:
                     if self.factory:
                         self.model = self.factory()
@@ -155,13 +178,7 @@ def yes_probability(choice):
 ASK_SLOTS = threading.Semaphore(int(os.environ.get('AGENT_ASK_SLOTS', 4)))
 CROP_WORDS = ('T1 close-up', 'T2 close-up', 'T1 wider view', 'T2 wider view')
 CONTEXT_NOTE = 'The first two images are close-ups and the last two show the same place with more surroundings. '
-CORRESPONDENCE = ('The first two images are close-ups and the last two show the same place with more surroundings. '
-    'The red contour marks the same region in all of them. First find the object inside the contour at the same '
-    'position in both dates, and compare its outline, roof structure and neighbouring fixed objects. Is there evidence '
-    'that a building was newly constructed, demolished, or replaced by a different building? If both dates show the '
-    'same building and only its color, shadow, occlusion or visibility differs, answer no. Do not read poor visibility '
-    'as demolition. The reason must name the evidence of correspondence or change. Reply with JSON only: '
-    '{"change": "yes" or "no", "type": one of ' + str(PSEUDO_TYPES).replace("'", '"') + ', "reason": one short sentence}')
+CORRESPONDENCE = verifier_prompts()['CORRESPONDENCE']
 
 
 EXAMPLES = Path(__file__).parent / 'verifier_examples.json'
@@ -196,7 +213,8 @@ class ApiAsk:
     """Independent verifier: each region is one fresh request that knows nothing of the planner's reasoning."""
     context = True
 
-    def __init__(self, client=None, guard=None, model='qwen3.7-plus', max_attempts=12, correspondence=False):
+    def __init__(self, client=None, guard=None, model='qwen3.7-plus', max_attempts=12, correspondence=False, session=None):
+        self.session = session
         self.client, self.guard, self.model, self.max_attempts = client, guard, model, max_attempts
         self.correspondence = correspondence
 
@@ -212,10 +230,11 @@ class ApiAsk:
         for word, image in zip(CROP_WORDS, images):
             content += [dict(type='text', text=word), dict(type='image_url',
                         image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
-        content.append(dict(type='text', text=CORRESPONDENCE if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
+        settings = verifier_prompts(self.session.target, self.session.change_direction) if self.session else verifier_prompts()
+        content.append(dict(type='text', text=settings['CORRESPONDENCE'] if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
         try:
             with ASK_SLOTS:
-                result = planner.complete([dict(role='system', content=SYSTEM), dict(role='user', content=content)], [], number)
+                result = planner.complete([dict(role='system', content=settings['SYSTEM']), dict(role='user', content=content)], [], number)
         except Exception as exc:
             exc.partial = dict(attempts=events, tokens=planner.tokens, cost=planner.cost)
             raise

@@ -15,25 +15,32 @@ from pathlib import Path
 import traceback
 import numpy as np
 from common import names, load_rgb, load_mask_png, write_json, WORKSPACE
-from prompts import SCOPE_CARD
-from .tools import Toolbox, SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, Result, failure, skill_index
+from prompts import scope_card
+from .tools import Toolbox, PLAN_SCHEMA, SKILL_SCHEMA, failure, skill_index
 from . import tools as tool_module
-from .state import Mask
+from .state import Mask, Session
 from .planner import Planner, RunGuard, RunStopped, usage_tokens
 from .recorder import Recorder
 from .backends import SegmentBackend, SharedPrompter, LocalAsk, ApiAsk
 
+from .tasks import INSTRUCTIONS, instruction_for, seed_for, read_tasks, image_name, load_pair
+
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
-INSTRUCTIONS = {
-    'T1.1xC0': 'Find all buildings that changed between T1 and T2 (newly built or demolished). Output a binary change mask.',
-    'T5.1': 'Here is a building change detection mask (mask#0). Check it against T1 (earlier) and T2 (later), and correct it where needed. Submit the final binary change mask and briefly summarize your decision.'}
 
 
-def system_prompt(version, budget):
+def system_prompt(version, budget, session=None):
     path = Path(__file__).parent / 'prompts' / f'system_{version}.txt'
     template = path.read_text()
-    text = template.format(counts='\n'.join('- ' + s for s in SCOPE_CARD['counts']),
-                           not_counts='\n'.join('- ' + s for s in SCOPE_CARD['not_counts']), budget=budget)
+    target = session.target if session else 'building'
+    direction = session.change_direction if session else 'any'
+    card = scope_card(target, direction)
+    # Earlier templates retain their text on the default route too.
+    rendered = template.replace('buildings', card['plural']).replace('building', target)
+    text = rendered.format(counts='\n'.join('- ' + s for s in card['counts']),
+                           not_counts='\n'.join('- ' + s for s in card['not_counts']),
+                           target=target, plural=card['plural'], budget=budget)
+    if direction != 'any':
+        text += f'\nCount only changes in the {direction} direction.'
     return path, template, text
 
 
@@ -97,16 +104,16 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
     previous_calls = None
     reason, error = 'budget', None
     reviewed = not (review or verify)
-    schemas = [*SCHEMAS, *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
+    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
     toolbox.skills = tuple(skills)
     messages = []
     planner.record = recorder.request
     try:
-        path, template, system = system_prompt(prompt_version, budget)
+        path, template, system = system_prompt(prompt_version, budget, session)
         if skills:
             # Index only; a skill's text enters the conversation when the planner loads it.
             system += '\n\nSkills\nThese notes hold working methods. Before your first other tool call, call load_skill for the skill that fits the start of your work. Later, load another one whenever its description fits what you are about to do.\n' + skill_index(skills)
-        instruction = INSTRUCTIONS[task]
+        instruction = instruction_for(task, session)
         initial = toolbox.execute('view', dict(overlay=session.initial_mask) if session.initial_mask else {})
         if not initial.public['ok']:
             raise RuntimeError('Initial view failed')
@@ -117,6 +124,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
         messages = [dict(role='system', content=system),
                     dict(role='user', content=[dict(type='text', text=text)] + image_blocks(initial))]
         recorder.start(session, dict(metadata or {}, task_id=task, instruction=instruction,
+            target=session.target, change_direction=session.change_direction, python=toolbox.python_enabled,
             image_shape=list(session.shape), system_prompt_version=prompt_version, system_prompt_path=str(path),
             system_prompt_template=template, system_prompt=system, tool_schema_version='v2', schemas=schemas,
             model_parameters=planner.parameters, seed=planner.parameters['seed'], seed_acceptance='not_reported',
@@ -183,7 +191,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     backend_seconds=internal.get('backend_seconds', 0.), seconds=internal.get('seconds', 0.),
                     status=internal.get('status', 'executed'), provenance=internal,
                     set_current=args.get('set_current', True) if isinstance(args, dict) and name in
-                        ('to_mask','combine','morph','remove_region','add_region','refine_region') else None))
+                        ('to_mask','combine','morph','remove_region','add_region','refine_region','python') else None))
             if images:
                 messages.append(dict(role='user', content=images))
             trim_images(messages)
@@ -242,7 +250,9 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--task', choices=list(INSTRUCTIONS), required=True)
+    parser.add_argument('--task', choices=list(INSTRUCTIONS))
+    parser.add_argument('--tasks', help='Task manifest JSONL; optionally filter by --task.')
+    parser.add_argument('--python', action='store_true', help='Offer the isolated Python array tool.')
     parser.add_argument('--split', default='val', choices=['val', 'test', 'train'])
     parser.add_argument('--config', required=True)
     parser.add_argument('--names-file')
@@ -266,68 +276,86 @@ def main():
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    if not args.tasks and not args.task:
+        parser.error('--task is required without --tasks')
     skills = sorted(p.name for p in tool_module.SKILLS.iterdir() if (p / 'SKILL.md').exists()) if args.skills == 'all' else [x for x in args.skills.split(',') if x]
     guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
         raise SystemExit(f'{guard.active_stop()} exists; check quota or budget, then delete it before running: {guard.active_stop().read_text()}')
-    todo = Path(args.names_file).read_text().split() if args.names_file else names(args.split)
+    todo = read_tasks(args.tasks, args.task) if args.tasks else (Path(args.names_file).read_text().split() if args.names_file else names(args.split))
     if args.limit is not None:
         todo = todo[:args.limit]
     shared = SharedPrompter()
-    def process(index_name):
-        index, name = index_name
-        directory = RUN / args.config / args.task / args.split / Path(name).stem
+    def identity(item):
+        if isinstance(item, dict):
+            return item['task_type'], image_name(item), Path(item['id']).stem
+        return args.task, item, Path(item).stem
+
+    def output_directory(item):
+        task, name, stem = identity(item)
+        return RUN / args.config / task / args.split / stem
+
+    def process(item):
+        task, name, stem = identity(item)
+        row = item if isinstance(item, dict) else None
+        directory = output_directory(item)
         if (directory / 'final.json').exists():
             return name, 'skipped'
         if guard.stopped():
             return name, 'stopped'
-        recorder = Recorder(directory, args.split, name)
+        # The label path is consumed only by the one-way scoring recorder.
+        recorder = Recorder(directory, args.split, name, gt_path=row['gt_mask'] if row else None)
         try:
-            rgb = load_rgb(args.split, name)
+            rgb = load_pair(row) if row else load_rgb(args.split, name)
         except Exception:
-            recorder.input_failure(args.task, dict(session_id=Path(name).stem), traceback.format_exc())
+            recorder.input_failure(task, dict(session_id=stem), traceback.format_exc())
             return name, 'error'
-        init_path = RUN / 'init' / args.init_name / args.split / (Path(name).stem + '.png')
-        # Recorder is created before optional init loading so an absent initial asset gets an error record.
-        planner = Planner(guard=guard, parameters=dict(model=args.planner_model), seed=(sum((i+1)*ord(c) for i,c in enumerate(name)) + 1000 * args.seed_offset) % (2**31))
-        init = None
-        init_error = None
-        if args.task == 'T5.1':
+        init_path = Path(row['init_mask']) if row and row['init_mask'] else RUN / 'init' / args.init_name / args.split / (Path(name).stem + '.png')
+        planner = Planner(guard=guard, parameters=dict(model=args.planner_model), seed=seed_for(name, args.seed_offset))
+        init, init_error = None, None
+        if task == 'T5.1' or (row and row['init_mask']):
             try:
                 init = load_mask_png(init_path)
             except Exception:
                 init_error = traceback.format_exc()
-        ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence) if args.ask_backend == 'api' else None
-        toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr),
-            shared.for_image(args.split, name), ask, init_mask=init)
+        session = Session(rgb[0].shape[:2], init, target=row['target'] if row else 'building',
+            change_direction=row['change_direction'] if row else 'any',
+            instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None)
+        ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence, session=session) if args.ask_backend == 'api' else None
+        source_images = [str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')]
+        custom_images = row is not None and [row['image_t1'], row['image_t2']] != source_images
+        image_paths = [row['image_t1'], row['image_t2']] if custom_images else None
+        toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr,
+            target=session.target, image_paths=image_paths),
+            shared.for_image(args.split, name, rgb=rgb if custom_images else None), ask, session=session, python=args.python)
         try:
-          result = run_session(toolbox, planner, recorder, args.task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills,
-            metadata=dict(session_id=Path(name).stem, source_images=[str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')],
-                init_mask_path=str(init_path) if args.task == 'T5.1' else None,
-                init_config=dict(route=args.init_name, text='building', tile=512, score_thr=.5,
-                                 overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if args.task == 'T5.1' else None,
-                backends=dict(ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage, plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence, ask_model=args.ask_model if args.ask_backend == 'api'
-                    else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
-                    sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
-                init_error=init_error))
+            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills,
+                metadata=dict(session_id=stem, source_images=image_paths or source_images,
+                    init_mask_path=str(init_path) if init is not None or task == 'T5.1' else None,
+                    init_config=dict(route=args.init_name, text=session.target, tile=512, score_thr=.5,
+                        overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if task == 'T5.1' else None,
+                    backends=dict(ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage,
+                        plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence,
+                        ask_model=args.ask_model if args.ask_backend == 'api' else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
+                        sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
+                    task_meta=row['meta'] if row else {}, init_error=init_error))
         except RunStopped:
-            return name, 'stopped'  # no final.json, so a later run redoes this image
+            return name, 'stopped'
         return name, result['submitted_by']
     with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
-        futures = {pool.submit(process, item): item[1] for item in enumerate(todo)}
+        futures = {pool.submit(process, item): item for item in todo}
         for future in as_completed(futures):
             try:
                 print(*future.result(), flush=True)
             except Exception as exc:
-                # Setup failures (including unavailable reference labels) remain visible per image.
-                directory = RUN / args.config / args.task / args.split / Path(futures[future]).stem
+                item = futures[future]
+                task, name, stem = identity(item)
+                directory = output_directory(item)
                 directory.mkdir(parents=True, exist_ok=True)
-                from common import write_json
-                write_json(directory / 'final.json', dict(task_id=args.task, submitted_by='error',
+                write_json(directory / 'final.json', dict(task_id=task, submitted_by='error',
                     termination_reason='input_error', fallback_kind='empty', error_type=type(exc).__name__,
-                    error=traceback.format_exc(),
-                    summary='系统兜底：输入数据无法读取，无法生成掩码。', elapsed_seconds=0))
-                print(futures[future], 'input_error', flush=True)
+                    error=traceback.format_exc(), summary='系统兜底：输入数据无法读取，无法生成掩码。', elapsed_seconds=0))
+                print(name, 'input_error', flush=True)
     if guard.stopped():
         raise SystemExit(3)  # a failed job state, so a stop cannot pass as a finished run
 

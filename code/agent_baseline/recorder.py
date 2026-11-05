@@ -18,11 +18,15 @@ def json_default(obj):
 
 
 class Recorder:
-    def __init__(self, directory, split, name, gt=None):
+    def __init__(self, directory, split, name, gt=None, gt_path=None):
+        self.gt_path = str(gt_path) if gt_path is not None else None
         self.directory = Path(directory)
         for folder in ('images', 'masks', 'insts'):
             (self.directory / folder).mkdir(parents=True, exist_ok=True)
         # Exactly one read, before any execution, never passed back into Session.
+        if gt_path is not None:
+            from common import load_mask_png
+            gt = load_mask_png(gt_path)
         self.gt = np.array(load_gt(split, name) if gt is None else gt, dtype=bool, copy=True)
         self.gt.flags.writeable = False
         self.cache, self.saved = {}, set()
@@ -59,6 +63,8 @@ class Recorder:
         return value
 
     def start(self, session, metadata):
+        if self.gt_path is not None:
+            metadata = dict(metadata, gt_mask_path=self.gt_path)
         write_json(self.directory / 'input.json', metadata)
         self.assets(session)
         if session.initial_mask is not None:
@@ -75,6 +81,8 @@ class Recorder:
         save_mask_png(self.directory / 'masks' / 'mask_0.png', empty)
         c = confusion(empty, self.gt)
         metric = dict(c, f1=image_f1(empty, self.gt), iou=0. if self.gt.any() else 1.)
+        if self.gt_path is not None:
+            metadata = dict(metadata, gt_mask_path=self.gt_path)
         write_json(self.directory / 'input.json', dict(metadata, task_id=task, input_error=error))
         row = dict(task_id=task, final_handle='mask#0', mask_path='masks/mask_0.png',
             summary='系统兜底：输入影像无法读取；使用空掩码。', summary_source='system',

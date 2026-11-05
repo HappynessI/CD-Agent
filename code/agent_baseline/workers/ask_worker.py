@@ -110,9 +110,17 @@ def handler(batcher):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, required=True)
+    parser.add_argument('--target', default='building')
+    parser.add_argument('--change-direction', default='any', choices=['any', 'appeared', 'disappeared'])
     args = parser.parse_args()
     from common import QWEN
     from mllm import Qwen
+    import prompts as verifier
+    settings = verifier.verifier_prompts(args.target, args.change_direction)
+    # One local worker serves one task scope; its existing microbatch stays homogeneous.
+    global VERIFY
+    VERIFY = settings['VERIFY']
+    verifier.SYSTEM, verifier.VERIFY = settings['SYSTEM'], VERIFY
     batcher = MicroBatch(Qwen(QWEN))
     try:
         ThreadingHTTPServer(('127.0.0.1', args.port), handler(batcher)).serve_forever()
