@@ -24,7 +24,7 @@ from PIL import Image, ImageFilter
 
 CATEGORIES = {
     'view': '看', 'inspect': '看', 'segment_text': '分割', 'segment_prompt': '分割',
-    'match_instances': '比较', 'ask': '语义', 'select': '运算', 'to_mask': '运算',
+    'match_instances': '比较', 'ask': '核验', 'select': '运算', 'to_mask': '运算',
     'combine': '运算', 'morph': '运算', 'remove_region': '修改', 'add_region': '修改',
     'refine_region': '修改', 'submit': '结束',
 }
@@ -129,6 +129,198 @@ def fixed_text(fixed):
     return '<p>不用 Agent 的对照 · ' + esc('；'.join(entries)) + '</p>'
 
 
+TOOL_ROWS = [('看', ['view', 'inspect']), ('分割', ['segment_text', 'segment_prompt']), ('比较', ['match_instances']),
+             ('运算', ['select', 'to_mask', 'combine', 'morph']), ('修改', ['remove_region', 'add_region', 'refine_region']),
+             ('核验', ['ask']), ('结束', ['submit'])]
+TOOL_NOTE = {'segment_text': ' · SAM3', 'segment_prompt': ' · SAM ViT-H'}
+
+
+def system_figure(task=None, counts=None, stops=0, reports=None, answers=None, ending=None):
+    """The G1 system as one left-to-right flow; with a session's numbers when they are given."""
+    session = counts is not None
+    bits = ['<svg class="sys" viewBox="0 0 1336 700" role="img" aria-label="G1 系统流程：输入进入规划器，工具箱在规划器正下方；'
+            '验证器与规划器分离，只收裁图、只回答案；提交门拦截 submit，通过后输出掩码；真值只用于事后评分。"><defs>']
+    for name in ('main', 'plan', 'ver', 'gate', 'mute'):
+        bits.append(f'<marker id="arrow-{name}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
+                    f'<path class="head-{name}" d="M0 0 10 5 0 10z"/></marker>')
+    bits.append('</defs>')
+
+    def box(x, y, w, h, cls='box'):
+        bits.append(f'<rect class="{cls}" x="{x}" y="{y}" width="{w}" height="{h}" rx="6"/>')
+
+    def text(x, y, value, cls='', anchor='start'):
+        bits.append(f'<text class="{cls}" x="{x}" y="{y}" text-anchor="{anchor}">{esc(value)}</text>')
+
+    def link(points, kind, dashed=False):
+        path = ' '.join(f'{x},{y}' for x, y in points)
+        bits.append(f'<polyline class="edge edge-{kind}{" dash" if dashed else ""}" points="{path}" marker-end="url(#arrow-{kind})"/>')
+
+    # The system boundary first, so everything else draws over it.
+    box(226, 16, 884, 652, 'frame')
+    text(250, 45, 'Agentic system：规划与验证解耦', 'title')
+
+    # Input.
+    box(16, 78, 170, 270)
+    text(32, 103, '输入', 'head')
+    given = '给定掩码（仅 T5.1）' if task is None else '给定掩码 mask#0' if task == 'T5.1' else 'T1.1 无给定掩码'
+    items = ['T1 较早影像', 'T2 较晚影像', '指令（一句话任务）', given, '系统提示和工具定义']
+    for n, item in enumerate(items):
+        y = 116 + 44 * n
+        off = task is not None and task != 'T5.1' and n == 3
+        box(28, y, 146, 36, 'chip off' if off else 'chip')
+        text(101, y + 23, item, 'small', 'middle')
+    link([(186, 145), (250, 145)], 'main')
+    text(218, 136, '首条消息', 'label', 'middle')
+    link([(186, 322), (250, 322)], 'main')
+    text(218, 313, '两期影像' if task and task != 'T5.1' else '影像、掩码', 'label', 'middle')
+
+    # Planner, with the toolbox directly below it.
+    box(250, 78, 470, 134, 'box plan')
+    text(270, 106, '规划器 Planner', 'head')
+    text(700, 106, 'qwen3.7-flash', 'mono', 'end')
+    for y, line in zip((130, 152, 174, 196), ('读对话：系统提示、指令、工具返回、状态行、最近的图',
+                                              '每轮写一句理由，发 1–8 个工具调用，最多 30 次回复',
+                                              '决定留哪些组件、删哪些、何时提交',
+                                              '读到验证器的答案后，可以采纳，也可以反对')):
+        text(270, y, line, 'body')
+    link([(400, 212), (400, 282)], 'plan')
+    text(392, 251, '工具调用（JSON）', 'label', 'end')
+    link([(560, 282), (560, 212)], 'plan')
+    text(568, 251, '结果、图、句柄、状态行', 'label')
+
+    box(250, 282, 470, 328, 'box plan')
+    text(270, 308, '工具箱 Toolbox', 'head')
+    text(700, 308, '14 个工具；工具不改旧句柄，只出新句柄', 'label', 'end')
+    ends = {}
+    for row, (group, tools) in enumerate(TOOL_ROWS):
+        y = 322 + 34 * row
+        text(270, y + 18, group, 'small muted')
+        x = 314
+        for tool in tools:
+            count = (counts or {}).get(tool, 0)
+            label = tool + TOOL_NOTE.get(tool, '') + (f' ×{count}' if count else '')
+            width = round(len(label) * 6.9 + 14)
+            kind = 'ver' if tool == 'ask' else 'gate' if tool == 'submit' else 'plan'
+            box(x, y, width, 26, f'tool tool-{kind}' + (' off' if session and not count else ''))
+            text(x + 7, y + 17, label, 'mono')
+            ends[tool] = x + width
+            x += width + 8
+    box(266, 562, 438, 36, 'chip')
+    text(278, 585, '工作状态：句柄 mask#k、inst#k · 当前掩码 · 核验账本（轮廓 → 全部回答）', 'label')
+
+    # Verifier, on the far side of the decoupling boundary.
+    box(850, 78, 240, 222, 'box ver')
+    text(870, 104, '独立验证器 Verifier', 'head')
+    text(870, 124, 'qwen3.7-flash · L1', 'mono')
+    for y, line in zip((148, 170, 190, 212, 234, 256), ('每个组件一次全新请求', '只看 4 张裁图：T1、T2 的', '近景和远景，红线圈出组件',
+                                                        '不知道规划器的理由', '没有工具，没有对话历史', '回答 yes/no、类型、一句理由')):
+        text(870, y, line, 'body')
+    if session:
+        text(870, 284, f'本次回答 {answers} 次', 'small strong')
+    bits.append('<line class="boundary" x1="838" y1="70" x2="838" y2="318"/>')
+    text(846, 322, '解耦边界：只传裁图和答案', 'label strong')
+    link([(850, 130), (720, 130)], 'ver')
+    text(785, 122, '答案、提交前报告', 'label', 'middle')
+    text(785, 148, '不自动删除', 'label strong', 'middle')
+    link([(ends['ask'], 505), (790, 505), (790, 230), (850, 230)], 'ver')
+    text(782, 330, 'ask', 'label mono', 'end')
+    text(782, 346, '按需核验', 'label', 'end')
+
+    # Submission gate.
+    box(850, 450, 240, 160, 'box gate')
+    text(870, 476, '提交门 Gate', 'head')
+    text(1074, 476, 'harness', 'mono', 'end')
+    for y, line in zip((500, 522, 544), ('拦下 submit，判断两件事：', '· 这是第一次提交？', '· 掩码里有未核验组件？')):
+        text(870, y, line, 'body')
+    text(870, 570, '不读真值，不改掩码', 'small muted')
+    if session:
+        text(870, 594, f'本次拦截 {reports} 次', 'small strong')
+    link([(ends['submit'], 539), (850, 539)], 'gate')
+    text(785, 531, 'submit', 'label mono', 'middle')
+    link([(1040, 450), (1040, 300)], 'ver')
+    text(1032, 385, '是：自动核验并报告', 'label', 'end')
+    link([(1090, 500), (1148, 500)], 'gate')
+    text(1119, 491, '否：结束', 'label', 'middle')
+
+    # Output and the scoring that the model never sees.
+    box(1148, 410, 172, 130, 'box')
+    text(1164, 435, '输出', 'head')
+    text(1164, 460, '最终二值变化掩码', 'body')
+    text(1164, 482, '决定说明 summary', 'body')
+    if session:
+        text(1164, 512, f'结束方式：{ending}', 'small strong')
+    link([(1234, 540), (1234, 590)], 'mute', True)
+    text(1242, 570, '掩码', 'label')
+    box(1148, 590, 172, 94, 'box dashbox')
+    text(1164, 615, '事后评分', 'head')
+    text(1164, 638, '真值只在这里出现', 'body')
+    text(1164, 660, '模型运行时看不到', 'body')
+
+    # Fallback that bypasses the gate.
+    link([(650, 78), (650, 62), (1234, 62), (1234, 410)], 'mute', True)
+    text(660, 54, '没调 submit 或回复用完：用当前掩码兜底', 'label')
+    text(250, 650, 'G1 未开启：plan、python、skill、L2 核验。', 'label')
+    bits.append('</svg>')
+    notes = ['第一次 submit 一定被拦下并得到报告，这不是拒绝；之后只有提交的掩码含未核验组件才再次拦下。',
+             '每次拦下时，验证器核验这个掩码的未核验组件，以及已被去掉、还没有答案的给定组件。答案只作证据，由规划器决定删不删。',
+             '三种情况下答案到不了规划器：第 30 次回复直接提交；模型停下不再调工具；再次提交的掩码没有未核验组件，但又去掉了没问过的给定组件。这些组件在结束后补问，答案只进账本。']
+    if session:
+        notes.append(f'这次运行结束后补问 {stops} 次。' + ('这些答案没有参与决定。' if stops else ''))
+    caption = '<figcaption><strong>规划和验证是两个独立模型，跨过边界的只有裁图和答案；工具箱只听规划器调用。</strong>' + ''.join(f'<br>{esc(n)}' for n in notes) + '</figcaption>'
+    return '<section class="panel system"><h2>系统流程（G1）</h2><figure><div class="sysscroll">' + ''.join(bits) + '</div>' + caption + '</figure></section>'
+
+
+def ledger_section(directory):
+    """All verifier answers of the session: what was asked, what it said, what stayed."""
+    path = directory / 'verification.json'
+    if not path.exists():
+        return ''
+    entries = read_json(path)
+    rows = []
+    against = 0
+    for entry in sorted(entries, key=lambda e: -e.get('area', 0)):
+        records = entry.get('records', [])
+        latest = entry.get('latest')
+        kept = entry.get('kept')
+        conflict = (latest == 'no' and kept) or (latest == 'yes' and not kept)
+        against += conflict
+        last = records[-1] if records else {}
+        score = last.get('p_yes')
+        rows.append(f'<tr{" class=against" if conflict else ""}><td>{esc(entry.get("area"))}</td><td>{esc(entry.get("bbox"))}</td>'
+                    f'<td>{len(records)}</td><td>{esc(latest or "无有效答案")}</td><td>{esc(last.get("type") or "")}</td>'
+                    f'<td>{"" if score is None else f"{score:.2f}"}</td><td>{"留" if kept else "去"}</td><td>{esc(last.get("reason") or "")}</td></tr>')
+    summary = f'验证器账本：{len(entries)} 个问过的轮廓，{against} 个最终决定和最后答案不同（标色）'
+    return (f'<details class="ledger"><summary>{esc(summary)}</summary><p class="muted">单位是问过的轮廓，含临时候选和已删区域，不等于最终组件数。'
+            'p_yes 是模型输出的读数，没有校准。</p><div class="tablewrap"><table><thead><tr><th>面积</th><th>框</th><th>回答次数</th><th>最后答案</th><th>类型</th><th>p_yes</th><th>最终</th><th>最后理由</th></tr></thead><tbody>'
+            + ''.join(rows) + '</tbody></table></div></details>')
+
+
+def after_stop_count(directory):
+    path = directory / 'messages.jsonl'
+    if not path.exists():
+        return 0
+    with path.open(encoding='utf-8') as handle:
+        return sum('"final-stage"' in line for line in handle)
+
+
+def report_text(call):
+    try:
+        return json.loads(call.get('result_text') or '').get('report')
+    except (ValueError, AttributeError):
+        return None
+
+
+def answers_list(call):
+    """One line per verifier answer, instead of a long JSON block."""
+    try:
+        results = json.loads(call.get('result_text') or '').get('results') or []
+    except (ValueError, AttributeError):
+        return ''
+    rows = [f'<li><span class="{"down" if r.get("answer") == "no" else "up" if r.get("answer") == "yes" else "muted"}">{esc(r.get("answer") or "未解析")}</span> '
+            f'组件 {esc(r.get("id"))}{"" if r.get("p_yes") is None else " · p_yes " + format(r["p_yes"], ".2f")}：{esc(r.get("reason") or "")}</li>' for r in results if isinstance(r, dict)]
+    return f'<ul class="answers">{"".join(rows)}</ul>' if rows else ''
+
+
 CSS = r'''
 :root{color-scheme:light;--bg:#f4f5f7;--panel:#fff;--text:#172530;--muted:#596975;--line:#cbd3da;--accent:#185b91;--tint:#edf4fa;--up:#187040;--down:#ad3440;--warn:#855418;--warnbg:#fff4df;--tp:#2cce78;--fp:#ef5050;--fn:#458dff;--backdrop:#0009}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#111920;--panel:#19232c;--text:#e5edf4;--muted:#a8b7c3;--line:#3b4b58;--accent:#8ac4f4;--tint:#243544;--up:#79d79a;--down:#ff9b9f;--warn:#f1c77d;--warnbg:#382f21}}
@@ -138,7 +330,9 @@ header,footer{padding:18px 24px;background:var(--panel)}header{border-bottom:1px
 .headtop{display:flex;justify-content:space-between;gap:12px;align-items:start}.metrics{display:flex;flex-wrap:wrap;gap:8px 25px;margin:12px 0}.metric strong{display:block;font-size:21px;line-height:1.25;font-variant-numeric:tabular-nums}.metric span{font-size:12px;color:var(--muted)}
 .layout{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(320px,1.55fr) minmax(240px,1fr);gap:16px;padding:18px 24px;max-width:1800px;margin:auto}.layout>*{min-width:0}.panel,.step{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}.step{margin-bottom:12px;scroll-margin-top:16px}.step.active{border-color:var(--accent);border-left:4px solid var(--accent);padding-left:9px}.stephead{display:flex;align-items:center;justify-content:space-between;gap:10px}.thought{border-left:2px solid var(--line);padding-left:10px;white-space:pre-wrap;margin:12px 0}.call{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.call.error{border-left:3px solid var(--down);padding-left:10px}.errorlabel,.down{color:var(--down)}.up{color:var(--up)}.badge{background:var(--tint);color:var(--accent);padding:2px 6px;border-radius:3px;margin-right:6px}.toolname{font-weight:600}pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;margin:8px 0}details{margin:8px 0}summary{cursor:pointer;color:var(--accent)}
 figure{margin:10px 0;min-width:0}figcaption{font-size:12px;margin-top:4px}img{display:block;width:100%;height:auto;max-width:100%;border-radius:3px}button,select{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 9px;cursor:pointer;max-width:100%}button:hover{border-color:var(--accent)}button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.zoom{display:block;padding:0;border:0;width:100%;cursor:zoom-in}.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.thumb{max-width:180px}.sticky{position:sticky;top:12px}.sticky figure img{max-height:27vh;object-fit:contain;background:var(--bg)}.legend{display:flex;gap:12px;font-size:12px;flex-wrap:wrap}.legend i{display:inline-block;width:9px;height:9px;margin-right:4px}.legend .tp{background:var(--tp)}.legend .fp{background:var(--fp)}.legend .fn{background:var(--fn)}.chart{width:100%;display:block;color:var(--muted)}.chart text{fill:currentColor;font-size:10px}.chart .axis{stroke:var(--line)}.chart .trace{fill:none;stroke:var(--accent);stroke-width:2}.chart .point{fill:var(--panel);stroke:var(--accent);stroke-width:2;cursor:pointer}.chart .point.active{fill:var(--accent);stroke-width:3}.chart .cursor{stroke:var(--muted);stroke-dasharray:3 3}.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.empty{padding:25px 10px;text-align:center;color:var(--muted);border:1px dashed var(--line);margin:12px 0}.js-only{display:none}.has-js .js-only{display:initial}[hidden]{display:none!important}footer{border-top:1px solid var(--line)}footer pre{max-width:1200px}dialog{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text);max-width:95vw;max-height:95vh;padding:14px}dialog::backdrop{background:var(--backdrop)}dialog img{max-width:85vw;max-height:80vh;object-fit:contain;width:auto}dialog .close{float:right;margin-bottom:10px}
-@media(max-width:900px){.layout{grid-template-columns:1fr;padding:12px}.sticky{position:static}.sticky figure img{max-height:none}.inputs .pair{grid-template-columns:1fr 1fr}header,footer{padding:14px}.headtop{flex-wrap:wrap}}
+@media(max-width:900px){.layout{grid-template-columns:1fr;padding:16px}.sticky{position:static}.sticky figure img{max-height:none}.inputs .pair{grid-template-columns:1fr 1fr}header,footer{padding:16px}.headtop{flex-wrap:wrap}}
+.system{margin:18px 24px 0;max-width:1752px}.sysscroll{overflow-x:auto}.sys{display:block;width:100%;min-width:1040px;height:auto;color:var(--text)}.sys text{fill:currentColor;font-size:13px;paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}.sys .title{font-size:16px;font-weight:700}.sys .head{font-size:15px;font-weight:700}.sys .body{font-size:13px}.sys .small{font-size:12.5px}.sys .label{font-size:12px;fill:var(--muted)}.sys .muted{fill:var(--muted)}.sys .strong{font-weight:700;fill:var(--text)}.sys .mono{font:11.5px ui-monospace,SFMono-Regular,Consolas,monospace}.sys rect{fill:var(--panel);stroke:var(--line);stroke-width:1.2}.sys .frame{fill:none;stroke-width:1.5}.sys .plan{stroke:var(--accent);stroke-width:2}.sys .ver{stroke:var(--up);stroke-width:2}.sys .gate{stroke:var(--warn);stroke-width:2}.sys .dashbox{stroke-dasharray:5 4}.sys .chip{fill:var(--tint);stroke:none}.sys .tool{fill:var(--tint);stroke:none}.sys .tool-ver{stroke:var(--up);stroke-width:1.5}.sys .tool-gate{stroke:var(--warn);stroke-width:1.5}.sys .off{opacity:.45}.sys .edge{fill:none;stroke-width:1.6}.sys .edge-main{stroke:var(--text)}.sys .edge-plan{stroke:var(--accent)}.sys .edge-ver{stroke:var(--up)}.sys .edge-gate{stroke:var(--warn)}.sys .edge-mute{stroke:var(--muted)}.sys .dash{stroke-dasharray:6 5}.sys .boundary{stroke:var(--up);stroke-width:1.4;stroke-dasharray:3 4}.sys .head-main{fill:var(--text)}.sys .head-plan{fill:var(--accent)}.sys .head-ver{fill:var(--up)}.sys .head-gate{fill:var(--warn)}.sys .head-mute{fill:var(--muted)}.system figure{margin:0}.system figcaption{font-size:13px;margin-top:8px;color:var(--text)}.tablewrap{overflow-x:auto}.ledger table{border-collapse:collapse;width:100%;font-size:12px}.ledger th,.ledger td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top;white-space:nowrap}.ledger td:last-child{white-space:normal;min-width:320px}.ledger .against{background:var(--warnbg)}.answers{margin:8px 0;padding-left:18px;font-size:13px}.reportbox{white-space:pre-wrap;background:var(--warnbg);border-left:3px solid var(--warn);padding:8px 10px;margin:8px 0;font-size:13px}.hub{max-width:1752px;margin:auto;padding:18px 24px}.hubtable{border-collapse:collapse;width:100%}.hubtable th,.hubtable td{border-bottom:1px solid var(--line);padding:8px;text-align:left}a{color:var(--accent)}
+@media(max-width:900px){.system{margin:12px 16px 0}.hub{padding:16px}}
 @media(prefers-reduced-motion:no-preference){.step{transition:border-color .15s}}
 '''
 
@@ -281,7 +475,7 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
              ('工具调用', str(final.get('tool_calls', len(calls)))),
              ('耗时', f'{final["elapsed_seconds"]:.1f} 秒' if final.get('elapsed_seconds') is not None else '未记录'),
              ('费用', f'¥{final["cost_cny"]:.4f}' if final.get('cost_cny') is not None else '未记录')]
-    head = f'<header><div class="headtop"><div><div class="eyebrow">变化检测 · Agent 轨迹展示 / {esc(split)} / {esc(name)}</div><h1>{title}</h1></div><label class="js-only">外观 <select id="theme"><option value="auto">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label></div>'
+    head = f'<header><div class="headtop"><div><div class="eyebrow"><a href="index.html">回放列表</a> · 变化检测 · Agent 轨迹展示 / {esc(split)} / {esc(name)}</div><h1>{title}</h1></div><label class="js-only">外观 <select id="theme"><option value="auto">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label></div>'
     head += '<div class="warning">这是挑出来的样例，不代表平均水平</div>'
     head += '<div class="metrics">' + ''.join(f'<div class="metric"><strong>{esc(v)}</strong><span>{k}</span></div>' for k, v in stats) + '</div>'
     if task == 'T5.1':
@@ -322,13 +516,23 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
         for call in row.get('calls', []):
             tool = call['tool']
             failed = not call.get('ok', False)
-            body += f'<div class="call{" error" if failed else ""}"><span class="badge">{CATEGORIES.get(tool, "其他")}</span><span class="toolname">{esc(tool)}</span>'
+            held = call.get('status') == 'report'
+            badge = '提交门' if held else CATEGORIES.get(tool, '其他')
+            body += f'<div class="call{" error" if failed else ""}"><span class="badge">{badge}</span><span class="toolname">{esc(tool)}</span>'
+            if held:
+                body += '<span class="muted"> · 被提交门拦下，返回报告（不是拒绝）</span>'
             if failed:
                 body += f'<span class="errorlabel"> · 调用失败 {esc(call.get("error_code") or "")}</span>'
             if call.get('status') == 'skipped_due_to_submit':
                 body += '<span class="muted"> · 提交后跳过</span>'
             body += text_block(call.get('args', call.get('raw_arguments', {})), '调用参数')
-            body += '<div class="muted">返回摘要 / 原文</div>' + text_block(call.get('result_text', '未记录'))
+            report = report_text(call) if held else None
+            if report:
+                body += f'<div class="reportbox">{esc(report)}</div>'
+            else:
+                if tool == 'ask':
+                    body += answers_list(call)
+                body += '<div class="muted">返回摘要 / 原文</div>' + text_block(call.get('result_text', '未记录'))
             if tool == 'view' and call.get('result_images'):
                 body += '<div class="pair">'
                 for j, path in enumerate(call['result_images']):
@@ -369,25 +573,48 @@ def render(run_dir, split, config_summary=None, fixed=None, note=''):
     footer = '<footer><h2>最终提交</h2>'
     footer += f'<p>提交来源：{esc(final.get("submitted_by", "未记录"))} · 结束原因：{esc(final.get("termination_reason", "未记录"))} · summary 来源：{esc(final.get("summary_source", "未记录"))}</p>'
     footer += text_block(final.get('summary', '未记录'), threshold=100000)
+    footer += ledger_section(directory)
     footer += f'<p>变化目标代理个数：{esc(final.get("change_component_count", "未记录"))} · 变化面积：{esc(final.get("change_area_px", "未记录"))} 像素。<strong>8 连通域是代理，不等于栋数。</strong></p>'
     footer += '<p>工具调用统计（含失败 / 跳过）：' + esc('；'.join(f'{k} × {v}（失败 / 跳过 {errors[k]}）' for k, v in sorted(counts.items()))) + '</p>'
     footer += '<p>F1 由记录器算，Agent 全程看不到；真值也不参与规划。空真值且空预测的逐图 F1 按现有评测约定为 1。展示图为 JPEG 缩小版，面积及指标取原分辨率记录。</p></footer>'
     state_json = json.dumps(states, ensure_ascii=False).replace('<', '\\u003c')
+    answers = sum(len(entry.get('records', [])) for entry in read_json(directory / 'verification.json')) if (directory / 'verification.json').exists() else 0
+    system = system_figure(task, counts, after_stop_count(directory), sum(c.get('status') == 'report' for c in calls), answers,
+                           final.get('termination_reason', '未记录'))
     return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{esc(title)} · {esc(name)}</title><style>{CSS}</style></head><body>' + head + '<main class="layout">' + left + ''.join(timeline) + right + '</main>' + footer +
+            f'<title>{esc(title)} · {esc(name)}</title><style>{CSS}</style></head><body>' + head + system + '<main class="layout">' + left + ''.join(timeline) + right + '</main>' + footer +
             '<dialog id="zoom-dialog" aria-label="放大图像"><button id="close-zoom" class="close" type="button">关闭（Esc）</button><img id="zoom-image" alt=""><p id="zoom-caption"></p></dialog>' +
             f'<script id="states" type="application/json">{state_json}</script><script>{JS}</script></body></html>')
 
 
+def render_hub(spec):
+    """Entry page: the system figure and a table of the replay pages. Spec: title, lead, rows, notes."""
+    rows = ''.join(f'<tr><td><a href="{esc(r["file"])}">{esc(r["label"])}</a></td><td>{esc(r["task"])}</td><td>{esc(r["run"])}</td>'
+                   f'<td>{esc(r["score"])}</td><td>{esc(r["why"])}</td></tr>' for r in spec['rows'])
+    notes = ''.join(f'<li>{esc(n)}</li>' for n in spec.get('notes', []))
+    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+            f'<title>{esc(spec["title"])}</title><style>{CSS}</style></head><body><header><h1>{esc(spec["title"])}</h1><p>{esc(spec["lead"])}</p></header>'
+            + system_figure() + '<main class="hub"><section class="panel"><h2>四个回放</h2><div class="tablewrap"><table class="hubtable"><thead><tr><th>页面</th><th>任务</th><th>运行</th><th>F1</th><th>为什么选它</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table></div><ul>{notes}</ul></section></main></body></html>')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--run-dir', required=True, type=Path)
-    parser.add_argument('--split', required=True, choices=['val', 'test'])
+    parser.add_argument('--hub', type=Path, help='JSON spec of the entry page; then --out is that page.')
+    parser.add_argument('--run-dir', type=Path)
+    parser.add_argument('--split', choices=['val', 'test'])
     parser.add_argument('--out', required=True, type=Path)
     parser.add_argument('--config-summary', type=Path)
     parser.add_argument('--fixed', type=Path)
     parser.add_argument('--note', default='')
     args = parser.parse_args()
+    if args.hub:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(render_hub(read_json(args.hub)), encoding='utf-8')
+        print(f'{args.out.name}: entry page')
+        return
+    if not args.run_dir or not args.split:
+        parser.error('--run-dir and --split are required without --hub')
     document = render(args.run_dir, args.split,
                       read_json(args.config_summary) if args.config_summary else None,
                       read_json(args.fixed) if args.fixed else None, args.note)
