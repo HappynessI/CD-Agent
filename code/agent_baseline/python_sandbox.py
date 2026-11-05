@@ -9,7 +9,7 @@ import tempfile
 import numpy as np
 from .state import ToolError
 
-WALL_SECONDS = 15
+WALL_SECONDS = 60  # includes starting the interpreter and importing NumPy and SciPy
 CPU_SECONDS = 5
 MEMORY_BYTES = 2 * 1024**3
 

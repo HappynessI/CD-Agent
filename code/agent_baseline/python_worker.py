@@ -5,7 +5,8 @@ import sys
 
 def main():
     cpu, memory = map(int, sys.argv[1:])
-    resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
+    # Importing from network storage can take long; the calculation's own limit is set after the imports.
+    resource.setrlimit(resource.RLIMIT_CPU, (cpu + 120, cpu + 120))
     resource.setrlimit(resource.RLIMIT_AS, (memory, memory))
     resource.setrlimit(resource.RLIMIT_FSIZE, (16 * 1024**2, 16 * 1024**2))
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
@@ -58,6 +59,9 @@ def main():
             raise RuntimeError('Cannot activate Python syscall sandbox')
     finally:
         lib.seccomp_release(context)
+    usage = resource.getrusage(resource.RUSAGE_SELF)
+    limit = int(usage.ru_utime + usage.ru_stime) + 1 + cpu
+    resource.setrlimit(resource.RLIMIT_CPU, (limit, limit))
     # Drop setup paths/arguments before any generated code executes.
     sys.argv = ['array_worker']
     saved = []
