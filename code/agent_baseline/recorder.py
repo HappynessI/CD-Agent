@@ -113,7 +113,7 @@ class Recorder:
                     flat[row['idx']] = True
                     packed.append(np.packbits(flat))
                 nbytes = (int(np.prod(session.shape)) + 7) // 8
-                np.savez(self.directory / 'insts' / f'inst_{number}.npz',
+                np.savez_compressed(self.directory / 'insts' / f'inst_{number}.npz',
                     masks=np.asarray(packed, dtype=np.uint8).reshape(len(packed), nbytes), shape=session.shape,
                     score=np.array([r.get('score', np.nan) for r in value.items], float),
                     ids=np.array([r['id'] for r in value.items], int), time=value.time, parents=np.array(value.parents, dtype=str))
