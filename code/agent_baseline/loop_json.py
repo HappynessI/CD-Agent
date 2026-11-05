@@ -105,7 +105,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
         path, template, system = system_prompt(prompt_version, budget)
         if skills:
             # Index only; a skill's text enters the conversation when the planner loads it.
-            system += '\n\nSkills\nThese notes hold working methods. Call load_skill with a name when its description fits what you are doing.\n' + skill_index(skills)
+            system += '\n\nSkills\nThese notes hold working methods. Before your first other tool call, call load_skill for the skill that fits the start of your work. Later, load another one whenever its description fits what you are about to do.\n' + skill_index(skills)
         instruction = INSTRUCTIONS[task]
         initial = toolbox.execute('view', dict(overlay=session.initial_mask) if session.initial_mask else {})
         if not initial.public['ok']:

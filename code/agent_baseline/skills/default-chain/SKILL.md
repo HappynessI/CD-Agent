@@ -11,7 +11,7 @@ With no given mask:
 1. Call `segment_text` for the target class at T1 and at T2, in one reply.
 2. Call `match_instances` on the two sets.
 3. Call `to_mask` on the appeared and disappeared sets. This is your first complete answer.
-4. Call `ask` with no arguments, and repeat until `remaining_unverified` is 0.
+4. Call `ask` with no arguments. Submitting also checks what is left, so you need not finish the list first.
 
 With a given mask, the given mask is your first complete answer; go to step 4.
 

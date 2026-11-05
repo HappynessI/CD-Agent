@@ -5,7 +5,7 @@ basis: General method; development runs showed that replacing outlines with box 
 ---
 # Boundary refinement
 
-Most outlines are good enough. Refine only a component whose error you can see, and only when the error is large relative to the component.
+Refine only a component whose error you can see, and only when the error is large relative to the component.
 
 1. Zoom in with `view` on the component at both dates.
 2. Prefer the smallest edit. `morph` with `open` and a small radius removes thin spills, but it acts on the whole mask, so pass `set_current=false` and compare the result.

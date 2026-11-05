@@ -1,0 +1,1088 @@
+{
+ "T1.1xC0": {
+  "schemas": [
+   {
+    "type": "function",
+    "function": {
+     "name": "view",
+     "description": "Look at T1 and T2 with full-image coordinate ticks. Optional thin red contours of a mask or inst set; component IDs can be labelled on masks only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "region": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Full-image [x0,y0,x1,y1], exclusive end."
+       },
+       "overlay": {
+        "type": "string",
+        "description": "An existing mask#k or inst#k handle."
+       },
+       "label_components": {
+        "type": "boolean",
+        "default": false
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       }
+      },
+      "required": [],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k or inst#k handle."
+       },
+       "offset": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 0
+       },
+       "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 50
+       }
+      },
+      "required": [
+       "mask"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "segment_text",
+     "description": "Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "time": {
+        "type": "string",
+        "enum": [
+         "t1",
+         "t2"
+        ]
+       },
+       "text": {
+        "type": "string"
+       },
+       "tile": {
+        "type": "integer",
+        "enum": [
+         0,
+         512
+        ],
+        "default": 512
+       },
+       "score_thr": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.5
+       }
+      },
+      "required": [
+       "time",
+       "text"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "segment_prompt",
+     "description": "Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "time": {
+        "type": "string",
+        "enum": [
+         "t1",
+         "t2"
+        ]
+       },
+       "box": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Full-image [x0,y0,x1,y1], exclusive end."
+       },
+       "points": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "array",
+         "items": {
+          "type": "number"
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "point_labels": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "enum": [
+          0,
+          1
+         ]
+        }
+       }
+      },
+      "required": [
+       "time"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "match_instances",
+     "description": "Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "inst_t1": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "inst_t2": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "overlap_thr": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.25
+       }
+      },
+      "required": [
+       "inst_t1",
+       "inst_t2"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask",
+     "description": "Ask the independent verifier about building change in mask components. With no arguments it checks the components of your current answer that have no answer yet, largest first, up to 64 per call; remaining_unverified says how many are left. For a mask without ids, the same on that mask. With ids it asks about exactly those components, up to 64 in total. Returns answer, type, reason, p_yes (relative yes/no reading, may be null), status. Unparsed is not no.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "regions": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "mask": {
+           "type": "string",
+           "description": "An existing mask#k handle."
+          },
+          "ids": {
+           "type": "array",
+           "items": {
+            "type": "integer",
+            "minimum": 1
+           },
+           "uniqueItems": true
+          }
+         },
+         "required": [
+          "mask"
+         ],
+         "additionalProperties": false
+        }
+       }
+      },
+      "required": [],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "select",
+     "description": "Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "set": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       },
+       "where": {
+        "type": "string"
+       },
+       "area_min": {
+        "type": "number",
+        "minimum": 0
+       },
+       "area_max": {
+        "type": "number",
+        "minimum": 0
+       }
+      },
+      "required": [
+       "set"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "to_mask",
+     "description": "Union one or more instance sets into a binary mask. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "sets": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "description": "An existing inst#k handle."
+        },
+        "minItems": 1
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "sets"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "combine",
+     "description": "Combine masks; subtract means a minus b. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "op": {
+        "type": "string",
+        "enum": [
+         "union",
+         "intersect",
+         "subtract"
+        ]
+       },
+       "a": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "b": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "op",
+       "a",
+       "b"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "morph",
+     "description": "Open/close with a disk of positive integer radius in original pixels; fill_holes uses no radius. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "op": {
+        "type": "string",
+        "enum": [
+         "open",
+         "close",
+         "fill_holes"
+        ]
+       },
+       "radius": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "op"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "remove_region",
+     "description": "Remove full components identified on mask. The remaining components keep their IDs; other edits renumber components. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "ids"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "add_region",
+     "description": "Add selected regions from other: mask component IDs or inst instance IDs; omitted IDs mean all. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "other": {
+        "type": "string"
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "other"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "refine_region",
+     "description": "Replace only the target component using SAM at the required time, clipped to the editing ROI. Without a prompt use its box; default ROI expands that box by 10%, at least 4 pixels. An explicit box is the ROI. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "id": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "time": {
+        "type": "string",
+        "enum": [
+         "t1",
+         "t2"
+        ]
+       },
+       "box": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Full-image [x0,y0,x1,y1], exclusive end."
+       },
+       "points": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "array",
+         "items": {
+          "type": "number"
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "point_labels": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "enum": [
+          0,
+          1
+         ]
+        }
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "id",
+       "time"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "submit",
+     "description": "Finish with any existing mask and a short summary. Pass mask=\"empty\" to answer that nothing changed. Subsequent calls in this reply are skipped.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle, or \"empty\"."
+       },
+       "summary": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "mask",
+       "summary"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "system_prompt": "You detect changes of one object class between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later). You work by calling tools, then submit one binary change mask.\n\nScope for the class \"building\".\nCOUNTS as a change:\n- a building newly constructed (absent in T1, present in T2)\n- a building demolished (present in T1, absent in T2)\n- a building demolished and rebuilt (a different building in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n\nConventions\n- Coordinates are full-image pixels: boxes [x0,y0,x1,y1] with x1,y1 exclusive, points [x,y]. View images show coordinate ticks along their top and left borders.\n- Large results live in handles (mask#k, inst#k). Tools never modify a handle; they return a new one.\n- Instance IDs belong to an inst handle. Component IDs belong to one mask handle and change when the mask changes; run inspect or view on the new handle before using its IDs.\n- Calls in the same reply run in order, but they can only use handles that already existed when you sent the reply. A handle created in this reply can be used from your next reply.\n- By default a mask returned by a mask tool becomes your current answer; pass set_current=false for intermediate candidates.\n- Tool scores provide limited evidence: `score` and `sam_quality` rate segmentation quality, and `p_yes` is a verifier's reading of one region. None of them is the probability that an edit improves the result.\n\nVerification\n- An independent verifier looks at one mask component at a time and answers whether it contains a building change. It sees only crops of the two images and knows nothing of your reasoning.\n- The first time you call submit, and whenever you submit a mask with components the verifier has not seen, the verifier checks those components and you get a report with its answers. Every run has this step. It does not judge your mask. To finish, call submit again.\n- You can also call ask with no arguments at any time to check the unchecked components of your current answer.\n- The verifier can be wrong in both directions. Its answers are evidence and you decide what stays: keep, remove, look again, or correct the region. Say in your summary where you went against an answer, and why.\n\nHow to work\n- Look at both times before you trust a result, and look again after you change a mask. Zoom into a region when objects are small or dense.\n- Before you add or remove a change region, check two things separately: whether it is the target class, and whether it differs between T1 and T2. Segmenting one time shows what exists at that time, not what changed. A different appearance, more area or more components do not by themselves make a result better.\n- When a verifier answer conflicts with the images or with its own reason, look at that region again before acting on it.\n- A box prompt segments one object: draw it tightly around one building. A large box returns one large blob, not the buildings inside it.\n- When you are given an existing mask, correct it region by region. Do not replace it with a rebuilt mask unless each region you drop has been checked.\n- Keep what is correct. If you have no new evidence, keep the current result and submit it, including an empty result when nothing changed.\n- Know which handle is your complete answer, and submit that handle. Your summary must describe the mask you submit.\n- Independent calls can share one reply, for example the same query on T1 and T2, or views of separate regions. This saves replies.\n- Before each tool call, write one short sentence saying why you make it.\n- When you are satisfied, call submit with the final mask and a short summary of what changed and roughly how many places. You have at most 30 replies.\n",
+  "instruction": "Find all buildings that changed between T1 and T2 (newly built or demolished). Output a binary change mask."
+ },
+ "T5.1": {
+  "schemas": [
+   {
+    "type": "function",
+    "function": {
+     "name": "view",
+     "description": "Look at T1 and T2 with full-image coordinate ticks. Optional thin red contours of a mask or inst set; component IDs can be labelled on masks only.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "region": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Full-image [x0,y0,x1,y1], exclusive end."
+       },
+       "overlay": {
+        "type": "string",
+        "description": "An existing mask#k or inst#k handle."
+       },
+       "label_components": {
+        "type": "boolean",
+        "default": false
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       }
+      },
+      "required": [],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "inspect",
+     "description": "List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k or inst#k handle."
+       },
+       "offset": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 0
+       },
+       "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 50
+       }
+      },
+      "required": [
+       "mask"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "segment_text",
+     "description": "Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "time": {
+        "type": "string",
+        "enum": [
+         "t1",
+         "t2"
+        ]
+       },
+       "text": {
+        "type": "string"
+       },
+       "tile": {
+        "type": "integer",
+        "enum": [
+         0,
+         512
+        ],
+        "default": 512
+       },
+       "score_thr": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.5
+       }
+      },
+      "required": [
+       "time",
+       "text"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "segment_prompt",
+     "description": "Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "time": {
+        "type": "string",
+        "enum": [
+         "t1",
+         "t2"
+        ]
+       },
+       "box": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Full-image [x0,y0,x1,y1], exclusive end."
+       },
+       "points": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "array",
+         "items": {
+          "type": "number"
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "point_labels": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "enum": [
+          0,
+          1
+         ]
+        }
+       }
+      },
+      "required": [
+       "time"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "match_instances",
+     "description": "Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "inst_t1": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "inst_t2": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "overlap_thr": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.25
+       }
+      },
+      "required": [
+       "inst_t1",
+       "inst_t2"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "ask",
+     "description": "Ask the independent verifier about building change in mask components. With no arguments it checks the components of your current answer that have no answer yet, largest first, up to 64 per call; remaining_unverified says how many are left. For a mask without ids, the same on that mask. With ids it asks about exactly those components, up to 64 in total. Returns answer, type, reason, p_yes (relative yes/no reading, may be null), status. Unparsed is not no.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "regions": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "mask": {
+           "type": "string",
+           "description": "An existing mask#k handle."
+          },
+          "ids": {
+           "type": "array",
+           "items": {
+            "type": "integer",
+            "minimum": 1
+           },
+           "uniqueItems": true
+          }
+         },
+         "required": [
+          "mask"
+         ],
+         "additionalProperties": false
+        }
+       }
+      },
+      "required": [],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "select",
+     "description": "Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "set": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       },
+       "where": {
+        "type": "string"
+       },
+       "area_min": {
+        "type": "number",
+        "minimum": 0
+       },
+       "area_max": {
+        "type": "number",
+        "minimum": 0
+       }
+      },
+      "required": [
+       "set"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "to_mask",
+     "description": "Union one or more instance sets into a binary mask. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "sets": {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "description": "An existing inst#k handle."
+        },
+        "minItems": 1
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "sets"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "combine",
+     "description": "Combine masks; subtract means a minus b. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "op": {
+        "type": "string",
+        "enum": [
+         "union",
+         "intersect",
+         "subtract"
+        ]
+       },
+       "a": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "b": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "op",
+       "a",
+       "b"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "morph",
+     "description": "Open/close with a disk of positive integer radius in original pixels; fill_holes uses no radius. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "op": {
+        "type": "string",
+        "enum": [
+         "open",
+         "close",
+         "fill_holes"
+        ]
+       },
+       "radius": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "op"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "remove_region",
+     "description": "Remove full components identified on mask. The remaining components keep their IDs; other edits renumber components. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "ids"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "add_region",
+     "description": "Add selected regions from other: mask component IDs or inst instance IDs; omitted IDs mean all. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "other": {
+        "type": "string"
+       },
+       "ids": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "uniqueItems": true
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "other"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "refine_region",
+     "description": "Replace only the target component using SAM at the required time, clipped to the editing ROI. Without a prompt use its box; default ROI expands that box by 10%, at least 4 pixels. An explicit box is the ROI. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle."
+       },
+       "id": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "time": {
+        "type": "string",
+        "enum": [
+         "t1",
+         "t2"
+        ]
+       },
+       "box": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4,
+        "description": "Full-image [x0,y0,x1,y1], exclusive end."
+       },
+       "points": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "array",
+         "items": {
+          "type": "number"
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "point_labels": {
+        "type": "array",
+        "items": {
+         "type": "integer",
+         "enum": [
+          0,
+          1
+         ]
+        }
+       },
+       "set_current": {
+        "type": "boolean",
+        "default": true
+       }
+      },
+      "required": [
+       "mask",
+       "id",
+       "time"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "submit",
+     "description": "Finish with any existing mask and a short summary. Pass mask=\"empty\" to answer that nothing changed. Subsequent calls in this reply are skipped.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "mask": {
+        "type": "string",
+        "description": "An existing mask#k handle, or \"empty\"."
+       },
+       "summary": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "mask",
+       "summary"
+      ],
+      "additionalProperties": false
+     }
+    }
+   }
+  ],
+  "system_prompt": "You detect changes of one object class between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later). You work by calling tools, then submit one binary change mask.\n\nScope for the class \"building\".\nCOUNTS as a change:\n- a building newly constructed (absent in T1, present in T2)\n- a building demolished (present in T1, absent in T2)\n- a building demolished and rebuilt (a different building in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n\nConventions\n- Coordinates are full-image pixels: boxes [x0,y0,x1,y1] with x1,y1 exclusive, points [x,y]. View images show coordinate ticks along their top and left borders.\n- Large results live in handles (mask#k, inst#k). Tools never modify a handle; they return a new one.\n- Instance IDs belong to an inst handle. Component IDs belong to one mask handle and change when the mask changes; run inspect or view on the new handle before using its IDs.\n- Calls in the same reply run in order, but they can only use handles that already existed when you sent the reply. A handle created in this reply can be used from your next reply.\n- By default a mask returned by a mask tool becomes your current answer; pass set_current=false for intermediate candidates.\n- Tool scores provide limited evidence: `score` and `sam_quality` rate segmentation quality, and `p_yes` is a verifier's reading of one region. None of them is the probability that an edit improves the result.\n\nVerification\n- An independent verifier looks at one mask component at a time and answers whether it contains a building change. It sees only crops of the two images and knows nothing of your reasoning.\n- The first time you call submit, and whenever you submit a mask with components the verifier has not seen, the verifier checks those components and you get a report with its answers. Every run has this step. It does not judge your mask. To finish, call submit again.\n- You can also call ask with no arguments at any time to check the unchecked components of your current answer.\n- The verifier can be wrong in both directions. Its answers are evidence and you decide what stays: keep, remove, look again, or correct the region. Say in your summary where you went against an answer, and why.\n\nHow to work\n- Look at both times before you trust a result, and look again after you change a mask. Zoom into a region when objects are small or dense.\n- Before you add or remove a change region, check two things separately: whether it is the target class, and whether it differs between T1 and T2. Segmenting one time shows what exists at that time, not what changed. A different appearance, more area or more components do not by themselves make a result better.\n- When a verifier answer conflicts with the images or with its own reason, look at that region again before acting on it.\n- A box prompt segments one object: draw it tightly around one building. A large box returns one large blob, not the buildings inside it.\n- When you are given an existing mask, correct it region by region. Do not replace it with a rebuilt mask unless each region you drop has been checked.\n- Keep what is correct. If you have no new evidence, keep the current result and submit it, including an empty result when nothing changed.\n- Know which handle is your complete answer, and submit that handle. Your summary must describe the mask you submit.\n- Independent calls can share one reply, for example the same query on T1 and T2, or views of separate regions. This saves replies.\n- Before each tool call, write one short sentence saying why you make it.\n- When you are satisfied, call submit with the final mask and a short summary of what changed and roughly how many places. You have at most 30 replies.\n",
+  "instruction": "Here is a building change detection mask (mask#0). Check it against T1 (earlier) and T2 (later), and correct it where needed. Submit the final binary change mask and briefly summarize your decision."
+ }
+}

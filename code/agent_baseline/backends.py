@@ -36,15 +36,15 @@ def encode_image(image):
     return base64.b64encode(buffer.getvalue()).decode('ascii')
 
 
-def read_soft(split, name, index, pixel_thr, score_thr, root=None, tile=512):
-    """Instances of one tile grid from the soft cache (sam3_soft.py, step = tile / 2), binarized at pixel_thr."""
+def read_soft(split, name, index, pixel_thr, score_thr, root=None):
+    """Instances of the 512 grid from the soft cache (sam3_soft.py, tile 512, step 256), binarized at pixel_thr."""
     root = Path(root or os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
-    with np.load(root / 'sam3_soft' / f't{tile}s{tile // 2}' / split / (Path(name).stem + '.npz')) as z:
+    with np.load(root / 'sam3_soft' / 't512s256' / split / (Path(name).stem + '.npz')) as z:
         scores, origins, offsets = z[f'scores{index}'], z[f'origins{index}'], z[f'offs{index}']
         pixels, values, (h, w) = z[f'idx{index}'], z[f'val{index}'], z['shape']
     rows = []
     for i in np.flatnonzero(scores >= score_thr):
-        if origins[i][0] % tile or origins[i][1] % tile:
+        if origins[i][0] % 512 or origins[i][1] % 512:
             continue
         idx = pixels[offsets[i]:offsets[i + 1]][values[offsets[i]:offsets[i + 1]] >= round(pixel_thr * 255)]
         if len(idx):
@@ -65,9 +65,9 @@ class SegmentBackend:
         building = ''.join(text.lower().split()) == 'building'
         if self.pixel_thr != .5:
             # The soft cache holds scores from 0.3 and values from 0.2.
-            if building and tile in (256, 512) and score_thr >= .3:
+            if building and tile == 512 and score_thr >= .3:
                 try:
-                    return read_soft(self.split, self.name, index, self.pixel_thr, score_thr, tile=tile), dict(
+                    return read_soft(self.split, self.name, index, self.pixel_thr, score_thr), dict(
                         cache_hit=True, backend='sam3_soft_cache', tile=tile, pixel_thr=self.pixel_thr)
                 except FileNotFoundError:
                     pass

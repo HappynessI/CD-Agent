@@ -66,10 +66,10 @@ def tempdir():
     return tempfile.TemporaryDirectory(prefix='synthetic_', dir=Path(__file__).parent)
 
 
-def run(directory, script, gt=None, init=None, budget=30, task=None, review=False, status=False, verify=False, plan=False, ask_backend=ask, skills=()):
+def run(directory, script, gt=None, init=None, budget=30, task=None, review=False, status=False, verify=False, plan=False, ask_backend=ask, skills=(), prompt_version='v1'):
     toolbox = Toolbox(rgb(), directory, segment, prompt, ask_backend, init_mask=init)
     client = ScriptClient(script)
     planner = Planner(client=client, sleep=lambda n: None, seed=7)
     recorder = Recorder(directory, 'synthetic', 'image.png', gt=mask() if gt is None else gt)
-    final = run_session(toolbox, planner, recorder, task or ('T5.1' if init is not None else 'T1.1xC0'), budget, review=review, status=status, verify=verify, plan=plan, skills=skills)
+    final = run_session(toolbox, planner, recorder, task or ('T5.1' if init is not None else 'T1.1xC0'), budget, prompt_version=prompt_version, review=review, status=status, verify=verify, plan=plan, skills=skills)
     return final, toolbox, client, recorder

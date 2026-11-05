@@ -54,16 +54,15 @@ SCHEMAS = [
            dict(region=BOX, overlay=arg('string', description='An existing mask#k or inst#k handle.'), label_components=arg('boolean', default=False), ids=IDS)),
     schema('inspect', 'List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID.',
            dict(mask=arg('string', description='An existing mask#k or inst#k handle.'), offset=arg('integer', minimum=0, default=0), limit=arg('integer', minimum=1, maximum=50, default=50)), ['mask']),
-    schema('segment_text', 'Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer. A smaller tile zooms in: it finds smaller objects and more false ones. region keeps only instances that touch that box.',
-           dict(time=TIME, text=S, tile=arg('integer', enum=[0, 256, 512], default=512),
-                score_thr=arg('number', minimum=0, maximum=1, default=0.5), region=BOX), ['time', 'text']),
+    schema('segment_text', 'Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.',
+           dict(time=TIME, text=S, tile=arg('integer', enum=[0, 512], default=512),
+                score_thr=arg('number', minimum=0, maximum=1, default=0.5)), ['time', 'text']),
     schema('segment_prompt', 'Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.', PROMPT_ARGS, ['time']),
     schema('match_instances', 'Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.',
            dict(inst_t1=I, inst_t2=I, overlap_thr=arg('number', minimum=0, maximum=1, default=0.25)), ['inst_t1', 'inst_t2']),
     schema('ask', 'Ask the independent verifier about building change in mask components. With no arguments it checks the components of your current answer that have no answer yet, largest first, up to 64 per call; remaining_unverified says how many are left. For a mask without ids, the same on that mask. With ids it asks about exactly those components, up to 64 in total. Returns answer, type, reason, p_yes (relative yes/no reading, may be null), status. Unparsed is not no.',
            dict(regions=arg('array', items=dict(type='object', properties=dict(mask=M, ids=IDS),
-                required=['mask'], additionalProperties=False)), level=arg('string', enum=['L1', 'L2'], default='L1',
-                description='L1 is the quick check. L2 is a thorough check of the same question for doubtful components; it costs several times more.'))),
+                required=['mask'], additionalProperties=False)))),
     schema('select', 'Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors.',
            dict(set=I, ids=IDS, where=S, area_min=arg('number', minimum=0), area_max=arg('number', minimum=0)), ['set']),
     schema('to_mask', 'Union one or more instance sets into a binary mask. ' + CURRENT,
@@ -281,15 +280,12 @@ class Toolbox:
         return dict(mask=mask, total_components=len(rows), returned=len(selected),
                     has_more=offset + len(selected) < len(rows), components=selected)
 
-    def segment_text(self, time, text, tile=512, score_thr=0.5, region=None):
+    def segment_text(self, time, text, tile=512, score_thr=0.5):
         text = ' '.join(text.lower().split())
         if not text:
             raise ToolError('bad_args', 'text must name an object class.')
         rows, meta = self._backend(self.segment_backend, time, text, tile, score_thr)
         self.meta.update(meta)
-        if region is not None:
-            x0, y0, x1, y1 = box_pixels(region, self.session.shape, 'region')
-            rows = [r for r in rows if r['bbox'][0] < x1 and x0 < r['bbox'][2] and r['bbox'][1] < y1 and y0 < r['bbox'][3]]
         key = self.session.add_instances(rows, time)
         scores = [r['score'] for r in rows if r.get('score') is not None]
         return dict(inst=key, n=len(rows), area=int(instances.to_mask(rows, self.session.shape).sum()),
@@ -333,7 +329,7 @@ class Toolbox:
         self.meta['match_basis'] = MATCH_BASIS
         return out
 
-    def ask(self, regions=None, level='L1'):
+    def ask(self, regions=None):
         if regions is None:
             if self.session.current_mask is None:
                 raise ToolError('bad_args', 'There is no current answer; pass regions with a mask handle.')
@@ -354,12 +350,12 @@ class Toolbox:
             raise ToolError('bad_args', f'regions expands to more than {MAX_ASK} components.')
         if not expanded:
             return dict(results=[], remaining_unverified=left)
-        return dict(results=self.verify(expanded, 'ask', level), remaining_unverified=left)
+        return dict(results=self.verify(expanded, 'ask'), remaining_unverified=left)
 
-    def verify(self, expanded, source, level='L1'):
+    def verify(self, expanded, source):
         context = getattr(self.ask_backend, 'context', False)
         pairs = [ask_images(self.rgb, item.labels == c['id'], c['bbox'], context) for _, item, c in expanded]
-        rows, meta = self._backend(self.ask_backend, pairs, VERIFY, **({} if level == 'L1' else dict(level=level)))
+        rows, meta = self._backend(self.ask_backend, pairs, VERIFY)
         self.meta.update(meta)
         self.meta['answers'] = rows
         if len(rows) != len(expanded):
@@ -371,8 +367,8 @@ class Toolbox:
             outline = np.flatnonzero(item.labels == c['id'])
             entry = self.asked.setdefault(outline.tobytes(), dict(outline=outline, area=c['area'], bbox=list(c['bbox']), records=[]))
             entry['records'].append(dict(answer=answer if valid else None, type=row.get('type'), reason=row.get('reason'),
-                                         p_yes=row.get('p_yes'), level=level, source=source, mask=key, id=c['id']))
-            results.append(dict(mask=key, id=c['id'], level=level, p_yes=row.get('p_yes'), answer=answer if valid else None,
+                                         p_yes=row.get('p_yes'), level=row.get('level', 'L1'), source=source, mask=key, id=c['id']))
+            results.append(dict(mask=key, id=c['id'], p_yes=row.get('p_yes'), answer=answer if valid else None,
                 type=row.get('type'), reason=row.get('reason'), status='parsed' if valid else 'unparsed'))
         return results
 
@@ -536,7 +532,7 @@ class Toolbox:
         row = lambda c: f"id={c['id']} area={c['area']} bbox={list(c['bbox'])}"
         def answer_row(c):
             last = next(r for r in reversed(self.entry(item, c)['records']) if r['answer'] is not None)
-            return row(c) + f" level={last['level']} type={last['type']} p_yes={None if last['p_yes'] is None else round(last['p_yes'], 2)} reason={str(last['reason'])[:120]}"
+            return row(c) + f" type={last['type']} p_yes={None if last['p_yes'] is None else round(last['p_yes'], 2)} reason={str(last['reason'])[:120]}"
         lines = [f"Report before submission. Every run gets this report as the first response to submit; it does not judge the mask, and nothing has to change. {key} is now your current answer: {int(item.data.sum())} pixels in {len(item.components)} components."]
         if checked is not None:
             if failed:
