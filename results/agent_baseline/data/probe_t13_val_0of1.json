@@ -1,0 +1,4281 @@
+{
+  "backend_config": {
+    "dynamic": {
+      "python": "/guisongxia01/pangchao/wangyihan/conda_envs/ovcd-de-env/bin/python",
+      "dynamic_earth": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch56_ovcd_de/DynamicEarth",
+      "sam_checkpoint": "/guisongxia01/pangchao/wangyihan/models/SAM/sam_vit_h_4b8939.pth",
+      "dinov2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch56_ovcd_de/weights/hf/dinov2-base",
+      "clip_checkpoint": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch56_ovcd_de/weights/clip/ViT-B-16.pt",
+      "simfeatup_checkpoint": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch56_ovcd_de/weights/simfeatup/xclip_jbu_one_million_aid.ckpt"
+    },
+    "anychange": {
+      "python": "/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/bin/python",
+      "sam_checkpoint": "/guisongxia01/pangchao/wangyihan/models/SAM/sam_vit_h_4b8939.pth"
+    }
+  },
+  "phase": "val",
+  "names": [
+    "train_1032.png",
+    "train_1049.png",
+    "train_1114.png",
+    "train_1119.png",
+    "train_1127.png",
+    "train_1146.png",
+    "train_1150.png",
+    "train_1160.png",
+    "train_1192.png",
+    "train_1224.png",
+    "train_1343.png",
+    "train_1347.png",
+    "train_1360.png",
+    "train_1373.png",
+    "train_1375.png",
+    "train_139.png",
+    "train_1392.png",
+    "train_1394.png",
+    "train_1430.png",
+    "train_1432.png",
+    "train_1433.png",
+    "train_1444.png",
+    "train_1450.png",
+    "train_146.png",
+    "train_1479.png",
+    "train_148.png",
+    "train_1490.png",
+    "train_1537.png",
+    "train_1568.png",
+    "train_1573.png",
+    "train_1575.png",
+    "train_1608.png",
+    "train_1633.png",
+    "train_1660.png",
+    "train_1681.png",
+    "train_1683.png",
+    "train_1703.png",
+    "train_1747.png",
+    "train_1780.png",
+    "train_1799.png",
+    "train_1800.png",
+    "train_1804.png",
+    "train_1893.png",
+    "train_191.png",
+    "train_1961.png",
+    "train_1966.png",
+    "train_1979.png",
+    "train_2020.png",
+    "train_2037.png",
+    "train_2068.png",
+    "train_2072.png",
+    "train_2099.png",
+    "train_214.png",
+    "train_2149.png",
+    "train_2166.png",
+    "train_2170.png",
+    "train_2184.png",
+    "train_2246.png",
+    "train_2262.png",
+    "train_2286.png",
+    "train_2336.png",
+    "train_2381.png",
+    "train_2404.png",
+    "train_243.png",
+    "train_2447.png",
+    "train_2465.png",
+    "train_2468.png",
+    "train_2472.png",
+    "train_2492.png",
+    "train_2502.png",
+    "train_2596.png",
+    "train_2604.png",
+    "train_2617.png",
+    "train_2669.png",
+    "train_268.png",
+    "train_2711.png",
+    "train_2728.png",
+    "train_2759.png",
+    "train_276.png",
+    "train_2767.png",
+    "train_2772.png",
+    "train_2795.png",
+    "train_2797.png",
+    "train_281.png",
+    "train_283.png",
+    "train_2834.png",
+    "train_2855.png",
+    "train_2864.png",
+    "train_2948.png",
+    "train_2961.png",
+    "train_343.png",
+    "train_344.png",
+    "train_353.png",
+    "train_39.png",
+    "train_395.png",
+    "train_421.png",
+    "train_433.png",
+    "train_47.png",
+    "train_502.png",
+    "train_508.png",
+    "train_519.png",
+    "train_559.png",
+    "train_609.png",
+    "train_612.png",
+    "train_618.png",
+    "train_619.png",
+    "train_624.png",
+    "train_65.png",
+    "train_659.png",
+    "train_660.png",
+    "train_665.png",
+    "train_677.png",
+    "train_700.png",
+    "train_703.png",
+    "train_708.png",
+    "train_711.png",
+    "train_725.png",
+    "train_763.png",
+    "train_79.png",
+    "train_805.png",
+    "train_820.png",
+    "train_833.png",
+    "train_853.png",
+    "train_869.png",
+    "train_876.png",
+    "train_891.png",
+    "train_937.png",
+    "train_943.png"
+  ],
+  "complete": true,
+  "thresholds": [
+    0.22
+  ],
+  "anychange_requested": true,
+  "anychange_skip_reason": null,
+  "per_image": {
+    "train_1032.png": {
+      "coverage": {
+        "covered": 145277,
+        "truth_pixels": 165338,
+        "coverage": 0.8786667311809747,
+        "pixel_oracle_f1_upper": 0.9354152246349983
+      },
+      "oracle": {
+        "lower": 0.9154925468918643,
+        "upper": 0.9154925468918643,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          145209,
+          36410,
+          20129
+        ]
+      ],
+      "anychange": [
+        142138,
+        31369,
+        23200
+      ]
+    },
+    "train_1049.png": {
+      "coverage": {
+        "covered": 215883,
+        "truth_pixels": 218465,
+        "coverage": 0.9881811731856361,
+        "pixel_oracle_f1_upper": 0.9940554578356525
+      },
+      "oracle": {
+        "lower": 0.9043005077162821,
+        "upper": 0.9043005077162821,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          215883,
+          43422,
+          2582
+        ]
+      ],
+      "anychange": [
+        78368,
+        15544,
+        140097
+      ]
+    },
+    "train_1114.png": {
+      "coverage": {
+        "covered": 83889,
+        "truth_pixels": 92703,
+        "coverage": 0.9049221708035339,
+        "pixel_oracle_f1_upper": 0.9500883392226148
+      },
+      "oracle": {
+        "lower": 0.7845423802770808,
+        "upper": 0.7845423802770809,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          44653,
+          16096,
+          48050
+        ]
+      ],
+      "anychange": [
+        36596,
+        33929,
+        56107
+      ]
+    },
+    "train_1119.png": {
+      "coverage": {
+        "covered": 93558,
+        "truth_pixels": 96210,
+        "coverage": 0.972435297786093,
+        "pixel_oracle_f1_upper": 0.9860250411028203
+      },
+      "oracle": {
+        "lower": 0.9092147685907437,
+        "upper": 0.9092147685907437,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          37749,
+          14636,
+          58461
+        ]
+      ],
+      "anychange": [
+        47184,
+        26158,
+        49026
+      ]
+    },
+    "train_1127.png": {
+      "coverage": {
+        "covered": 39797,
+        "truth_pixels": 40384,
+        "coverage": 0.9854645404120443,
+        "pixel_oracle_f1_upper": 0.992679063618563
+      },
+      "oracle": {
+        "lower": 0.6900931636268206,
+        "upper": 0.6900931636268206,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          33862,
+          67222,
+          6522
+        ]
+      ],
+      "anychange": [
+        33714,
+        79218,
+        6670
+      ]
+    },
+    "train_1146.png": {
+      "coverage": {
+        "covered": 51063,
+        "truth_pixels": 58519,
+        "coverage": 0.8725883900955246,
+        "pixel_oracle_f1_upper": 0.9319596284061251
+      },
+      "oracle": {
+        "lower": 0.8573735948537534,
+        "upper": 0.8573735948537534,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          38728,
+          32784,
+          19791
+        ]
+      ],
+      "anychange": [
+        24403,
+        16304,
+        34116
+      ]
+    },
+    "train_1150.png": {
+      "coverage": {
+        "covered": 40248,
+        "truth_pixels": 40494,
+        "coverage": 0.9939250259297674,
+        "pixel_oracle_f1_upper": 0.9969532585271605
+      },
+      "oracle": {
+        "lower": 0.9568107148701552,
+        "upper": 0.9568107148701552,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          38491,
+          18650,
+          2003
+        ]
+      ],
+      "anychange": [
+        39359,
+        27569,
+        1135
+      ]
+    },
+    "train_1160.png": {
+      "coverage": {
+        "covered": 190179,
+        "truth_pixels": 190207,
+        "coverage": 0.999852791958235,
+        "pixel_oracle_f1_upper": 0.9999263905611668
+      },
+      "oracle": {
+        "lower": 0.8857808857808858,
+        "upper": 0.8857808857808859,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          41655,
+          12998,
+          148552
+        ]
+      ],
+      "anychange": [
+        16675,
+        10319,
+        173532
+      ]
+    },
+    "train_1192.png": {
+      "coverage": {
+        "covered": 75753,
+        "truth_pixels": 75884,
+        "coverage": 0.9982736808813452,
+        "pixel_oracle_f1_upper": 0.9991360947526
+      },
+      "oracle": {
+        "lower": 0.869300029044438,
+        "upper": 0.869300029044438,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          58805,
+          14374,
+          17079
+        ]
+      ],
+      "anychange": [
+        29048,
+        16633,
+        46836
+      ]
+    },
+    "train_1224.png": {
+      "coverage": {
+        "covered": 35246,
+        "truth_pixels": 47964,
+        "coverage": 0.734842798765741,
+        "pixel_oracle_f1_upper": 0.847157793534431
+      },
+      "oracle": {
+        "lower": 0.7633218996086768,
+        "upper": 0.7633218996086768,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          25866,
+          4544,
+          22098
+        ]
+      ],
+      "anychange": [
+        24059,
+        11885,
+        23905
+      ]
+    },
+    "train_1343.png": {
+      "coverage": {
+        "covered": 12179,
+        "truth_pixels": 12479,
+        "coverage": 0.9759596121484093,
+        "pixel_oracle_f1_upper": 0.9878335631438073
+      },
+      "oracle": {
+        "lower": 0.9333494227907164,
+        "upper": 0.9333494227907164,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          9193,
+          8755,
+          3286
+        ]
+      ],
+      "anychange": [
+        10762,
+        15957,
+        1717
+      ]
+    },
+    "train_1347.png": {
+      "coverage": {
+        "covered": 6308,
+        "truth_pixels": 6352,
+        "coverage": 0.993073047858942,
+        "pixel_oracle_f1_upper": 0.99652448657188
+      },
+      "oracle": {
+        "lower": 0.7935228827733009,
+        "upper": 0.793522882773301,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          187,
+          13925,
+          6165
+        ]
+      ],
+      "anychange": [
+        4819,
+        43956,
+        1533
+      ]
+    },
+    "train_1360.png": {
+      "coverage": {
+        "covered": 9589,
+        "truth_pixels": 9700,
+        "coverage": 0.9885567010309279,
+        "pixel_oracle_f1_upper": 0.9942454248535435
+      },
+      "oracle": {
+        "lower": 0.921090084866375,
+        "upper": 0.921090084866375,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          8044,
+          19660,
+          1656
+        ]
+      ],
+      "anychange": [
+        8212,
+        47066,
+        1488
+      ]
+    },
+    "train_1373.png": {
+      "coverage": {
+        "covered": 24940,
+        "truth_pixels": 25611,
+        "coverage": 0.9738003201749248,
+        "pixel_oracle_f1_upper": 0.9867262764337006
+      },
+      "oracle": {
+        "lower": 0.816432115210131,
+        "upper": 0.8164321152101311,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          12563,
+          28093,
+          13048
+        ]
+      ],
+      "anychange": [
+        12119,
+        41657,
+        13492
+      ]
+    },
+    "train_1375.png": {
+      "coverage": {
+        "covered": 19073,
+        "truth_pixels": 19274,
+        "coverage": 0.9895714433952475,
+        "pixel_oracle_f1_upper": 0.9947583904868699
+      },
+      "oracle": {
+        "lower": 0.9145968715485577,
+        "upper": 0.914596871548558,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          16800,
+          12291,
+          2474
+        ]
+      ],
+      "anychange": [
+        1501,
+        19594,
+        17773
+      ]
+    },
+    "train_139.png": {
+      "coverage": {
+        "covered": 22170,
+        "truth_pixels": 28504,
+        "coverage": 0.7777855739545327,
+        "pixel_oracle_f1_upper": 0.8750049334964676
+      },
+      "oracle": {
+        "lower": 0.6816919060052219,
+        "upper": 0.6816919060052219,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          5868,
+          6096,
+          22636
+        ]
+      ],
+      "anychange": [
+        8109,
+        9715,
+        20395
+      ]
+    },
+    "train_1392.png": {
+      "coverage": {
+        "covered": 48829,
+        "truth_pixels": 55029,
+        "coverage": 0.8873321339657272,
+        "pixel_oracle_f1_upper": 0.9403031061641857
+      },
+      "oracle": {
+        "lower": 0.8518665424457379,
+        "upper": 0.8518665424457379,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          16579,
+          12341,
+          38450
+        ]
+      ],
+      "anychange": [
+        13602,
+        21112,
+        41427
+      ]
+    },
+    "train_1394.png": {
+      "coverage": {
+        "covered": 20396,
+        "truth_pixels": 20501,
+        "coverage": 0.9948782986195795,
+        "pixel_oracle_f1_upper": 0.9974325745164682
+      },
+      "oracle": {
+        "lower": 0.5410740767753386,
+        "upper": 0.5410740767753386,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          6132,
+          11736,
+          14369
+        ]
+      ],
+      "anychange": [
+        7714,
+        50305,
+        12787
+      ]
+    },
+    "train_1430.png": {
+      "coverage": {
+        "covered": 22340,
+        "truth_pixels": 29469,
+        "coverage": 0.7580847670433337,
+        "pixel_oracle_f1_upper": 0.8623984249840762
+      },
+      "oracle": {
+        "lower": 0.8146200167695709,
+        "upper": 0.8146200167695709,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          18617,
+          11106,
+          10852
+        ]
+      ],
+      "anychange": [
+        19128,
+        20324,
+        10341
+      ]
+    },
+    "train_1432.png": {
+      "coverage": {
+        "covered": 129316,
+        "truth_pixels": 129578,
+        "coverage": 0.9979780518297859,
+        "pixel_oracle_f1_upper": 0.9989880028119617
+      },
+      "oracle": {
+        "lower": 0.9068254041194914,
+        "upper": 0.9068254041194914,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          129130,
+          114194,
+          448
+        ]
+      ],
+      "anychange": [
+        70318,
+        54819,
+        59260
+      ]
+    },
+    "train_1433.png": {
+      "coverage": {
+        "covered": 60472,
+        "truth_pixels": 62878,
+        "coverage": 0.9617354241547122,
+        "pixel_oracle_f1_upper": 0.980494527766518
+      },
+      "oracle": {
+        "lower": 0.8897605659350626,
+        "upper": 0.8897605659350626,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          20014,
+          15719,
+          42864
+        ]
+      ],
+      "anychange": [
+        30037,
+        19030,
+        32841
+      ]
+    },
+    "train_1444.png": {
+      "coverage": {
+        "covered": 21164,
+        "truth_pixels": 33450,
+        "coverage": 0.6327055306427504,
+        "pixel_oracle_f1_upper": 0.7750393671952247
+      },
+      "oracle": {
+        "lower": 0.6872175710232249,
+        "upper": 0.6872175710232249,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          14270,
+          26364,
+          19180
+        ]
+      ],
+      "anychange": [
+        16089,
+        26025,
+        17361
+      ]
+    },
+    "train_1450.png": {
+      "coverage": {
+        "covered": 22142,
+        "truth_pixels": 22282,
+        "coverage": 0.9937169015348712,
+        "pixel_oracle_f1_upper": 0.9968485503331532
+      },
+      "oracle": {
+        "lower": 0.780764264192453,
+        "upper": 0.780764264192453,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          12930,
+          17073,
+          9352
+        ]
+      ],
+      "anychange": [
+        18849,
+        70202,
+        3433
+      ]
+    },
+    "train_146.png": {
+      "coverage": {
+        "covered": 14785,
+        "truth_pixels": 17705,
+        "coverage": 0.8350748376164925,
+        "pixel_oracle_f1_upper": 0.9101261926746691
+      },
+      "oracle": {
+        "lower": 0.7654983081146651,
+        "upper": 0.7654983081146651,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          12922,
+          26745,
+          4783
+        ]
+      ],
+      "anychange": [
+        10331,
+        49011,
+        7374
+      ]
+    },
+    "train_1479.png": {
+      "coverage": {
+        "covered": 14701,
+        "truth_pixels": 18990,
+        "coverage": 0.7741442864665613,
+        "pixel_oracle_f1_upper": 0.8726959722180998
+      },
+      "oracle": {
+        "lower": 0.7304153720853066,
+        "upper": 0.7304153720853066,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          6459,
+          31440,
+          12531
+        ]
+      ],
+      "anychange": [
+        5238,
+        67931,
+        13752
+      ]
+    },
+    "train_148.png": {
+      "coverage": {
+        "covered": 43955,
+        "truth_pixels": 50166,
+        "coverage": 0.8761910457281824,
+        "pixel_oracle_f1_upper": 0.9340104758767969
+      },
+      "oracle": {
+        "lower": 0.8033579033579034,
+        "upper": 0.8033579033579034,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          30592,
+          13195,
+          19574
+        ]
+      ],
+      "anychange": [
+        12535,
+        33852,
+        37631
+      ]
+    },
+    "train_1490.png": {
+      "coverage": {
+        "covered": 66642,
+        "truth_pixels": 71363,
+        "coverage": 0.9338452699578212,
+        "pixel_oracle_f1_upper": 0.9657910945255607
+      },
+      "oracle": {
+        "lower": 0.8785660342462587,
+        "upper": 0.8785660342462587,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          65171,
+          14998,
+          6192
+        ]
+      ],
+      "anychange": [
+        65221,
+        21424,
+        6142
+      ]
+    },
+    "train_1537.png": {
+      "coverage": {
+        "covered": 86928,
+        "truth_pixels": 88415,
+        "coverage": 0.983181586834813,
+        "pixel_oracle_f1_upper": 0.9915194789640875
+      },
+      "oracle": {
+        "lower": 0.9031503829901238,
+        "upper": 0.9031503829901238,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          83632,
+          85224,
+          4783
+        ]
+      ],
+      "anychange": [
+        85469,
+        62255,
+        2946
+      ]
+    },
+    "train_1568.png": {
+      "coverage": {
+        "covered": 32233,
+        "truth_pixels": 33151,
+        "coverage": 0.9723085276462249,
+        "pixel_oracle_f1_upper": 0.9859598678575798
+      },
+      "oracle": {
+        "lower": 0.9041541361497618,
+        "upper": 0.9041541361497619,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          31447,
+          17430,
+          1704
+        ]
+      ],
+      "anychange": [
+        13005,
+        19337,
+        20146
+      ]
+    },
+    "train_1573.png": {
+      "coverage": {
+        "covered": 12847,
+        "truth_pixels": 14538,
+        "coverage": 0.8836841381207869,
+        "pixel_oracle_f1_upper": 0.9382508672631003
+      },
+      "oracle": {
+        "lower": 0.9052497279447634,
+        "upper": 0.9052497279447634,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          12066,
+          8137,
+          2472
+        ]
+      ],
+      "anychange": [
+        2179,
+        36591,
+        12359
+      ]
+    },
+    "train_1575.png": {
+      "coverage": {
+        "covered": 20629,
+        "truth_pixels": 21030,
+        "coverage": 0.9809320019020447,
+        "pixel_oracle_f1_upper": 0.9903742288581099
+      },
+      "oracle": {
+        "lower": 0.8650241949350298,
+        "upper": 0.86502419493503,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          15618,
+          1859,
+          5412
+        ]
+      ],
+      "anychange": [
+        15438,
+        8244,
+        5592
+      ]
+    },
+    "train_1608.png": {
+      "coverage": {
+        "covered": 20763,
+        "truth_pixels": 21175,
+        "coverage": 0.980543093270366,
+        "pixel_oracle_f1_upper": 0.9901759740569412
+      },
+      "oracle": {
+        "lower": 0.88043969962906,
+        "upper": 0.88043969962906,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          4034,
+          7104,
+          17141
+        ]
+      ],
+      "anychange": [
+        8360,
+        30986,
+        12815
+      ]
+    },
+    "train_1633.png": {
+      "coverage": {
+        "covered": 10571,
+        "truth_pixels": 11599,
+        "coverage": 0.9113716699715493,
+        "pixel_oracle_f1_upper": 0.9536310329273794
+      },
+      "oracle": {
+        "lower": 0.7484088356420816,
+        "upper": 0.7484088356420817,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          3005,
+          3322,
+          8594
+        ]
+      ],
+      "anychange": [
+        5044,
+        27422,
+        6555
+      ]
+    },
+    "train_1660.png": {
+      "coverage": {
+        "covered": 94066,
+        "truth_pixels": 127044,
+        "coverage": 0.7404206416674538,
+        "pixel_oracle_f1_upper": 0.8508525168468183
+      },
+      "oracle": {
+        "lower": 0.7279719913389676,
+        "upper": 0.7279719913389677,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          50924,
+          41427,
+          76120
+        ]
+      ],
+      "anychange": [
+        43977,
+        35116,
+        83067
+      ]
+    },
+    "train_1681.png": {
+      "coverage": {
+        "covered": 99877,
+        "truth_pixels": 107999,
+        "coverage": 0.9247955999592589,
+        "pixel_oracle_f1_upper": 0.9609286305297389
+      },
+      "oracle": {
+        "lower": 0.8963437063194292,
+        "upper": 0.8963437063194292,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          93137,
+          38737,
+          14862
+        ]
+      ],
+      "anychange": [
+        62271,
+        50969,
+        45728
+      ]
+    },
+    "train_1683.png": {
+      "coverage": {
+        "covered": 84561,
+        "truth_pixels": 96522,
+        "coverage": 0.8760800646484739,
+        "pixel_oracle_f1_upper": 0.933947416378125
+      },
+      "oracle": {
+        "lower": 0.8795735719926296,
+        "upper": 0.8795735719926296,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          13816,
+          9103,
+          82706
+        ]
+      ],
+      "anychange": [
+        14739,
+        1393,
+        81783
+      ]
+    },
+    "train_1703.png": {
+      "coverage": {
+        "covered": 55325,
+        "truth_pixels": 58703,
+        "coverage": 0.9424560925336013,
+        "pixel_oracle_f1_upper": 0.9703756971971796
+      },
+      "oracle": {
+        "lower": 0.908936170212766,
+        "upper": 0.908936170212766,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          46692,
+          16653,
+          12011
+        ]
+      ],
+      "anychange": [
+        50247,
+        28224,
+        8456
+      ]
+    },
+    "train_1747.png": {
+      "coverage": {
+        "covered": 2787,
+        "truth_pixels": 2851,
+        "coverage": 0.9775517362329007,
+        "pixel_oracle_f1_upper": 0.9886484568996098
+      },
+      "oracle": {
+        "lower": 0.8580816773587858,
+        "upper": 0.8580816773587858,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          739,
+          1762,
+          2112
+        ]
+      ],
+      "anychange": [
+        1658,
+        13160,
+        1193
+      ]
+    },
+    "train_1780.png": {
+      "coverage": {
+        "covered": 47326,
+        "truth_pixels": 48277,
+        "coverage": 0.9803011786150755,
+        "pixel_oracle_f1_upper": 0.990052613411713
+      },
+      "oracle": {
+        "lower": 0.7911289261384916,
+        "upper": 0.7911289261384916,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          36937,
+          69439,
+          11340
+        ]
+      ],
+      "anychange": [
+        31946,
+        97988,
+        16331
+      ]
+    },
+    "train_1799.png": {
+      "coverage": {
+        "covered": 110622,
+        "truth_pixels": 128424,
+        "coverage": 0.8613810502709773,
+        "pixel_oracle_f1_upper": 0.925528977686303
+      },
+      "oracle": {
+        "lower": 0.7825792762388478,
+        "upper": 0.7825792762388479,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          81867,
+          58333,
+          46557
+        ]
+      ],
+      "anychange": [
+        71621,
+        83892,
+        56803
+      ]
+    },
+    "train_1800.png": {
+      "coverage": {
+        "covered": 161339,
+        "truth_pixels": 163614,
+        "coverage": 0.9860953219162174,
+        "pixel_oracle_f1_upper": 0.9929989875458912
+      },
+      "oracle": {
+        "lower": 0.8594721220668854,
+        "upper": 0.8594721220668854,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          147261,
+          42922,
+          16353
+        ]
+      ],
+      "anychange": [
+        84432,
+        17832,
+        79182
+      ]
+    },
+    "train_1804.png": {
+      "coverage": {
+        "covered": 146181,
+        "truth_pixels": 146928,
+        "coverage": 0.9949158771643254,
+        "pixel_oracle_f1_upper": 0.9974514600370511
+      },
+      "oracle": {
+        "lower": 0.8400293909255517,
+        "upper": 0.8400293909255518,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          39099,
+          13455,
+          107829
+        ]
+      ],
+      "anychange": [
+        41510,
+        17354,
+        105418
+      ]
+    },
+    "train_1893.png": {
+      "coverage": {
+        "covered": 41637,
+        "truth_pixels": 49498,
+        "coverage": 0.8411855024445433,
+        "pixel_oracle_f1_upper": 0.9137433477807648
+      },
+      "oracle": {
+        "lower": 0.7209468674595378,
+        "upper": 0.7209468674595378,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          23238,
+          40823,
+          26260
+        ]
+      ],
+      "anychange": [
+        25790,
+        25719,
+        23708
+      ]
+    },
+    "train_191.png": {
+      "coverage": {
+        "covered": 90197,
+        "truth_pixels": 105374,
+        "coverage": 0.855970163417921,
+        "pixel_oracle_f1_upper": 0.9223964698242582
+      },
+      "oracle": {
+        "lower": 0.897243287558926,
+        "upper": 0.897243287558926,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          27671,
+          2501,
+          77703
+        ]
+      ],
+      "anychange": [
+        45380,
+        6430,
+        59994
+      ]
+    },
+    "train_1961.png": {
+      "coverage": {
+        "covered": 95308,
+        "truth_pixels": 116248,
+        "coverage": 0.8198678686945152,
+        "pixel_oracle_f1_upper": 0.9010191155060598
+      },
+      "oracle": {
+        "lower": 0.866428467963884,
+        "upper": 0.866428467963884,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          91820,
+          40570,
+          24428
+        ]
+      ],
+      "anychange": [
+        34938,
+        17776,
+        81310
+      ]
+    },
+    "train_1966.png": {
+      "coverage": {
+        "covered": 60553,
+        "truth_pixels": 62279,
+        "coverage": 0.972286003307696,
+        "pixel_oracle_f1_upper": 0.9859482870913117
+      },
+      "oracle": {
+        "lower": 0.8732148900169204,
+        "upper": 0.8732148900169204,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          52411,
+          18437,
+          9868
+        ]
+      ],
+      "anychange": [
+        32266,
+        11251,
+        30013
+      ]
+    },
+    "train_1979.png": {
+      "coverage": {
+        "covered": 38126,
+        "truth_pixels": 41375,
+        "coverage": 0.9214743202416918,
+        "pixel_oracle_f1_upper": 0.9591325895271757
+      },
+      "oracle": {
+        "lower": 0.9156589660928401,
+        "upper": 0.9156589660928401,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          31661,
+          3735,
+          9714
+        ]
+      ],
+      "anychange": [
+        9747,
+        5168,
+        31628
+      ]
+    },
+    "train_2020.png": {
+      "coverage": {
+        "covered": 48478,
+        "truth_pixels": 49194,
+        "coverage": 0.9854453795178274,
+        "pixel_oracle_f1_upper": 0.9926693422884757
+      },
+      "oracle": {
+        "lower": 0.7938993116479957,
+        "upper": 0.7938993116479957,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          20393,
+          19449,
+          28801
+        ]
+      ],
+      "anychange": [
+        17084,
+        38776,
+        32110
+      ]
+    },
+    "train_2037.png": {
+      "coverage": {
+        "covered": 7190,
+        "truth_pixels": 7217,
+        "coverage": 0.9962588333102397,
+        "pixel_oracle_f1_upper": 0.9981259110154785
+      },
+      "oracle": {
+        "lower": 0.7337369573618446,
+        "upper": 0.7337369573618446,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          3639,
+          16061,
+          3578
+        ]
+      ],
+      "anychange": [
+        3922,
+        29527,
+        3295
+      ]
+    },
+    "train_2068.png": {
+      "coverage": {
+        "covered": 33286,
+        "truth_pixels": 33828,
+        "coverage": 0.9839777698947617,
+        "pixel_oracle_f1_upper": 0.9919241886938641
+      },
+      "oracle": {
+        "lower": 0.8943348090342913,
+        "upper": 0.8943348090342913,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          29668,
+          32226,
+          4160
+        ]
+      ],
+      "anychange": [
+        31859,
+        57934,
+        1969
+      ]
+    },
+    "train_2072.png": {
+      "coverage": {
+        "covered": 115283,
+        "truth_pixels": 122403,
+        "coverage": 0.9418314910582257,
+        "pixel_oracle_f1_upper": 0.9700445125080989
+      },
+      "oracle": {
+        "lower": 0.8231399087373512,
+        "upper": 0.8231399087373512,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          94436,
+          60451,
+          27967
+        ]
+      ],
+      "anychange": [
+        59493,
+        57600,
+        62910
+      ]
+    },
+    "train_2099.png": {
+      "coverage": {
+        "covered": 85902,
+        "truth_pixels": 87576,
+        "coverage": 0.9808851740202795,
+        "pixel_oracle_f1_upper": 0.9903503614291149
+      },
+      "oracle": {
+        "lower": 0.9265092009214799,
+        "upper": 0.9265092009214799,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          77794,
+          42952,
+          9782
+        ]
+      ],
+      "anychange": [
+        77472,
+        67384,
+        10104
+      ]
+    },
+    "train_214.png": {
+      "coverage": {
+        "covered": 59870,
+        "truth_pixels": 77317,
+        "coverage": 0.7743445813986575,
+        "pixel_oracle_f1_upper": 0.8728232266905757
+      },
+      "oracle": {
+        "lower": 0.7647166697230882,
+        "upper": 0.7647166697230883,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          53585,
+          42096,
+          23732
+        ]
+      ],
+      "anychange": [
+        43833,
+        53093,
+        33484
+      ]
+    },
+    "train_2149.png": {
+      "coverage": {
+        "covered": 42719,
+        "truth_pixels": 50764,
+        "coverage": 0.8415215507052242,
+        "pixel_oracle_f1_upper": 0.9139415722644759
+      },
+      "oracle": {
+        "lower": 0.7202819302260997,
+        "upper": 0.7202819302260997,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          22517,
+          27264,
+          28247
+        ]
+      ],
+      "anychange": [
+        18758,
+        17017,
+        32006
+      ]
+    },
+    "train_2166.png": {
+      "coverage": {
+        "covered": 37718,
+        "truth_pixels": 41919,
+        "coverage": 0.8997829146687659,
+        "pixel_oracle_f1_upper": 0.9472481384281176
+      },
+      "oracle": {
+        "lower": 0.8471427185407975,
+        "upper": 0.8471427185407977,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          25125,
+          20038,
+          16794
+        ]
+      ],
+      "anychange": [
+        22536,
+        27976,
+        19383
+      ]
+    },
+    "train_2170.png": {
+      "coverage": {
+        "covered": 18766,
+        "truth_pixels": 18766,
+        "coverage": 1.0,
+        "pixel_oracle_f1_upper": 1.0
+      },
+      "oracle": {
+        "lower": 0.9197926197011284,
+        "upper": 0.9197926197011284,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          16176,
+          10426,
+          2590
+        ]
+      ],
+      "anychange": [
+        16633,
+        15958,
+        2133
+      ]
+    },
+    "train_2184.png": {
+      "coverage": {
+        "covered": 29243,
+        "truth_pixels": 30115,
+        "coverage": 0.9710443300680723,
+        "pixel_oracle_f1_upper": 0.9853094780821456
+      },
+      "oracle": {
+        "lower": 0.822354601034645,
+        "upper": 0.822354601034645,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          2873,
+          7454,
+          27242
+        ]
+      ],
+      "anychange": [
+        2847,
+        25144,
+        27268
+      ]
+    },
+    "train_2246.png": {
+      "coverage": {
+        "covered": 26322,
+        "truth_pixels": 26504,
+        "coverage": 0.9931331119830968,
+        "pixel_oracle_f1_upper": 0.9965547268390565
+      },
+      "oracle": {
+        "lower": 0.9101121539784474,
+        "upper": 0.9101121539784475,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          26273,
+          74012,
+          231
+        ]
+      ],
+      "anychange": [
+        16794,
+        42572,
+        9710
+      ]
+    },
+    "train_2262.png": {
+      "coverage": {
+        "covered": 93431,
+        "truth_pixels": 98639,
+        "coverage": 0.9472014112065208,
+        "pixel_oracle_f1_upper": 0.9728848857187484
+      },
+      "oracle": {
+        "lower": 0.9119609208627285,
+        "upper": 0.9119609208627285,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          82750,
+          31642,
+          15889
+        ]
+      ],
+      "anychange": [
+        86646,
+        41758,
+        11993
+      ]
+    },
+    "train_2286.png": {
+      "coverage": {
+        "covered": 36190,
+        "truth_pixels": 39022,
+        "coverage": 0.9274255548152325,
+        "pixel_oracle_f1_upper": 0.9623464340796681
+      },
+      "oracle": {
+        "lower": 0.7451820601455598,
+        "upper": 0.7451820601455598,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          32695,
+          70565,
+          6327
+        ]
+      ],
+      "anychange": [
+        34883,
+        120084,
+        4139
+      ]
+    },
+    "train_2336.png": {
+      "coverage": {
+        "covered": 15517,
+        "truth_pixels": 15779,
+        "coverage": 0.9833956524494581,
+        "pixel_oracle_f1_upper": 0.9916283231083844
+      },
+      "oracle": {
+        "lower": 0.8478056069908716,
+        "upper": 0.8478056069908716,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          8087,
+          10040,
+          7692
+        ]
+      ],
+      "anychange": [
+        8377,
+        34660,
+        7402
+      ]
+    },
+    "train_2381.png": {
+      "coverage": {
+        "covered": 52308,
+        "truth_pixels": 61716,
+        "coverage": 0.8475597900058331,
+        "pixel_oracle_f1_upper": 0.917491054514839
+      },
+      "oracle": {
+        "lower": 0.7373590822662185,
+        "upper": 0.7373590822662185,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          33892,
+          53719,
+          27824
+        ]
+      ],
+      "anychange": [
+        36417,
+        69361,
+        25299
+      ]
+    },
+    "train_2404.png": {
+      "coverage": {
+        "covered": 37607,
+        "truth_pixels": 37684,
+        "coverage": 0.9979566924954888,
+        "pixel_oracle_f1_upper": 0.9989773014038863
+      },
+      "oracle": {
+        "lower": 0.8074498649247438,
+        "upper": 0.8074498649247439,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          19678,
+          2983,
+          18006
+        ]
+      ],
+      "anychange": [
+        15327,
+        12326,
+        22357
+      ]
+    },
+    "train_243.png": {
+      "coverage": {
+        "covered": 30433,
+        "truth_pixels": 32822,
+        "coverage": 0.927213454390348,
+        "pixel_oracle_f1_upper": 0.96223223460596
+      },
+      "oracle": {
+        "lower": 0.7786126098868774,
+        "upper": 0.7786126098868774,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          21569,
+          26428,
+          11253
+        ]
+      ],
+      "anychange": [
+        9691,
+        55154,
+        23131
+      ]
+    },
+    "train_2447.png": {
+      "coverage": {
+        "covered": 15127,
+        "truth_pixels": 15127,
+        "coverage": 1.0,
+        "pixel_oracle_f1_upper": 1.0
+      },
+      "oracle": {
+        "lower": 0.9088080269257637,
+        "upper": 0.9088080269257637,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          14525,
+          76325,
+          602
+        ]
+      ],
+      "anychange": [
+        10537,
+        28269,
+        4590
+      ]
+    },
+    "train_2465.png": {
+      "coverage": {
+        "covered": 54022,
+        "truth_pixels": 70332,
+        "coverage": 0.768099869191833,
+        "pixel_oracle_f1_upper": 0.8688421763674671
+      },
+      "oracle": {
+        "lower": 0.808898006282454,
+        "upper": 0.808898006282454,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          52158,
+          38527,
+          18174
+        ]
+      ],
+      "anychange": [
+        38891,
+        32623,
+        31441
+      ]
+    },
+    "train_2468.png": {
+      "coverage": {
+        "covered": 28889,
+        "truth_pixels": 32584,
+        "coverage": 0.8866007856616744,
+        "pixel_oracle_f1_upper": 0.9398923104452361
+      },
+      "oracle": {
+        "lower": 0.8690341045360792,
+        "upper": 0.8690341045360792,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          23641,
+          35426,
+          8943
+        ]
+      ],
+      "anychange": [
+        24904,
+        51607,
+        7680
+      ]
+    },
+    "train_2472.png": {
+      "coverage": {
+        "covered": 32307,
+        "truth_pixels": 32944,
+        "coverage": 0.9806641573579408,
+        "pixel_oracle_f1_upper": 0.9902376975065517
+      },
+      "oracle": {
+        "lower": 0.9177203918076581,
+        "upper": 0.9177203918076581,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          27363,
+          28801,
+          5581
+        ]
+      ],
+      "anychange": [
+        17091,
+        37275,
+        15853
+      ]
+    },
+    "train_2492.png": {
+      "coverage": {
+        "covered": 55860,
+        "truth_pixels": 55931,
+        "coverage": 0.9987305787488155,
+        "pixel_oracle_f1_upper": 0.9993648862609691
+      },
+      "oracle": {
+        "lower": 0.9780371180808818,
+        "upper": 0.9780371180808818,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          53934,
+          6595,
+          1997
+        ]
+      ],
+      "anychange": [
+        20282,
+        25052,
+        35649
+      ]
+    },
+    "train_2502.png": {
+      "coverage": {
+        "covered": 18333,
+        "truth_pixels": 19183,
+        "coverage": 0.9556899337955481,
+        "pixel_oracle_f1_upper": 0.9773430003198635
+      },
+      "oracle": {
+        "lower": 0.8608379932684918,
+        "upper": 0.8608379932684918,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          14410,
+          15249,
+          4773
+        ]
+      ],
+      "anychange": [
+        14290,
+        24322,
+        4893
+      ]
+    },
+    "train_2596.png": {
+      "coverage": {
+        "covered": 18738,
+        "truth_pixels": 18817,
+        "coverage": 0.9958016687038317,
+        "pixel_oracle_f1_upper": 0.9978964185860738
+      },
+      "oracle": {
+        "lower": 0.9222088309411636,
+        "upper": 0.9222088309411636,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          18550,
+          134761,
+          267
+        ]
+      ],
+      "anychange": [
+        18266,
+        134847,
+        551
+      ]
+    },
+    "train_2604.png": {
+      "coverage": {
+        "covered": 23448,
+        "truth_pixels": 23958,
+        "coverage": 0.9787127473077887,
+        "pixel_oracle_f1_upper": 0.9892418681179598
+      },
+      "oracle": {
+        "lower": 0.9321246870709844,
+        "upper": 0.9321246870709844,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          23254,
+          26266,
+          704
+        ]
+      ],
+      "anychange": [
+        20634,
+        68762,
+        3324
+      ]
+    },
+    "train_2617.png": {
+      "coverage": {
+        "covered": 80236,
+        "truth_pixels": 80671,
+        "coverage": 0.99460772768405,
+        "pixel_oracle_f1_upper": 0.9972965750402406
+      },
+      "oracle": {
+        "lower": 0.9466703018698048,
+        "upper": 0.9466703018698048,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          79271,
+          46435,
+          1400
+        ]
+      ],
+      "anychange": [
+        36529,
+        39120,
+        44142
+      ]
+    },
+    "train_2669.png": {
+      "coverage": {
+        "covered": 16307,
+        "truth_pixels": 18850,
+        "coverage": 0.8650928381962865,
+        "pixel_oracle_f1_upper": 0.9276673208749324
+      },
+      "oracle": {
+        "lower": 0.82942143818209,
+        "upper": 0.82942143818209,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          14699,
+          53795,
+          4151
+        ]
+      ],
+      "anychange": [
+        15443,
+        37225,
+        3407
+      ]
+    },
+    "train_268.png": {
+      "coverage": {
+        "covered": 19781,
+        "truth_pixels": 22394,
+        "coverage": 0.8833169598999732,
+        "pixel_oracle_f1_upper": 0.9380438648488441
+      },
+      "oracle": {
+        "lower": 0.6749849927107452,
+        "upper": 0.6749849927107452,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          2331,
+          8776,
+          20063
+        ]
+      ],
+      "anychange": [
+        11149,
+        34628,
+        11245
+      ]
+    },
+    "train_2711.png": {
+      "coverage": {
+        "covered": 40688,
+        "truth_pixels": 41800,
+        "coverage": 0.9733971291866028,
+        "pixel_oracle_f1_upper": 0.9865192512850354
+      },
+      "oracle": {
+        "lower": 0.879727921777511,
+        "upper": 0.8797279217775112,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          30672,
+          27668,
+          11128
+        ]
+      ],
+      "anychange": [
+        16721,
+        31084,
+        25079
+      ]
+    },
+    "train_2728.png": {
+      "coverage": {
+        "covered": 41941,
+        "truth_pixels": 58276,
+        "coverage": 0.7196959297137758,
+        "pixel_oracle_f1_upper": 0.8370037019667322
+      },
+      "oracle": {
+        "lower": 0.7109432666723886,
+        "upper": 0.7109432666723886,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          11561,
+          7878,
+          46715
+        ]
+      ],
+      "anychange": [
+        23292,
+        11591,
+        34984
+      ]
+    },
+    "train_2759.png": {
+      "coverage": {
+        "covered": 52191,
+        "truth_pixels": 52430,
+        "coverage": 0.9954415411024222,
+        "pixel_oracle_f1_upper": 0.9977155637969433
+      },
+      "oracle": {
+        "lower": 0.8929924332330128,
+        "upper": 0.8929924332330128,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          31775,
+          59732,
+          20655
+        ]
+      ],
+      "anychange": [
+        31466,
+        118827,
+        20964
+      ]
+    },
+    "train_276.png": {
+      "coverage": {
+        "covered": 41952,
+        "truth_pixels": 42898,
+        "coverage": 0.9779476898689916,
+        "pixel_oracle_f1_upper": 0.9888509133765468
+      },
+      "oracle": {
+        "lower": 0.8567702477852228,
+        "upper": 0.8567702477852228,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          32917,
+          28479,
+          9981
+        ]
+      ],
+      "anychange": [
+        22254,
+        26609,
+        20644
+      ]
+    },
+    "train_2767.png": {
+      "coverage": {
+        "covered": 47217,
+        "truth_pixels": 48178,
+        "coverage": 0.9800531362862718,
+        "pixel_oracle_f1_upper": 0.9899260967555952
+      },
+      "oracle": {
+        "lower": 0.8867617561845331,
+        "upper": 0.8867617561845331,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          40078,
+          23809,
+          8100
+        ]
+      ],
+      "anychange": [
+        32706,
+        31468,
+        15472
+      ]
+    },
+    "train_2772.png": {
+      "coverage": {
+        "covered": 45999,
+        "truth_pixels": 46711,
+        "coverage": 0.9847573376720686,
+        "pixel_oracle_f1_upper": 0.9923201380649337
+      },
+      "oracle": {
+        "lower": 0.7807779590099992,
+        "upper": 0.7807779590099994,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          20240,
+          18083,
+          26471
+        ]
+      ],
+      "anychange": [
+        13910,
+        17478,
+        32801
+      ]
+    },
+    "train_2795.png": {
+      "coverage": {
+        "covered": 31984,
+        "truth_pixels": 47183,
+        "coverage": 0.6778712671936926,
+        "pixel_oracle_f1_upper": 0.8080134399434108
+      },
+      "oracle": {
+        "lower": 0.7114415107237461,
+        "upper": 0.7114415107237461,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          24973,
+          17557,
+          22210
+        ]
+      ],
+      "anychange": [
+        17734,
+        28572,
+        29449
+      ]
+    },
+    "train_2797.png": {
+      "coverage": {
+        "covered": 17595,
+        "truth_pixels": 18002,
+        "coverage": 0.9773914009554494,
+        "pixel_oracle_f1_upper": 0.9885664522291204
+      },
+      "oracle": {
+        "lower": 0.7282184655396619,
+        "upper": 0.728218465539662,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          9843,
+          12445,
+          8159
+        ]
+      ],
+      "anychange": [
+        7157,
+        22451,
+        10845
+      ]
+    },
+    "train_281.png": {
+      "coverage": {
+        "covered": 7903,
+        "truth_pixels": 9232,
+        "coverage": 0.8560441941074524,
+        "pixel_oracle_f1_upper": 0.922439451415232
+      },
+      "oracle": {
+        "lower": 0.46125255528712134,
+        "upper": 0.46125255528712134,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          4818,
+          26167,
+          4414
+        ]
+      ],
+      "anychange": [
+        4732,
+        34439,
+        4500
+      ]
+    },
+    "train_283.png": {
+      "coverage": {
+        "covered": 43351,
+        "truth_pixels": 48691,
+        "coverage": 0.8903288081986404,
+        "pixel_oracle_f1_upper": 0.9419830077573281
+      },
+      "oracle": {
+        "lower": 0.8685177311922905,
+        "upper": 0.8685177311922906,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          36084,
+          19238,
+          12607
+        ]
+      ],
+      "anychange": [
+        30904,
+        29446,
+        17787
+      ]
+    },
+    "train_2834.png": {
+      "coverage": {
+        "covered": 20685,
+        "truth_pixels": 21033,
+        "coverage": 0.9834545713878191,
+        "pixel_oracle_f1_upper": 0.9916582770027327
+      },
+      "oracle": {
+        "lower": 0.8734210297064204,
+        "upper": 0.8734210297064204,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          14751,
+          31490,
+          6282
+        ]
+      ],
+      "anychange": [
+        10604,
+        21905,
+        10429
+      ]
+    },
+    "train_2855.png": {
+      "coverage": {
+        "covered": 49837,
+        "truth_pixels": 77007,
+        "coverage": 0.6471749321490254,
+        "pixel_oracle_f1_upper": 0.7857998801677651
+      },
+      "oracle": {
+        "lower": 0.7389016947075806,
+        "upper": 0.7389016947075807,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          37170,
+          23299,
+          39837
+        ]
+      ],
+      "anychange": [
+        22724,
+        21729,
+        54283
+      ]
+    },
+    "train_2864.png": {
+      "coverage": {
+        "covered": 41774,
+        "truth_pixels": 44790,
+        "coverage": 0.9326635409689663,
+        "pixel_oracle_f1_upper": 0.9651587264913821
+      },
+      "oracle": {
+        "lower": 0.8569632799091063,
+        "upper": 0.8569632799091064,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          30729,
+          44958,
+          14061
+        ]
+      ],
+      "anychange": [
+        29487,
+        32312,
+        15303
+      ]
+    },
+    "train_2948.png": {
+      "coverage": {
+        "covered": 78570,
+        "truth_pixels": 79232,
+        "coverage": 0.9916447899838449,
+        "pixel_oracle_f1_upper": 0.9958048693932903
+      },
+      "oracle": {
+        "lower": 0.8631336813235424,
+        "upper": 0.8631336813235426,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          61871,
+          97447,
+          17361
+        ]
+      ],
+      "anychange": [
+        65573,
+        88393,
+        13659
+      ]
+    },
+    "train_2961.png": {
+      "coverage": {
+        "covered": 133733,
+        "truth_pixels": 135720,
+        "coverage": 0.9853595638078396,
+        "pixel_oracle_f1_upper": 0.9926258011601281
+      },
+      "oracle": {
+        "lower": 0.944489002683777,
+        "upper": 0.944489002683777,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          129859,
+          26764,
+          5861
+        ]
+      ],
+      "anychange": [
+        124458,
+        37859,
+        11262
+      ]
+    },
+    "train_343.png": {
+      "coverage": {
+        "covered": 65657,
+        "truth_pixels": 66556,
+        "coverage": 0.986492577678947,
+        "pixel_oracle_f1_upper": 0.9932003660759532
+      },
+      "oracle": {
+        "lower": 0.8478315834298109,
+        "upper": 0.8478315834298109,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          62673,
+          36780,
+          3883
+        ]
+      ],
+      "anychange": [
+        64380,
+        60974,
+        2176
+      ]
+    },
+    "train_344.png": {
+      "coverage": {
+        "covered": 127217,
+        "truth_pixels": 135222,
+        "coverage": 0.9408010530830782,
+        "pixel_oracle_f1_upper": 0.969497673745137
+      },
+      "oracle": {
+        "lower": 0.8821101996308148,
+        "upper": 0.8821101996308148,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          92313,
+          18040,
+          42909
+        ]
+      ],
+      "anychange": [
+        75510,
+        81473,
+        59712
+      ]
+    },
+    "train_353.png": {
+      "coverage": {
+        "covered": 19696,
+        "truth_pixels": 21283,
+        "coverage": 0.9254334445331955,
+        "pixel_oracle_f1_upper": 0.9612728470680104
+      },
+      "oracle": {
+        "lower": 0.8445629722592621,
+        "upper": 0.8445629722592621,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          18011,
+          13310,
+          3272
+        ]
+      ],
+      "anychange": [
+        17124,
+        30115,
+        4159
+      ]
+    },
+    "train_39.png": {
+      "coverage": {
+        "covered": 62341,
+        "truth_pixels": 63218,
+        "coverage": 0.9861273687873707,
+        "pixel_oracle_f1_upper": 0.9930152358652108
+      },
+      "oracle": {
+        "lower": 0.6493861583019929,
+        "upper": 0.6493861583019929,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          15965,
+          12998,
+          47253
+        ]
+      ],
+      "anychange": [
+        19173,
+        18356,
+        44045
+      ]
+    },
+    "train_395.png": {
+      "coverage": {
+        "covered": 14790,
+        "truth_pixels": 14791,
+        "coverage": 0.9999323913190453,
+        "pixel_oracle_f1_upper": 0.9999661945167506
+      },
+      "oracle": {
+        "lower": 0.41977593765221627,
+        "upper": 0.41977593765221627,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          1284,
+          12583,
+          13507
+        ]
+      ],
+      "anychange": [
+        3548,
+        25491,
+        11243
+      ]
+    },
+    "train_421.png": {
+      "coverage": {
+        "covered": 23009,
+        "truth_pixels": 32698,
+        "coverage": 0.7036821823964768,
+        "pixel_oracle_f1_upper": 0.8260721273807601
+      },
+      "oracle": {
+        "lower": 0.6535670089300646,
+        "upper": 0.6535670089300646,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          5186,
+          5210,
+          27512
+        ]
+      ],
+      "anychange": [
+        10770,
+        10891,
+        21928
+      ]
+    },
+    "train_433.png": {
+      "coverage": {
+        "covered": 29300,
+        "truth_pixels": 33809,
+        "coverage": 0.8666331450205567,
+        "pixel_oracle_f1_upper": 0.9285521874851448
+      },
+      "oracle": {
+        "lower": 0.7913778809484331,
+        "upper": 0.7913778809484331,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          22342,
+          3615,
+          11467
+        ]
+      ],
+      "anychange": [
+        22992,
+        13851,
+        10817
+      ]
+    },
+    "train_47.png": {
+      "coverage": {
+        "covered": 17481,
+        "truth_pixels": 23341,
+        "coverage": 0.7489396341202177,
+        "pixel_oracle_f1_upper": 0.8564499534564696
+      },
+      "oracle": {
+        "lower": 0.7501762114537445,
+        "upper": 0.7501762114537445,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          7983,
+          6221,
+          15358
+        ]
+      ],
+      "anychange": [
+        10220,
+        11923,
+        13121
+      ]
+    },
+    "train_502.png": {
+      "coverage": {
+        "covered": 16487,
+        "truth_pixels": 16684,
+        "coverage": 0.9881922800287701,
+        "pixel_oracle_f1_upper": 0.9940610774471677
+      },
+      "oracle": {
+        "lower": 0.8437759017651574,
+        "upper": 0.8437759017651574,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          13732,
+          10839,
+          2952
+        ]
+      ],
+      "anychange": [
+        6411,
+        41636,
+        10273
+      ]
+    },
+    "train_508.png": {
+      "coverage": {
+        "covered": 58157,
+        "truth_pixels": 58917,
+        "coverage": 0.9871004973097748,
+        "pixel_oracle_f1_upper": 0.9935083793156465
+      },
+      "oracle": {
+        "lower": 0.9326670173592846,
+        "upper": 0.9326670173592846,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          26458,
+          24023,
+          32459
+        ]
+      ],
+      "anychange": [
+        24336,
+        31002,
+        34581
+      ]
+    },
+    "train_519.png": {
+      "coverage": {
+        "covered": 99392,
+        "truth_pixels": 106900,
+        "coverage": 0.9297661365762395,
+        "pixel_oracle_f1_upper": 0.963604987105656
+      },
+      "oracle": {
+        "lower": 0.8999518363569398,
+        "upper": 0.8999518363569411,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          89314,
+          13804,
+          17586
+        ]
+      ],
+      "anychange": [
+        93992,
+        42078,
+        12908
+      ]
+    },
+    "train_559.png": {
+      "coverage": {
+        "covered": 14873,
+        "truth_pixels": 16915,
+        "coverage": 0.8792787466745492,
+        "pixel_oracle_f1_upper": 0.9357619227381402
+      },
+      "oracle": {
+        "lower": 0.7925281102647805,
+        "upper": 0.7925281102647806,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          2793,
+          3055,
+          14122
+        ]
+      ],
+      "anychange": [
+        7994,
+        24753,
+        8921
+      ]
+    },
+    "train_609.png": {
+      "coverage": {
+        "covered": 13440,
+        "truth_pixels": 14222,
+        "coverage": 0.9450147658557165,
+        "pixel_oracle_f1_upper": 0.9717301713542044
+      },
+      "oracle": {
+        "lower": 0.8915222683660318,
+        "upper": 0.8915222683660318,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          9417,
+          5771,
+          4805
+        ]
+      ],
+      "anychange": [
+        3282,
+        32170,
+        10940
+      ]
+    },
+    "train_612.png": {
+      "coverage": {
+        "covered": 22753,
+        "truth_pixels": 25244,
+        "coverage": 0.9013230866740611,
+        "pixel_oracle_f1_upper": 0.9481009229743526
+      },
+      "oracle": {
+        "lower": 0.8011029340375542,
+        "upper": 0.8011029340375542,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          10073,
+          11861,
+          15171
+        ]
+      ],
+      "anychange": [
+        8129,
+        36954,
+        17115
+      ]
+    },
+    "train_618.png": {
+      "coverage": {
+        "covered": 20479,
+        "truth_pixels": 20613,
+        "coverage": 0.9934992480473488,
+        "pixel_oracle_f1_upper": 0.9967390246276647
+      },
+      "oracle": {
+        "lower": 0.8865169337088491,
+        "upper": 0.8865169337088491,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          14958,
+          35361,
+          5655
+        ]
+      ],
+      "anychange": [
+        18821,
+        51655,
+        1792
+      ]
+    },
+    "train_619.png": {
+      "coverage": {
+        "covered": 10917,
+        "truth_pixels": 13496,
+        "coverage": 0.8089063426200356,
+        "pixel_oracle_f1_upper": 0.8943595625281612
+      },
+      "oracle": {
+        "lower": 0.8020520219630476,
+        "upper": 0.8020520219630476,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          8461,
+          9601,
+          5035
+        ]
+      ],
+      "anychange": [
+        9913,
+        27557,
+        3583
+      ]
+    },
+    "train_624.png": {
+      "coverage": {
+        "covered": 12363,
+        "truth_pixels": 14560,
+        "coverage": 0.8491071428571428,
+        "pixel_oracle_f1_upper": 0.9183969097054563
+      },
+      "oracle": {
+        "lower": 0.778017477787122,
+        "upper": 0.778017477787122,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          7121,
+          11042,
+          7439
+        ]
+      ],
+      "anychange": [
+        5685,
+        33405,
+        8875
+      ]
+    },
+    "train_65.png": {
+      "coverage": {
+        "covered": 26600,
+        "truth_pixels": 37999,
+        "coverage": 0.7000184215374089,
+        "pixel_oracle_f1_upper": 0.8235421600953575
+      },
+      "oracle": {
+        "lower": 0.593554377030962,
+        "upper": 0.593554377030962,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          2957,
+          2938,
+          35042
+        ]
+      ],
+      "anychange": [
+        13001,
+        27435,
+        24998
+      ]
+    },
+    "train_659.png": {
+      "coverage": {
+        "covered": 13479,
+        "truth_pixels": 14130,
+        "coverage": 0.953927813163482,
+        "pixel_oracle_f1_upper": 0.9764207323698794
+      },
+      "oracle": {
+        "lower": 0.6361366360367559,
+        "upper": 0.636136636036756,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          2607,
+          27223,
+          11523
+        ]
+      ],
+      "anychange": [
+        4962,
+        60488,
+        9168
+      ]
+    },
+    "train_660.png": {
+      "coverage": {
+        "covered": 79302,
+        "truth_pixels": 81073,
+        "coverage": 0.9781554894971198,
+        "pixel_oracle_f1_upper": 0.9889571317225253
+      },
+      "oracle": {
+        "lower": 0.8910288018099023,
+        "upper": 0.8910288018099023,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          74741,
+          31513,
+          6332
+        ]
+      ],
+      "anychange": [
+        43936,
+        58928,
+        37137
+      ]
+    },
+    "train_665.png": {
+      "coverage": {
+        "covered": 11335,
+        "truth_pixels": 11784,
+        "coverage": 0.9618974881194841,
+        "pixel_oracle_f1_upper": 0.980578744755396
+      },
+      "oracle": {
+        "lower": 0.7638510038903547,
+        "upper": 0.7638510038903547,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          3977,
+          33316,
+          7807
+        ]
+      ],
+      "anychange": [
+        4719,
+        65691,
+        7065
+      ]
+    },
+    "train_677.png": {
+      "coverage": {
+        "covered": 23555,
+        "truth_pixels": 43198,
+        "coverage": 0.5452798740682439,
+        "pixel_oracle_f1_upper": 0.7057360717870358
+      },
+      "oracle": {
+        "lower": 0.570531356719484,
+        "upper": 0.570531356719484,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          8140,
+          12396,
+          35058
+        ]
+      ],
+      "anychange": [
+        13326,
+        50927,
+        29872
+      ]
+    },
+    "train_700.png": {
+      "coverage": {
+        "covered": 80322,
+        "truth_pixels": 80322,
+        "coverage": 1.0,
+        "pixel_oracle_f1_upper": 1.0
+      },
+      "oracle": {
+        "lower": 0.7888583354764683,
+        "upper": 0.7888583354764684,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          22995,
+          35496,
+          57327
+        ]
+      ],
+      "anychange": [
+        25712,
+        20762,
+        54610
+      ]
+    },
+    "train_703.png": {
+      "coverage": {
+        "covered": 46760,
+        "truth_pixels": 47030,
+        "coverage": 0.9942589836274718,
+        "pixel_oracle_f1_upper": 0.9971212282759356
+      },
+      "oracle": {
+        "lower": 0.8756104442949233,
+        "upper": 0.8756104442949233,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          30950,
+          18134,
+          16080
+        ]
+      ],
+      "anychange": [
+        23115,
+        25481,
+        23915
+      ]
+    },
+    "train_708.png": {
+      "coverage": {
+        "covered": 16404,
+        "truth_pixels": 22335,
+        "coverage": 0.7344526527871055,
+        "pixel_oracle_f1_upper": 0.8468984744056377
+      },
+      "oracle": {
+        "lower": 0.5846318399494372,
+        "upper": 0.5846318399494372,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          3071,
+          24483,
+          19264
+        ]
+      ],
+      "anychange": [
+        5335,
+        29869,
+        17000
+      ]
+    },
+    "train_711.png": {
+      "coverage": {
+        "covered": 21931,
+        "truth_pixels": 22250,
+        "coverage": 0.9856629213483146,
+        "pixel_oracle_f1_upper": 0.9927797016817184
+      },
+      "oracle": {
+        "lower": 0.8770003721622628,
+        "upper": 0.8770003721622628,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          10936,
+          7973,
+          11314
+        ]
+      ],
+      "anychange": [
+        15709,
+        24768,
+        6541
+      ]
+    },
+    "train_725.png": {
+      "coverage": {
+        "covered": 49765,
+        "truth_pixels": 49766,
+        "coverage": 0.9999799059598923,
+        "pixel_oracle_f1_upper": 0.9999899528790025
+      },
+      "oracle": {
+        "lower": 0.907541131580027,
+        "upper": 0.9075411315800271,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          43298,
+          36755,
+          6468
+        ]
+      ],
+      "anychange": [
+        24513,
+        32759,
+        25253
+      ]
+    },
+    "train_763.png": {
+      "coverage": {
+        "covered": 50380,
+        "truth_pixels": 50487,
+        "coverage": 0.9978806425416444,
+        "pixel_oracle_f1_upper": 0.9989391971606174
+      },
+      "oracle": {
+        "lower": 0.9016842532467533,
+        "upper": 0.9016842532467533,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          42989,
+          63077,
+          7498
+        ]
+      ],
+      "anychange": [
+        41829,
+        74417,
+        8658
+      ]
+    },
+    "train_79.png": {
+      "coverage": {
+        "covered": 34085,
+        "truth_pixels": 39357,
+        "coverage": 0.8660467007139772,
+        "pixel_oracle_f1_upper": 0.9282154625418698
+      },
+      "oracle": {
+        "lower": 0.8383110195674562,
+        "upper": 0.8383110195674562,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          28436,
+          8592,
+          10921
+        ]
+      ],
+      "anychange": [
+        14613,
+        17603,
+        24744
+      ]
+    },
+    "train_805.png": {
+      "coverage": {
+        "covered": 28545,
+        "truth_pixels": 29599,
+        "coverage": 0.9643906888746241,
+        "pixel_oracle_f1_upper": 0.9818725921849202
+      },
+      "oracle": {
+        "lower": 0.81676366137999,
+        "upper": 0.81676366137999,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          11850,
+          12464,
+          17749
+        ]
+      ],
+      "anychange": [
+        10377,
+        43915,
+        19222
+      ]
+    },
+    "train_820.png": {
+      "coverage": {
+        "covered": 45154,
+        "truth_pixels": 64001,
+        "coverage": 0.7055202262464649,
+        "pixel_oracle_f1_upper": 0.8273372726856305
+      },
+      "oracle": {
+        "lower": 0.6991567660766723,
+        "upper": 0.6991567660766723,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          30813,
+          16811,
+          33188
+        ]
+      ],
+      "anychange": [
+        26194,
+        35050,
+        37807
+      ]
+    },
+    "train_833.png": {
+      "coverage": {
+        "covered": 13014,
+        "truth_pixels": 13080,
+        "coverage": 0.994954128440367,
+        "pixel_oracle_f1_upper": 0.9974706829156128
+      },
+      "oracle": {
+        "lower": 0.8335118327863189,
+        "upper": 0.8335118327863189,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          11628,
+          42146,
+          1452
+        ]
+      ],
+      "anychange": [
+        10691,
+        59830,
+        2389
+      ]
+    },
+    "train_853.png": {
+      "coverage": {
+        "covered": 65979,
+        "truth_pixels": 71131,
+        "coverage": 0.9275702576935513,
+        "pixel_oracle_f1_upper": 0.9624243308292612
+      },
+      "oracle": {
+        "lower": 0.8315521263233447,
+        "upper": 0.8315521263233447,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          53771,
+          53693,
+          17360
+        ]
+      ],
+      "anychange": [
+        25092,
+        51401,
+        46039
+      ]
+    },
+    "train_869.png": {
+      "coverage": {
+        "covered": 72263,
+        "truth_pixels": 76581,
+        "coverage": 0.9436152570480929,
+        "pixel_oracle_f1_upper": 0.9709897610921502
+      },
+      "oracle": {
+        "lower": 0.9044427564046545,
+        "upper": 0.9044427564046545,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          53145,
+          30769,
+          23436
+        ]
+      ],
+      "anychange": [
+        55221,
+        43369,
+        21360
+      ]
+    },
+    "train_876.png": {
+      "coverage": {
+        "covered": 63608,
+        "truth_pixels": 64474,
+        "coverage": 0.986568229053572,
+        "pixel_oracle_f1_upper": 0.9932387064536781
+      },
+      "oracle": {
+        "lower": 0.9730565541768139,
+        "upper": 0.973056554176814,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          62232,
+          17924,
+          2242
+        ]
+      ],
+      "anychange": [
+        39538,
+        40929,
+        24936
+      ]
+    },
+    "train_891.png": {
+      "coverage": {
+        "covered": 50763,
+        "truth_pixels": 53785,
+        "coverage": 0.9438133308543274,
+        "pixel_oracle_f1_upper": 0.9710946168267207
+      },
+      "oracle": {
+        "lower": 0.7439250889955116,
+        "upper": 0.7439250889955116,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          35979,
+          42617,
+          17806
+        ]
+      ],
+      "anychange": [
+        13988,
+        44614,
+        39797
+      ]
+    },
+    "train_937.png": {
+      "coverage": {
+        "covered": 98747,
+        "truth_pixels": 99147,
+        "coverage": 0.9959655864524393,
+        "pixel_oracle_f1_upper": 0.9979787158781974
+      },
+      "oracle": {
+        "lower": 0.8907218706424971,
+        "upper": 0.8907218706424971,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          96686,
+          40317,
+          2461
+        ]
+      ],
+      "anychange": [
+        84084,
+        100972,
+        15063
+      ]
+    },
+    "train_943.png": {
+      "coverage": {
+        "covered": 137185,
+        "truth_pixels": 141468,
+        "coverage": 0.9697246020301411,
+        "pixel_oracle_f1_upper": 0.9846296289650569
+      },
+      "oracle": {
+        "lower": 0.9287142449096176,
+        "upper": 0.9287142449096176,
+        "exact": true,
+        "status": "optimal"
+      },
+      "counts": [
+        [
+          134027,
+          61421,
+          7441
+        ]
+      ],
+      "anychange": [
+        25885,
+        37332,
+        115583
+      ]
+    }
+  },
+  "summary": {
+    "scores": [
+      {
+        "threshold": 0.22,
+        "tp": 4539386,
+        "fp": 3503788,
+        "fn": 2329862,
+        "precision": 0.5643774460182013,
+        "recall": 0.660827211362874,
+        "f1": 0.6088060007958466,
+        "iou": 0.4376140215844233
+      }
+    ],
+    "coverage": 0.9212113174542541,
+    "pixel_oracle_f1_upper": 0.9589901007609373,
+    "whole_proposal_oracles": {
+      "train_1032.png": {
+        "lower": 0.9154925468918643,
+        "upper": 0.9154925468918643,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1049.png": {
+        "lower": 0.9043005077162821,
+        "upper": 0.9043005077162821,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1114.png": {
+        "lower": 0.7845423802770808,
+        "upper": 0.7845423802770809,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1119.png": {
+        "lower": 0.9092147685907437,
+        "upper": 0.9092147685907437,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1127.png": {
+        "lower": 0.6900931636268206,
+        "upper": 0.6900931636268206,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1146.png": {
+        "lower": 0.8573735948537534,
+        "upper": 0.8573735948537534,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1150.png": {
+        "lower": 0.9568107148701552,
+        "upper": 0.9568107148701552,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1160.png": {
+        "lower": 0.8857808857808858,
+        "upper": 0.8857808857808859,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1192.png": {
+        "lower": 0.869300029044438,
+        "upper": 0.869300029044438,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1224.png": {
+        "lower": 0.7633218996086768,
+        "upper": 0.7633218996086768,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1343.png": {
+        "lower": 0.9333494227907164,
+        "upper": 0.9333494227907164,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1347.png": {
+        "lower": 0.7935228827733009,
+        "upper": 0.793522882773301,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1360.png": {
+        "lower": 0.921090084866375,
+        "upper": 0.921090084866375,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1373.png": {
+        "lower": 0.816432115210131,
+        "upper": 0.8164321152101311,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1375.png": {
+        "lower": 0.9145968715485577,
+        "upper": 0.914596871548558,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_139.png": {
+        "lower": 0.6816919060052219,
+        "upper": 0.6816919060052219,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1392.png": {
+        "lower": 0.8518665424457379,
+        "upper": 0.8518665424457379,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1394.png": {
+        "lower": 0.5410740767753386,
+        "upper": 0.5410740767753386,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1430.png": {
+        "lower": 0.8146200167695709,
+        "upper": 0.8146200167695709,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1432.png": {
+        "lower": 0.9068254041194914,
+        "upper": 0.9068254041194914,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1433.png": {
+        "lower": 0.8897605659350626,
+        "upper": 0.8897605659350626,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1444.png": {
+        "lower": 0.6872175710232249,
+        "upper": 0.6872175710232249,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1450.png": {
+        "lower": 0.780764264192453,
+        "upper": 0.780764264192453,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_146.png": {
+        "lower": 0.7654983081146651,
+        "upper": 0.7654983081146651,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1479.png": {
+        "lower": 0.7304153720853066,
+        "upper": 0.7304153720853066,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_148.png": {
+        "lower": 0.8033579033579034,
+        "upper": 0.8033579033579034,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1490.png": {
+        "lower": 0.8785660342462587,
+        "upper": 0.8785660342462587,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1537.png": {
+        "lower": 0.9031503829901238,
+        "upper": 0.9031503829901238,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1568.png": {
+        "lower": 0.9041541361497618,
+        "upper": 0.9041541361497619,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1573.png": {
+        "lower": 0.9052497279447634,
+        "upper": 0.9052497279447634,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1575.png": {
+        "lower": 0.8650241949350298,
+        "upper": 0.86502419493503,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1608.png": {
+        "lower": 0.88043969962906,
+        "upper": 0.88043969962906,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1633.png": {
+        "lower": 0.7484088356420816,
+        "upper": 0.7484088356420817,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1660.png": {
+        "lower": 0.7279719913389676,
+        "upper": 0.7279719913389677,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1681.png": {
+        "lower": 0.8963437063194292,
+        "upper": 0.8963437063194292,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1683.png": {
+        "lower": 0.8795735719926296,
+        "upper": 0.8795735719926296,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1703.png": {
+        "lower": 0.908936170212766,
+        "upper": 0.908936170212766,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1747.png": {
+        "lower": 0.8580816773587858,
+        "upper": 0.8580816773587858,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1780.png": {
+        "lower": 0.7911289261384916,
+        "upper": 0.7911289261384916,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1799.png": {
+        "lower": 0.7825792762388478,
+        "upper": 0.7825792762388479,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1800.png": {
+        "lower": 0.8594721220668854,
+        "upper": 0.8594721220668854,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1804.png": {
+        "lower": 0.8400293909255517,
+        "upper": 0.8400293909255518,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1893.png": {
+        "lower": 0.7209468674595378,
+        "upper": 0.7209468674595378,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_191.png": {
+        "lower": 0.897243287558926,
+        "upper": 0.897243287558926,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1961.png": {
+        "lower": 0.866428467963884,
+        "upper": 0.866428467963884,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1966.png": {
+        "lower": 0.8732148900169204,
+        "upper": 0.8732148900169204,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_1979.png": {
+        "lower": 0.9156589660928401,
+        "upper": 0.9156589660928401,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2020.png": {
+        "lower": 0.7938993116479957,
+        "upper": 0.7938993116479957,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2037.png": {
+        "lower": 0.7337369573618446,
+        "upper": 0.7337369573618446,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2068.png": {
+        "lower": 0.8943348090342913,
+        "upper": 0.8943348090342913,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2072.png": {
+        "lower": 0.8231399087373512,
+        "upper": 0.8231399087373512,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2099.png": {
+        "lower": 0.9265092009214799,
+        "upper": 0.9265092009214799,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_214.png": {
+        "lower": 0.7647166697230882,
+        "upper": 0.7647166697230883,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2149.png": {
+        "lower": 0.7202819302260997,
+        "upper": 0.7202819302260997,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2166.png": {
+        "lower": 0.8471427185407975,
+        "upper": 0.8471427185407977,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2170.png": {
+        "lower": 0.9197926197011284,
+        "upper": 0.9197926197011284,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2184.png": {
+        "lower": 0.822354601034645,
+        "upper": 0.822354601034645,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2246.png": {
+        "lower": 0.9101121539784474,
+        "upper": 0.9101121539784475,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2262.png": {
+        "lower": 0.9119609208627285,
+        "upper": 0.9119609208627285,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2286.png": {
+        "lower": 0.7451820601455598,
+        "upper": 0.7451820601455598,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2336.png": {
+        "lower": 0.8478056069908716,
+        "upper": 0.8478056069908716,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2381.png": {
+        "lower": 0.7373590822662185,
+        "upper": 0.7373590822662185,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2404.png": {
+        "lower": 0.8074498649247438,
+        "upper": 0.8074498649247439,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_243.png": {
+        "lower": 0.7786126098868774,
+        "upper": 0.7786126098868774,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2447.png": {
+        "lower": 0.9088080269257637,
+        "upper": 0.9088080269257637,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2465.png": {
+        "lower": 0.808898006282454,
+        "upper": 0.808898006282454,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2468.png": {
+        "lower": 0.8690341045360792,
+        "upper": 0.8690341045360792,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2472.png": {
+        "lower": 0.9177203918076581,
+        "upper": 0.9177203918076581,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2492.png": {
+        "lower": 0.9780371180808818,
+        "upper": 0.9780371180808818,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2502.png": {
+        "lower": 0.8608379932684918,
+        "upper": 0.8608379932684918,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2596.png": {
+        "lower": 0.9222088309411636,
+        "upper": 0.9222088309411636,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2604.png": {
+        "lower": 0.9321246870709844,
+        "upper": 0.9321246870709844,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2617.png": {
+        "lower": 0.9466703018698048,
+        "upper": 0.9466703018698048,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2669.png": {
+        "lower": 0.82942143818209,
+        "upper": 0.82942143818209,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_268.png": {
+        "lower": 0.6749849927107452,
+        "upper": 0.6749849927107452,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2711.png": {
+        "lower": 0.879727921777511,
+        "upper": 0.8797279217775112,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2728.png": {
+        "lower": 0.7109432666723886,
+        "upper": 0.7109432666723886,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2759.png": {
+        "lower": 0.8929924332330128,
+        "upper": 0.8929924332330128,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_276.png": {
+        "lower": 0.8567702477852228,
+        "upper": 0.8567702477852228,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2767.png": {
+        "lower": 0.8867617561845331,
+        "upper": 0.8867617561845331,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2772.png": {
+        "lower": 0.7807779590099992,
+        "upper": 0.7807779590099994,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2795.png": {
+        "lower": 0.7114415107237461,
+        "upper": 0.7114415107237461,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2797.png": {
+        "lower": 0.7282184655396619,
+        "upper": 0.728218465539662,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_281.png": {
+        "lower": 0.46125255528712134,
+        "upper": 0.46125255528712134,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_283.png": {
+        "lower": 0.8685177311922905,
+        "upper": 0.8685177311922906,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2834.png": {
+        "lower": 0.8734210297064204,
+        "upper": 0.8734210297064204,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2855.png": {
+        "lower": 0.7389016947075806,
+        "upper": 0.7389016947075807,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2864.png": {
+        "lower": 0.8569632799091063,
+        "upper": 0.8569632799091064,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2948.png": {
+        "lower": 0.8631336813235424,
+        "upper": 0.8631336813235426,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_2961.png": {
+        "lower": 0.944489002683777,
+        "upper": 0.944489002683777,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_343.png": {
+        "lower": 0.8478315834298109,
+        "upper": 0.8478315834298109,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_344.png": {
+        "lower": 0.8821101996308148,
+        "upper": 0.8821101996308148,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_353.png": {
+        "lower": 0.8445629722592621,
+        "upper": 0.8445629722592621,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_39.png": {
+        "lower": 0.6493861583019929,
+        "upper": 0.6493861583019929,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_395.png": {
+        "lower": 0.41977593765221627,
+        "upper": 0.41977593765221627,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_421.png": {
+        "lower": 0.6535670089300646,
+        "upper": 0.6535670089300646,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_433.png": {
+        "lower": 0.7913778809484331,
+        "upper": 0.7913778809484331,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_47.png": {
+        "lower": 0.7501762114537445,
+        "upper": 0.7501762114537445,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_502.png": {
+        "lower": 0.8437759017651574,
+        "upper": 0.8437759017651574,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_508.png": {
+        "lower": 0.9326670173592846,
+        "upper": 0.9326670173592846,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_519.png": {
+        "lower": 0.8999518363569398,
+        "upper": 0.8999518363569411,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_559.png": {
+        "lower": 0.7925281102647805,
+        "upper": 0.7925281102647806,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_609.png": {
+        "lower": 0.8915222683660318,
+        "upper": 0.8915222683660318,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_612.png": {
+        "lower": 0.8011029340375542,
+        "upper": 0.8011029340375542,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_618.png": {
+        "lower": 0.8865169337088491,
+        "upper": 0.8865169337088491,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_619.png": {
+        "lower": 0.8020520219630476,
+        "upper": 0.8020520219630476,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_624.png": {
+        "lower": 0.778017477787122,
+        "upper": 0.778017477787122,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_65.png": {
+        "lower": 0.593554377030962,
+        "upper": 0.593554377030962,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_659.png": {
+        "lower": 0.6361366360367559,
+        "upper": 0.636136636036756,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_660.png": {
+        "lower": 0.8910288018099023,
+        "upper": 0.8910288018099023,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_665.png": {
+        "lower": 0.7638510038903547,
+        "upper": 0.7638510038903547,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_677.png": {
+        "lower": 0.570531356719484,
+        "upper": 0.570531356719484,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_700.png": {
+        "lower": 0.7888583354764683,
+        "upper": 0.7888583354764684,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_703.png": {
+        "lower": 0.8756104442949233,
+        "upper": 0.8756104442949233,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_708.png": {
+        "lower": 0.5846318399494372,
+        "upper": 0.5846318399494372,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_711.png": {
+        "lower": 0.8770003721622628,
+        "upper": 0.8770003721622628,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_725.png": {
+        "lower": 0.907541131580027,
+        "upper": 0.9075411315800271,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_763.png": {
+        "lower": 0.9016842532467533,
+        "upper": 0.9016842532467533,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_79.png": {
+        "lower": 0.8383110195674562,
+        "upper": 0.8383110195674562,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_805.png": {
+        "lower": 0.81676366137999,
+        "upper": 0.81676366137999,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_820.png": {
+        "lower": 0.6991567660766723,
+        "upper": 0.6991567660766723,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_833.png": {
+        "lower": 0.8335118327863189,
+        "upper": 0.8335118327863189,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_853.png": {
+        "lower": 0.8315521263233447,
+        "upper": 0.8315521263233447,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_869.png": {
+        "lower": 0.9044427564046545,
+        "upper": 0.9044427564046545,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_876.png": {
+        "lower": 0.9730565541768139,
+        "upper": 0.973056554176814,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_891.png": {
+        "lower": 0.7439250889955116,
+        "upper": 0.7439250889955116,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_937.png": {
+        "lower": 0.8907218706424971,
+        "upper": 0.8907218706424971,
+        "exact": true,
+        "status": "optimal"
+      },
+      "train_943.png": {
+        "lower": 0.9287142449096176,
+        "upper": 0.9287142449096176,
+        "exact": true,
+        "status": "optimal"
+      }
+    },
+    "whole_proposal_f1_upper_definition": "Per image: maximum F1 among unions of whole proposals; MILP certified upper/lower, exact iff gap <= 1e-6. Aggregate pixel oracle permits truth clipping and is optimistic.",
+    "anychange": {
+      "tp": 3574575,
+      "fp": 4833056,
+      "fn": 3294673,
+      "precision": 0.42515840669030314,
+      "recall": 0.520373554718071,
+      "f1": 0.46797189399745853,
+      "iou": 0.30545907882755396
+    }
+  },
+  "selection_rule": "Maximum development micro F1 on grid 0..2 step .02; tie chooses smaller threshold",
+  "settings_source": "../results/agent_baseline/data/probe_t13_dev_0of1.json"
+}

@@ -27,7 +27,7 @@ class Instances:
 
 
 class Session:
-    def __init__(self, shape, init_mask=None, target="building", change_direction="any", instruction=None, constraint=None, scope=None, region_mask=None, targets=None):
+    def __init__(self, shape, init_mask=None, target="building", change_direction="any", instruction=None, constraint=None, scope=None, region_mask=None, targets=None, feedback_points=None, feedback_cells=None):
         from .scope_t13 import scope_card
         target = tuple(targets) if targets is not None else target
         scope_card(target, change_direction, scope)
@@ -35,6 +35,8 @@ class Session:
         self.target, self.change_direction = target, change_direction
         self.instruction, self.constraint = instruction, constraint
         self.shape = tuple(shape)
+        self.feedback_points = None if feedback_points is None else tuple(tuple(p) for p in feedback_points)
+        self.feedback_cells = None if feedback_cells is None else tuple(feedback_cells)
         self.handles = {}
         self.next_id = 0
         self.current_mask = None

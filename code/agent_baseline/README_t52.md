@@ -108,6 +108,6 @@ for n in 1 2 3; do for task in T1.1xC0 T5.1; do sbatch --partition="$T52_PARTITI
 
 Agent 对固定响应、对给定掩码分别按图配对 bootstrap 4000 次，种子 1016，三次重复固定且共享每次图像抽样，不对重复再次抽样。报告误差只反映图像抽样变化。缺会话、缺已有路径指向的掩码直接报错；已有的明确 `error + empty` 兜底记录按空预测计入，另计错误和兜底。JSON 保存全部逐次指标，Markdown 同时给三次均值和逐次行。
 
-T5.3 后续入口为 `error_regions(truth, initial)` 和 `region_mask(..., full=False/True)`：复用 `region_id/type/area/point/component_id` 及同一错误区域，在独立渲染器中改成 3×3 方位词，并筛选所在格子唯一错误、每图最多一句。当前没有注册 T5.3 任务或实现语言反馈，避免改变本次实验范围。
+T5.3 复用 `error_regions(truth, initial)` 和 `region_mask(..., full=False/True)`，已在独立模块实现语言反馈。G3 下 T5.2 的自动核验与默认 `ask()` 限于公开点击半径 32 像素内相交的组件及相对给定掩码改动过的组件；空反馈只核验改动。G3 关闭时保留本手册描述的 G2 行为。G3 开关、T5.3 的生成、对照、指标和回归命令见 [README_t53.md](README_t53.md)。
 
 本次未生成正式反馈 JSON、区域 PNG、清单、模型掩码或指标文件；这些由以上计算作业生成。没有真实缓存和模型验收结果；极小单元测试的通过仅覆盖代码逻辑与小规模文件读写。

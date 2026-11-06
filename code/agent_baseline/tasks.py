@@ -42,8 +42,27 @@ def t52_instruction(feedback):
 INSTRUCTIONS['T5.2'] = t52_instruction([])
 
 
+def t53_instruction(feedback):
+    from .feedback import CELLS
+    if len(feedback) > 1:
+        raise ValueError('T5.3 allows at most one feedback sentence')
+    phrases = {'missed': 'A building in the {where} was missed.',
+               'false_positive': 'The marked change in the {where} is not a building change.'}
+    for item in feedback:
+        if item['where'] not in CELLS:
+            raise ValueError('Unknown T5.3 cell')
+    review = (phrases[feedback[0]['type']].format(where=feedback[0]['where']) if feedback
+              else 'The user reviewed the mask and pointed out no errors.')
+    requirement = ('Correct only what the user described and keep the rest of mask#0 unchanged.'
+                   if feedback else 'Keep mask#0 unchanged.')
+    return INSTRUCTIONS['T5.1'] + ' User feedback: ' + review + ' ' + requirement
+
+
+INSTRUCTIONS['T5.3'] = t53_instruction([])
+
+
 def needs_init(task):
-    return task in ('T5.1', 'T5.1xC1', 'T5.2')
+    return task in ('T5.1', 'T5.1xC1', 'T5.2', 'T5.3')
 
 
 FIELDS = {'id', 'image_t1', 'image_t2', 'instruction', 'task_type', 'constraint', 'target',
@@ -121,6 +140,11 @@ def read_tasks(filename, task=None):
                 raise ValueError('T5.2 uses LEVIR building changes in both directions')
             if row['instruction'] != t52_instruction(feedback):
                 raise ValueError('T5.2 instruction must match the point feedback')
+        if row['task_type'] == 'T5.3':
+            if row['target'] != 'building' or row['change_direction'] != 'any':
+                raise ValueError('T5.3 uses LEVIR building changes in both directions')
+            if row['instruction'] != t53_instruction(row['meta']['feedback']):
+                raise ValueError('T5.3 instruction must match the language feedback')
         if task is None or row['task_type'] == task:
             rows.append(row)
     return rows

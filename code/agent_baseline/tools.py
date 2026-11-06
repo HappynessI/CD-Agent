@@ -27,6 +27,10 @@ from .view import render_view, box_pixels, ask_images
 
 MATCH_BASIS = 'raw'
 MAX_ASK = 64
+BIG_BOX_SHARE = .10
+# Opposite direction only; rebuilt and pseudo changes have no single direction.
+OPPOSITE_TYPES = {'appeared': {'demolished', 'removed_tree'},
+                  'disappeared': {'new_building', 'new_tree'}}
 CURRENT = 'By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.'
 
 
@@ -216,7 +220,7 @@ def failure(code, message):
 
 
 class Toolbox(ProposalTools):
-    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None):
+    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE):
         self.rgb = tuple(np.array(im, copy=True) for im in rgb)
         self.session = session or Session(self.rgb[0].shape[:2], init_mask)
         self.directory = Path(directory)
@@ -232,6 +236,9 @@ class Toolbox(ProposalTools):
         self.proposal = None
         self.todo = []
         self.skills = ()
+        if not 0 < big_box_share <= 1:
+            raise ValueError('big_box_share must be in (0, 1]')
+        self.gate3, self.big_box_share = gate3, big_box_share
 
     def get(self, key, kind=None):
         return self.session.get(key, kind, self.allowed)
@@ -336,6 +343,13 @@ class Toolbox(ProposalTools):
         return np.asarray(data, bool), float(quality)
 
     def segment_prompt(self, time, box=None, points=None, point_labels=None):
+        if self.gate3 and box is not None and points is None:
+            x0, y0, x1, y1 = box_pixels(box, self.session.shape)
+            share = (x1-x0) * (y1-y0) / np.prod(self.session.shape)
+            if share > self.big_box_share:
+                raise ToolError('box_too_large', 'A box prompt segments one object. '
+                    f'This box covers {100*share:.2f}% of the image. For several objects or a whole area, '
+                    'use segment_text, then intersect with a region if needed.')
         data, quality = self._prompt(time, box, points, point_labels)
         return self._mask(data, set_current=False, bbox=bbox(data), sam_quality=quality)
 
@@ -523,9 +537,40 @@ class Toolbox(ProposalTools):
             answered[self.latest(entry) or ('unparsed' if entry else 'none')].append(c)
         return answered
 
-    def pending(self, item):
+    def feedback_limited(self):
+        return self.gate3 and (self.session.feedback_points is not None or self.session.feedback_cells is not None)
+
+    def relevant(self, item, comparison=None):
+        """Public point disks/cells plus changed outlines relative to mask#0.
+
+        For an original component, comparison is the proposed mask; any removal
+        counts as a change, including a complete deletion. No ground truth is used.
+        """
+        from .feedback import cell_mask
+        s = self.session
+        region = np.zeros(s.shape, bool)
+        yy, xx = np.ogrid[:s.shape[0], :s.shape[1]]
+        for x, y in s.feedback_points or ():
+            region |= (xx-x)**2 + (yy-y)**2 <= 32**2
+        for where in s.feedback_cells or ():
+            region |= cell_mask(where, s.shape)
+        start = s.get(s.initial_mask, Mask) if s.initial_mask else None
+        original = {np.flatnonzero(start.labels == c['id']).tobytes() for c in start.components} if start else set()
+        selected = set()
+        for c in item.components:
+            pixels = item.labels == c['id']
+            changed = (not comparison.data[pixels].all() if comparison is not None
+                       else np.flatnonzero(pixels).tobytes() not in original)
+            if changed or region[pixels].any():
+                selected.add(c['id'])
+        return selected
+
+    def pending(self, item, comparison=None):
         """Components the verifier still owes an answer: never asked, or unparsed once and allowed one retry."""
         rows = sorted(item.components, key=lambda c: (-c['area'], c['id']))
+        if self.feedback_limited():
+            relevant = self.relevant(item, comparison)
+            rows = [c for c in rows if c['id'] in relevant]
         out = []
         for c in rows:
             entry = self.entry(item, c)
@@ -538,8 +583,14 @@ class Toolbox(ProposalTools):
         rows = self.pending(item)
         if self.session.initial_mask is not None:
             start = self.session.get(self.session.initial_mask, Mask)
-            rows = rows + [c for c in self.pending(start) if item.data[start.labels == c['id']].mean() < .5]
+            rows = rows + self.dropped_pending(start, item)
         return rows
+
+    def dropped_pending(self, start, item):
+        if self.feedback_limited():
+            return [c for c in self.pending(start, comparison=item)
+                    if not item.data[start.labels == c['id']].all()]
+        return [c for c in self.pending(start) if item.data[start.labels == c['id']].mean() < .5]
 
     def stage(self, key):
         """The fixed verification stage: every component of this mask still without an answer. Never edits a mask."""
@@ -548,7 +599,7 @@ class Toolbox(ProposalTools):
         if self.session.initial_mask is not None:
             # Given components the planner dropped unasked: the report must be able to say what they were.
             start = self.session.get(self.session.initial_mask, Mask)
-            todo += [(self.session.initial_mask, start, c) for c in self.pending(start) if item.data[start.labels == c['id']].mean() < .5]
+            todo += [(self.session.initial_mask, start, c) for c in self.dropped_pending(start, item)]
         self.meta = {}
         failed = False
         if todo:
@@ -640,8 +691,30 @@ class Toolbox(ProposalTools):
         if previous is not None and previous != key:
             before = self.session.get(previous, Mask).data
             lines.append(f"Compared with your previous proposal {previous}: {int((item.data & ~before).sum())} pixels added, {int((before & ~item.data).sum())} pixels removed.")
+        if self.gate3:
+            lines.extend(self.constraint_report(item))
         lines.append(f"A verifier answer is evidence, not an order, and it can be wrong in both directions. No answer is not an error. To finish with this mask, call submit with {key} again. To change it, edit and submit the new handle; components the verifier has not seen will be reported again. In the summary, say what you changed, and why you went against any verifier answer. You have {replies_left} replies left.")
         return '\n'.join(lines)
+
+    def constraint_report(self, item):
+        lines = []
+        if self.session.region_mask is not None:
+            region = self.session.get(self.session.region_mask, Mask).data
+            outside = item.data & ~region
+            if outside.any():
+                ids = sorted(int(i) for i in np.unique(item.labels[outside]))
+                lines.append(f'Outside region#0: {int(outside.sum())} pixels in component IDs {ids}.')
+        types = set(verifier_prompts(self.session.target, self.session.change_direction, self.session.scope)['PSEUDO_TYPES'])
+        opposite = OPPOSITE_TYPES.get(self.session.change_direction, set()) & types
+        wrong = []
+        for c in item.components:
+            records = (self.entry(item, c) or dict(records=[]))['records']
+            last = next((r for r in reversed(records) if r.get('type') in types), None)
+            if last and last['type'] in opposite:
+                wrong.append(c['id'])
+        if wrong:
+            lines.append(f'Opposite-direction verifier types for {self.session.change_direction}: component IDs {sorted(wrong)} (types {sorted(opposite)}).')
+        return lines
 
     def ledger(self, final_key):
         """Per outline: every verifier answer and what the planner finally did with it. For the trace only."""

@@ -24,6 +24,7 @@ from .recorder import Recorder
 from .backends import SegmentBackend, SharedPrompter, LocalAsk, ApiAsk
 
 from .tasks import INSTRUCTIONS, instruction_for, seed_for, read_tasks, image_name, load_pair, needs_init
+from .feedback import public_feedback
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
 
@@ -106,8 +107,15 @@ def latest_mask(session):
     return masks[-1] if masks else None
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False):
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False, gate3=False):
     session = toolbox.session
+    if gate3:
+        if not verify:
+            raise ValueError('G3 requires --verify-stage')
+        toolbox.gate3 = True
+        gate2 = True
+        metadata = copy.deepcopy(metadata or {})
+        metadata.setdefault('backends', {}).update(gate3=True, gate2=True, big_box_share=toolbox.big_box_share)
     gate2 = gate2 and verify
     limit, grant = budget, None
     rounds, no_tools = 0, 0
@@ -306,7 +314,11 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
     if gate2:
         write_json(toolbox.directory / 'gate.json', dict(grant=grant, rounds=rounds, budget=budget,
             extra_used=rounds - grant['at_reply'] if grant else 0))
-    return recorder.final(session, task, submitted_by, reason, fallback, rounds, planner, error)
+    result = recorder.final(session, task, submitted_by, reason, fallback, rounds, planner, error)
+    if gate3:
+        result['backends'] = metadata['backends']
+        write_json(toolbox.directory / 'final.json', result)
+    return result
 
 
 def main():
@@ -331,6 +343,8 @@ def main():
     parser.add_argument('--skills', default='', help='Comma-separated skill names, or all.')
     parser.add_argument('--verify-stage', action='store_true', help='Each submit first verifies every unchecked component and reports all answers.')
     parser.add_argument('--gate2', action='store_true', help='Close the gaps where verifier answers never reach the planner (G2). Needs --verify-stage.')
+    parser.add_argument('--gate3', action='store_true', help='G3 box guard, constraint reports and feedback verification scope. Implies --gate2; requires --verify-stage.')
+    parser.add_argument('--big-box-share', type=float, default=tool_module.BIG_BOX_SHARE)
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
@@ -341,6 +355,10 @@ def main():
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    if args.gate3 and not args.verify_stage:
+        parser.error('--gate3 requires --verify-stage')
+    if not 0 < args.big_box_share <= 1:
+        parser.error('--big-box-share must be in (0, 1]')
     vision = None
     if args.tools_t13:
         from .backends_t13 import WorkerPool
@@ -349,8 +367,8 @@ def main():
         vision = WorkerPool(json.loads(args.vision_config.read_text()), RUN / 'vision_t13')
     if not args.tasks and not args.task:
         parser.error('--task is required without --tasks')
-    if args.task == 'T5.2' and not args.tasks:
-        parser.error('T5.2 requires a feedback task manifest (--tasks)')
+    if args.task in ('T5.2', 'T5.3') and not args.tasks:
+        parser.error(f'{args.task} requires a feedback task manifest (--tasks)')
     skills = sorted(p.name for p in tool_module.SKILLS.iterdir() if (p / 'SKILL.md').exists()) if args.skills == 'all' else [x for x in args.skills.split(',') if x]
     guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
@@ -402,13 +420,14 @@ def main():
             change_direction=row['change_direction'] if row else 'any',
             instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None,
             scope=row.get('scope') if row else None,
-            region_mask=load_mask_png(row['region_mask']) if row and row.get('region_mask') else None)
+            region_mask=load_mask_png(row['region_mask']) if row and row.get('region_mask') else None,
+            **(public_feedback(row) if row else {}))
         if row and row.get('exemplar_mask'):
             session.exemplar_handle = session.add_mask(load_mask_png(row['exemplar_mask']))
         ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence, session=session) if args.ask_backend == 'api' else None
         source_images = [str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')]
         custom_images = row is not None and [row['image_t1'], row['image_t2']] != source_images
-        if task == 'T5.2':
+        if task in ('T5.2', 'T5.3'):
             from .tasks import levir_cache_name
             levir_cache_name(row, args.split)
             custom_images = False
@@ -417,9 +436,10 @@ def main():
             target=session.target, image_paths=image_paths),
             shared.for_image(args.split, name, rgb=rgb if custom_images else None), ask, session=session, python=args.python,
             tools_t13=True if args.tools_t13 == 'all' else args.tools_t13,
-            vision=vision.for_pair(image_paths or source_images) if vision else None)
+            vision=vision.for_pair(image_paths or source_images) if vision else None,
+            big_box_share=args.big_box_share)
         try:
-            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2,
+            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2, gate3=args.gate3,
                 metadata=dict(**({'scope': session.scope} if session.scope else {}), session_id=stem, source_images=image_paths or source_images,
                     init_mask_path=str(init_path) if init is not None or needs_init(task) else None,
                     init_config=dict(route=args.init_name, text=session.target, tile=512, score_thr=.5,
