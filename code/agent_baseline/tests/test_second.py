@@ -89,7 +89,9 @@ class SecondTests(unittest.TestCase):
                      next(s['function']['description'] for s in session_schemas(session) if s['function']['name'] == 'ask')]
             for text in texts:
                 self.assertIn('rebuilt', text)
-                self.assertIn('neither newly built nor demolished', text)
+                # The clause lives in the scope card; the question itself stays the frozen wording.
+                if text is not settings['CORRESPONDENCE']:
+                    self.assertIn('answer no, type rebuilt', text)
                 self.assertNotIn('SECOND', text)
             self.assertIn('rebuilt', settings['PSEUDO_TYPES'])
             if direction != 'any':
@@ -191,7 +193,7 @@ class SecondTests(unittest.TestCase):
         self.assertEqual(final['submitted_by'], 'model')
         self.assertTrue(final['identical_to_init'])
         request = json.dumps(client.requests)
-        self.assertIn('neither newly built nor demolished', request)
+        self.assertIn('answer no, type rebuilt', request)
         self.assertIn(C1_INSTRUCTIONS['T5.1xC1']['appeared'], request)
         self.assertNotIn('SECOND', request)
         self.assertNotIn('secret-label', request)
