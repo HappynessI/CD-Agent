@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 import numpy as np
 from common import load_gt, confusion, image_f1, object_counts, scores, save_mask_png, write_json
+from .tools_t13 import Features
 from .state import Mask
 
 
@@ -104,7 +105,11 @@ class Recorder:
                 continue
             number = key.split('#')[1]
             if isinstance(value, Mask):
-                save_mask_png(self.directory / 'masks' / f'mask_{number}.png', value.data)
+                save_mask_png(self.directory / 'masks' / f'{key.replace("#", "_")}.png', value.data)
+            elif isinstance(value, Features):
+                directory = self.directory / 'features'
+                directory.mkdir(exist_ok=True)
+                np.savez(directory / f'feat_{number}.npz', data=value.data, shape=value.shape, time=value.time)
             else:
                 # Pack one instance at a time; avoid a large dense instance stack.
                 packed = []
@@ -181,7 +186,7 @@ class Recorder:
         tokens = {k: planner.tokens[k] + self.ask_tokens[k] for k in planner.tokens}
         initial = session.get(session.initial_mask, Mask).data if session.initial_mask is not None else None
         calls = [c for row in self.steps for c in row['calls']]
-        row = dict(task_id=task, final_handle=key, mask_path=f'masks/mask_{key.split("#")[1]}.png',
+        row = dict(task_id=task, final_handle=key, mask_path=f'masks/{key.replace("#", "_")}.png',
             summary=session.summary, summary_source='model' if submitted_by == 'model' else 'system',
             submitted_by=submitted_by, termination_reason=reason, fallback_kind=fallback,
             change_component_count=len(mask.components), change_area_px=int(mask.data.sum()),

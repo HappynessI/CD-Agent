@@ -17,7 +17,9 @@ from pathlib import Path
 import re
 import numpy as np
 from scipy import ndimage as ndi
-from prompts import VERIFY, verifier_prompts
+from prompts import VERIFY
+from .scope_t13 import verifier_prompts
+from .tools_t13 import ProposalTools, tool_schemas, enabled_names, extend_schemas, NAMES as T13_NAMES
 from . import instances
 from common import components
 from .state import Session, Mask, Instances, ToolError, chosen_ids
@@ -90,25 +92,26 @@ PLAN_SCHEMA = schema('plan', 'Write or replace your own short to-do list for thi
 SKILL_SCHEMA = schema('load_skill', 'Read the full text of one skill from the index in the system prompt.', dict(name=S), ['name'])
 PYTHON_SCHEMA = schema('python', 'Run array calculations in an isolated Python subprocess with np and ndi. Inputs: masks[handle] (H,W bool), instances[handle] (N,H,W bool, only for handles written out in the code), images["t1"/"t2"] (H,W,3 uint8), all read-only. Call save_mask(array) for each output mask. No filesystem, network or submission access. New handles become usable in the next reply; submit them with submit. ' + CURRENT,
     dict(code=S, set_current=SET_CURRENT), ['code'])
-SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, PYTHON_SCHEMA]}
+SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, PYTHON_SCHEMA, *tool_schemas()]}
 
 
-def session_schemas(session, python=False):
+def session_schemas(session, python=False, tools_t13=False):
     import copy
     schemas = copy.deepcopy(SCHEMAS)
     if (session.target, session.change_direction) != ('building', 'any'):
         ask = next(s['function'] for s in schemas if s['function']['name'] == 'ask')
-        ask['description'] = ask['description'].replace('building change', f'{session.target} change')
+        label = 'any land-cover change' if session.target == 'any change' else 'changes involving ' + ', '.join(session.target) if isinstance(session.target,(list,tuple)) else f'{session.target} change'
+        ask['description'] = ask['description'].replace('building change', label)
         if session.change_direction != 'any':
             ask['description'] += f' Count only the {session.change_direction} direction.'
     if session.scope:
-        from prompts import scope_card
+        from .scope_t13 import scope_card
         card = scope_card(session.target, session.change_direction, session.scope)
         ask = next(s['function'] for s in schemas if s['function']['name'] == 'ask')
         ask['description'] += ' Scope: ' + '; '.join(card['counts'] + card['not_counts'])
     if python:
         schemas.append(copy.deepcopy(PYTHON_SCHEMA))
-    return schemas
+    return extend_schemas(schemas, tools_t13)
 SKILLS = Path(__file__).parent / 'skills'
 
 
@@ -212,13 +215,15 @@ def failure(code, message):
     return Result(dict(ok=False, error_code=code, message=message))
 
 
-class Toolbox:
-    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False):
+class Toolbox(ProposalTools):
+    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None):
         self.rgb = tuple(np.array(im, copy=True) for im in rgb)
         self.session = session or Session(self.rgb[0].shape[:2], init_mask)
         self.directory = Path(directory)
         self.segment_backend, self.prompt_backend, self.ask_backend = segment, prompt, ask
         self.python_enabled = python
+        self.tools_t13 = enabled_names(tools_t13)
+        self.vision_backend = vision
         self.allowed = None
         self.meta = {}
         # Verifier answers by exact component outline, so they survive renumbering and lapse when an outline changes.
@@ -238,7 +243,7 @@ class Toolbox:
         started_at = clock.time()
         self.allowed, self.meta = allowed, {}
         try:
-            if name not in SCHEMA_BY_NAME or (name == 'python' and not self.python_enabled):
+            if name not in SCHEMA_BY_NAME or (name == 'python' and not self.python_enabled) or (name in T13_NAMES and name not in self.tools_t13):
                 raise ToolError('bad_args', 'Unknown tool name.')
             validate(args, SCHEMA_BY_NAME[name])
             pyinspect.signature(getattr(self, name)).bind(**args)
@@ -405,6 +410,10 @@ class Toolbox:
             raise ToolError('bad_args', 'area_min must not exceed area_max.')
         rows = [r for r in item.items if r['id'] in wanted and pred(r)
                 and (area_min is None or r['area'] >= area_min) and (area_max is None or r['area'] <= area_max)]
+        if set.startswith('props#'):
+            result = self._props(rows, item.time, (set,))
+            result.update(ids=[r['id'] for r in rows], n_in=len(item.items), n_out=len(rows))
+            return result
         key = self.session.add_instances(rows, item.time, (set,))
         return dict(inst=key, ids=[r['id'] for r in rows], n_in=len(item.items), n_out=len(rows))
 

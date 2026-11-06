@@ -115,3 +115,79 @@ for n in 1 2 3; do for t in T1.1xC1 T5.1xC1 T1.1xC0; do ds='appeared disappeared
 仅验证集准备和运行；测试集等待 Ethan 决定。没有生成模型结果、费用实测值、正式 128 图单或对新数据的性能结论。
 
 轨迹展示也识别 T5.1xC1 的给定掩码，并从 input.json 的 gt_mask_path 读参照。通用 diagnose 可传 --tasks 和 --fixed-dir；SECOND 的正式多方向统计仍用 second_metrics。
+
+## 线 B：T1.1 × C2 和 T1.1 × C4
+
+C2 是框内任意建筑变化（direction=any）；C4 是框内新建（direction=appeared）。两者均使用 `scope=building_rebuild_excluded`。指令按 README_ai.md 第 10.7 节原文填写，只替换整数坐标。框采用 `[x0,y0,x1,y1]`，右界 x1 和下界 y1 为开区间，和工具 bbox 一致。真值与框逐像素取交集，跨边界建筑会被截断。
+
+清单可选 `region_mask` PNG 路径按清单位置解析。会话登记 `region#0`，它是 Mask，可用于 `combine(op="intersect", a=答案句柄, b="region#0")`、`view(overlay="region#0")` 等。第一轮消息显示面积、bbox、开区间说明；路径、数据集名和真值不进入规划器输入。它不占用普通句柄编号，也不作为给定掩码、当前答案或自动核验候选。Agent 显式提交它时按普通掩码提交和核验。轨迹保存为 `masks/region_0.png`，与 `masks/mask_0.png` 分开。工具列表不增加，Python 保持关闭；没有区域字段的旧任务沿用原消息和编号。
+
+以下命令均在仓库根、已经分配的计算节点执行，一步一条命令。资源为估计值。这里交付代码和极小单测；未生成正式框文件，未执行正式数据处理、模型或 API。`results/agent_baseline/data/second_boxes.json` 由第 3 步生成后纳入交付；不能用未核对真值的占位框替代。正式运行前等待线 A 结论；若采用新分割设置，先重算缓存、固定路线、规则及历史 C0/C1，使用新目录和前缀，旧结果保留。Agent 作业总并发最多两个。
+
+1. 公共环境。CPU 1，内存 1 GiB，GPU 0。`BOX_BASE` 用新的输出目录，改变来源后也换目录。历史参照前缀 `HISTORY_PREFIX` 可替换为线 A 重跑配置。
+
+```bash
+export PYTHONPATH="$PWD/code/ovcd_v0:$PWD/code" AGENT_RUN=/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run PY=/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/bin/python OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 BOX_BASE=/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second/box_baselines HISTORY_PREFIX=second_g2
+```
+
+2. 极小单测。CPU 1，内存 2 GiB，GPU 0。覆盖旧 SECOND、小数组框及真实临时文件流程，无模型/API。完整 G1 fixture 和 replay 回归仍由计算节点执行原手册的测试命令及历史回放命令。
+
+```bash
+"$PY" -B -m unittest agent_baseline.tests.test_second agent_baseline.tests.test_second_boxes -v
+```
+
+3. 生成固定框、区域 PNG、裁剪真值和两个清单。CPU 1，内存 2 GiB，GPU 0。读取现有 `second/second_val128.txt`、C0 清单及 `gt/{c0,new}`；要求恰好 128 图。随机数为 NumPy default_rng(1016)，按名称排序，先固定抽 64 张，再按图依次生成 C2/C4 框。宽高分别在 `[ceil(.4×边长), floor(.7×边长)]` 整数中均匀采样；位置均匀。要求相交的框整个重采样，空真值记录豁免。JSON 记录每框的要求、实际交集、尺寸及尝试次数。预检查全部输出；任意已有不同内容即报错，同内容可重复执行。
+
+```bash
+"$PY" -B -m agent_baseline.analysis.make_second_boxes --run-root "$AGENT_RUN" --names-file "$AGENT_RUN/second/second_val128.txt" --seed 1016 --output results/agent_baseline/data/second_boxes.json
+```
+
+输出：`second/regions/{c2,c4}/`、`second/gt/{c2,c4}/`、`second/tasks/T1.1xC2_any.jsonl`、`second/tasks/T1.1xC4_appeared.jsonl`。框 JSON 无需保存运行路径，可跨克隆复用。运行路径在清单内，仅由 harness 读取。
+
+需要保持已有运行根只读时，增加 `--source-run-root 原运行根`，将 `--run-root` 指向新的可写目录。图单、C0 清单和原始 c0/new 真值从来源目录读取，区域 PNG、裁剪真值和两个清单只写入新的运行根；`--output` 指定框 JSON 的可写位置。此模式生成的框内容与原地生成完全一致。后续 C4 指标的 `demolished_dir` 仍须指向含完整拆除真值的来源目录。
+
+4. 选择最终分割设置对应的对照来源。CPU 1，内存 1 GiB，GPU 0。线 A 采用时替换这里四个目录及第 1 步历史前缀；不改框文件。
+
+```bash
+export FIXED_ANY="$AGENT_RUN/second/fixed/any" FIXED_APPEARED="$AGENT_RUN/second/fixed/appeared" RULE_ANY="$AGENT_RUN/second/rule/any/masks" RULE_APPEARED="$AGENT_RUN/second/rule/appeared/masks"
+```
+
+5. 生成 C2 不分方向的规则掩码。CPU 2，内存 4 GiB，GPU 0；调用现有 flash API，预算 10 元、并发 4。`second_rule.run` 和 CLI 已支持 scope 和 direction any，无需改算法。只删 answer=no，其余保留。方向和范围写入 settings，输入改变时使用新的 output-dir，并同步修改 `RULE_ANY`。C4 复用已有 appeared 规则；线 A 改动时须先重算。
+
+```bash
+"$PY" -B -m agent_baseline.analysis.second_rule --tasks "$AGENT_RUN/second/tasks/T1.1xC0_any.jsonl" --mask-dir "$FIXED_ANY" --output-dir "$AGENT_RUN/second/rule" --scope building_rebuild_excluded --direction any --max-cost-cny 10 --concurrency 4
+```
+
+6. 所有对照取框内交集。CPU 1，内存 2 GiB，GPU 0；无 API。C2 为 fixed_any、rule、posthoc_s1/s2/s3；C4 另外有 fixed_direction。历史 C0 来自 `${HISTORY_PREFIX}_any_s{1,2,3}/T1.1xC0/val`，C1 新建来自 `${HISTORY_PREFIX}_appeared_s{1,2,3}/T1.1xC1/val`。源 final 缺失即报错；已有错误或空兜底照常计入，来源诊断写到 preparation.json。
+
+```bash
+"$PY" -B -m agent_baseline.analysis.second_box_baselines --run-root "$AGENT_RUN" --fixed-any-dir "$FIXED_ANY" --fixed-appeared-dir "$FIXED_APPEARED" --rule-any-dir "$RULE_ANY" --rule-appeared-dir "$RULE_APPEARED" --agent-prefix "$HISTORY_PREFIX" --output-dir "$BOX_BASE"
+```
+
+7. 10 张试跑，顺序运行两个子任务。CPU 4，内存 8 GiB，GPU 1（建议 24 GiB 显存）。没有预存 SAM 编码时 `segment_prompt` 需要编码整张图，GPU 约 0.4–0.8 秒，CPU 单线程约 150 秒；这些是现有 C0 运行观察，未对 C2/C4 实测。沿用 G2 的 v4/status/verify-stage/gate2、flash 模型、pixel-thr=.85、seed-offset=1、concurrency=6、ASK_SLOTS=3。Python/skill/plan 不开启。
+
+```bash
+for k in c2 c4; do t=T1.1xC2; d=any; [ "$k" != c4 ] || { t=T1.1xC4; d=appeared; }; AGENT_ASK_SLOTS=3 "$PY" -B -m agent_baseline.loop_json --tasks "$AGENT_RUN/second/tasks/${t}_${d}.jsonl" --split val --config "second_smoke_g2_${k}_s1" --limit 10 --seed-offset 1 --concurrency 6 --prompt-version v4 --status --verify-stage --gate2 --planner-model qwen3.7-flash --ask-backend api --ask-model qwen3.7-flash --ask-correspondence --pixel-thr 0.85 --batch second_boxes_smoke_g2 --max-cost-cny 10 || exit; done
+```
+
+检查首轮 region 面积和 bbox、区域 PNG、GT 与框交集、方向范围及 combine 的结果。查看轨迹中工具耗时，确认 GPU 编码。试跑用独立配置，不混入正式三次重复，也不用结果调整框或门限。
+
+8. 线 A 结论确定且试跑检查通过后全量：2 × 128 × 3 = 768 个会话。CPU 4，内存 8 GiB，GPU 1（原因见第 7 步）。顺序执行，config 为 `second_g2_c2_s{1,2,3}` 和 `second_g2_c4_s{1,2,3}`。约 47 元的估计沿用既有单价，预算上限 60 元；实际看账本。原 G2 的回复预算和提交门逻辑保持不变。相同 config 可续跑。
+
+```bash
+for n in 1 2 3; do for k in c2 c4; do t=T1.1xC2; d=any; [ "$k" != c4 ] || { t=T1.1xC4; d=appeared; }; AGENT_ASK_SLOTS=3 "$PY" -B -m agent_baseline.loop_json --tasks "$AGENT_RUN/second/tasks/${t}_${d}.jsonl" --split val --config "second_g2_${k}_s$n" --seed-offset "$n" --concurrency 6 --prompt-version v4 --status --verify-stage --gate2 --planner-model qwen3.7-flash --ask-backend api --ask-model qwen3.7-flash --ask-correspondence --pixel-thr 0.85 --batch second_boxes_g2 --max-cost-cny 60 || exit; done; done
+```
+
+9. 写出统计输入 spec。CPU 1，内存 1 GiB，GPU 0。`--agent-prefix second_g2` 对应新 C2/C4 配置；历史前缀已在第 6 步使用。spec 可显式替换目录，保留三个不同重复目录。
+
+```bash
+"$PY" -B -m agent_baseline.analysis.second_box_metrics --write-spec --run-root "$AGENT_RUN" --baseline-root "$BOX_BASE" --agent-prefix second_g2 --output "$AGENT_RUN/second/box_metrics_spec.json"
+```
+
+10. 全量统计。CPU 1，内存 2 GiB，GPU 0。JSON 和同名 Markdown 表同时生成。Agent 预测按原样评分，不自动裁剪，所以能观察框外违反。P/R/F1 按每次重复累计像素后计算，再报三次均值和逐次值。框外违反率为框外预测像素/全部预测像素；C4 方向违反率为完整拆除真值上的预测像素/全部预测像素，空预测均记 0。每个对照都有 Agent 减对照的配对 bootstrap 4000 次、种子 1016、95% 区间；三次重复共享抽样图索引，事后裁剪参照也保留三个重复。缺 final 或必需掩码会报错，错误/兜底会话逐次报告。
+
+```bash
+"$PY" -B -m agent_baseline.analysis.second_box_metrics --spec "$AGENT_RUN/second/box_metrics_spec.json" --output "$AGENT_RUN/second/box_metrics.json"
+```
+
+全部命令只是运行手册，本次没有执行。正式框 JSON、10 张模型试跑、768 个会话、全量 fixture/replay 及性能结论仍需计算节点验收。

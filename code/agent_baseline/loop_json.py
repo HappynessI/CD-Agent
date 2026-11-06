@@ -15,7 +15,7 @@ from pathlib import Path
 import traceback
 import numpy as np
 from common import names, load_rgb, load_mask_png, write_json, WORKSPACE
-from prompts import scope_card
+from .scope_t13 import scope_card
 from .tools import Toolbox, PLAN_SCHEMA, SKILL_SCHEMA, failure, skill_index
 from . import tools as tool_module
 from .state import Mask, Session
@@ -35,10 +35,12 @@ def system_prompt(version, budget, session=None):
     direction = session.change_direction if session else 'any'
     card = scope_card(target, direction, session.scope if session else None)
     # Earlier templates retain their text on the default route too.
-    rendered = template.replace('buildings', card['plural']).replace('building', target)
+    rendered = template.replace('buildings', card['plural']).replace('building', card['target'])
     text = rendered.format(counts='\n'.join('- ' + s for s in card['counts']),
                            not_counts='\n'.join('- ' + s for s in card['not_counts']),
-                           target=target, plural=card['plural'], budget=budget)
+                           target=card['target'], plural=card['plural'], budget=budget)
+    if target == 'any change' or isinstance(target,(list,tuple)):
+        text = text.replace('one object class','the requested land-cover categories')
     if direction != 'any':
         text += f'\nCount only changes in the {direction} direction.'
     return path, template, text
@@ -87,7 +89,7 @@ def trim_images(messages):
 
 def referenced_handles(args):
     if isinstance(args, str):
-        return [args] if args.startswith(('mask#', 'inst#')) else []
+        return [args] if args.startswith(('mask#', 'inst#', 'region#', 'props#', 'feat#')) else []
     if isinstance(args, dict):
         return [key for v in args.values() for key in referenced_handles(v)]
     if isinstance(args, list):
@@ -100,7 +102,7 @@ EXTRA_REPLIES = 2  # G2: one grant per session to act on a report that would oth
 
 
 def latest_mask(session):
-    masks = [key for key, value in session.handles.items() if isinstance(value, Mask)]
+    masks = [key for key, value in session.handles.items() if isinstance(value, Mask) and key != session.region_mask]
     return masks[-1] if masks else None
 
 
@@ -112,23 +114,32 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
     previous_calls = None
     reason, error = 'budget', None
     reviewed = not (review or verify)
-    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
+    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled, toolbox.tools_t13), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
     toolbox.skills = tuple(skills)
     messages = []
     planner.record = recorder.request
     try:
         path, template, system = system_prompt(prompt_version, budget, session)
+        if toolbox.tools_t13:
+            system += '\nAdditional handles: props#k proposal sets and feat#k patch features. Proposal sets work with select and to_mask. On compared proposals score is 1-cos temporal difference; on matched proposals it is exemplar cosine similarity. Classification probabilities are reported by ID.'
         if skills:
             # Index only; a skill's text enters the conversation when the planner loads it.
             system += '\n\nSkills\nThese notes hold working methods. Before your first other tool call, call load_skill for the skill that fits the start of your work. Later, load another one whenever its description fits what you are about to do.\n' + skill_index(skills)
         instruction = instruction_for(task, session)
-        initial = toolbox.execute('view', dict(overlay=session.initial_mask) if session.initial_mask else {})
+        exemplar = getattr(session, 'exemplar_handle', None)
+        initial_overlay = session.initial_mask or exemplar
+        initial = toolbox.execute('view', dict(overlay=initial_overlay) if initial_overlay else {})
         if not initial.public['ok']:
             raise RuntimeError('Initial view failed')
         text = instruction
+        if exemplar:
+            text += f' Example region: {exemplar}, marked by the red contour. Find other changes of the same transition as this example, including the example itself.'
         if session.initial_mask:
             item = session.get(session.initial_mask, Mask)
             text += f' mask#0: area={int(item.data.sum())} pixels; component_count={len(item.components)}.'
+        if session.region_mask:
+            item = session.get(session.region_mask, Mask)
+            text += f' region#0: area={int(item.data.sum())} pixels; bbox={session.region_bbox}. Coordinates are integer pixels; x1 and y1 are exclusive right and bottom bounds. region#0 is a region mask usable wherever a mask handle is accepted. It is not the current answer.'
         messages = [dict(role='system', content=system),
                     dict(role='user', content=[dict(type='text', text=text)] + image_blocks(initial))]
         recorder.start(session, dict(metadata or {}, task_id=task, instruction=instruction,
@@ -302,6 +313,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', choices=list(INSTRUCTIONS))
     parser.add_argument('--tasks', help='Task manifest JSONL; optionally filter by --task.')
+    parser.add_argument('--tools-t13', nargs='?', const='all', default='', help='Enable all new vision tools, or comma-separated tool names. Default off.')
+    parser.add_argument('--vision-config', type=Path, help='Local worker environment, source and weight paths JSON.')
     parser.add_argument('--python', action='store_true', help='Offer the isolated Python array tool.')
     parser.add_argument('--split', default='val', choices=['val', 'test', 'train'])
     parser.add_argument('--config', required=True)
@@ -321,14 +334,23 @@ def main():
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
+    parser.add_argument('--sam-prompt-device', choices=['cpu', 'cuda'], default='cpu', help='SAM decoder device; cached LEVIR embeddings are reused on either device.')
     parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
     parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2', 'v3', 'v4'])
     parser.add_argument('--seed-offset', type=int, default=0, help='Repeat runs of one configuration.')
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    vision = None
+    if args.tools_t13:
+        from .backends_t13 import WorkerPool
+        if not args.vision_config:
+            parser.error('--tools-t13 requires --vision-config')
+        vision = WorkerPool(json.loads(args.vision_config.read_text()), RUN / 'vision_t13')
     if not args.tasks and not args.task:
         parser.error('--task is required without --tasks')
+    if args.task == 'T5.2' and not args.tasks:
+        parser.error('T5.2 requires a feedback task manifest (--tasks)')
     skills = sorted(p.name for p in tool_module.SKILLS.iterdir() if (p / 'SKILL.md').exists()) if args.skills == 'all' else [x for x in args.skills.split(',') if x]
     guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
@@ -340,7 +362,10 @@ def main():
         keys = [(r['task_type'], Path(r['id']).stem) for r in todo]
         if len(set(keys)) != len(keys):
             parser.error('Run each direction in a separate config/manifest to avoid output collisions.')
-    shared = SharedPrompter()
+    def gpu_prompter():
+        from sam_tools import Prompter
+        return Prompter(device='cuda')
+    shared = SharedPrompter(factory=gpu_prompter) if args.sam_prompt_device == 'cuda' else SharedPrompter()
     def identity(item):
         if isinstance(item, dict):
             return item['task_type'], image_name(item), Path(item['id']).stem
@@ -376,14 +401,23 @@ def main():
         session = Session(rgb[0].shape[:2], init, target=row['target'] if row else 'building',
             change_direction=row['change_direction'] if row else 'any',
             instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None,
-            scope=row.get('scope') if row else None)
+            scope=row.get('scope') if row else None,
+            region_mask=load_mask_png(row['region_mask']) if row and row.get('region_mask') else None)
+        if row and row.get('exemplar_mask'):
+            session.exemplar_handle = session.add_mask(load_mask_png(row['exemplar_mask']))
         ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence, session=session) if args.ask_backend == 'api' else None
         source_images = [str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')]
         custom_images = row is not None and [row['image_t1'], row['image_t2']] != source_images
+        if task == 'T5.2':
+            from .tasks import levir_cache_name
+            levir_cache_name(row, args.split)
+            custom_images = False
         image_paths = [row['image_t1'], row['image_t2']] if custom_images else None
         toolbox = Toolbox(rgb, directory, SegmentBackend(args.split, name, args.sam3_worker, args.pixel_thr,
             target=session.target, image_paths=image_paths),
-            shared.for_image(args.split, name, rgb=rgb if custom_images else None), ask, session=session, python=args.python)
+            shared.for_image(args.split, name, rgb=rgb if custom_images else None), ask, session=session, python=args.python,
+            tools_t13=True if args.tools_t13 == 'all' else args.tools_t13,
+            vision=vision.for_pair(image_paths or source_images) if vision else None)
         try:
             result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2,
                 metadata=dict(**({'scope': session.scope} if session.scope else {}), session_id=stem, source_images=image_paths or source_images,
@@ -393,7 +427,7 @@ def main():
                     backends=dict(**({'gate2': True} if args.gate2 else {}), ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage,
                         plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence,
                         ask_model=args.ask_model if args.ask_backend == 'api' else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
-                        sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_cpu', sam_model='SAM ViT-H'),
+                        sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_' + args.sam_prompt_device, sam_model='SAM ViT-H'),
                     task_meta=row['meta'] if row else {}, init_error=init_error))
         except RunStopped:
             return name, 'stopped'
@@ -412,6 +446,8 @@ def main():
                     termination_reason='input_error', fallback_kind='empty', error_type=type(exc).__name__,
                     error=traceback.format_exc(), summary='系统兜底：输入数据无法读取，无法生成掩码。', elapsed_seconds=0))
                 print(name, 'input_error', flush=True)
+    if vision:
+        vision.close()
     if guard.stopped():
         raise SystemExit(3)  # a failed job state, so a stop cannot pass as a finished run
 

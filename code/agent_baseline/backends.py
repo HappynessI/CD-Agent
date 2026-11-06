@@ -11,7 +11,8 @@ import time
 import urllib.error
 import urllib.request
 import numpy as np
-from prompts import PSEUDO_TYPES, SYSTEM, VERIFY, scope_card, verifier_prompts
+from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
+from .scope_t13 import scope_card, verifier_prompts
 from . import instances
 from .segment_cache import manifest_cache_path, read_instances
 from .state import ToolError
@@ -65,7 +66,7 @@ class SegmentBackend:
     def __call__(self, time, text, tile, score_thr):
         import sam3_t7
         index = 0 if time == 't1' else 1
-        cached_class = ''.join(text.lower().split()) == ''.join(self.target.lower().split())
+        cached_class = isinstance(self.target, str) and ''.join(text.lower().split()) == ''.join(self.target.lower().split())
         cache = self.cache_config if cached_class else {}
         if self.image_paths is not None:
             cache = {}  # Explicit images use the worker's source-path namespace.
