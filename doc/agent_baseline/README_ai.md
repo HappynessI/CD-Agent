@@ -824,7 +824,7 @@ G2 先跑；SECOND 的准备工作（1–4）不依赖 G2，可以并行。Agent
 
 ### 线 B 全量结果（2026-11-06，G2，3 次，128 张，快照 `code_n`）
 
-Ethan 决定照 G2 跑全量（不先修大框问题）。第一次提交在预算上限 40 元处停在 639/768，上限提到 100 元后续跑补齐。结果 `results/agent_baseline/data/second_box_metrics.{json,md}`。
+Ethan 决定照 G2 跑全量（不先修大框问题）。第一次提交在预算上限 40 元处停在 639/768，上限提到 100 元后续跑补齐，共 48.7 元。结果 `results/agent_baseline/data/second_box_metrics.{json,md}`。
 
 | 子任务 | Agent | 固定 ∩ 框 | 带方向固定 ∩ 框 | 规则 ∩ 框 | 事后裁剪（C0 / C1 Agent ∩ 框） | 框外违反率 | 兜底 |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -881,7 +881,7 @@ Ethan 决定照 G2 跑全量（不先修大框问题）。第一次提交在预�
 
 ### T5.2 全量结果（2026-11-06，G2，3 次，64 张，快照 `code_n`）
 
-结果 `results/agent_baseline/data/t52_metrics*.{json,md}`。费用约 22 元，错误会话 1 个。
+结果 `results/agent_baseline/data/t52_metrics*.{json,md}`。费用 13.5 元，错误会话 1 个。
 
 | 行 | k=1 F1 | k=3 F1 | 修复率 k=1 / k=3 | 未指出区域 加 / 删（像素，k=1） |
 |---|---:|---:|---|---|
