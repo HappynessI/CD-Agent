@@ -1462,16 +1462,10 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 <td>之后接 T5.3 语言反馈</td>
 </tr>
 <tr>
-<td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
-<td>T1.2 多个类别</td>
-<td>—</td>
-<td>SAM 3 对非建筑类别召回很低，要先接语义分割工具</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
-<td>T1.3、T3</td>
-<td>—</td>
-<td>缺特征匹配工具</td>
+<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>工具准备中</strong></td>
+<td>T1.2 多个类别、T1.3 全部变化、T3 视觉示例</td>
+<td>SECOND</td>
+<td>并行开发 segment_everything、extract_features/compare_features、classify、segment_semantic、match_exemplar 五个工具（后端为 DynamicEarth 的 SAM ViT-H、DINOv2、SegEarth-OV），在 SECOND 上做离线摸底；Agent 实验还没开始</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
@@ -1657,8 +1651,7 @@ T3 靠外观匹配，地图没有外观，因此不适用。T5.4 本身就是地
 | 进行中 | 分割 2 倍放大测试 | SECOND | 工具改进，结果好的话 C1 要重跑 |
 | 进行中 | T1.1 × C2（框内建筑变化）、T1.1 × C4（框内新建） | SECOND 同一批图 | 框以区域掩码句柄（region#0）交给 Agent |
 | 进行中 | T5.2 点框反馈 | LEVIR-CD | 之后接 T5.3 语言反馈 |
-| 暂缓 | T1.2 多个类别 | — | SAM 3 对非建筑类别召回很低，要先接语义分割工具 |
-| 暂缓 | T1.3、T3 | — | 缺特征匹配工具 |
+| 工具准备中 | T1.2 多个类别、T1.3 全部变化、T3 视觉示例 | SECOND | 并行开发 segment_everything、extract_features/compare_features、classify、segment_semantic、match_exemplar 五个工具（后端为 DynamicEarth 的 SAM ViT-H、DINOv2、SegEarth-OV），在 SECOND 上做离线摸底；Agent 实验还没开始 |
 | 暂缓 | T2.1 | — | 需要 OSM，LEVIR-CD 没有地理坐标 |
 | 暂缓 | T2 × C0（自建 benchmark） | — | 还没开始 |
 | 暂缓 | C3、T4 | — | 缺真值 |
