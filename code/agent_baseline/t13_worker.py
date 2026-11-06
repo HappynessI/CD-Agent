@@ -44,8 +44,20 @@ class DynamicBackend:
     def semantic(self, image, classes):
         import torch
         from torchvision import transforms
-        from dynamic_earth.identifier.segearth_ov_ext import SegEarth_OV
-        import open_clip_custom.openai as clip_loader
+        # SegEarth-OV ships a top-level package named `prompts`; our ovcd_v0/prompts.py module may already be loaded.
+        ours = sys.modules.get('prompts')
+        if ours is not None and not hasattr(ours, '__path__'):
+            del sys.modules['prompts']
+        saved = list(sys.path)
+        # Directories holding a plain prompts.py would shadow SegEarth-OV's package during this import.
+        sys.path[:] = [p for p in sys.path if not os.path.isfile(os.path.join(p or '.', 'prompts.py'))]
+        try:
+            from dynamic_earth.identifier.segearth_ov_ext import SegEarth_OV
+            import open_clip_custom.openai as clip_loader
+        finally:
+            sys.path[:] = saved
+            if ours is not None and not hasattr(ours, '__path__'):
+                sys.modules['prompts'] = ours
         vocabulary = ('background',*classes)
         if self.vocabulary != vocabulary:
             # A local names file avoids get_identifier's implicit ./class_name.txt write.
