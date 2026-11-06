@@ -74,7 +74,7 @@ for d in appeared disappeared; do "$PY" -m agent_baseline.analysis.second_rule -
 
 模型、max_tokens、logprobs、JSON、四幅近景/上下文图、seed 公式均复用 `ask_eval.py` 的 `f37_corr`。只注入会话的方向和范围卡，不在新数据改问法。答案是 `second/rule/<direction>/answers.jsonl`，掩码是其 `masks/`。
 
-7. 先做 10 张 Agent 试跑，两个任务、两个方向都覆盖。CPU 4，内存 8 GiB，GPU 0（SAM prompt 的 CPU 回退可能较慢；已有缓存均可读）。本条顺序跑四组，不超过两个 Agent 作业并发；规划器和验证器共用 flash 限额。沿用 G1 的 v4、status、固定核验，Python/skill/plan 关闭；新配置加 gate2。若 G2 尚未验收或不如 G1，去掉 `--gate2` 并把 config 前缀换成 `second_g1`，记录原因。
+7. 先做 10 张 Agent 试跑，两个任务、两个方向都覆盖。CPU 4，内存 8 GiB，GPU 1。没有预存 SAM 编码的图，`segment_prompt` 每次编码整张图：CPU 单线程实测约 150 秒，GPU 0.4–0.8 秒（每个进程约 6 GB 显存，几个进程共用 1 张卡）。不要用 GPU 0 跑。本条顺序跑四组，不超过两个 Agent 作业并发；规划器和验证器共用 flash 限额。沿用 G1 的 v4、status、固定核验，Python/skill/plan 关闭；新配置加 gate2。若 G2 尚未验收或不如 G1，去掉 `--gate2` 并把 config 前缀换成 `second_g1`，记录原因。
 
 ```bash
 for t in T1.1xC1 T5.1xC1; do for d in appeared disappeared; do AGENT_ASK_SLOTS=3 "$PY" -m agent_baseline.loop_json --tasks "$AGENT_RUN/second/tasks/${t}_${d}.jsonl" --split val --config "second_smoke_g2_${d}_s1" --limit 10 --seed-offset 1 --concurrency 6 --prompt-version v4 --status --verify-stage --gate2 --planner-model qwen3.7-flash --ask-backend api --ask-model qwen3.7-flash --ask-correspondence --pixel-thr 0.85 --batch second_smoke_g2 --max-cost-cny 10 || exit; done; done
@@ -82,7 +82,7 @@ for t in T1.1xC1 T5.1xC1; do for d in appeared disappeared; do AGENT_ASK_SLOTS=3
 
 人工核对范围、两期图、方向、三种 GT 和给定掩码。试跑结果保留在独立 config；不用试跑调门限或问法，不混入三次正式重复。
 
-8. 试跑核对后，五个子任务各三次。CPU 4，内存 8 GiB，GPU 0；当前命令顺序执行，最多一个 Agent 进程。1536 个 C1 会话按文档旧单价估约 94 元，C0 另算，此处共享估算预算上限 140 元，实际以账本为准。续跑用相同 config 跳过已有 final；检查账本停止原因后才处理对应 STOP 文件。
+8. 试跑核对后，五个子任务各三次。CPU 4，内存 8 GiB，GPU 1（理由见第 7 步）；当前命令顺序执行，最多一个 Agent 进程。1536 个 C1 会话按文档旧单价估约 94 元，C0 另算，此处共享估算预算上限 140 元，实际以账本为准。续跑用相同 config 跳过已有 final；检查账本停止原因后才处理对应 STOP 文件。
 
 ```bash
 for n in 1 2 3; do for t in T1.1xC1 T5.1xC1 T1.1xC0; do ds='appeared disappeared'; [ "$t" != T1.1xC0 ] || ds=any; for d in $ds; do AGENT_ASK_SLOTS=3 "$PY" -m agent_baseline.loop_json --tasks "$AGENT_RUN/second/tasks/${t}_${d}.jsonl" --split val --config "second_g2_${d}_s$n" --seed-offset "$n" --concurrency 6 --prompt-version v4 --status --verify-stage --gate2 --planner-model qwen3.7-flash --ask-backend api --ask-model qwen3.7-flash --ask-correspondence --pixel-thr 0.85 --batch second_g2 --max-cost-cny 140 || exit; done; done; done

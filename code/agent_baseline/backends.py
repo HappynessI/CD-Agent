@@ -124,8 +124,10 @@ class SharedPrompter:
                 if rgb is not None:
                     # Arbitrary images cannot use embeddings indexed by dataset split/name.
                     if self.image_model is None:
+                        # Images without stored embeddings are encoded per call; use the job's GPU when there is one.
+                        import torch
                         from sam_tools import build
-                        self.image_model = build('cpu')
+                        self.image_model = build('cuda' if torch.cuda.is_available() else 'cpu')
                     pred = self.image_model
                     pred.set_image(rgb[0 if time == 't1' else 1])
                     if box is not None:
