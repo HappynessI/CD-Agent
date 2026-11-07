@@ -1403,7 +1403,7 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 </section>
 <section class="am-panel" id="panel-I">
 <header class="am-panel-head"><span class="am-panel-id">I</span><h2>任务进展</h2></header>
-<div class="am-panel-body"><div class="am-md"><p>更新于 2026-11-06 16:50。数字来自 <code>doc/agent_baseline/README_ai.md</code> 第 10–11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次。</p>
+<div class="am-panel-body"><div class="am-md"><p>更新于 2026-11-07 13:20（分支提交 643ca9a）。数字来自 <code>doc/agent_baseline/README_ai.md</code> 第 10–11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次。</p>
 <div class="am-table-wrap"><table>
 <thead>
 <tr>
@@ -1453,13 +1453,43 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>T5.2 点框反馈</td>
 <td>LEVIR-CD</td>
-<td>83.95（k=1）、84.67（k=3），与合理的固定响应 C（84.07、84.73）持平</td>
+<td>83.95（k=1）、84.67（k=3），与合理的固定响应 C（84.07、84.73）持平；G3 后重跑</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>分割 2 倍放大测试</td>
 <td>SECOND</td>
 <td>结论：不采用</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T1.3 工具摸底</td>
+<td>SECOND 同一批图</td>
+<td>固定路线（SAM 提议 → DINOv2 → 门限）60.88，AnyChange 46.80，提议覆盖 92.1%；能做</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T1.2 工具摸底</td>
+<td>SECOND 同一批图</td>
+<td>SegEarth-OV 只有低矮植被和建筑够用；T1.2 定为“低矮植被 + 建筑”，水体、树、运动场不纳入</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T3.1 工具摸底</td>
+<td>SECOND 自动生成 703 个任务</td>
+<td>检索 AP 只有 5.2，可能做不成；试跑时对照接近 0 就跳过</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>G3 代码</td>
+<td>—</td>
+<td>大框阈值为图面积 10%、约束报告、反馈任务只核验被指出的区域</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T5.3 反馈与对照</td>
+<td>LEVIR-CD</td>
+<td>两个对照 82.73、83.22（给定掩码 83.15）</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>参照</strong></td>
@@ -1469,45 +1499,51 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
-<td>G3：修正大框提示和约束执行</td>
-<td>SECOND、LEVIR-CD</td>
-<td>完成后重跑 C2、C4、T5.2</td>
+<td>G3 回归</td>
+<td>LEVIR（T1.1、T5.1）、SECOND（C2、C4）</td>
+<td>风险：10% 阈值挡住 80.5% 的失败像素，也挡住 75.5% 的正常像素，多来自 SECOND C0/C1</td>
 </tr>
 <tr>
-<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
-<td>T5.3 语言反馈</td>
-<td>LEVIR-CD</td>
-<td>用 G3</td>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>建议加跑</strong></td>
+<td>G3 下的 T1.1 × C1</td>
+<td>SECOND 同一批图</td>
+<td>新建、拆除各 3 次，与 G2 的 72.30、50.29 配对比较；明显变差就重定阈值</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 1</strong></td>
-<td>T1.3 × C0 全部变化</td>
-<td>SECOND</td>
-<td>工具和离线摸底正在进行</td>
+<td>T5.2 重跑、T5.3 语言反馈</td>
+<td>LEVIR-CD</td>
+<td>等 G3 回归结论</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 2</strong></td>
-<td>T1.2 × C0 多个类别</td>
+<td>T1.3 × C0 全部变化</td>
 <td>SECOND</td>
-<td>同上</td>
+<td>—</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 3</strong></td>
-<td>T1.1 × C1 转换（如低矮植被变建筑）</td>
+<td>T1.2 × C0（低矮植被 + 建筑）</td>
 <td>SECOND</td>
-<td>同上</td>
+<td>—</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 4</strong></td>
-<td>T3.1 图内点选</td>
+<td>T1.1 × C1 转换（如低矮植被变建筑）</td>
 <td>SECOND</td>
-<td>同上</td>
+<td>—</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 5</strong></td>
+<td>T3.1 图内点选</td>
+<td>SECOND</td>
+<td>视试跑结果可能跳过</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 6</strong></td>
 <td>T3.3 变化对示例（示例取自另一对图）</td>
 <td>SECOND</td>
-<td>同上</td>
+<td>视试跑结果可能跳过</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
@@ -1675,7 +1711,7 @@ T3 靠外观匹配，地图没有外观，因此不适用。T5.4 本身就是地
 | AnyChange | 自动模式与点查询模式 | T1.3 与 T3.1 |
 | 交互式分割 | 点击反馈迭代修正 | T5.2 |
 ## 任务进展
-更新于 2026-11-06 16:50。数字来自 `doc/agent_baseline/README_ai.md` 第 10–11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次。
+更新于 2026-11-07 13:20（分支提交 643ca9a）。数字来自 `doc/agent_baseline/README_ai.md` 第 10–11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次。
 
 | 状态 | 任务 | 数据 | 结果或说明 |
 |---|---|---|---|
@@ -1685,16 +1721,22 @@ T3 靠外观匹配，地图没有外观，因此不适用。T5.4 本身就是地
 | 已完成 | T5.1 × C1 | SECOND 同一批图 | 新建 65.67、拆除 37.52，与规则持平 |
 | 已完成 | T1.1 × C2（框内建筑变化） | SECOND 同一批图 | 60.51，与“规则 ∩ 框”持平，比事后裁剪低 6.2 |
 | 已完成 | T1.1 × C4（框内新建） | SECOND 同一批图 | 65.24，与“规则 ∩ 框”持平，比事后裁剪低 10.9 |
-| 已完成 | T5.2 点框反馈 | LEVIR-CD | 83.95（k=1）、84.67（k=3），与合理的固定响应 C（84.07、84.73）持平 |
+| 已完成 | T5.2 点框反馈 | LEVIR-CD | 83.95（k=1）、84.67（k=3），与合理的固定响应 C（84.07、84.73）持平；G3 后重跑 |
 | 已完成 | 分割 2 倍放大测试 | SECOND | 结论：不采用 |
+| 已完成 | T1.3 工具摸底 | SECOND 同一批图 | 固定路线（SAM 提议 → DINOv2 → 门限）60.88，AnyChange 46.80，提议覆盖 92.1%；能做 |
+| 已完成 | T1.2 工具摸底 | SECOND 同一批图 | SegEarth-OV 只有低矮植被和建筑够用；T1.2 定为“低矮植被 + 建筑”，水体、树、运动场不纳入 |
+| 已完成 | T3.1 工具摸底 | SECOND 自动生成 703 个任务 | 检索 AP 只有 5.2，可能做不成；试跑时对照接近 0 就跳过 |
+| 已完成 | G3 代码 | — | 大框阈值为图面积 10%、约束报告、反馈任务只核验被指出的区域 |
+| 已完成 | T5.3 反馈与对照 | LEVIR-CD | 两个对照 82.73、83.22（给定掩码 83.15） |
 | 参照 | T1.1 × C0（不分方向） | SECOND 同一批图 | 64.24 |
-| 进行中 | G3：修正大框提示和约束执行 | SECOND、LEVIR-CD | 完成后重跑 C2、C4、T5.2 |
-| 进行中 | T5.3 语言反馈 | LEVIR-CD | 用 G3 |
-| 排队 1 | T1.3 × C0 全部变化 | SECOND | 工具和离线摸底正在进行 |
-| 排队 2 | T1.2 × C0 多个类别 | SECOND | 同上 |
-| 排队 3 | T1.1 × C1 转换（如低矮植被变建筑） | SECOND | 同上 |
-| 排队 4 | T3.1 图内点选 | SECOND | 同上 |
-| 排队 5 | T3.3 变化对示例（示例取自另一对图） | SECOND | 同上 |
+| 进行中 | G3 回归 | LEVIR（T1.1、T5.1）、SECOND（C2、C4） | 风险：10% 阈值挡住 80.5% 的失败像素，也挡住 75.5% 的正常像素，多来自 SECOND C0/C1 |
+| 建议加跑 | G3 下的 T1.1 × C1 | SECOND 同一批图 | 新建、拆除各 3 次，与 G2 的 72.30、50.29 配对比较；明显变差就重定阈值 |
+| 排队 1 | T5.2 重跑、T5.3 语言反馈 | LEVIR-CD | 等 G3 回归结论 |
+| 排队 2 | T1.3 × C0 全部变化 | SECOND | — |
+| 排队 3 | T1.2 × C0（低矮植被 + 建筑） | SECOND | — |
+| 排队 4 | T1.1 × C1 转换（如低矮植被变建筑） | SECOND | — |
+| 排队 5 | T3.1 图内点选 | SECOND | 视试跑结果可能跳过 |
+| 排队 6 | T3.3 变化对示例（示例取自另一对图） | SECOND | 视试跑结果可能跳过 |
 | 暂缓 | T2 稀缺类别 | — | 需要 OSM 或自建 benchmark |
 | 暂缓 | C3、T4 | — | 缺真值 |
 </textarea>
