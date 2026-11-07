@@ -21,7 +21,7 @@ G3 的反馈会话只核验公开反馈范围及相对 `mask#0` 改动过的组�
 指令由 T5.1 原文追加 `User feedback:` 和下列句子组成：
 
 - 漏检：`A building in the {where} was missed.`
-- 误检：`The marked change in the {where} is not a building change.`
+- 误检：`One of the marked changes in the {where} is not a building change.`（10 张试跑后由 `The marked change in the {where} ...` 改来：原句没说是格子里的哪一个，规划器把整格组件都删了）
 - 有反馈时结尾：`Correct only what the user described and keep the rest of mask#0 unchanged.`
 - 无可用错误时：`The user reviewed the mask and pointed out no errors. Keep mask#0 unchanged.`
 

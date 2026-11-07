@@ -80,7 +80,8 @@ def evaluate_group(spec, samples=4000, seed=1016):
     task, direction = rows[0]['task_type'], rows[0]['change_direction']
     if len(spec['agent_runs']) != 3 or len(set(spec['agent_runs'])) != 3:
         raise ValueError('Exactly three distinct repeat directories are required')
-    baselines = dict(fixed_direction=spec['fixed_dir'], fixed_any=spec['undirected_dir'])
+    reference = 'fixed_unintersected' if task == 'T1.1xC1t' else 'fixed_any'
+    baselines = dict(fixed_direction=spec['fixed_dir'], **{reference: spec['undirected_dir']})
     if spec.get('rule_dir'):
         baselines['rule_direction'] = spec['rule_dir']
     if direction != 'any' and not spec.get('rule_dir'):

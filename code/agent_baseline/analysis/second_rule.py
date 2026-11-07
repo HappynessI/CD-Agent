@@ -28,6 +28,8 @@ def apply_rule(mask, labels, answers):
 
 
 def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=None):
+    if not rows or concurrency < 1 or max_cost <= 0:
+        raise ValueError('Require nonempty tasks and positive concurrency/cost cap')
     policies = {(direction or r['change_direction'], scope or r.get('scope')) for r in rows}
     if len(policies) != 1:
         raise ValueError('Use one subtask/direction manifest per invocation')
@@ -36,7 +38,12 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
     dest.mkdir(parents=True, exist_ok=True)
     settings = dict(mask_dir=str(Path(mask_dir).resolve()), direction=actual_direction, scope=actual_scope,
                     variant='f37_corr', ids=[r['id'] for r in rows],
-                    images=[[r['image_t1'], r['image_t2']] for r in rows])
+                    images=[[r['image_t1'], r['image_t2']] for r in rows],
+                    targets=[list(r['target']) if isinstance(r['target'], (tuple, list)) else r['target'] for r in rows],
+                    source_classes=[r.get('source_classes') for r in rows],
+                    masks=[dict(name=Path(r['id']).stem + '.png',
+                        size=(Path(mask_dir)/(Path(r['id']).stem + '.png')).stat().st_size,
+                        mtime=(Path(mask_dir)/(Path(r['id']).stem + '.png')).stat().st_mtime_ns) for r in rows])
     config = dest / 'settings.json'
     if config.exists() and json.loads(config.read_text()) != settings:
         raise ValueError('Existing rule answers have different inputs or scope; use a fresh directory')
@@ -45,13 +52,15 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
     done = {r['uid']: r for r in map(json.loads, answers_path.read_text().splitlines())} if answers_path.exists() else {}
     guard = RunGuard(RUN / 'STOP.json', dest / 'budget' / 'ledger.txt', max_cost)
     guard.check()
+    guard.charge(0)
     with ThreadPoolExecutor(max_workers=concurrency) as executor, answers_path.open('a') as file:
         for row in rows:
             stem = Path(row['id']).stem
             mask = np.asarray(Image.open(Path(mask_dir) / (stem + '.png'))) > 0
             labels, comps = components(mask)
             rgb = load_pair(row)
-            session = Session(mask.shape, target=row['target'], change_direction=actual_direction, scope=actual_scope)
+            session = Session(mask.shape, target=row['target'], change_direction=actual_direction, scope=actual_scope,
+                              source_classes=row.get('source_classes'))
             def one(comp):
                 uid = f"{stem}:{comp['id']}"
                 pair = ask_images(rgb, labels == comp['id'], comp['bbox'], True)

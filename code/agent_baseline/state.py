@@ -27,10 +27,18 @@ class Instances:
 
 
 class Session:
-    def __init__(self, shape, init_mask=None, target="building", change_direction="any", instruction=None, constraint=None, scope=None, region_mask=None, targets=None, feedback_points=None, feedback_cells=None):
+    def __init__(self, shape, init_mask=None, target="building", change_direction="any", instruction=None, constraint=None, scope=None, region_mask=None, targets=None, feedback_points=None, feedback_cells=None, source_classes=None, ask_variant=None):
         from .scope_t13 import scope_card
         target = tuple(targets) if targets is not None else target
         scope_card(target, change_direction, scope)
+        if source_classes is not None and (target != 'building' or change_direction != 'appeared'
+                or list(source_classes) != ['low vegetation', 'non-vegetated ground surface']):
+            raise ValueError('Source classes require the declared ground/vegetation to building conversion')
+        from .scope_t13 import ASK_CANDIDATES
+        if ask_variant is not None and (target != 'any change' or ask_variant not in ASK_CANDIDATES):
+            raise ValueError('ask_variant requires any change and a declared candidate')
+        self.source_classes = tuple(source_classes) if source_classes is not None else None
+        self.ask_variant = ask_variant
         self.scope = scope
         self.target, self.change_direction = target, change_direction
         self.instruction, self.constraint = instruction, constraint

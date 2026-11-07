@@ -31,6 +31,7 @@ from prompts import PSEUDO_TYPES, SYSTEM, VERIFY, verifier_prompts
 from .backends import CORRESPONDENCE, encode_image, example_blocks, post, yes_probability
 from .planner import Planner, RunGuard, RunStopped, request_cost, token_cost, usage_tokens
 from .view import ask_images
+from .scope_t13 import session_prompts
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
 # The ledger prices every variant at planner.PRICE (qwen3.7-plus). The price of qwen3-vl-plus is not
@@ -99,7 +100,7 @@ def api_answer(images, spec, guard, seed, session=None):
     question = CORRESPONDENCE if spec.get('correspondence') else CONTEXT_QUESTION if spec.get('context') else VERIFY
     system = SYSTEM
     if session is not None:
-        settings = verifier_prompts(session.target, session.change_direction, session.scope)
+        settings = session_prompts(session)
         system = settings['SYSTEM']
         question = settings['CORRESPONDENCE'] if spec.get('correspondence') else settings['VERIFY']
         if spec.get('context') and not spec.get('correspondence'):
@@ -221,6 +222,8 @@ def answers(args):
 
 def auc(positive, negative, weights_positive=None, weights_negative=None):
     """Rank AUC; with weights, each pair counts in proportion to the product of its weights."""
+    if not len(positive) or not len(negative):
+        return None
     wp = np.ones(len(positive)) if weights_positive is None else np.asarray(weights_positive, float)
     wn = np.ones(len(negative)) if weights_negative is None else np.asarray(weights_negative, float)
     order = np.argsort(negative)

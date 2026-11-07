@@ -15,7 +15,7 @@ from pathlib import Path
 import traceback
 import numpy as np
 from common import names, load_rgb, load_mask_png, write_json, WORKSPACE
-from .scope_t13 import scope_card
+from .scope_t13 import scope_card, session_card
 from .tools import Toolbox, PLAN_SCHEMA, SKILL_SCHEMA, failure, skill_index
 from . import tools as tool_module
 from .state import Mask, Session
@@ -34,7 +34,7 @@ def system_prompt(version, budget, session=None):
     template = path.read_text()
     target = session.target if session else 'building'
     direction = session.change_direction if session else 'any'
-    card = scope_card(target, direction, session.scope if session else None)
+    card = session_card(session) if session else scope_card(target, direction)
     # Earlier templates retain their text on the default route too.
     rendered = template.replace('buildings', card['plural']).replace('building', card['target'])
     text = rendered.format(counts='\n'.join('- ' + s for s in card['counts']),
@@ -420,6 +420,7 @@ def main():
             change_direction=row['change_direction'] if row else 'any',
             instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None,
             scope=row.get('scope') if row else None,
+            source_classes=row.get('source_classes') if row else None,
             region_mask=load_mask_png(row['region_mask']) if row and row.get('region_mask') else None,
             **(public_feedback(row) if row else {}))
         if row and row.get('exemplar_mask'):

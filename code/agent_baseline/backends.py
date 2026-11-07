@@ -12,7 +12,7 @@ import urllib.error
 import urllib.request
 import numpy as np
 from prompts import PSEUDO_TYPES, SYSTEM, VERIFY
-from .scope_t13 import scope_card, verifier_prompts
+from .scope_t13 import scope_card, verifier_prompts, session_prompts
 from . import instances
 from .segment_cache import manifest_cache_path, read_instances
 from .state import ToolError
@@ -240,7 +240,7 @@ class ApiAsk:
         for word, image in zip(CROP_WORDS, images):
             content += [dict(type='text', text=word), dict(type='image_url',
                         image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
-        settings = verifier_prompts(self.session.target, self.session.change_direction, self.session.scope) if self.session else verifier_prompts()
+        settings = session_prompts(self.session) if self.session else verifier_prompts()
         content.append(dict(type='text', text=settings['CORRESPONDENCE'] if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
         try:
             with ASK_SLOTS:

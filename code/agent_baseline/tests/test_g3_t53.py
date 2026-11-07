@@ -201,7 +201,7 @@ class G3T53Tests(unittest.TestCase):
                   dict(type='false_positive', point=[80, 80], area=25, component_id=4)]
         selected = generator.select_feedback(errors, shape)
         self.assertEqual([(e['where'], e['area']) for e in selected], [('lower right', 25)])
-        self.assertIn('The marked change in the lower right is not a building change.', t53_instruction(selected))
+        self.assertIn('One of the marked changes in the lower right is not a building change.', t53_instruction(selected))
         self.assertIn('A building in the top was missed.', t53_instruction(generator.select_feedback(errors[:3], shape)))
         self.assertEqual(generator.select_feedback(errors[:2], shape), [])
         self.assertTrue(t53_instruction([]).endswith('Keep mask#0 unchanged.'))

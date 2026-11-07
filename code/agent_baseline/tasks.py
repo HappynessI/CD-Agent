@@ -6,6 +6,8 @@ import numpy as np
 from .scope_t13 import scope_card
 
 INSTRUCTIONS = {
+    'T1.2xC0': 'Find changes involving buildings or low vegetation between T1 and T2. Output a binary change mask.',
+    'T1.1xC1t': 'Find buildings newly built on low vegetation or bare ground between T1 and T2. Output a binary change mask.',
     'T1.3': 'Find all land-cover changes between T1 and T2. Output a binary change mask.',
     'T1.2': 'Find changes involving the requested land-cover classes between T1 and T2.',
     'T3.1': 'Find all changes similar to the marked example between T1 and T2.',
@@ -47,7 +49,7 @@ def t53_instruction(feedback):
     if len(feedback) > 1:
         raise ValueError('T5.3 allows at most one feedback sentence')
     phrases = {'missed': 'A building in the {where} was missed.',
-               'false_positive': 'The marked change in the {where} is not a building change.'}
+               'false_positive': 'One of the marked changes in the {where} is not a building change.'}
     for item in feedback:
         if item['where'] not in CELLS:
             raise ValueError('Unknown T5.3 cell')
@@ -70,6 +72,10 @@ FIELDS = {'id', 'image_t1', 'image_t2', 'instruction', 'task_type', 'constraint'
 
 
 def instruction_for(task, session):
+    if task == 'T1.2xC0' and (session.target != ('building', 'low vegetation') or session.change_direction != 'any'):
+        raise ValueError('T1.2xC0 requires building and low vegetation in both directions')
+    if task == 'T1.1xC1t' and session.source_classes is None:
+        raise ValueError('T1.1xC1t requires source_classes')
     if task in BOX_INSTRUCTIONS:
         if (session.change_direction != BOX_DIRECTIONS[task] or session.target != 'building'
                 or session.scope != 'building_rebuild_excluded' or session.region_bbox is None):
@@ -82,6 +88,8 @@ def instruction_for(task, session):
         text = BOX_INSTRUCTIONS[task].format(box=session.region_bbox)
     elif task in C1_INSTRUCTIONS:
         text = C1_INSTRUCTIONS[task][session.change_direction]
+    elif task in ('T1.2xC0', 'T1.1xC1t'):
+        text = INSTRUCTIONS[task]
     else:
         card = scope_card(session.target, session.change_direction, session.scope)
         text = INSTRUCTIONS[task].replace('buildings', card['plural']).replace('building', card['target'])
@@ -121,6 +129,11 @@ def read_tasks(filename, task=None):
             raise ValueError(f'Unsupported task_type: {row["task_type"]}')
         row = dict(row, target=tuple(row['targets']) if row.get('targets') else row['target'] or 'building', change_direction=row['change_direction'] or 'any')
         scope_card(row['target'], row['change_direction'], row.get('scope'))
+        if row['task_type'] in ('T1.2xC0', 'T1.1xC1t'):
+            from .state import Session
+            session = Session((1, 1), target=row['target'], change_direction=row['change_direction'],
+                scope=row.get('scope'), source_classes=row.get('source_classes'))
+            instruction_for(row['task_type'], session)
         if row['task_type'] in C1_INSTRUCTIONS and row['change_direction'] not in ('appeared', 'disappeared'):
             raise ValueError('C1 requires appeared or disappeared')
         if row['task_type'] in BOX_INSTRUCTIONS:

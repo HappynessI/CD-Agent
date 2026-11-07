@@ -18,7 +18,7 @@ import re
 import numpy as np
 from scipy import ndimage as ndi
 from prompts import VERIFY
-from .scope_t13 import verifier_prompts
+from .scope_t13 import verifier_prompts, session_prompts, session_card
 from .tools_t13 import ProposalTools, tool_schemas, enabled_names, extend_schemas, NAMES as T13_NAMES
 from . import instances
 from common import components
@@ -110,7 +110,7 @@ def session_schemas(session, python=False, tools_t13=False):
             ask['description'] += f' Count only the {session.change_direction} direction.'
     if session.scope:
         from .scope_t13 import scope_card
-        card = scope_card(session.target, session.change_direction, session.scope)
+        card = session_card(session)
         ask = next(s['function'] for s in schemas if s['function']['name'] == 'ask')
         ask['description'] += ' Scope: ' + '; '.join(card['counts'] + card['not_counts'])
     if python:
@@ -396,7 +396,7 @@ class Toolbox(ProposalTools):
     def verify(self, expanded, source):
         context = getattr(self.ask_backend, 'context', False)
         pairs = [ask_images(self.rgb, item.labels == c['id'], c['bbox'], context) for _, item, c in expanded]
-        question = verifier_prompts(self.session.target, self.session.change_direction, self.session.scope)['VERIFY']
+        question = session_prompts(self.session)['VERIFY']
         if hasattr(self.ask_backend, 'session'):
             self.ask_backend.session = self.session
         rows, meta = self._backend(self.ask_backend, pairs, question)
@@ -704,7 +704,7 @@ class Toolbox(ProposalTools):
             if outside.any():
                 ids = sorted(int(i) for i in np.unique(item.labels[outside]))
                 lines.append(f'Outside region#0: {int(outside.sum())} pixels in component IDs {ids}.')
-        types = set(verifier_prompts(self.session.target, self.session.change_direction, self.session.scope)['PSEUDO_TYPES'])
+        types = set(session_prompts(self.session)['PSEUDO_TYPES'])
         opposite = OPPOSITE_TYPES.get(self.session.change_direction, set()) & types
         wrong = []
         for c in item.components:
