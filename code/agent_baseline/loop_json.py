@@ -421,6 +421,7 @@ def main():
             instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None,
             scope=row.get('scope') if row else None,
             source_classes=row.get('source_classes') if row else None,
+            ask_variant=row.get('ask_variant') if row else None,
             region_mask=load_mask_png(row['region_mask']) if row and row.get('region_mask') else None,
             **(public_feedback(row) if row else {}))
         if row and row.get('exemplar_mask'):

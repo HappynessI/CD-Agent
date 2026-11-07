@@ -307,7 +307,7 @@ class LoopTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 assert_no_evidence(self,bad)
         package=Path(__file__).resolve().parents[1]
-        allowed={'replay_g1.py','make_levir_tasks.py','recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py','ask_eval.py','compare_runs.py','levir_analysis.py','boundary_eval.py','sam3_soft_eval.py','agent_vs_rule.py','vs_rule.py','verifier_select.py','planner_room.py','ask_pair.py','ask_fp_sample.py','vs_fixed.py','vs_fixed_r7.py'}
+        allowed={'replay_g1.py','make_levir_tasks.py','recorder.py','summarize.py','fixed_routes.py','make_demo.py','pick_demo.py','diagnose.py','ask_eval.py','compare_runs.py','levir_analysis.py','boundary_eval.py','sam3_soft_eval.py','agent_vs_rule.py','vs_rule.py','verifier_select.py','planner_room.py','ask_pair.py','ask_fp_sample.py','vs_fixed.py','vs_fixed_r7.py','g3_vs_g2_levir.py'}
         # Offline analysis may read labels, but nothing the agent runs may import it.
         online=['loop_json.py','tools.py','state.py','view.py','backends.py','planner.py','instances.py','tasks.py','python_sandbox.py','python_worker.py']
         for filename in online:
