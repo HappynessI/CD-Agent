@@ -1,4 +1,5 @@
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -11,7 +12,8 @@ from agent_baseline.tasks import read_tasks, instruction_for
 
 class T13TaskTest(unittest.TestCase):
     def manifest(self, **change):
-        d = Path(tempfile.mkdtemp(dir=Path(__file__).parent))
+        d = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, d, True)
         row = task_row('a.png', d, d, 'describe')
         row.update(change)
         (d / 'm.jsonl').write_text(json.dumps(row) + '\n')

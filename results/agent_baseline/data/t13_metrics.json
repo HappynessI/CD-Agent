@@ -1,0 +1,148 @@
+{
+ "T1.3": {
+  "task": "T1.3",
+  "direction": "any",
+  "images": 128,
+  "repeats": 3,
+  "agent_mean": {
+   "f1_c": 46.532482214585876,
+   "precision": 51.23693202972043,
+   "recall": 42.673686163803275,
+   "direction_violation": 0.0
+  },
+  "agent_per_run": [
+   {
+    "f1_c": 48.461416592501706,
+    "precision": 52.114738032416135,
+    "recall": 45.28674754500056,
+    "direction_violation": 0.0,
+    "tp": 3110859,
+    "fp": 2858391,
+    "fn": 3758389,
+    "opposite_pixels": 0,
+    "predicted_pixels": 5969250
+   },
+   {
+    "f1_c": 45.207278093153185,
+    "precision": 48.904037171183624,
+    "recall": 42.030131973689116,
+    "direction_violation": 0.0,
+    "tp": 2887154,
+    "fp": 3016559,
+    "fn": 3982094,
+    "opposite_pixels": 0,
+    "predicted_pixels": 5903713
+   },
+   {
+    "f1_c": 45.928751958102744,
+    "precision": 52.692020885561526,
+    "recall": 40.70417897272016,
+    "direction_violation": 0.0,
+    "tp": 2796071,
+    "fp": 2510370,
+    "fn": 4073177,
+    "opposite_pixels": 0,
+    "predicted_pixels": 5306441
+   }
+  ],
+  "baselines": {
+   "fixed_direction": {
+    "f1_c": 60.88060007958466,
+    "precision": 56.43774460182013,
+    "recall": 66.0827211362874,
+    "direction_violation": 0.0,
+    "tp": 4539386,
+    "fp": 3503788,
+    "fn": 2329862,
+    "opposite_pixels": 0,
+    "predicted_pixels": 8043174
+   },
+   "fixed_any": {
+    "f1_c": 60.88060007958466,
+    "precision": 56.43774460182013,
+    "recall": 66.0827211362874,
+    "direction_violation": 0.0,
+    "tp": 4539386,
+    "fp": 3503788,
+    "fn": 2329862,
+    "opposite_pixels": 0,
+    "predicted_pixels": 8043174
+   },
+   "rule_direction": {
+    "f1_c": 61.10629169417924,
+    "precision": 57.02427095258882,
+    "recall": 65.81778675045653,
+    "direction_violation": 0.0,
+    "tp": 4521187,
+    "fp": 3407344,
+    "fn": 2348061,
+    "opposite_pixels": 0,
+    "predicted_pixels": 7928531
+   }
+  },
+  "comparisons": {
+   "fixed_direction": {
+    "delta_f1": -14.348117864998784,
+    "ci95": [
+     -17.28273075584335,
+     -11.262441937864274
+    ]
+   },
+   "rule_direction": {
+    "delta_f1": -14.573809479593365,
+    "ci95": [
+     -17.522388168960397,
+     -11.507005480413333
+    ]
+   }
+  },
+  "delta_f1_given": null,
+  "run_diagnostics": [
+   {
+    "error_sessions": 0,
+    "fallback_sessions": 18,
+    "submitted_by": {
+     "model": 110,
+     "budget": 18
+    },
+    "rebuilt_answers": 0,
+    "rebuilt_regions": 0,
+    "missing_verification_ledgers": 0
+   },
+   {
+    "error_sessions": 0,
+    "fallback_sessions": 20,
+    "submitted_by": {
+     "model": 108,
+     "budget": 17,
+     "empty": 2,
+     "no_submit": 1
+    },
+    "rebuilt_answers": 0,
+    "rebuilt_regions": 0,
+    "missing_verification_ledgers": 0
+   },
+   {
+    "error_sessions": 1,
+    "fallback_sessions": 20,
+    "submitted_by": {
+     "model": 108,
+     "budget": 16,
+     "empty": 2,
+     "error": 1,
+     "no_submit": 1
+    },
+    "rebuilt_answers": 0,
+    "rebuilt_regions": 0,
+    "missing_verification_ledgers": 0
+   }
+  ],
+  "offline_rebuilt": null,
+  "bootstrap": {
+   "seed": 1016,
+   "samples": 4000,
+   "unit": "paired image; same resampled images across fixed three repeats"
+  },
+  "units": "F1/P/R percent; delta F1 percentage points; direction violation fraction; empty prediction violation=0"
+ }
+}
