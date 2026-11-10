@@ -1,6 +1,6 @@
 # MLLM 判断器审核前端
 
-顶部提供“MLLM 判断器审核”和“漏检候选审核”两种模式；后者的离线构建与启动说明见本文末节。
+顶部提供“MLLM 判断器审核”“漏检候选审核”和“任务数据”三种模式；后两者的说明见本文对应章节。
 
 只覆盖“MLLM 做判断器”这一环：提示词版本、ICL 示例（零样本 / 少示例 / 多示例 / 多示例批量；示例形式 A / B / A+B）、示例池审核、模型原始输出与指标、示例数量对指标的影响。候选生成、分类和调度智能体不在范围内。exp6k 起的 ICL 实验都在这里审，不再另做审核页。
 
@@ -9,7 +9,7 @@
 ## 启动
 
 ```bash
-pip install fastapi uvicorn numpy pillow
+pip install fastapi uvicorn numpy pillow scipy
 cd audit/verifier_ui
 VERIFIER_DB=/path/to/verifier.db uvicorn app:app --port 8765
 # 本机：ssh -L 8765:localhost:8765 <服务器>，然后打开 http://localhost:8765
@@ -266,3 +266,89 @@ $CONDA_ENVS/exp6-v2-env/bin/python -B \
 2026-10-28仍只用原来的7张真实验收图。单图stats约0.03–0.17秒；按7673张直接外推约9分钟，按冻结候选平均数量修正后约17分钟。考虑缓存预热偏差、NFS和分片启动，建议预留 **0.5–1个单CPU作业小时**，32个统计分片，最多4个并发。这是小规模外推，未执行全量stats。
 
 7张图的663张PNG合计 **15.68 MB**；每划分扩大到10张直接外推约 **156.75 MB**。按冻结候选平均数量修正后约 **601 MB**，再留25%余量约 **0.75 GB**，低于1 GB目标。统计JSON按当前记录大小外推，逐图分片与合并文件合计约0.05–0.1 GB。实际典型图可能更复杂，运行时仍执行每划分约142.86 MB的PNG硬上限；超额会明确失败。实际生成名单、统计覆盖、空间和未执行项目见 `check/REPORT.md`。
+
+## 任务数据
+
+第三种模式 `?mode=task-data` 下有“真值审查”“组件标注”两个标签页，组件标注内切换第一遍、第二遍。原有两种模式及接口保持原样。新表均使用 `CREATE TABLE IF NOT EXISTS`；新模块只读写 `task_*` 表，不运行旧库迁移。可将新表放进同一个本机 SQLite，也可用独立的 `TASK_DATA_DB`。它优先于 `VERIFIER_DB`。
+
+### 启动、合成、真数据导入、导出
+
+以下命令均在 `audit/verifier_ui/` 执行。`PYTHON` 指已有 Python 环境；`LOCAL_DB` 必须指向本机磁盘（例如本机临时目录里的库），不能把运行中的 SQLite 放在共享盘。`RUN_ROOT` 是真值产物目录，`SECOND_ROOT` 是含 `img1/img2/slabel1/slabel2` 的 SECOND 根目录，`ASSETS`、`EXPORT_DIR` 为输出目录。服务器路径通过环境变量传入，不写进代码。设 `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1`，并将 `TMPDIR` 指向工作目录内的临时目录。
+
+```bash
+# 1. 启动；在浏览器打开 ?mode=task-data
+TASK_DATA_DB="$LOCAL_DB" "$PYTHON" -m uvicorn app:app --host 127.0.0.1 --port 8765 --workers 1
+
+# 2. 合成数据：3 个任务各 3 例，20 个组件（4 个第二遍）
+TASK_DATA_DB="$LOCAL_DB" "$PYTHON" task_data_import.py --synthetic "$ASSETS/synthetic"
+
+# 3. 真数据导入；使用与合成演示不同的新库
+TASK_DATA_DB="$LOCAL_DB" "$PYTHON" task_data_import.py --run-root "$RUN_ROOT" --second-root "$SECOND_ROOT"
+
+# 4. 导出两个 JSON
+TASK_DATA_DB="$LOCAL_DB" "$PYTHON" task_data_import.py --export "$EXPORT_DIR"
+```
+
+页面上的“导出审查”“导出标注”也可直接下载。合成、真数据使用不同数据库，避免混入已有标注。重复导入同一清单保留判断、备注、两遍标注和映射修改；清单变化时报错，要求使用新库。真值重新生成后，使用新库重新审查，旧库及导出保留作记录。
+
+准备脚本只读原图、语义标签和指定的真值产物，不调用真值脚本，也不读 `init_mask`、预测、固定路线、规则路线或模型答案。T4.1 只读 LEVIR 任务清单的 `gt_mask`；LEVIR 没有两期语义地类标签，卡片明确写明，不伪造标签。
+
+图片采用**按登记路径直接从原图读取**的方案。SECOND 语义图按 0–6 编码着色，与原有 RGB 图例一致；0 是未变化且没有地类。真值在 T2 上使用黄色半透明填充和红色轮廓。组件的轮廓压成逐行区间存库，接口重建相同轮廓，两期裁剪一致，外接框每边加约 12 px 后扩至至少 96×96（不超出整图）；整图缩略图显示红框。显示图最多 512 px，LEVIR 1024² 原图缩小显示，面积始终按原始真值计算。文件及图片的 `OSError` 总共尝试三次后再报错。
+
+### 抽例与映射
+
+固定种子 1016；只在真值非空条目中抽取。R1 按 `meta.purpose` 每个目的各 3 例，R2 共 3 例，R3 按 `meta.reference` 每个参照物各 3 例，T4.1 共 3 例。每组先按 `(真值面积, id)` 排序，后四分之一和前四分之一分别随机取 1 例，再从剩余条目随机取 1 例，三例不重复。四分之一的个数为 `ceil(N/4)`，因此重复面积仍有确定的排序规则。少于 3 例全部展示，0 例和数量不足也在页面的抽样说明中显示。
+
+读取 `construct/r1/tasks/T4.3_report.jsonl`、`construct/r2/tasks/T1.3xC3_report.jsonl`、`t41/tasks/T4.1_any.jsonl`。R3 仅在 `construct/stats.json` 的 `r3.decision == "do"` 时读取 `construct/r3/tasks/T4.4_report.jsonl`；否则不出卡并显示决定及非空图数。若决定为 do 但清单尚未生成，也明确提示。R1 初始映射来自 `stats.json.mapping`，补集仅在 1–6 类内展开；变化还要求两期非零且类别不同。
+
+审查可选“合理 / 不合理”，保存一句话备注，重复点击可修改。“撤销”恢复当前例子由当前审查人最近一次修改前的状态。先填写标注人。映射面板列出六个目的的 T1、T2 类别勾选框，每行单独保存，记录修改前后集合、修改人及时间。页面保留生成真值时的映射，明确提示“映射改动需要重新生成真值后再审”；编辑不自动重算真值。
+
+### 组件、HSV 和快捷键
+
+完整导入范围是 `second_dev/names.txt` 60 张与 `second/second_val128.txt` 128 张，并检查两池不重叠。新建为 `T1 != 5 且 T2 == 5`，拆除为 `T1 == 5 且 T2 != 5`，分别取 8 连通组件；小于 64 px 不出卡，恰好 64 px 保留。新建取 T2 像素，拆除取 T1 像素，子类不预填。
+
+颜色预填取组件像素的 Pillow HSV 三通道中位数。H 转为 0–360°，S、V 转为 0–1；按以下顺序判断，阈值均在 `task_data_import.py` 定义为常量：
+
+| 条件 | 初始颜色 |
+| --- | --- |
+| 无像素，或 V < 0.04（近乎全黑） | 看不清 |
+| V < 0.25 | 深灰或黑 |
+| S ≤ 0.20 且 V ≥ 0.65 | 白或浅灰 |
+| S ≥ 0.25 且 H ∈ [180,260] | 蓝 |
+| S ≥ 0.25 且 H ≤ 45 或 H ≥ 330 | 红或橙（两端都要求 S ≥ 0.25） |
+| S ≥ 0.25 且 H ∈ [70,175] | 绿 |
+| 其余 | 其他或混色 |
+
+这是无模型的初值，可由标注人修改；不把规则视作真值。多栋混色、颜色看不清或子类看不清时，导出标记整个组件为忽略区，另报忽略数。
+
+| 操作 | 快捷键 |
+| --- | --- |
+| 蓝 / 红或橙 / 白或浅灰 / 深灰或黑 / 绿 / 其他或混色 / 看不清 | 1–7 |
+| 临时工棚或彩钢板房 / 厂房或仓库 / 住宅或一般建筑 / 看不清 | Q / W / E / R |
+| 保存两个属性并到下一张 | 空格 |
+| 撤销当前遍当前标注人最近一次保存 | Z |
+
+输入框获得焦点时快捷键不生效。两属性均选好才能保存；颜色沿用初值也需要按空格确认。“上一张 / 下一张”只切换卡，不保存。进度条显示当前筛选范围的已标 / 总数，另列本遍总计；支持按图、按方向筛选。
+
+### 第二遍与导出字段
+
+先按稳定组件 id 排序，用 `random.Random(1016).sample` 抽取 `round(0.2*N)` 个（Python 四舍六入五取偶规则）。第二遍保存在同一行 `second_*` 字段；第二遍接口删除预填字段，只返回该遍的结果，页面不显示第一遍结果或预填。第一次打开不选任何属性；重访可见该组件第二遍已经保存的结果。
+
+`task_review.json` 含每例判断、备注、标注人、时间、最终映射、生成时映射及全部修改历史。`second_component_labels.json` 的 `components` 每条含 id、图名、方向、图池、bbox（右下边界不含）、面积、颜色、子类、预填颜色、`prefill_changed`、标注人、时间、是否抽中第二遍及 `second_result`。未标字段为 null；`prefill_changed` 也为 null。`agreement` 以两遍都已保存的组件为分母，分别报颜色、子类、两者都相同的一致率，尚无成对结果时为 null，同时报已配对数与应盲标数。导出不包含服务器图像路径或组件像素区间。
+
+### 轻量测试与截图
+
+```bash
+"$PYTHON" -B test_task_data.py
+node --check static/task_data.js
+
+# 在一个进程里导入内存库并截图；文件只写到给定目录
+TASK_DATA_DB='file:synthetic-preview?mode=memory&cache=shared' \
+  "$PYTHON" -B task_data_preview.py --synthetic "$ASSETS/synthetic" --output "$SCREENSHOTS"
+TASK_DATA_DB='file:real-preview?mode=memory&cache=shared' \
+  "$PYTHON" -B task_data_preview.py --run-root "$RUN_ROOT" --second-root "$SECOND_ROOT" --output "$SCREENSHOTS/real"
+```
+
+命名内存库只在同一个预览进程中存在；普通导入与启动的分开命令必须使用同一个本机文件库。测试在内存库及工作目录内的临时图片上运行，不使用共享盘 SQLite。覆盖抽例、HSV 七档、组件阈值、8 连通、判读期、盲标复现、写入撤销、映射历史、重导入保留、图像和导出，并直接调用原 `/api/prompts` 处理函数比较返回；不依赖 socket 或跨线程 TestClient。
+
+截图脚本使用 127.0.0.1 随机端口和单 worker，依次生成 `review.png`、`components.png`、`second_pass.png`。如无 Playwright/浏览器或本地 socket 不可用，会明确记录到 `capture.json`，并保留同名 HTML 快照：全部图片内嵌、可离线查看、控件只读；审查快照保留首张 R1 卡及六目的映射表。不会把 HTML 渲染伪称为浏览器截图。可加 `--html-only` 跳过浏览器尝试；`--preview-images N` 仅处理每池前 N 张，页面明确标为部分图像预览，不能用作完整标注库。正式导入不使用该参数。

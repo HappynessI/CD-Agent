@@ -162,3 +162,30 @@ CREATE TABLE IF NOT EXISTS output (
 CREATE INDEX IF NOT EXISTS output_sample ON output(sample_id);
 CREATE INDEX IF NOT EXISTS item_sample ON demo_set_item(sample_id);
 CREATE INDEX IF NOT EXISTS set_item_sample ON sample_set_item(sample_id);
+
+-- Task data is independent of all legacy review tables.
+-- TASK_DATA_SCHEMA
+CREATE TABLE IF NOT EXISTS task_data_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS task_example (
+    id TEXT PRIMARY KEY, payload TEXT NOT NULL,
+    verdict TEXT CHECK (verdict IN ('reasonable', 'unreasonable')),
+    note TEXT, annotator TEXT, reviewed_at TEXT
+);
+CREATE TABLE IF NOT EXISTS task_mapping (
+    purpose TEXT PRIMARY KEY, value TEXT NOT NULL, generated_value TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS task_mapping_history (
+    id INTEGER PRIMARY KEY, purpose TEXT NOT NULL,
+    before_value TEXT NOT NULL, after_value TEXT NOT NULL,
+    annotator TEXT NOT NULL, modified_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS task_component (
+    id TEXT PRIMARY KEY, payload TEXT NOT NULL, second_pass INTEGER NOT NULL,
+    color TEXT, subtype TEXT, annotator TEXT, labeled_at TEXT,
+    second_color TEXT, second_subtype TEXT, second_annotator TEXT, second_labeled_at TEXT
+);
+CREATE TABLE IF NOT EXISTS task_edit (
+    id INTEGER PRIMARY KEY, kind TEXT NOT NULL, target TEXT NOT NULL,
+    pass_number INTEGER NOT NULL, before_value TEXT NOT NULL,
+    annotator TEXT NOT NULL, modified_at TEXT NOT NULL, undone_at TEXT
+);

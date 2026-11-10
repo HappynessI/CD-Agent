@@ -19,6 +19,7 @@ from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 
 import store
+from task_data_api import router as task_data_router
 
 DB = Path(os.environ.get('VERIFIER_DB', Path(__file__).with_name('verifier.db')))
 STATIC = Path(__file__).with_name('static')
@@ -27,6 +28,7 @@ AREA_BINS = ((0, 500, '<500'), (500, 2000, '500–2k'), (2000, 8000, '2k–8k'),
 SPLIT_FOR = {'demo_pool': 'train', 'dev': 'val', 'test': 'test'}
 METRIC_VERSION = 2  # bump when store.metrics changes so cached values are recomputed
 app = FastAPI(title='MLLM verifier audit')
+app.include_router(task_data_router)
 
 
 def db():
@@ -388,6 +390,15 @@ def thumb(sample_id: int):
 @app.get('/')
 def index():
     return FileResponse(STATIC / 'index.html')
+
+
+@app.get('/task-data-static/{filename}')
+def task_data_static(filename: str):
+    if filename not in ('task_data.js', 'task_data.css'):
+        raise HTTPException(404)
+    from task_data_store import retry_io
+    return Response(retry_io(lambda: (STATIC / filename).read_bytes()),
+                    media_type='text/javascript' if filename.endswith('.js') else 'text/css')
 
 
 @app.get('/api/walkthrough')

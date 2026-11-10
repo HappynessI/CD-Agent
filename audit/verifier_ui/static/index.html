@@ -146,11 +146,12 @@ tr.dshead td { font-weight: 600; background: var(--bg); }
 @media(max-width:900px) { .walk-layout { grid-template-columns:1fr; } .walk-aside { position:static; } .walk-legend { position:static; } }
 
 </style>
+<link rel="stylesheet" href="/task-data-static/task_data.css">
 </head>
 <body>
 <header>
   <h1>MLLM 判断器审核</h1>
-  <div class="mode-switch"><a id="mode-verifier" href="?mode=verifier">MLLM 判断器审核</a><a id="mode-candidates" href="?mode=candidates">漏检候选审核</a></div>
+  <div class="mode-switch"><a id="mode-verifier" href="?mode=verifier">MLLM 判断器审核</a><a id="mode-candidates" href="?mode=candidates">漏检候选审核</a><a id="mode-task-data" href="?mode=task-data">任务数据</a></div>
   <nav id="tabs">
     <button data-tab="prompts">提示词</button>
     <button data-tab="sets">样本集与审核</button>
@@ -161,6 +162,7 @@ tr.dshead td { font-weight: 600; background: var(--bg); }
 </header>
 <main><div id="banner"></div><div id="main"></div></main>
 <div id="tip"></div>
+<script src="/task-data-static/task_data.js"></script>
 <script>
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -769,9 +771,16 @@ function renderWalk(n) {
 }
 
 const candidateMode = new URLSearchParams(location.search).get('mode') === 'candidates';
+const taskDataMode = new URLSearchParams(location.search).get('mode') === 'task-data';
 $('#mode-candidates').classList.toggle('on', candidateMode);
-$('#mode-verifier').classList.toggle('on', !candidateMode);
-if (candidateMode) {
+$('#mode-verifier').classList.toggle('on', !candidateMode && !taskDataMode);
+$('#mode-task-data').classList.toggle('on', taskDataMode);
+if (taskDataMode) {
+  $('#tabs').hidden = true;
+  $('header h1').textContent = '任务数据';
+  document.title = '任务数据 · 审查与标注';
+  TaskDataUI.start();
+} else if (candidateMode) {
   loadWalk();
   window.addEventListener('popstate', loadWalk);
   window.addEventListener('pagehide', walkStop);
