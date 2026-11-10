@@ -1,0 +1,52 @@
+{
+ "tasks": 128,
+ "agent_mean": {
+  "f1_c": 20.341566071135038,
+  "precision": 12.682458575603894,
+  "recall": 51.36728498980088
+ },
+ "agent_per_run": [
+  {
+   "f1_c": 22.640274737815634,
+   "precision": 14.175147877378908,
+   "recall": 56.2045641234585
+  },
+  {
+   "f1_c": 17.220874253803196,
+   "precision": 10.709259515323417,
+   "recall": 43.93483042731504
+  },
+  {
+   "f1_c": 21.163549221786283,
+   "precision": 13.162968334109356,
+   "recall": 53.962460418629085
+  }
+ ],
+ "fixed": {
+  "f1_c": 19.38722789755496,
+  "precision": 12.480690672196262,
+  "recall": 43.408563594178446
+ },
+ "agent_minus_fixed": {
+  "delta_f1": 0.9543381735800764,
+  "ci95": [
+   -7.679248376573189,
+   11.213966150138932
+  ]
+ },
+ "diagnostics": [
+  {
+   "fallback": 32,
+   "error": 0
+  },
+  {
+   "fallback": 32,
+   "error": 0
+  },
+  {
+   "fallback": 36,
+   "error": 0
+  }
+ ],
+ "rule": "exemplar pixels removed from predictions and truth; pooled pixel F1; paired task bootstrap 4000, seed 1016"
+}
