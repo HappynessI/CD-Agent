@@ -1403,7 +1403,7 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 </section>
 <section class="am-panel" id="panel-I">
 <header class="am-panel-head"><span class="am-panel-id">I</span><h2>任务进展</h2></header>
-<div class="am-panel-body"><div class="am-md"><p>更新于 2026-11-07 16:13（分支提交 00e2ca0）。数字来自 <code>doc/agent_baseline/README_ai.md</code> 第 10–11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次。</p>
+<div class="am-panel-body"><div class="am-md"><p>更新于 2026-11-10 03:03（分支提交 89fbc0f）。数字来自 <code>doc/agent_baseline/README_ai.md</code> 第 0.1 和 10.11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次；SECOND 为验证部分 128 张，3 次，G3。</p>
 <div class="am-table-wrap"><table>
 <thead>
 <tr>
@@ -1417,133 +1417,121 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>T1.1 × C0</td>
 <td>LEVIR-CD 建筑</td>
-<td>验证 85.54；测试 82.63（同工具固定组合 78.26，规则 80.97）</td>
+<td>验证 85.76（G3），测试 82.63（G1）；规则 86.35 / 80.97。验证集低于规则，测试集高于规则</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>T5.1 × C0（修正 SAM 3 掩码）</td>
 <td>LEVIR-CD</td>
-<td>验证 86.05（G1）、86.23（G2）；测试 81.19</td>
+<td>验证 86.23，测试 81.19，与规则持平</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C1</td>
-<td>SECOND 验证部分 128 张，零样本</td>
-<td>G2：新建 72.30、拆除 50.29，比带方向的规则高 8.57、12.33；G3：71.31、48.45，与 G2 差异区间跨零</td>
+<td>T1.1 × C1 新建 / 拆除</td>
+<td>SECOND</td>
+<td>71.31 / 48.45（G3），比规则高 7.57 / 10.49，区间在零以上：胜</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>T5.1 × C1</td>
-<td>SECOND 同一批图</td>
-<td>新建 65.67、拆除 37.52，与规则持平</td>
+<td>SECOND</td>
+<td>新建 65.67、拆除 37.52（G2），与规则持平</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C2（框内建筑变化）</td>
-<td>SECOND 同一批图</td>
-<td>G2 60.51（比事后裁剪低 6.2）；G3 62.77，+2.26，区间跨零</td>
+<td>T1.1 × C1 转换（低矮植被或裸地 → 建筑）</td>
+<td>SECOND</td>
+<td>Agent 64.84，固定路线 62.82，没有确认差异</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C4（框内新建）</td>
-<td>SECOND 同一批图</td>
-<td>G2 65.24（比事后裁剪低 10.9）；G3 71.94，+6.70 [+0.65, +13.41]，确认变好</td>
+<td>T1.1 × C2 / C4</td>
+<td>SECOND</td>
+<td>62.77 / 71.94（G3），比事后 ∩ 框低 3.94 / 4.18：平 / 输</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>T5.2 点框反馈</td>
-<td>LEVIR-CD</td>
-<td>G2 83.95（k=1）、84.67（k=3），与固定响应 C 持平；G3 84.19、84.59，指出区域外的误删少约 90%</td>
+<td>LEVIR-CD 验证</td>
+<td>84.19（k=1）、84.59（k=3），与固定响应 C 持平</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>T5.3 语言反馈</td>
-<td>LEVIR-CD 验证 64 张，3 次</td>
-<td>Agent 82.89，验证器挑选对照 83.22，没有确认差异；定位比例 37% 对 79%</td>
+<td>LEVIR-CD 验证</td>
+<td>82.89，与验证器挑选对照持平；定位比例 37% 对 79%</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T1.3 × C0 全部变化</td>
+<td>SECOND</td>
+<td>Agent 46.53，固定路线 60.88，−14.35：输</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T1.2 × C0（建筑 + 低矮植被）</td>
+<td>SECOND</td>
+<td>Agent 41.22，固定路线 46.26，−5.04：输</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T3.1 图内点选</td>
+<td>SECOND，每图 1 个任务，共 128 个</td>
+<td>Agent 20.34，固定路线 19.39，没有确认差异，两者都低；保留 T3</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>G3 回归，采用</td>
-<td>LEVIR（T1.1、T5.1）、SECOND（C1、C2、C4）、T5.2</td>
-<td>没有确认变差的任务；之后的任务都用 G3</td>
+<td>LEVIR、SECOND</td>
+<td>没有确认变差的任务，C4 +6.70；之后的任务都用 G3</td>
 </tr>
 <tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>分割 2 倍放大测试</td>
-<td>SECOND</td>
-<td>结论：不采用</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.3 工具摸底</td>
-<td>SECOND 同一批图</td>
-<td>固定路线 60.88，AnyChange 46.80，提议覆盖 92.1%；能做。任务清单和 ask_variant 代码已就绪（185 个测试通过）</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.2 工具摸底与固定路线</td>
-<td>SECOND 开发集 60 张</td>
-<td>只做低矮植被 + 建筑；固定路线（SAM3 建筑 + SegEarth 低矮植被）46.71</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>C1 转换固定路线</td>
-<td>SECOND 开发集 60 张</td>
-<td>新建 ∩ T1 低矮植被或裸地，组件覆盖 ≥ 25% 保留：64.63</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T3.1 工具摸底</td>
-<td>SECOND 自动生成 703 个任务</td>
-<td>检索 AP 只有 5.2，可能跳过</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>参照</strong></td>
-<td>T1.1 × C0（不分方向）</td>
-<td>SECOND 同一批图</td>
-<td>64.24</td>
+<td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>不采用</strong></td>
+<td>H1 skill、P1 python、SECOND 放大 2 倍</td>
+<td>—</td>
+<td>放大 2 倍 −9.81</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
-<td>T1.3 问法选择</td>
-<td>SECOND 开发集</td>
-<td>选定后跑全量</td>
+<td>G4</td>
+<td>—</td>
+<td>当前答案提醒、提交时强制区域约束、新工具用途说明；之后重跑 T1.3、T1.2、T3.1、C2、C4</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>并行</strong></td>
+<td>WHU-CD T1.1 × C0 / C1</td>
+<td>WHU-CD</td>
+<td>—</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>并行</strong></td>
+<td>T4.1 按尺寸</td>
+<td>LEVIR-CD</td>
+<td>—</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>代码</strong></td>
+<td>跨图示例输入（T3.2 / T3.3 / T3.4）、地图输入（T5.4）</td>
+<td>WHU-CD</td>
+<td>—</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 1</strong></td>
-<td>T1.2 × C0、T1.1 × C1 转换的 128 张报告</td>
-<td>SECOND 同一批图</td>
-<td>—</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 2</strong></td>
-<td>T1.3 × C0 全部变化，Agent 全量</td>
-<td>SECOND 同一批图</td>
-<td>—</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 3</strong></td>
-<td>T3.1 图内点选</td>
+<td>T1.3 × C3：除植被类型之间的变化以外的全部变化</td>
 <td>SECOND</td>
-<td>试跑时对照接近 0 就跳过</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 4</strong></td>
-<td>T3.3 变化对示例（示例取自另一对图）</td>
-<td>SECOND</td>
-<td>视 T3.1 结果</td>
+<td>SECOND 可推出，排在 G4 后</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
-<td>T2 稀缺类别</td>
+<td>T2、T4.2–T4.4、颜色属性、细粒度排除</td>
 <td>—</td>
-<td>需要 OSM 或自建 benchmark</td>
+<td>等 Ethan 构造数据</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
-<td>C3、T4</td>
+<td>C1 程度分级（xBD）、异源输入（BRIGHT）</td>
 <td>—</td>
-<td>缺真值</td>
+<td>需要下载数据</td>
 </tr>
 </tbody></table></div>
 </div></div>
@@ -1699,32 +1687,30 @@ T3 靠外观匹配，地图没有外观，因此不适用。T5.4 本身就是地
 | AnyChange | 自动模式与点查询模式 | T1.3 与 T3.1 |
 | 交互式分割 | 点击反馈迭代修正 | T5.2 |
 ## 任务进展
-更新于 2026-11-07 16:13（分支提交 00e2ca0）。数字来自 `doc/agent_baseline/README_ai.md` 第 10–11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次。
+更新于 2026-11-10 03:03（分支提交 89fbc0f）。数字来自 `doc/agent_baseline/README_ai.md` 第 0.1 和 10.11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次；SECOND 为验证部分 128 张，3 次，G3。
 
 | 状态 | 任务 | 数据 | 结果或说明 |
 |---|---|---|---|
-| 已完成 | T1.1 × C0 | LEVIR-CD 建筑 | 验证 85.54；测试 82.63（同工具固定组合 78.26，规则 80.97） |
-| 已完成 | T5.1 × C0（修正 SAM 3 掩码） | LEVIR-CD | 验证 86.05（G1）、86.23（G2）；测试 81.19 |
-| 已完成 | T1.1 × C1 | SECOND 验证部分 128 张，零样本 | G2：新建 72.30、拆除 50.29，比带方向的规则高 8.57、12.33；G3：71.31、48.45，与 G2 差异区间跨零 |
-| 已完成 | T5.1 × C1 | SECOND 同一批图 | 新建 65.67、拆除 37.52，与规则持平 |
-| 已完成 | T1.1 × C2（框内建筑变化） | SECOND 同一批图 | G2 60.51（比事后裁剪低 6.2）；G3 62.77，+2.26，区间跨零 |
-| 已完成 | T1.1 × C4（框内新建） | SECOND 同一批图 | G2 65.24（比事后裁剪低 10.9）；G3 71.94，+6.70 [+0.65, +13.41]，确认变好 |
-| 已完成 | T5.2 点框反馈 | LEVIR-CD | G2 83.95（k=1）、84.67（k=3），与固定响应 C 持平；G3 84.19、84.59，指出区域外的误删少约 90% |
-| 已完成 | T5.3 语言反馈 | LEVIR-CD 验证 64 张，3 次 | Agent 82.89，验证器挑选对照 83.22，没有确认差异；定位比例 37% 对 79% |
-| 已完成 | G3 回归，采用 | LEVIR（T1.1、T5.1）、SECOND（C1、C2、C4）、T5.2 | 没有确认变差的任务；之后的任务都用 G3 |
-| 已完成 | 分割 2 倍放大测试 | SECOND | 结论：不采用 |
-| 已完成 | T1.3 工具摸底 | SECOND 同一批图 | 固定路线 60.88，AnyChange 46.80，提议覆盖 92.1%；能做。任务清单和 ask_variant 代码已就绪（185 个测试通过） |
-| 已完成 | T1.2 工具摸底与固定路线 | SECOND 开发集 60 张 | 只做低矮植被 + 建筑；固定路线（SAM3 建筑 + SegEarth 低矮植被）46.71 |
-| 已完成 | C1 转换固定路线 | SECOND 开发集 60 张 | 新建 ∩ T1 低矮植被或裸地，组件覆盖 ≥ 25% 保留：64.63 |
-| 已完成 | T3.1 工具摸底 | SECOND 自动生成 703 个任务 | 检索 AP 只有 5.2，可能跳过 |
-| 参照 | T1.1 × C0（不分方向） | SECOND 同一批图 | 64.24 |
-| 进行中 | T1.3 问法选择 | SECOND 开发集 | 选定后跑全量 |
-| 排队 1 | T1.2 × C0、T1.1 × C1 转换的 128 张报告 | SECOND 同一批图 | — |
-| 排队 2 | T1.3 × C0 全部变化，Agent 全量 | SECOND 同一批图 | — |
-| 排队 3 | T3.1 图内点选 | SECOND | 试跑时对照接近 0 就跳过 |
-| 排队 4 | T3.3 变化对示例（示例取自另一对图） | SECOND | 视 T3.1 结果 |
-| 暂缓 | T2 稀缺类别 | — | 需要 OSM 或自建 benchmark |
-| 暂缓 | C3、T4 | — | 缺真值 |
+| 已完成 | T1.1 × C0 | LEVIR-CD 建筑 | 验证 85.76（G3），测试 82.63（G1）；规则 86.35 / 80.97。验证集低于规则，测试集高于规则 |
+| 已完成 | T5.1 × C0（修正 SAM 3 掩码） | LEVIR-CD | 验证 86.23，测试 81.19，与规则持平 |
+| 已完成 | T1.1 × C1 新建 / 拆除 | SECOND | 71.31 / 48.45（G3），比规则高 7.57 / 10.49，区间在零以上：胜 |
+| 已完成 | T5.1 × C1 | SECOND | 新建 65.67、拆除 37.52（G2），与规则持平 |
+| 已完成 | T1.1 × C1 转换（低矮植被或裸地 → 建筑） | SECOND | Agent 64.84，固定路线 62.82，没有确认差异 |
+| 已完成 | T1.1 × C2 / C4 | SECOND | 62.77 / 71.94（G3），比事后 ∩ 框低 3.94 / 4.18：平 / 输 |
+| 已完成 | T5.2 点框反馈 | LEVIR-CD 验证 | 84.19（k=1）、84.59（k=3），与固定响应 C 持平 |
+| 已完成 | T5.3 语言反馈 | LEVIR-CD 验证 | 82.89，与验证器挑选对照持平；定位比例 37% 对 79% |
+| 已完成 | T1.3 × C0 全部变化 | SECOND | Agent 46.53，固定路线 60.88，−14.35：输 |
+| 已完成 | T1.2 × C0（建筑 + 低矮植被） | SECOND | Agent 41.22，固定路线 46.26，−5.04：输 |
+| 已完成 | T3.1 图内点选 | SECOND，每图 1 个任务，共 128 个 | Agent 20.34，固定路线 19.39，没有确认差异，两者都低；保留 T3 |
+| 已完成 | G3 回归，采用 | LEVIR、SECOND | 没有确认变差的任务，C4 +6.70；之后的任务都用 G3 |
+| 不采用 | H1 skill、P1 python、SECOND 放大 2 倍 | — | 放大 2 倍 −9.81 |
+| 进行中 | G4 | — | 当前答案提醒、提交时强制区域约束、新工具用途说明；之后重跑 T1.3、T1.2、T3.1、C2、C4 |
+| 并行 | WHU-CD T1.1 × C0 / C1 | WHU-CD | — |
+| 并行 | T4.1 按尺寸 | LEVIR-CD | — |
+| 代码 | 跨图示例输入（T3.2 / T3.3 / T3.4）、地图输入（T5.4） | WHU-CD | — |
+| 排队 1 | T1.3 × C3：除植被类型之间的变化以外的全部变化 | SECOND | SECOND 可推出，排在 G4 后 |
+| 暂缓 | T2、T4.2–T4.4、颜色属性、细粒度排除 | — | 等 Ethan 构造数据 |
+| 暂缓 | C1 程度分级（xBD）、异源输入（BRIGHT） | — | 需要下载数据 |
 </textarea>
 <script>
 (() => {
