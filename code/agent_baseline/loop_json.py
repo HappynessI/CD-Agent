@@ -19,7 +19,7 @@ from .scope_t13 import scope_card, session_card
 from .tools import Toolbox, PLAN_SCHEMA, SKILL_SCHEMA, failure, skill_index
 from . import tools as tool_module
 from .state import Mask, Session
-from .planner import Planner, RunGuard, RunStopped, usage_tokens
+from .planner import Planner, RunGuard, RunStopped, usage_tokens, stop_path
 from .recorder import Recorder
 from .backends import SegmentBackend, SharedPrompter, LocalAsk, ApiAsk
 
@@ -370,7 +370,7 @@ def main():
     if args.task in ('T5.2', 'T5.3') and not args.tasks:
         parser.error(f'{args.task} requires a feedback task manifest (--tasks)')
     skills = sorted(p.name for p in tool_module.SKILLS.iterdir() if (p / 'SKILL.md').exists()) if args.skills == 'all' else [x for x in args.skills.split(',') if x]
-    guard = RunGuard(RUN / 'STOP.json', RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
+    guard = RunGuard(stop_path(RUN / 'STOP.json'), RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
         raise SystemExit(f'{guard.active_stop()} exists; check quota or budget, then delete it before running: {guard.active_stop().read_text()}')
     todo = read_tasks(args.tasks, args.task) if args.tasks else (Path(args.names_file).read_text().split() if args.names_file else names(args.split))

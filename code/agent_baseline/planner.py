@@ -72,6 +72,12 @@ def is_quota_error(code, body):
     return code == 403 or (code in (400, 402, 429) and any(word in body.lower() for word in QUOTA_WORDS))
 
 
+def stop_path(default):
+    """Quota stop file; AGENT_STOP_FILE gives each API key its own file so one key's quota stop leaves the other running."""
+    override = os.environ.get('AGENT_STOP_FILE')
+    return Path(override) if override else Path(default)
+
+
 class RunGuard:
     """Stop switch shared by all parallel jobs through one file, plus an optional budget ledger with its own batch stop.
 

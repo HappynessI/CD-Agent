@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 from common import components, save_mask_png, write_json
 from agent_baseline.ask_eval import api_answer, VARIANTS, RUN
-from agent_baseline.planner import RunGuard
+from agent_baseline.planner import RunGuard, stop_path
 from agent_baseline.tasks import read_tasks, load_pair
 from agent_baseline.state import Session
 from agent_baseline.view import ask_images
@@ -50,7 +50,7 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
     write_json(config, settings)
     answers_path = dest / 'answers.jsonl'
     done = {r['uid']: r for r in map(json.loads, answers_path.read_text().splitlines())} if answers_path.exists() else {}
-    guard = RunGuard(RUN / 'STOP.json', dest / 'budget' / 'ledger.txt', max_cost)
+    guard = RunGuard(stop_path(RUN / 'STOP.json'), dest / 'budget' / 'ledger.txt', max_cost)
     guard.check()
     guard.charge(0)
     with ThreadPoolExecutor(max_workers=concurrency) as executor, answers_path.open('a') as file:
