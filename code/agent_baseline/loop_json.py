@@ -45,6 +45,9 @@ def system_prompt(version, budget, session=None):
         text = text.replace('one object class','the requested land-cover categories')
     if direction != 'any':
         text += f'\nCount only changes in the {direction} direction.'
+    if session and getattr(session, 'old_map', None):
+        text = text.replace('two co-registered remote sensing images',
+                            'an old building map and a co-registered new optical image')
     return path, template, text
 
 
@@ -91,7 +94,7 @@ def trim_images(messages):
 
 def referenced_handles(args):
     if isinstance(args, str):
-        return [args] if args.startswith(('mask#', 'inst#', 'region#', 'props#', 'feat#')) else []
+        return [args] if args.startswith(('mask#', 'inst#', 'region#', 'props#', 'feat#', 'example#', 'exmask#', 'map#')) else []
     if isinstance(args, dict):
         return [key for v in args.values() for key in referenced_handles(v)]
     if isinstance(args, list):
@@ -104,7 +107,8 @@ EXTRA_REPLIES = 2  # G2: one grant per session to act on a report that would oth
 
 
 def latest_mask(session):
-    masks = [key for key, value in session.handles.items() if isinstance(value, Mask) and key != session.region_mask]
+    masks = [key for key, value in session.handles.items() if isinstance(value, Mask)
+             and key not in (session.region_mask, getattr(session, 'old_map', None))]
     return masks[-1] if masks else None
 
 
@@ -115,6 +119,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
         toolbox.gate4 = True
         metadata = copy.deepcopy(metadata or {})
         metadata.setdefault('backends', {})['gate4'] = True
+    if (task == 'T5.4') != bool(getattr(session, 'old_map', None)):
+        raise ValueError('T5.4 requires the opt-in map input; use --map-input with a T5.4 manifest')
     if gate3:
         if not verify:
             raise ValueError('G3 requires --verify-stage')
@@ -147,6 +153,9 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
         if not initial.public['ok']:
             raise RuntimeError('Initial view failed')
         text = instruction
+        if getattr(session, 'old_map', None):
+            from .map_input import describe
+            text += ' ' + describe(session)
         if exemplar:
             text += f' Example region: {exemplar}, marked by the red contour. Find other changes of the same transition as this example, including the example itself.'
         if session.initial_mask:
@@ -157,6 +166,9 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             text += f' region#0: area={int(item.data.sum())} pixels; bbox={session.region_bbox}. Coordinates are integer pixels; x1 and y1 are exclusive right and bottom bounds. region#0 is a region mask usable wherever a mask handle is accepted. It is not the current answer.'
         messages = [dict(role='system', content=system),
                     dict(role='user', content=[dict(type='text', text=text)] + image_blocks(initial))]
+        if getattr(session, 'external_examples', ()):
+            from .examples_t3x import example_blocks
+            messages[1]['content'].extend(example_blocks(session, toolbox.directory))
         recorder.start(session, dict(metadata or {}, task_id=task, instruction=instruction,
             target=session.target, change_direction=session.change_direction, python=toolbox.python_enabled,
             image_shape=list(session.shape), system_prompt_version=prompt_version, system_prompt_path=str(path),
@@ -354,8 +366,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', choices=list(INSTRUCTIONS))
     parser.add_argument('--tasks', help='Task manifest JSONL; optionally filter by --task.')
+    parser.add_argument('--map-input', action='store_true', help='Enable T5.4 old building map as T1; requires a T5.4 manifest.')
     parser.add_argument('--tools-t13', nargs='?', const='all', default='', help='Enable all new vision tools, or comma-separated tool names. Default off.')
     parser.add_argument('--tool-hints', choices=['off', 'a', 'b'], default='off', help='Append purpose hints to enabled T1.3 tool descriptions only.')
+    parser.add_argument('--external-examples', action='store_true', help='Load external example crops from --tasks. Requires match_exemplar in --tools-t13. Default off.')
     parser.add_argument('--vision-config', type=Path, help='Local worker environment, source and weight paths JSON.')
     parser.add_argument('--python', action='store_true', help='Offer the isolated Python array tool.')
     parser.add_argument('--split', default='val', choices=['val', 'test', 'train'])
@@ -390,6 +404,8 @@ def main():
         if not args.verify_stage:
             parser.error('--gate4 requires --verify-stage')
         args.gate3 = True
+    if args.external_examples and ('match_exemplar' not in tool_module.enabled_names(True if args.tools_t13 == 'all' else args.tools_t13) or not args.tasks):
+        parser.error('--external-examples requires --tasks and match_exemplar in --tools-t13')
     if args.gate3 and not args.verify_stage:
         parser.error('--gate3 requires --verify-stage')
     if not 0 < args.big_box_share <= 1:
@@ -402,13 +418,23 @@ def main():
         vision = WorkerPool(json.loads(args.vision_config.read_text()), RUN / 'vision_t13')
     if not args.tasks and not args.task:
         parser.error('--task is required without --tasks')
+    if args.task in ('T3.2', 'T3.3', 'T3.4') and not args.tasks:
+        parser.error('External example tasks require an example manifest (--tasks)')
     if args.task in ('T5.2', 'T5.3') and not args.tasks:
         parser.error(f'{args.task} requires a feedback task manifest (--tasks)')
+    if (args.map_input or args.task == 'T5.4') and not args.tasks:
+        parser.error('T5.4 map input requires a task manifest (--tasks)')
     skills = sorted(p.name for p in tool_module.SKILLS.iterdir() if (p / 'SKILL.md').exists()) if args.skills == 'all' else [x for x in args.skills.split(',') if x]
     guard = RunGuard(stop_path(RUN / 'STOP.json'), RUN / 'budget' / f'{args.batch}.txt' if args.batch else None, args.max_cost_cny)
     if guard.stopped():
         raise SystemExit(f'{guard.active_stop()} exists; check quota or budget, then delete it before running: {guard.active_stop().read_text()}')
     todo = read_tasks(args.tasks, args.task) if args.tasks else (Path(args.names_file).read_text().split() if args.names_file else names(args.split))
+    if args.tasks and any(r.get('examples') for r in todo) and not args.external_examples:
+        parser.error('External example tasks require --external-examples')
+    if args.map_input and (not args.tasks or not todo or any(r['task_type'] != 'T5.4' for r in todo)):
+        parser.error('--map-input requires a nonempty T5.4 manifest')
+    if (args.task == 'T5.4' or (args.tasks and any(r['task_type'] == 'T5.4' for r in todo))) and not args.map_input:
+        parser.error('T5.4 requires --map-input')
     if args.limit is not None:
         todo = todo[:args.limit]
     if args.tasks:
@@ -461,6 +487,9 @@ def main():
             **(public_feedback(row) if row else {}))
         if row and row.get('exemplar_mask'):
             session.exemplar_handle = session.add_mask(load_mask_png(row['exemplar_mask']))
+        if args.external_examples and row and row.get('examples'):
+            from .examples_t3x import attach_examples, load_examples
+            attach_examples(session, load_examples(row['examples'], vision))
         ask = LocalAsk(args.ask_worker) if args.ask_backend == 'local' else ApiAsk(guard=guard, model=args.ask_model, correspondence=args.ask_correspondence, session=session) if args.ask_backend == 'api' else None
         source_images = [str(WORKSPACE / 'datasets' / 'LEVIR-CD' / f'{args.split}_original' / part / name) for part in ('A','B')]
         custom_images = row is not None and [row['image_t1'], row['image_t2']] != source_images
@@ -474,6 +503,7 @@ def main():
             shared.for_image(args.split, name, rgb=rgb if custom_images else None), ask, session=session, python=args.python,
             tools_t13=True if args.tools_t13 == 'all' else args.tools_t13,
             vision=vision.for_pair(image_paths or source_images) if vision else None,
+            map_input=args.map_input,
             big_box_share=args.big_box_share)
         try:
             result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2, gate3=args.gate3, gate4=args.gate4, tool_hints=args.tool_hints,

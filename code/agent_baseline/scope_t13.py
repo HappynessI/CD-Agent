@@ -13,6 +13,9 @@ ASK_SOURCE = 'Task brief examples, translated and fixed before development evalu
 
 def session_card(session):
     card = scope_card(session.target, session.change_direction, session.scope)
+    if getattr(session, 'old_map', None):
+        from .map_input import COUNTS, NOT_COUNTS
+        card.update(counts=COUNTS[:], not_counts=NOT_COUNTS[:])
     if session.source_classes is not None:
         card['counts'] = ['a building newly appearing in T2 on land that was one of these classes in T1: '
                           + ', '.join(session.source_classes)]
@@ -21,6 +24,9 @@ def session_card(session):
 
 
 def session_prompts(session):
+    if getattr(session, 'old_map', None):
+        from .map_input import verifier_settings
+        return verifier_settings()
     settings = verifier_prompts(session.target, session.change_direction, session.scope)
     if session.source_classes is not None:
         card = session_card(session)

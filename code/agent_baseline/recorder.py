@@ -104,6 +104,10 @@ class Recorder:
             if key in self.saved:
                 continue
             number = key.split('#')[1]
+            from .examples_t3x import archive_example
+            if archive_example(self.directory, key, value):
+                self.saved.add(key)
+                continue
             if isinstance(value, Mask):
                 save_mask_png(self.directory / 'masks' / f'{key.replace("#", "_")}.png', value.data)
             elif isinstance(value, Features):

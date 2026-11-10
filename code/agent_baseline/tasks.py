@@ -4,6 +4,7 @@ from pathlib import Path
 from PIL import Image
 import numpy as np
 from .scope_t13 import scope_card
+from .map_input import INSTRUCTION as MAP_INSTRUCTION
 
 INSTRUCTIONS = {
     'T1.2xC0': 'Find changes involving buildings or low vegetation between T1 and T2. Output a binary change mask.',
@@ -25,6 +26,9 @@ BOX_INSTRUCTIONS = {
     'T1.1xC4': 'Find the buildings that were newly built inside the region region#0 (box {box}).'}
 BOX_DIRECTIONS = {'T1.1xC2': 'any', 'T1.1xC4': 'appeared'}
 INSTRUCTIONS.update(BOX_INSTRUCTIONS)
+from .examples_t3x import INSTRUCTIONS as EXTERNAL_INSTRUCTIONS, resolve_examples
+INSTRUCTIONS.update(EXTERNAL_INSTRUCTIONS)
+INSTRUCTIONS['T5.4'] = MAP_INSTRUCTION
 
 
 def t52_instruction(feedback):
@@ -129,8 +133,12 @@ def read_tasks(filename, task=None):
             raise ValueError(f'Task line {n}: id must be a filename or stem')
         if row['task_type'] not in INSTRUCTIONS:
             raise ValueError(f'Unsupported task_type: {row["task_type"]}')
+        row = resolve_examples(row, path.parent)
         row = dict(row, target=tuple(row['targets']) if row.get('targets') else row['target'] or 'building', change_direction=row['change_direction'] or 'any')
         scope_card(row['target'], row['change_direction'], row.get('scope'))
+        if row['task_type'] == 'T5.4':
+            from .map_input import check_task
+            check_task(row)
         if row.get('ask_variant') is not None and row['task_type'] != 'T1.3':
             raise ValueError('ask_variant is only used by T1.3')
         if row['task_type'] in ('T1.2xC0', 'T1.1xC1t', 'T1.3'):

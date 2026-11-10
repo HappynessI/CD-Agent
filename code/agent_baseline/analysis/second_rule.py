@@ -61,6 +61,9 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
             rgb = load_pair(row)
             session = Session(mask.shape, target=row['target'], change_direction=actual_direction, scope=actual_scope,
                               source_classes=row.get('source_classes'))
+            if row.get('task_type') == 'T5.4':
+                from agent_baseline.map_input import attach_map
+                attach_map(session, rgb[0])
             def one(comp):
                 uid = f"{stem}:{comp['id']}"
                 pair = ask_images(rgb, labels == comp['id'], comp['bbox'], True)

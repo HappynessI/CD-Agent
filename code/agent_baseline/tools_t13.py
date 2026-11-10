@@ -146,7 +146,11 @@ class ProposalTools:
         probs = self._vision('classify', time=time, classes=[text])
         return self._mask(probs.argmax(axis=0) == 1, set_current=False)
 
-    def match_exemplar(self, props, exemplar, mode='change'):
+    def match_exemplar(self, props, exemplar, mode='change', negative=None):
+        if (getattr(self.session, 'external_examples', ()) and
+                ('example' in exemplar or str(exemplar.get('mask', '')).startswith('exmask#') or negative is not None)):
+            from .examples_t3x import match_external
+            return match_external(self, props, exemplar, mode, negative)
         item = self.get(props, Instances)
         if set(exemplar) == {'mask'}:
             idx = np.flatnonzero(self.get(exemplar['mask'], Mask).data)

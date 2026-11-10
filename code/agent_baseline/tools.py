@@ -115,7 +115,12 @@ def session_schemas(session, python=False, tools_t13=False, tool_hints='off'):
         ask['description'] += ' Scope: ' + '; '.join(card['counts'] + card['not_counts'])
     if python:
         schemas.append(copy.deepcopy(PYTHON_SCHEMA))
-    return extend_schemas(schemas, tools_t13, tool_hints)
+    from .examples_t3x import extend_schema
+    schemas = extend_schema(extend_schemas(schemas, tools_t13, tool_hints), session)
+    if getattr(session, 'old_map', None):
+        from .map_input import schemas_for_map
+        schemas = schemas_for_map(schemas)
+    return schemas
 SKILLS = Path(__file__).parent / 'skills'
 
 
@@ -220,9 +225,12 @@ def failure(code, message):
 
 
 class Toolbox(ProposalTools):
-    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE, gate4=False):
+    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE, gate4=False, map_input=False):
         self.rgb = tuple(np.array(im, copy=True) for im in rgb)
         self.session = session or Session(self.rgb[0].shape[:2], init_mask)
+        if map_input:
+            from .map_input import attach_map
+            attach_map(self.session, self.rgb[0])
         self.directory = Path(directory)
         self.segment_backend, self.prompt_backend, self.ask_backend = segment, prompt, ask
         self.python_enabled = python
@@ -253,8 +261,12 @@ class Toolbox(ProposalTools):
         try:
             if name not in SCHEMA_BY_NAME or (name == 'python' and not self.python_enabled) or (name in T13_NAMES and name not in self.tools_t13):
                 raise ToolError('bad_args', 'Unknown tool name.')
-            validate(args, SCHEMA_BY_NAME[name])
+            from .examples_t3x import external_spec
+            validate(args, external_spec(self.session, name, SCHEMA_BY_NAME[name]))
             pyinspect.signature(getattr(self, name)).bind(**args)
+            if getattr(self.session, 'old_map', None):
+                from .map_input import check_tool
+                check_tool(name, args)
             result = getattr(self, name)(**args)
             if not isinstance(result, Result):
                 result = Result(dict(ok=True, **result))
