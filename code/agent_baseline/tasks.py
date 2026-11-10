@@ -29,6 +29,8 @@ INSTRUCTIONS.update(BOX_INSTRUCTIONS)
 from .examples_t3x import INSTRUCTIONS as EXTERNAL_INSTRUCTIONS, resolve_examples
 INSTRUCTIONS.update(EXTERNAL_INSTRUCTIONS)
 INSTRUCTIONS['T5.4'] = MAP_INSTRUCTION
+# T4.1 size attribute: the manifest carries the full instruction with its area threshold (analysis/make_t41_tasks.py).
+INSTRUCTIONS['T4.1'] = 'Find building changes whose footprint is larger than a given area between T1 and T2. Output a binary change mask.'
 
 
 def t52_instruction(feedback):

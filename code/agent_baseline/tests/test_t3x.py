@@ -116,16 +116,17 @@ class T3xTests(unittest.TestCase):
     def rows(self, phase='val'):
         return read_tasks(self.args.output_root / phase / 'tasks.jsonl')
 
-    def test_split_names_rejects_overlap_duplicates(self):
+    def test_split_names_drops_overlap_rejects_duplicates(self):
         d = self.root / 'second_dev'
         d.mkdir()
         rest = d / 'rest.txt'
         with patch.object(make, 'inventories', return_value={k: self.groups[k] for k in ('dev', 'val')}):
-            for text in ('report.png', 'dev.png', 'rest_a.png rest_a.png'):
+            for text in ('report.png dev.png', 'rest_a.png rest_a.png'):
                 rest.write_text(text)
                 with self.assertRaises(ValueError):
                     make.split_names(self.root)
-            rest.write_text('rest_b.png rest_a.png')
+            # rest.txt still lists the development images; they are dropped from the example pool.
+            rest.write_text('rest_b.png dev.png rest_a.png report.png')
             self.assertEqual(make.split_names(self.root), self.groups)
 
     def test_generation_reproducible_and_rest_never_evaluated(self):

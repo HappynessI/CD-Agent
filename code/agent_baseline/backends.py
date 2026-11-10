@@ -155,6 +155,35 @@ class SharedPrompter:
         return call
 
 
+class PromptWorker:
+    """Client of workers/sam_prompt_worker.py: one SAM decoder per job instead of one per process.
+
+    Same interface and outputs as SharedPrompter: (mask, quality, meta). Images that are not LEVIR
+    cached pairs are sent as the exact pixel arrays the session holds.
+    """
+    def __init__(self, url, timeout=600):
+        self.url, self.timeout = url.rstrip('/'), timeout
+
+    def for_image(self, split, name, rgb=None):
+        def call(time, box=None, points=None, point_labels=None):
+            payload = dict(time=time, box=None if box is None else [float(v) for v in box],
+                           points=None if points is None else [[float(v) for v in p] for p in points],
+                           point_labels=None if point_labels is None else [int(v) for v in point_labels])
+            if rgb is not None:
+                image = np.ascontiguousarray(rgb[0 if time == 't1' else 1])
+                payload.update(mode='image', image=dict(dtype=str(image.dtype), shape=list(image.shape),
+                               data=base64.b64encode(image.tobytes()).decode('ascii')))
+            else:
+                payload.update(mode='cached', split=split, name=name)
+            result = post(self.url, payload, self.timeout)
+            m = result['mask']
+            bits = np.frombuffer(base64.b64decode(m['bits']), np.uint8)
+            mask = np.unpackbits(bits, count=int(np.prod(m['shape']))).reshape(m['shape']).astype(bool)
+            return mask, float(result['quality']), dict(backend='sam_prompt', worker=True,
+                queue_seconds=result.get('queue_seconds'), worker_seconds=result.get('seconds'))
+        return call
+
+
 def time_module():
     return time.monotonic()
 

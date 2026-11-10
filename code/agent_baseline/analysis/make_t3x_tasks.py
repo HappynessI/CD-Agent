@@ -24,8 +24,11 @@ MIN_AREA, MAX_AREA = 16, 4096
 
 def split_names(run):
     groups = inventories(run)
-    rest = (run / 'second_dev/rest.txt').read_text().split()
-    if not rest or len(set(rest)) != len(rest) or set(rest) & (set(groups['dev']) | set(groups['val'])):
+    # rest.txt is the pool the 60 development images were drawn from, so it still lists them; examples use
+    # rest minus development minus report images (109 images on SECOND).
+    used = set(groups['dev']) | set(groups['val'])
+    rest = [n for n in (run / 'second_dev/rest.txt').read_text().split() if n not in used]
+    if not rest or len(set(rest)) != len(rest):
         raise ValueError('Example inventory must be unique and disjoint from development and report images')
     if any(Path(n).name != n for n in rest):
         raise ValueError('Example inventory must contain image filenames')
@@ -80,7 +83,7 @@ def select_examples(pool, name, task_type, source, target, seed=SEED):
     return result, local_seed
 
 
-def tasks_for_pair(a, b, name, pool, seed=SEED):
+def tasks_for_pair(a, b, name, pool, seed=SEED, skipped=None):
     changed = binary_truth(a, b)
     rows = []
     for task_type in INSTRUCTIONS:
@@ -90,7 +93,14 @@ def tasks_for_pair(a, b, name, pool, seed=SEED):
             truth = changed & (b == target)
             if task_type != 'T3.2':
                 truth &= a == source
-            examples, local_seed = select_examples(pool, name, task_type, source, target, seed)
+            try:
+                examples, local_seed = select_examples(pool, name, task_type, source, target, seed)
+            except ValueError:
+                # Rare transitions may have no eligible example in the example pool; skip and count them.
+                if skipped is None:
+                    raise
+                skipped.append(f'{task_type} {source}->{target}')
+                continue
             transition = f'*->{target}' if task_type == 'T3.2' else f'{source}->{target}'
             key = f'{Path(name).stem}_{task_type.replace(".", "")}_{source}to{target}'
             rows.append((dict(id=key, task_type=task_type, target='any change', change_direction='any',
@@ -133,9 +143,9 @@ def generate(args):
     for phase in phases:
         output = args.output_root / phase
         output.mkdir(parents=True, exist_ok=True)
-        rows, counts = [], {k: Counter() for k in INSTRUCTIONS}
+        rows, counts, skipped = [], {k: Counter() for k in INSTRUCTIONS}, []
         for name in sorted(groups[phase]):
-            for row, truth in tasks_for_pair(*loader(name), name, pool, args.seed):
+            for row, truth in tasks_for_pair(*loader(name), name, pool, args.seed, skipped):
                 row.update(image_t1=str((args.dataset_root / 'img1' / name).resolve()),
                            image_t2=str((args.dataset_root / 'img2' / name).resolve()))
                 row['examples'] = []
@@ -154,6 +164,7 @@ def generate(args):
         report = dict(phase=phase, names=sorted(groups[phase]), example_names=groups['rest'], seed=args.seed,
             min_area=args.min_area, max_area=args.max_area, total=len(rows), counts=counts,
             totals_by_type={k: sum(c.values()) for k, c in counts.items()},
+            skipped_no_example=dict(Counter(skipped)),
             rule='8-connected rest examples only; T3.2 incoming class changes; T3.3/4 exact directed transition; all truth pixels retained; no evaluation pixels excluded')
         write_json(output / 'inventory.json', report)
         reports[phase] = report

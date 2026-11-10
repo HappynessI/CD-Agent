@@ -393,6 +393,7 @@ def main():
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
     parser.add_argument('--pixel-thr', type=float, default=.5, help='SAM3 soft mask threshold of segment_text.')
+    parser.add_argument('--sam-prompt-worker', help='URL of workers/sam_prompt_worker.py; one SAM decoder for the whole job. Default off.')
     parser.add_argument('--sam-prompt-device', choices=['cpu', 'cuda'], default='cpu', help='SAM decoder device; cached LEVIR embeddings are reused on either device.')
     parser.add_argument('--init-name', default='sam3_imc', help='Directory under init/ with the T5.1 given masks.')
     parser.add_argument('--prompt-version', default='v1', choices=['v1', 'v2', 'v3', 'v4'])
@@ -444,7 +445,11 @@ def main():
     def gpu_prompter():
         from sam_tools import Prompter
         return Prompter(device='cuda')
-    shared = SharedPrompter(factory=gpu_prompter) if args.sam_prompt_device == 'cuda' else SharedPrompter()
+    if args.sam_prompt_worker:
+        from .backends import PromptWorker
+        shared = PromptWorker(args.sam_prompt_worker)
+    else:
+        shared = SharedPrompter(factory=gpu_prompter) if args.sam_prompt_device == 'cuda' else SharedPrompter()
     def identity(item):
         if isinstance(item, dict):
             return item['task_type'], image_name(item), Path(item['id']).stem
@@ -514,7 +519,7 @@ def main():
                     backends=dict(**({'gate2': True} if args.gate2 else {}), ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage,
                         plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence,
                         ask_model=args.ask_model if args.ask_backend == 'api' else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
-                        sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='shared_' + args.sam_prompt_device, sam_model='SAM ViT-H'),
+                        sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='worker' if args.sam_prompt_worker else 'shared_' + args.sam_prompt_device, sam_model='SAM ViT-H'),
                     task_meta=row['meta'] if row else {}, init_error=init_error))
         except RunStopped:
             return name, 'stopped'
