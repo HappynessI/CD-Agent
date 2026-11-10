@@ -25,6 +25,7 @@ from .backends import SegmentBackend, SharedPrompter, LocalAsk, ApiAsk
 
 from .tasks import INSTRUCTIONS, instruction_for, seed_for, read_tasks, image_name, load_pair, needs_init
 from .feedback import public_feedback
+from .gate4 import remind, clip_submission
 
 RUN = Path(os.environ.get('AGENT_RUN', '/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run'))
 
@@ -107,8 +108,13 @@ def latest_mask(session):
     return masks[-1] if masks else None
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False, gate3=False):
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False, gate3=False, gate4=False, tool_hints='off'):
     session = toolbox.session
+    if gate4:
+        gate3 = True
+        toolbox.gate4 = True
+        metadata = copy.deepcopy(metadata or {})
+        metadata.setdefault('backends', {})['gate4'] = True
     if gate3:
         if not verify:
             raise ValueError('G3 requires --verify-stage')
@@ -122,7 +128,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
     previous_calls = None
     reason, error = 'budget', None
     reviewed = not (review or verify)
-    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled, toolbox.tools_t13), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
+    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled, toolbox.tools_t13, tool_hints), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
+    generated_calls = []
     toolbox.skills = tuple(skills)
     messages = []
     planner.record = recorder.request
@@ -185,6 +192,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 fun = call.get('function') or {}
                 name, raw_args = fun.get('name', ''), fun.get('arguments', '')
                 args = None
+                empty_handle = None
                 before = session.current_mask
                 if session.submitted is not None:
                     result = failure('bad_args', 'skipped_due_to_submit')
@@ -199,8 +207,11 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     else:
                         if name == 'submit' and isinstance(args, dict) and args.get('mask') == 'empty':
                             args = dict(args, mask=session.add_mask(np.zeros(session.shape, bool)))
+                            empty_handle = args['mask']
                             allowed = allowed | {args['mask']}
                         handle = args.get('mask') if isinstance(args, dict) else None
+                        report_calls = (generated_calls + [dict(tool=name, handles_created=[empty_handle])]
+                                        if empty_handle is not None else generated_calls)
                         # The first valid submit opens one report, and with the verifier stage so does any
                         # submit of a mask with unchecked components. The last reply can only submit.
                         known = name == 'submit' and handle in allowed and isinstance(session.handles[handle], Mask)
@@ -209,6 +220,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                             reviewed = True
                             previous_calls = None
                             result = toolbox.pre_submit(handle, limit - number, verify)
+                            if gate4 and limit - number <= REVIEW_REPLIES:
+                                remind(result, session, report_calls)
                         elif known and gate2 and grant is None and number == limit and owed:
                             # The last reply: its report still reaches the planner, with replies to act on it.
                             grant = dict(kind='last_reply', at_reply=number)
@@ -216,6 +229,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                             reviewed = True
                             previous_calls = None
                             result = toolbox.pre_submit(handle, EXTRA_REPLIES, verify)
+                            if gate4:
+                                remind(result, session, report_calls)
                         else:
                             result = toolbox.execute(name, args, allowed)
                             # ask checks a batch per call, so the same empty call is the way to get the next batch.
@@ -223,6 +238,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 messages.append(dict(role='tool', tool_call_id=call['id'], content=result.text))
                 images.extend(image_blocks(result) if result.images else [])
                 internal = result.internal
+                if gate4 and empty_handle is not None:
+                    internal['handles_created'] = [empty_handle, *internal.get('handles_created', [])]
                 call_records.append(dict(tool=name, tool_call_id=call['id'], raw_arguments=raw_args, args=args,
                     ok=result.public['ok'], error_code=result.public.get('error_code'), result_text=result.text,
                     result_images=result.images, input_handles=referenced_handles(args),
@@ -232,6 +249,8 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                     status=internal.get('status', 'executed'), provenance=internal,
                     set_current=args.get('set_current', True) if isinstance(args, dict) and name in
                         ('to_mask','combine','morph','remove_region','add_region','refine_region','python') else None))
+                if gate4:
+                    generated_calls.append(call_records[-1])
             if more_to_check:
                 previous_calls = None
             if images:
@@ -280,12 +299,17 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
                 reviewed = True
                 previous_calls = None
                 late = toolbox.pre_submit(late_key, left, verify)
+                # G4 keeps G2's behaviour here: the reported mask becomes the current answer.
+                if gate4 and (left <= REVIEW_REPLIES or (grant and grant['kind'] in ('budget', 'last_reply'))):
+                    remind(late, session, generated_calls)
                 recorder.ask_spending(late.internal, f'report-{number}')
                 recorder.note(number, late)
                 messages.append(dict(role='user', content=note + late.public['report']))
             elif 0 < left <= REVIEW_REPLIES and not reviewed and session.current_mask is not None:
                 reviewed = True
                 late = toolbox.pre_submit(session.current_mask, left, verify)
+                if gate4:
+                    remind(late, session, generated_calls)
                 recorder.ask_spending(late.internal, f'report-{number}')
                 recorder.note(number, late)
                 messages.append(dict(role='user', content=late.public['report']))
@@ -306,6 +330,11 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
             session.current_mask = session.add_mask(np.zeros(session.shape, bool))
         session.submitted = session.current_mask
         session.summary = f'系统兜底：{reason}；使用当前掩码。' if fallback == 'current' else f'系统兜底：{reason}；使用空掩码。'
+        if gate4:
+            session.submitted, report = clip_submission(toolbox, session.submitted)
+            session.current_mask = session.submitted
+            if report:
+                session.summary += '\n' + report
     if verify and reason != 'error':
         # Whatever ended the run, the trace holds an answer for every component of the final mask.
         _, _, meta = toolbox.stage(session.submitted)
@@ -326,6 +355,7 @@ def main():
     parser.add_argument('--task', choices=list(INSTRUCTIONS))
     parser.add_argument('--tasks', help='Task manifest JSONL; optionally filter by --task.')
     parser.add_argument('--tools-t13', nargs='?', const='all', default='', help='Enable all new vision tools, or comma-separated tool names. Default off.')
+    parser.add_argument('--tool-hints', choices=['off', 'a', 'b'], default='off', help='Append purpose hints to enabled T1.3 tool descriptions only.')
     parser.add_argument('--vision-config', type=Path, help='Local worker environment, source and weight paths JSON.')
     parser.add_argument('--python', action='store_true', help='Offer the isolated Python array tool.')
     parser.add_argument('--split', default='val', choices=['val', 'test', 'train'])
@@ -344,6 +374,7 @@ def main():
     parser.add_argument('--verify-stage', action='store_true', help='Each submit first verifies every unchecked component and reports all answers.')
     parser.add_argument('--gate2', action='store_true', help='Close the gaps where verifier answers never reach the planner (G2). Needs --verify-stage.')
     parser.add_argument('--gate3', action='store_true', help='G3 box guard, constraint reports and feedback verification scope. Implies --gate2; requires --verify-stage.')
+    parser.add_argument('--gate4', action='store_true', help='G4 current-answer reminders and region clipping at submission. Implies --gate3; requires --verify-stage.')
     parser.add_argument('--big-box-share', type=float, default=tool_module.BIG_BOX_SHARE)
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
@@ -355,6 +386,10 @@ def main():
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    if args.gate4:
+        if not args.verify_stage:
+            parser.error('--gate4 requires --verify-stage')
+        args.gate3 = True
     if args.gate3 and not args.verify_stage:
         parser.error('--gate3 requires --verify-stage')
     if not 0 < args.big_box_share <= 1:
@@ -441,7 +476,7 @@ def main():
             vision=vision.for_pair(image_paths or source_images) if vision else None,
             big_box_share=args.big_box_share)
         try:
-            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2, gate3=args.gate3,
+            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2, gate3=args.gate3, gate4=args.gate4, tool_hints=args.tool_hints,
                 metadata=dict(**({'scope': session.scope} if session.scope else {}), session_id=stem, source_images=image_paths or source_images,
                     init_mask_path=str(init_path) if init is not None or needs_init(task) else None,
                     init_config=dict(route=args.init_name, text=session.target, tile=512, score_thr=.5,

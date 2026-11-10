@@ -99,7 +99,7 @@ PYTHON_SCHEMA = schema('python', 'Run array calculations in an isolated Python s
 SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, PYTHON_SCHEMA, *tool_schemas()]}
 
 
-def session_schemas(session, python=False, tools_t13=False):
+def session_schemas(session, python=False, tools_t13=False, tool_hints='off'):
     import copy
     schemas = copy.deepcopy(SCHEMAS)
     if (session.target, session.change_direction) != ('building', 'any'):
@@ -115,7 +115,7 @@ def session_schemas(session, python=False, tools_t13=False):
         ask['description'] += ' Scope: ' + '; '.join(card['counts'] + card['not_counts'])
     if python:
         schemas.append(copy.deepcopy(PYTHON_SCHEMA))
-    return extend_schemas(schemas, tools_t13)
+    return extend_schemas(schemas, tools_t13, tool_hints)
 SKILLS = Path(__file__).parent / 'skills'
 
 
@@ -220,7 +220,7 @@ def failure(code, message):
 
 
 class Toolbox(ProposalTools):
-    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE):
+    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE, gate4=False):
         self.rgb = tuple(np.array(im, copy=True) for im in rgb)
         self.session = session or Session(self.rgb[0].shape[:2], init_mask)
         self.directory = Path(directory)
@@ -239,6 +239,7 @@ class Toolbox(ProposalTools):
         if not 0 < big_box_share <= 1:
             raise ValueError('big_box_share must be in (0, 1]')
         self.gate3, self.big_box_share = gate3, big_box_share
+        self.gate4 = gate4
 
     def get(self, key, kind=None):
         return self.session.get(key, kind, self.allowed)
@@ -731,10 +732,14 @@ class Toolbox(ProposalTools):
         item = self.get(mask, Mask)
         if not summary.strip():
             raise ToolError('bad_args', 'summary must be a nonempty explanation.')
+        from .gate4 import clip_submission
+        mask, report = clip_submission(self, mask)
+        item = self.session.get(mask, Mask)
         before = self.session.current_mask
         self.session.submitted = self.session.current_mask = mask
         self.session.summary = summary
         return dict(mask=mask, area=int(item.data.sum()), component_count=len(item.components),
+                    **({'report': report} if report else {}),
                     current_mask=dict(before=before, after=mask), submitted=True)
 
 

@@ -202,5 +202,7 @@ class Recorder:
             view_calls=sum(c['tool'] == 'view' and c['ok'] for c in calls),
             ask_calls=sum(c['tool'] == 'ask' and c['ok'] for c in calls), initial_images_present=True,
             final_delta=self.edge(session, key, self.previous), error=error)
+        if hasattr(session, 'g4_submission'):
+            row.update(session.g4_submission)
         write_json(self.directory / 'final.json', row)
         return row

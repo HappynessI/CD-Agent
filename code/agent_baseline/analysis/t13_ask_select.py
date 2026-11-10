@@ -1,9 +1,9 @@
-"""CPU/API only: choose an unrestricted verifier question on the 60-image dev set.
+"""CPU/API only: compare unrestricted verifier scopes on the 60-image dev set.
 
 prepare reconstructs probe_t13's score>=.22 union from its existing worker cache;
 it never launches a model. answers resumes per component, shares a total budget
-across questions and selects by pooled pixel F1 of delete-no. val uses one frozen
-question and probability threshold, with no selection or sweep.
+with the frozen describe question. --scope compares the original scope with its
+seasonal-color sentence offline. val uses a frozen probability threshold.
 """
 import argparse
 import json
@@ -127,14 +127,23 @@ def evaluate(images, answers, thresholds=P_THRESHOLDS):
 
 
 def select(reports):
-    question = max(ASK_CANDIDATES, key=lambda q: reports[q]['delete_no']['f1_c'])
+    question = max((q for q in ASK_CANDIDATES if q in reports), key=lambda q: reports[q]['delete_no']['f1_c'])
     thresholds = reports[question]['thresholds']
     threshold = max(thresholds, key=lambda t: (thresholds[t]['f1_c'], -float(t)))
     return dict(question=question, p_threshold=float(threshold),
         rule='highest complete-dev pooled delete-no F1; question ties use declared order; p threshold independently maximizes dev F1 with smaller-threshold tie break')
 
 
-def answer_questions(dataset, run, phase, candidates, output, max_cost, settings=None, answer_fn=api_answer, concurrency=1):
+def comparison_session(scope='any_change'):
+    """Offline scope comparison only; keep the selected describe question fixed."""
+    if scope not in ('any_change', 'any_change_season'):
+        raise ValueError('Unknown offline comparison scope')
+    return Session((1, 1), target='any change', ask_variant='describe', scope=scope)
+
+
+def answer_questions(dataset, run, phase, candidates, output, max_cost, settings=None, answer_fn=api_answer, concurrency=1, scope=None):
+    # Explicit scope selects the new CLI comparison. Keep historical direct
+    # callers without scope on the original three-question selection contract.
     if max_cost <= 0:
         raise ValueError('Cost cap must be positive')
     names = inventories(Path(run))[phase]
@@ -152,11 +161,16 @@ def answer_questions(dataset, run, phase, candidates, output, max_cost, settings
             raise ValueError('val requires a complete development selection with the same backend')
         questions = [frozen['selected']['question']]
     else:
-        questions = list(ASK_CANDIDATES)
+        questions = ['describe'] if scope is not None else list(ASK_CANDIDATES)
+    if scope is not None and questions != ['describe']:
+        raise ValueError('Offline scope comparison requires the frozen describe question')
+    if scope is not None:
+        comparison_session(scope)
     policy = dict(phase=phase, names=names, candidates=source,
         masks=[dict(name=n,size=(candidates/'masks'/n).stat().st_size,
                     mtime=(candidates/'masks'/n).stat().st_mtime_ns) for n in names],
-        questions={q: session_prompts(Session((1,1), target='any change', ask_variant=q)) for q in questions},
+        questions={q: session_prompts(Session((1,1), target='any change', ask_variant=q, scope=scope)) for q in questions},
+        **({'scope': scope} if scope is not None else {}),
         parameters=VARIANTS['f37_corr'], source=ASK_SOURCE,
         selected=frozen['selected'] if phase == 'val' else None)
     if phase == 'val' and policy['questions'][questions[0]] != frozen['policy']['questions'][questions[0]]:
@@ -179,7 +193,7 @@ def answer_questions(dataset, run, phase, candidates, output, max_cost, settings
                 if not todo:
                     continue
                 rgb = [np.asarray(Image.open(dataset/part/name).convert('RGB')) for part in ('img1','img2')]
-                session = Session(pred.shape, target='any change', ask_variant=question)
+                session = Session(pred.shape, target='any change', ask_variant=question, scope=scope)
                 def one(comp):
                     guard.check()
                     uid = f"{Path(name).stem}:{comp['id']}"
@@ -205,8 +219,11 @@ def answer_questions(dataset, run, phase, candidates, output, max_cost, settings
             kept = [c['id'] for c in comps if done[f"{Path(name).stem}:{c['id']}"].get('answer') != 'no']
             save_mask_png(dest/'masks'/name, pred & np.isin(labels, kept))
         reports[question] = report
+    selected = frozen['selected'] if phase == 'val' else select(reports)
+    if phase != 'val' and scope is not None:
+        selected['rule'] = 'frozen describe question; probability threshold maximizes complete-dev pooled F1, smaller-threshold tie break'
     result = dict(phase=phase, names=names, complete=True, candidates=source, policy=policy,
-                  reports=reports, selected=frozen['selected'] if phase == 'val' else select(reports))
+                  reports=reports, selected=selected)
     # One component -> one request per question. Estimate 8k input + 128 output tokens.
     n = next(iter(reports.values()))['components']
     result['cost_estimate'] = dict(calls_per_question=n, input_tokens=8000, output_tokens=128,
@@ -229,6 +246,7 @@ def main():
     p.add_argument('--probe-report', type=Path)
     p.add_argument('--max-cost-cny', type=float)
     p.add_argument('--concurrency', type=int, default=1)
+    p.add_argument('--scope', choices=['any_change', 'any_change_season'], default='any_change', help='Offline describe-question scope comparison; online defaults are unchanged.')
     a = p.parse_args()
     if a.command == 'prepare':
         if not all((a.cache, a.vision_config, a.probe_report)):
@@ -237,7 +255,7 @@ def main():
     else:
         if not a.output_dir or a.max_cost_cny is None or a.max_cost_cny <= 0:
             p.error('answers requires --output-dir and positive --max-cost-cny')
-        answer_questions(a.dataset_root,a.run_root,a.phase,a.candidates_dir,a.output_dir,a.max_cost_cny,a.settings,concurrency=a.concurrency)
+        answer_questions(a.dataset_root,a.run_root,a.phase,a.candidates_dir,a.output_dir,a.max_cost_cny,a.settings,concurrency=a.concurrency,scope=a.scope)
 
 
 if __name__ == '__main__':

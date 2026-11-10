@@ -44,17 +44,24 @@ def pooled(feature, rows):
     return np.asarray([pool_features(feature, r['idx']) for r in rows], np.float32).reshape(len(rows), feature.data.shape[-1])
 
 
-def tool_schemas():
+def tool_schemas(tool_hints='off'):
     from .tools import schema, arg, TIME, S
     props = arg('string', description='Existing props#k proposal set; IDs persist through select.')
     feat = arg('string', description='Existing feat#k DINOv2 feature handle.')
-    return [
+    schemas = [
         schema('segment_everything', 'Propose class-agnostic SAM masks at one date. Returns props handle, count and area statistics.', dict(time=TIME), ['time']),
         schema('extract_features', 'Extract a cached DINOv2 patch feature grid at one date. Returns feat handle and grid size.', dict(time=TIME), ['time']),
         schema('compare_features', 'Attach score = 1 - cosine of region-mean T1 and T2 DINOv2 features to each proposal. Returns new props handle and score distribution.', dict(props=props, feat_t1=feat, feat_t2=feat), ['props','feat_t1','feat_t2']),
         schema('classify', 'Mean SegEarth-OV class probabilities in each proposal at one date. Softmax vocabulary includes background and the supplied classes. Returns new props handle and per-ID probabilities.', dict(props=props, time=TIME, classes=arg('array', items=S, minItems=1, uniqueItems=True)), ['props','time','classes']),
         schema('segment_semantic', 'Dense SegEarth-OV segmentation for one class at one date, against background. Returns a mask; does not change current answer.', dict(time=TIME, text=S), ['time','text']),
         schema('match_exemplar', 'Rank proposals by cosine similarity to a mask handle or [x,y] point. change uses T2 minus T1 region-mean DINOv2 features; t1/t2 uses appearance. Returns new props handle and per-ID similarities.', dict(props=props, exemplar=arg('object', properties=dict(mask=S, point=arg('array', items=arg('number'), minItems=2, maxItems=2)), additionalProperties=False), mode=arg('string', enum=['change','t1','t2'], default='change')), ['props','exemplar'])]
+    if tool_hints != 'off':
+        from .gate4 import TOOL_HINTS
+        for entry in schemas:
+            hint = TOOL_HINTS[tool_hints].get(entry['function']['name'])
+            if hint:
+                entry['function']['description'] += ' ' + hint
+    return schemas
 
 
 NAMES = ('segment_everything','extract_features','compare_features','classify','segment_semantic','match_exemplar')
@@ -71,7 +78,7 @@ def enabled_names(value):
     return names
 
 
-def extend_schemas(schemas, enabled):
+def extend_schemas(schemas, enabled, tool_hints='off'):
     import copy
     names = enabled_names(enabled)
     if not names:
@@ -80,7 +87,7 @@ def extend_schemas(schemas, enabled):
         function = entry['function']
         if function['name'] in ('select','to_mask','inspect','view','add_region'):
             function['description'] += ' Proposal handles props#k use the same operations as inst#k; select by ids or where="score >= threshold", then to_mask(sets=[handle]).'
-    return schemas + [copy.deepcopy(s) for s in tool_schemas() if s['function']['name'] in names]
+    return schemas + [copy.deepcopy(s) for s in tool_schemas(tool_hints) if s['function']['name'] in names]
 
 
 class ProposalTools:

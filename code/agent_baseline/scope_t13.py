@@ -39,7 +39,8 @@ def scope_card(target='building', change_direction='any', scope=None):
         return original_card(target, change_direction, scope)
     if change_direction != 'any':
         raise ValueError('Unrestricted and multiclass scopes require change_direction=any')
-    card = json.loads((Path(__file__).parent/'scopes'/'any_change.json').read_text())
+    filename = 'any_change_season.json' if scope == 'any_change_season' else 'any_change.json'
+    card = json.loads((Path(__file__).parent/'scopes'/filename).read_text())
     if isinstance(target,(tuple,list)):
         if not target or any(not isinstance(x,str) or not x.strip() for x in target):
             raise ValueError('targets must be a nonempty list of class names')
