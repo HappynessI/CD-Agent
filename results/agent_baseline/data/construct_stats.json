@@ -1,0 +1,143 @@
+{
+ "seed": 1016,
+ "report": 128,
+ "dev": 64,
+ "mapping": {
+  "ecology": {
+   "t1": [
+    1,
+    3
+   ],
+   "t2_not": [
+    1,
+    3
+   ],
+   "text": "For an ecological protection check, find places where vegetation (grass, crops or trees) was destroyed between T1 and T2."
+  },
+  "urban": {
+   "t1_not": [
+    5,
+    6
+   ],
+   "t2": [
+    5,
+    6
+   ],
+   "text": "For urban expansion monitoring, find newly added built-up land (buildings or sports grounds) between T1 and T2."
+  },
+  "water_loss": {
+   "t1": [
+    4
+   ],
+   "t2_not": [
+    4
+   ],
+   "text": "To check encroachment on rivers and lakes, find places where water surface was occupied or lost between T1 and T2."
+  },
+  "water_gain": {
+   "t1_not": [
+    4
+   ],
+   "t2": [
+    4
+   ],
+   "text": "Find newly appeared water surfaces between T1 and T2, such as newly dug ponds or new reservoirs."
+  },
+  "bare_soil": {
+   "t1": [
+    1,
+    3
+   ],
+   "t2": [
+    2
+   ],
+   "text": "For dust control, find vegetated land that became bare, non-vegetated ground between T1 and T2."
+  },
+  "greening": {
+   "t1": [
+    2,
+    5,
+    6
+   ],
+   "t2": [
+    1,
+    3
+   ],
+   "text": "To assess greening work, find newly added green space (grass, crops or trees) between T1 and T2."
+  }
+ },
+ "r1_report": {
+  "tasks": 128,
+  "purposes": {
+   "greening": 22,
+   "urban": 21,
+   "ecology": 22,
+   "bare_soil": 23,
+   "water_gain": 19,
+   "water_loss": 21
+  },
+  "images_with_nonempty": {
+   "ecology": 101,
+   "urban": 118,
+   "water_loss": 18,
+   "water_gain": 18,
+   "bare_soil": 87,
+   "greening": 92
+  },
+  "empty_truth_tasks": 27
+ },
+ "r1_dev": {
+  "tasks": 64,
+  "purposes": {
+   "greening": 12,
+   "ecology": 12,
+   "urban": 11,
+   "water_gain": 8,
+   "bare_soil": 13,
+   "water_loss": 8
+  },
+  "images_with_nonempty": {
+   "ecology": 52,
+   "urban": 55,
+   "water_loss": 4,
+   "water_gain": 7,
+   "bare_soil": 47,
+   "greening": 45
+  },
+  "empty_truth_tasks": 14
+ },
+ "r2_report": {
+  "tasks": 128,
+  "nonempty": 128
+ },
+ "r2_dev": {
+  "tasks": 60,
+  "nonempty": 60
+ },
+ "r3": {
+  "d_pixels": 20,
+  "train_tiles": 2968,
+  "nonempty_images": {
+   "water": 164,
+   "either": 218,
+   "either_in_validation": 20,
+   "playground": 56
+  },
+  "truth_pixels": {
+   "water": 1184235,
+   "playground": 591300
+  },
+  "decision": "do",
+  "report_tasks": 128,
+  "report_references": {
+   "water": 91,
+   "playground": 37
+  },
+  "dev_tasks": 64,
+  "dev_references": {
+   "water": 48,
+   "playground": 16
+  },
+  "report_from_validation": 20
+ }
+}

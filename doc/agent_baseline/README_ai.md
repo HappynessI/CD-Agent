@@ -1269,6 +1269,28 @@ Ethan 决定照 G2 跑全量（不先修大框问题）。第一次提交在预�
 
 服务器上已有 xBD，路径见 `/guisongxia01/pangchao/wangyihan/wyh/dataset_search/REPORT.md`。在 `/guisongxia01/pangchao/wangyihan/datasets/xBD` 建软链接指向它（和 `datasets/lim1/...` 放在一起；Ethan 指定别的位置就按他的）。只读核对并写进本节：有哪些划分（train / tier3 / test / hold）、每个划分的图数、标签 JSON 里是否有经纬度（`features.lng_lat`）、损毁等级的取值。不跑模型。
 
+### 进度（2026-11-10，Claude）
+
+**xBD**：软链接 `datasets/xBD` → 原始布局的拷贝（`qiyaoyi/Dataset/xBD/severe_recovery_reference_task`，有 images / labels / targets）。另一份 `haoxiangyu/rs_datasets/xBD` 已转成 img1/img2 格式，没有原始 JSON。只读核对：
+
+| 划分 | 图对 | 灾害事件 | 抽 150 个 post 标签，带 `features.lng_lat` 的 |
+|---|---:|---:|---:|
+| train | 2,799 | 10 | 125（其余是没有建筑的图） |
+| hold | 933 | 10 | 126 |
+| test | 933 | 10 | 122 |
+| tier3 | **这份拷贝里没有**（只在 `tier3_DORA定位来源` 有 36 对残缺子集） | | |
+
+损毁等级取值：no-damage / minor-damage / major-damage / destroyed / un-classified。10 个事件：guatemala-volcano、hurricane-florence / harvey / matthew / michael、mexico-earthquake、midwest-flooding、palu-tsunami、santa-rosa-wildfire、socal-fire。
+
+**第 1 类真值**（`analysis/make_construct_tasks.py`，只读标签，种子 1016，统计 `results/agent_baseline/data/construct_stats.json`）：
+- 图单：报告 = SECOND 报告 128 张（来自 297 张验证图）；R1 开发 64 张从 train 抽，不含 297 张验证图（所以也不含 `second_dev` 和 T3 示例图）。
+- **R1**（T4.3）：报告 128 个任务，6 个目的 22 / 21 / 22 / 23 / 19 / 21 个，27 个故意给真值为空的目的。第一版把空真值槽位按「已选次数最少」分配，结果大多落在两个水体目的上（21 个里 13、11 个为空）；改成空槽位单独计数后，水体目的仍偏多（新增水面 8 / 19、水面被占 7 / 21 为空，其余 1–4），原因是大多数图没有水，空槽位常常只能选水体目的。开发 64 个任务，14 个空。
+- 报告集里各目的真值非空的图数：生态 101、城市扩张 118、水面被占 18、新增水面 18、裸地 87、绿化 92。
+- **R2**（T1.3 × C3）：报告 128 张、开发（`second_dev`）60 张，真值全部非空。
+- **R3**（T4.4，d = 20 像素）：train 全部 2,968 张里真值非空 **218 张**（水面 164、运动场 56），超过 40，**做**。297 张验证图里只有 20 张非空，报告集 = 这 20 张 + train 其余图里补 108 张（种子 1016，不和 R1 开发集、`second_dev` 重叠），共 128 个任务（水面 91、运动场 37）；开发 64 个（水面 48、运动场 16）。每张图 1 个参照，取已选次数最少的非空参照。
+
+**页面**：Codex 在写（batch91），Claude 审后合并。
+
 ### 顺序
 
 1. xBD 软链接和核对（几分钟）。
