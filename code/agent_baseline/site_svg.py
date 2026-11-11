@@ -11,19 +11,25 @@ def esc(value):
     return escape(str(value), quote=True)
 
 
-# (category, tools); the column x positions and widths are those of the G1 figure.
+# (category, subtitle, rows of (subgroup, tools)); the column x positions and widths are those of the G1 figure.
+# 读取 tools only look; everything that runs a model or an operation, including segmentation, matching and
+# features, is 执行. 事件触发 starts the verifier or the submission gate.
 GROUPS = [
-    ('感知工具', '读取信息，不修改当前掩码', [('查看', ['view', 'inspect']), ('分割', ['segment_text', 'segment_prompt']), ('比较', ['match_instances'])]),
-    ('执行工具', '筛选实例，或生成新掩码', [('运算', ['select', 'to_mask', 'combine', 'morph']), ('修改', ['remove_region', 'add_region', 'refine_region'])]),
+    ('读取工具', '读取影像或已有结果，不执行操作', [('查看', ['view', 'inspect'])]),
+    ('执行工具', '执行操作，产生新的实例、掩码或特征',
+     [('分割', ['segment_text', 'segment_prompt']), ('比较', ['match_instances']),
+      ('运算', ['select', 'to_mask', 'combine', 'morph']), ('修改', ['remove_region', 'add_region', 'refine_region'])]),
     ('事件触发工具', '启动验证器或提交门', [('验证', ['ask']), ('结束', ['submit'])]),
 ]
 COLUMNS = [(372, 140), (518, 116), (640, 104), (750, 66)]
 VERIFIER_TOOLS = {'ask', 'submit'}
-# Tools offered only with the --tools-t13 switch (T1.2, T1.3, T3). They are sensing tools like the others:
-# they join the sensing group in extra rows and get a dashed outline.
-SENSING_WITH_SWITCH = [('查看', ['view', 'inspect']), ('分割', ['segment_text', 'segment_prompt']),
-                       ('', ['segment_everything', 'segment_semantic']), ('比较', ['match_instances', 'match_exemplar', 'classify']),
-                       ('特征', ['extract_features', 'compare_features'])]
+# Tools offered only with the --tools-t13 switch (T1.2, T1.3, T3). They join the 执行 group in extra rows and
+# get a dashed outline.
+EXEC_ROWS_WITH_SWITCH = [('分割', ['segment_text', 'segment_prompt']), ('', ['segment_everything', 'segment_semantic']),
+                         ('比较', ['match_instances', 'match_exemplar', 'classify']),
+                         ('特征', ['extract_features', 'compare_features']),
+                         ('运算', ['select', 'to_mask', 'combine', 'morph']),
+                         ('修改', ['remove_region', 'add_region', 'refine_region'])]
 SWITCH_TOOLS = {'segment_everything', 'segment_semantic', 'match_exemplar', 'classify', 'extract_features', 'compare_features'}
 WIDE_COLUMNS = [(372, 140), (518, 130), (654, 90)]
 
@@ -56,8 +62,8 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
     notes = harness_notes if harness_notes is not None else ['G1 不启用：plan、python、skill、L2 仔细验证。L1 是快速验证。']
     groups = GROUPS
     if switch_tools:
-        rows = [(cat, [n for n in names if n not in SWITCH_TOOLS or n in switch_tools]) for cat, names in SENSING_WITH_SWITCH]
-        groups = [(GROUPS[0][0], GROUPS[0][1], [r for r in rows if r[1]])] + GROUPS[1:]
+        rows = [(cat, [n for n in names if n not in SWITCH_TOOLS or n in switch_tools]) for cat, names in EXEC_ROWS_WITH_SWITCH]
+        groups = [GROUPS[0], (GROUPS[1][0], GROUPS[1][1], [r for r in rows if r[1]])] + GROUPS[2:]
     extra = sum(30 * len(rows) + 34 for _, _, rows in groups) - 312 + (20 if switch_tools else 0)
     box_bottom = 826 + extra                     # bottom of the toolbox
     note_top = box_bottom + 20
@@ -124,7 +130,7 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
         for r, (cat, names) in enumerate(rows):
             ty = y + 26 + 30 * r
             s.text(328, ty + 17, cat, 'cat')
-            columns = WIDE_COLUMNS if switch_tools and title == '感知工具' and (cat in ('', '特征') or len(names) == 3) else COLUMNS
+            columns = WIDE_COLUMNS if switch_tools and title == '执行工具' and cat in ('', '特征') else COLUMNS
             if cat == '比较' and len(names) == 3:
                 columns = [(372, 140), (518, 116), (640, 104)]
             for (x, width), name in zip(columns, names):

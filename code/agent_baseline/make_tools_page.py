@@ -135,9 +135,11 @@ def build_catalog(gate5=False):
 
 
 CLASSES = [
-    ('感知工具', '读取影像或已有结果，不修改当前掩码。', ['view', 'inspect', 'segment_text', 'segment_prompt', 'segment_everything', 'segment_semantic',
-                                         'match_instances', 'match_exemplar', 'classify', 'extract_features', 'compare_features']),
-    ('执行工具', '筛选实例，或生成新掩码。默认把新掩码设为当前掩码。', ['select', 'to_mask', 'combine', 'morph', 'python', 'remove_region', 'add_region', 'refine_region']),
+    ('读取工具', '读取影像或已有结果，不执行操作。', ['view', 'inspect']),
+    ('执行工具', '执行操作，产生新的实例、掩码或特征。默认把新掩码设为当前掩码。',
+     ['segment_text', 'segment_prompt', 'segment_everything', 'segment_semantic',
+      'match_instances', 'match_exemplar', 'classify', 'extract_features', 'compare_features',
+      'select', 'to_mask', 'combine', 'morph', 'python', 'remove_region', 'add_region', 'refine_region']),
     ('事件触发工具', '调用后启动验证器或提交门。', ['ask', 'submit']),
     ('规划工具', '只写清单或读说明，不处理影像。G1–G4 都没有打开。', ['plan', 'load_skill']),
 ]
