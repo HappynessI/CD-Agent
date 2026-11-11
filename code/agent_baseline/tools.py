@@ -99,7 +99,7 @@ PYTHON_SCHEMA = schema('python', 'Run array calculations in an isolated Python s
 SCHEMA_BY_NAME = {s['function']['name']: s['function']['parameters'] for s in [*SCHEMAS, PLAN_SCHEMA, SKILL_SCHEMA, PYTHON_SCHEMA, *tool_schemas()]}
 
 
-def session_schemas(session, python=False, tools_t13=False, tool_hints='off'):
+def session_schemas(session, python=False, tools_t13=False, tool_hints='off', gate5=False):
     import copy
     schemas = copy.deepcopy(SCHEMAS)
     if (session.target, session.change_direction) != ('building', 'any'):
@@ -117,6 +117,12 @@ def session_schemas(session, python=False, tools_t13=False, tool_hints='off'):
         schemas.append(copy.deepcopy(PYTHON_SCHEMA))
     from .examples_t3x import extend_schema
     schemas = extend_schema(extend_schemas(schemas, tools_t13, tool_hints), session)
+    if gate5:
+        from .gate5 import SEGMENT_TOOLS, region_spec
+        for entry in schemas:
+            function = entry['function']
+            if function['name'] in SEGMENT_TOOLS:
+                function['parameters'] = region_spec(function['parameters'])
     if getattr(session, 'old_map', None):
         from .map_input import schemas_for_map
         schemas = schemas_for_map(schemas)
@@ -225,7 +231,7 @@ def failure(code, message):
 
 
 class Toolbox(ProposalTools):
-    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE, gate4=False, map_input=False):
+    def __init__(self, rgb, directory, segment=None, prompt=None, ask=None, session=None, init_mask=None, python=False, tools_t13=False, vision=None, gate3=False, big_box_share=BIG_BOX_SHARE, gate4=False, map_input=False, gate5=False):
         self.rgb = tuple(np.array(im, copy=True) for im in rgb)
         self.session = session or Session(self.rgb[0].shape[:2], init_mask)
         if map_input:
@@ -246,8 +252,9 @@ class Toolbox(ProposalTools):
         self.skills = ()
         if not 0 < big_box_share <= 1:
             raise ValueError('big_box_share must be in (0, 1]')
-        self.gate3, self.big_box_share = gate3, big_box_share
-        self.gate4 = gate4
+        self.gate3, self.big_box_share = gate3 or gate5, big_box_share
+        self.gate4 = gate4 or gate5
+        self.gate5 = gate5
 
     def get(self, key, kind=None):
         return self.session.get(key, kind, self.allowed)
@@ -262,7 +269,12 @@ class Toolbox(ProposalTools):
             if name not in SCHEMA_BY_NAME or (name == 'python' and not self.python_enabled) or (name in T13_NAMES and name not in self.tools_t13):
                 raise ToolError('bad_args', 'Unknown tool name.')
             from .examples_t3x import external_spec
-            validate(args, external_spec(self.session, name, SCHEMA_BY_NAME[name]))
+            spec = external_spec(self.session, name, SCHEMA_BY_NAME[name])
+            if self.gate5:
+                from .gate5 import SEGMENT_TOOLS, region_spec
+                if name in SEGMENT_TOOLS:
+                    spec = region_spec(spec)
+            validate(args, spec)
             pyinspect.signature(getattr(self, name)).bind(**args)
             if getattr(self.session, 'old_map', None):
                 from .map_input import check_tool
@@ -327,16 +339,21 @@ class Toolbox(ProposalTools):
         return dict(mask=mask, total_components=len(rows), returned=len(selected),
                     has_more=offset + len(selected) < len(rows), components=selected)
 
-    def segment_text(self, time, text, tile=512, score_thr=0.5):
+    def segment_text(self, time, text, tile=512, score_thr=0.5, region=None):
+        from .gate5 import resolve_region, clip_instances, clip_result
+        region_data = resolve_region(self, region)
         text = ' '.join(text.lower().split())
         if not text:
             raise ToolError('bad_args', 'text must name an object class.')
         rows, meta = self._backend(self.segment_backend, time, text, tile, score_thr)
         self.meta.update(meta)
-        key = self.session.add_instances(rows, time)
+        if region is not None:
+            rows, stats = clip_instances(rows, region, region_data)
+        key = self.session.add_instances(rows, time, (region,) if region is not None else ())
         scores = [r['score'] for r in rows if r.get('score') is not None]
-        return dict(inst=key, n=len(rows), area=int(instances.to_mask(rows, self.session.shape).sum()),
+        result = dict(inst=key, n=len(rows), area=int(instances.to_mask(rows, self.session.shape).sum()),
                     score=dict(min=float(min(scores)), median=float(np.median(scores)), max=float(max(scores))) if scores else None)
+        return clip_result(self, result, stats) if region is not None else result
 
     def _prompt(self, time, box=None, points=None, point_labels=None):
         if (box is None) == (points is None):
@@ -413,6 +430,13 @@ class Toolbox(ProposalTools):
         if hasattr(self.ask_backend, 'session'):
             self.ask_backend.session = self.session
         rows, meta = self._backend(self.ask_backend, pairs, question)
+        if self.session.ask_variant == 't2_state':
+            from .map_input import t2_state_change
+            if not getattr(self.session, 'old_map', None):
+                raise ValueError('t2_state requires map input')
+            old = self.session.get(self.session.old_map, Mask).data
+            rows = [t2_state_change(row, old, item.labels == c['id'])
+                    for (_, item, c), row in zip(expanded, rows)]
         self.meta.update(meta)
         self.meta['answers'] = rows
         if len(rows) != len(expanded):
@@ -427,6 +451,10 @@ class Toolbox(ProposalTools):
                                          p_yes=row.get('p_yes'), level=row.get('level', 'L1'), source=source, mask=key, id=c['id']))
             results.append(dict(mask=key, id=c['id'], p_yes=row.get('p_yes'), answer=answer if valid else None,
                 type=row.get('type'), reason=row.get('reason'), status='parsed' if valid else 'unparsed'))
+            if self.session.ask_variant == 't2_state':
+                for field in ('p_change', 'state_answer', 'state_p_yes', 'old_building', 'old_building_fraction'):
+                    results[-1][field] = row.get(field)
+                    entry['records'][-1][field] = row.get(field)
         return results
 
     def select(self, set, ids=None, where=None, area_min=None, area_max=None):

@@ -265,12 +265,21 @@ class ApiAsk:
             record=lambda event: events.append({k: v for k, v in event.items() if k != 'request'}),
             parameters=dict(model=self.model, logprobs=True, top_logprobs=5, response_format={'type': 'json_object'},
                             parallel_tool_calls=False, max_tokens=256))
-        content = list(example_blocks()) if level == 'L2' else []
-        for word, image in zip(CROP_WORDS, images):
+        state_question = self.session is not None and self.session.ask_variant == 't2_state'
+        if state_question:
+            from .map_input import T2_STATE_SYSTEM, T2_STATE_QUESTION
+            if not getattr(self.session, 'old_map', None):
+                raise ValueError('t2_state requires map input')
+            images = [images[i] for i in (1, 3)] if len(images) == 4 else [images[1]]
+        words = ('T2 close-up', 'T2 wider view') if state_question else CROP_WORDS
+        content = list(example_blocks()) if level == 'L2' and not state_question else []
+        for word, image in zip(words, images):
             content += [dict(type='text', text=word), dict(type='image_url',
                         image_url=dict(url='data:image/jpeg;base64,' + encode_image(image)))]
         settings = session_prompts(self.session) if self.session else verifier_prompts()
-        content.append(dict(type='text', text=settings['CORRESPONDENCE'] if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
+        if state_question:
+            settings = dict(settings, SYSTEM=T2_STATE_SYSTEM)
+        content.append(dict(type='text', text=T2_STATE_QUESTION if state_question else settings['CORRESPONDENCE'] if self.correspondence else (CONTEXT_NOTE if len(images) > 2 else '') + question))
         try:
             with ASK_SLOTS:
                 result = planner.complete([dict(role='system', content=settings['SYSTEM']), dict(role='user', content=content)], [], number)
@@ -280,8 +289,10 @@ class ApiAsk:
         raw = result['message'].get('content') or ''
         parsed = parse_json(raw)
         parsed = parsed if isinstance(parsed, dict) else {}
-        answer = dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'), level=level,
+        answer = dict(answer=parsed.get('building' if state_question else 'change'), type=parsed.get('type'), reason=parsed.get('reason'), level=level,
                       p_yes=yes_probability(result['raw']['choices'][0]), raw=raw, usage=result['usage'])
+        if state_question and answer['p_yes'] is None:
+            answer['p_yes'] = parsed.get('p_yes')
         return answer, events, planner.tokens, planner.cost
 
     def __call__(self, pairs, question, level='L1'):

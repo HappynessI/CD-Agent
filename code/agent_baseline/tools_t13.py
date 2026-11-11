@@ -103,9 +103,15 @@ class ProposalTools:
     def _vision(self, operation, **kwargs):
         return self._backend(self.vision_backend, operation, **kwargs)
 
-    def segment_everything(self, time):
+    def segment_everything(self, time, region=None):
+        from .gate5 import resolve_region, clip_instances, clip_result
+        region_data = resolve_region(self, region)
         masks = self._vision('segment_everything', time=time)
-        return self._props(instances.from_dense(masks, np.ones(len(masks))), time)
+        rows = instances.from_dense(masks, np.ones(len(masks)))
+        if region is not None:
+            rows, stats = clip_instances(rows, region, region_data)
+        result = self._props(rows, time, (region,) if region is not None else ())
+        return clip_result(self, result, stats) if region is not None else result
 
     def extract_features(self, time):
         data = np.array(self._vision('extract_features', time=time), copy=True)

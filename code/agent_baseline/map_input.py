@@ -91,3 +91,34 @@ def verifier_settings():
                 VERIFY=question,
                 CORRESPONDENCE=('The first two images are close-ups and the last two show the same '
                                 'place with more surroundings. ' + question))
+
+
+T2_STATE_SYSTEM = ('You inspect the current building state in T2 optical imagery. '
+                   'Both views show T2 only. Decide building presence inside the red contour.')
+T2_STATE_QUESTION = ('The close-up and wider view show the same T2 region. '
+                     'Is the area inside the red contour currently a building? '
+                     'Reply with JSON only: {"building": "yes" or "no", "reason": one short sentence, '
+                     '"p_yes": a probability or null}')
+
+
+def t2_state_change(reading, old_map, region):
+    """Map majority defines direction; retain occupancy to expose mixed XOR components.
+
+    XOR components can join old and new footprints. Majority (ties -> building)
+    is fixed in advance, without reference labels; no component is silently split.
+    """
+    fraction = float(np.asarray(old_map, bool)[np.asarray(region, bool)].mean())
+    old = fraction >= .5
+    answer = reading.get('answer')
+    p = reading.get('p_yes')
+    if type(p) not in (int, float) or not np.isfinite(p) or not 0 <= p <= 1:
+        p = None
+    change = dict(reading, state_answer=answer, state_p_yes=p, old_building=old,
+                  old_building_fraction=fraction)
+    valid = answer in ('yes', 'no')
+    changed = (answer == 'yes') != old
+    change.update(answer=('yes' if changed else 'no') if valid else None,
+                  p_change=(1 - p if old else p) if p is not None else None,
+                  type=('demolished' if old else 'new_building') if valid and changed else 'no_change' if valid else 'uncertain')
+    change['p_yes'] = change['p_change']
+    return change

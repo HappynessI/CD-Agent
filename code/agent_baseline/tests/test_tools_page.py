@@ -43,7 +43,7 @@ class ToolsPageTest(unittest.TestCase):
     def test_html_self_contained(self):
         document=render_catalog(build_catalog())
         audit_html(document)
-        for term in ('没有一键输出变化掩码','map#0','region#0','example#k','exmask#k','feat#k','props#k','提交门','未定义','prefers-color-scheme:dark'):
+        for term in ('没有一次输出变化掩码','map#0','region#0','example#k','exmask#k','feat#k','props#k','提交门','未定义','prefers-color-scheme:dark'):
             self.assertIn(term,document)
 
 

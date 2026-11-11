@@ -156,3 +156,42 @@ TMPDIR="$PWD/code/agent_baseline/.tmp" "$PY" -B -m unittest agent_baseline.tests
 ```
 
 后续 Agent 会话通过实验作业入口运行，命令参数包括 `--tasks "$R/t54/tasks/T5.4_val.jsonl" --map-input --task T5.4 --pixel-thr .85 --planner-model qwen3.7-flash --ask-backend api --ask-model qwen3.7-flash --ask-correspondence`，以及所用 G3/G4 开关和 SAM3 worker。三次重复采用不同 seed-offset 和输出 config。地图设置只对 T5.4 生效。Agent 跑完后，在第 12 步增加 `--agent-prefix t54_agent`，得到三份 `R/t54_agent_s1..3/T5.4/val` 的路径，再重跑指标步骤。
+
+## 2026-11：T2 现状问法与噪声备用地图
+
+新增问法默认关闭。在线入口加 `--map-ask-variant t2_state`，同时需要
+`--map-input --ask-backend api`。离线 `t54_rule` 也接受同名参数。验证器只收到
+T2 近景和 T2 上下文，JSON 的 `building` 是当前建筑状态。harness 将它与组件
+内旧地图的建筑占用多数比较：旧地图为建筑时反转 yes/no 和概率，否则保持。
+返回 `p_change`，兼容字段 `p_yes` 同样表示变化概率；另保留 `state_answer`、
+`state_p_yes`、旧建筑占比。异或组件有可能连接新旧轮廓；多数判向固定使用
+≥0.5，混合占比在结果中保留。它是组件级近似，未依据评测结果调节。
+
+`python -m agent_baseline.analysis.t54_ask_compare --tasks DEV_MANIFEST --names
+NAMES_DEV60 --mask-dir FIXED_DEV/xor --output-dir COMPARE --concurrency 1
+--max-cost-cny 20` 对固定路线的全部组件各问两次，默认 f37_corr 参数和 seed。
+开发固定路线已存在则直接使用；不存在时先按本文件第 7 步用 `t54_fixed` 生成，
+不要从 Agent 轨迹抽组件。主入口只接受提供的 60 张开发清单。报告含累计像素
+F1/P/R、组件纯度≥0.5 的变化 AUC、变化 yes 比例、原始状态 yes 比例和账本费用。
+无 logprobs 时 t2_state 可使用模型 JSON 的可空 p_yes；仍无概率则 AUC 退回二值
+回答，并报告概率可用数量，不能把这个回退解释为可靠概率校准。
+
+两问法共用一份费用上限和逐次响应检查，账本跨进程续跑累计。HTTP 429/403/402
+及欠费立即写 `STOP.json`，不自动恢复。最多已有 concurrency 个请求在途，费用
+可能超过上限一批在途请求的费用。已成功回答原子保存；停止中恰好跨预算的响应
+可能已计费而未保存，因此账本费用才是总费用，回答内费用仅供对照。失败时只写
+`incomplete.json`，不产生完整报告。修复额度/授权后人工处理 STOP，再用原命令
+续跑；改变候选或图像时用新目录。
+
+`python -m agent_baseline.analysis.make_t54_noisy --run-root R --output-root R/t54n`
+使用现有 T5.4 清单指向的地图（也可 `--old-map-dir R/whu/maps`）。按图名派生
+种子 1016 的随机源；均匀选择欧氏长度在 2–4 像素的整数 dx/dy，零填充平移，
+再从平移后 8 连通组件无放回删除 ceil(10%)。输出 `maps/`、`gt/{any,new,demolished}/`、
+`tasks/T5.4n_{dev,val}.jsonl`、`preparation.json`，包括删除数量、位移分布、裁边面积
+和相对无噪真值面积变化。task_type 保留 T5.4，meta.variant 标为 T5.4n，清单可直接
+用现有工具读取；只有显式采用新清单才启用此来源。真值仍是 `(slabel2==1) XOR 输入地图`。
+没有运行噪声 Agent。
+
+新增批处理入口 `analysis/run_t54_t3diag.sbatch` 的 `compare`、`noisy` 模式接受上述
+参数；提交命令和资源估计见本批 NOTES.md。共享盘本地读写三次尝试，不用 I/O 重试
+包裹 API。默认旧问法和旧地图生成器保持原有行为。

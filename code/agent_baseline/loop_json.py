@@ -112,8 +112,13 @@ def latest_mask(session):
     return masks[-1] if masks else None
 
 
-def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False, gate3=False, gate4=False, tool_hints='off'):
+def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_version='v1', metadata=None, review=False, status=False, verify=False, plan=False, skills=(), gate2=False, gate3=False, gate4=False, tool_hints='off', gate5=False):
     session = toolbox.session
+    if gate5 or toolbox.gate5:
+        gate5 = gate4 = True
+        toolbox.gate5 = True
+        metadata = copy.deepcopy(metadata or {})
+        metadata.setdefault('backends', {})['gate5'] = True
     if gate4:
         gate3 = True
         toolbox.gate4 = True
@@ -134,7 +139,7 @@ def run_session(toolbox, planner, recorder, task='T1.1xC0', budget=30, prompt_ve
     previous_calls = None
     reason, error = 'budget', None
     reviewed = not (review or verify)
-    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled, toolbox.tools_t13, tool_hints), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
+    schemas = [*tool_module.session_schemas(session, toolbox.python_enabled, toolbox.tools_t13, tool_hints, gate5=gate5), *([PLAN_SCHEMA] if plan else []), *([SKILL_SCHEMA] if skills else [])]
     generated_calls = []
     toolbox.skills = tuple(skills)
     messages = []
@@ -366,6 +371,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--task', choices=list(INSTRUCTIONS))
     parser.add_argument('--tasks', help='Task manifest JSONL; optionally filter by --task.')
+    parser.add_argument('--map-ask-variant', choices=['t2_state'], help='Opt-in T2-only building-state verifier; requires --map-input and API ask.')
     parser.add_argument('--map-input', action='store_true', help='Enable T5.4 old building map as T1; requires a T5.4 manifest.')
     parser.add_argument('--tools-t13', nargs='?', const='all', default='', help='Enable all new vision tools, or comma-separated tool names. Default off.')
     parser.add_argument('--tool-hints', choices=['off', 'a', 'b'], default='off', help='Append purpose hints to enabled T1.3 tool descriptions only.')
@@ -389,6 +395,7 @@ def main():
     parser.add_argument('--gate2', action='store_true', help='Close the gaps where verifier answers never reach the planner (G2). Needs --verify-stage.')
     parser.add_argument('--gate3', action='store_true', help='G3 box guard, constraint reports and feedback verification scope. Implies --gate2; requires --verify-stage.')
     parser.add_argument('--gate4', action='store_true', help='G4 current-answer reminders and region clipping at submission. Implies --gate3; requires --verify-stage.')
+    parser.add_argument('--gate5', action='store_true', help='G4 plus optional region clipping for segment_text and segment_everything. Implies --gate4; requires --verify-stage.')
     parser.add_argument('--big-box-share', type=float, default=tool_module.BIG_BOX_SHARE)
     parser.add_argument('--ask-correspondence', action='store_true', help='Ask about the object across the dates.')
     parser.add_argument('--ask-model', default='qwen3.7-plus', help='Model of the api ask backend.')
@@ -401,6 +408,10 @@ def main():
     parser.add_argument('--batch', help='Budget ledger name; parallel jobs of one batch share it.')
     parser.add_argument('--max-cost-cny', type=float, help='Stop every job of the batch above this estimated cost.')
     args = parser.parse_args()
+    if args.gate5:
+        if not args.verify_stage:
+            parser.error('--gate5 requires --verify-stage')
+        args.gate4 = True
     if args.gate4:
         if not args.verify_stage:
             parser.error('--gate4 requires --verify-stage')
@@ -432,6 +443,8 @@ def main():
     todo = read_tasks(args.tasks, args.task) if args.tasks else (Path(args.names_file).read_text().split() if args.names_file else names(args.split))
     if args.tasks and any(r.get('examples') for r in todo) and not args.external_examples:
         parser.error('External example tasks require --external-examples')
+    if args.map_ask_variant and (not args.map_input or args.ask_backend != 'api'):
+        parser.error('--map-ask-variant requires --map-input and --ask-backend api')
     if args.map_input and (not args.tasks or not todo or any(r['task_type'] != 'T5.4' for r in todo)):
         parser.error('--map-input requires a nonempty T5.4 manifest')
     if (args.task == 'T5.4' or (args.tasks and any(r['task_type'] == 'T5.4' for r in todo))) and not args.map_input:
@@ -487,7 +500,7 @@ def main():
             instruction=row['instruction'] if row else None, constraint=row['constraint'] if row else None,
             scope=row.get('scope') if row else None,
             source_classes=row.get('source_classes') if row else None,
-            ask_variant=row.get('ask_variant') if row else None,
+            ask_variant=args.map_ask_variant or (row.get('ask_variant') if row else None),
             region_mask=load_mask_png(row['region_mask']) if row and row.get('region_mask') else None,
             **(public_feedback(row) if row else {}))
         if row and row.get('exemplar_mask'):
@@ -511,7 +524,7 @@ def main():
             map_input=args.map_input,
             big_box_share=args.big_box_share)
         try:
-            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2, gate3=args.gate3, gate4=args.gate4, tool_hints=args.tool_hints,
+            result = run_session(toolbox, planner, recorder, task, prompt_version=args.prompt_version, review=args.review, status=args.status, verify=args.verify_stage, plan=args.plan, skills=skills, gate2=args.gate2, gate3=args.gate3, gate4=args.gate4, tool_hints=args.tool_hints, gate5=args.gate5,
                 metadata=dict(**({'scope': session.scope} if session.scope else {}), session_id=stem, source_images=image_paths or source_images,
                     init_mask_path=str(init_path) if init is not None or needs_init(task) else None,
                     init_config=dict(route=args.init_name, text=session.target, tile=512, score_thr=.5,

@@ -48,12 +48,12 @@ META = {
 }
 
 
-def registered_schemas():
+def registered_schemas(gate5=False):
     """Union of schemas actually offered by run_session, including opt-in variants."""
     session = Session((1, 1))
     # extend_schema only checks whether external_examples is nonempty.
     session.external_examples = (('example#0', 'exmask#1'),)
-    return [*tools.session_schemas(session, python=True, tools_t13=True),
+    return [*tools.session_schemas(session, python=True, tools_t13=True, gate5=gate5),
             tools.PLAN_SCHEMA, tools.SKILL_SCHEMA]
 
 
@@ -93,6 +93,8 @@ def switch_for(name, options):
 
 def rules_for(name):
     rules = ['G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。' if name in ('segment_prompt','segment_semantic','to_mask','combine','morph','remove_region','add_region','refine_region','python') else 'G4：此工具不直接产生最新 mask 提醒。']
+    if name in ('segment_text', 'segment_everything'):
+        rules += ['G5：仅 --gate5 时提供可选 region 参数。整图分割后求交；保留至少 1 像素的实例。像素统计按并集去重。不传 region 保留原行为。']
     if name == 'segment_prompt':
         rules += ['G3：只有 box 且无 points 时，框占比超过 big_box_share（默认 0.10）报 box_too_large；不作用于 refine_region。']
     if name == 'ask':
@@ -110,17 +112,17 @@ def rules_for(name):
     return rules
 
 
-def build_catalog():
+def build_catalog(gate5=False):
     options = cli_options()
     entries = []
-    for item in registered_schemas():
+    for item in registered_schemas(gate5=gate5):
         fun = item['function']; name = fun['name']; spec = fun['parameters']
         group, description, output, backend, changes = META[name]
         parameters = []
         for key, value in spec['properties'].items():
             parameters.append(dict(name=key, type=value.get('type', '未定义'),
                 required=key in spec.get('required', []), meaning=value.get('description', '未定义'),
-                schema=value, switch='--external-examples' if key == 'negative' else None))
+                schema=value, switch='--external-examples' if key == 'negative' else '--gate5' if key == 'region' and name in ('segment_text', 'segment_everything') else None))
         default_schema = next((s['function']['parameters'] for s in tools.SCHEMAS if s['function']['name'] == name), None)
         tasks = ('T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制'
                  if name in tools.T13_NAMES else 'T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单')
@@ -132,39 +134,56 @@ def build_catalog():
     return entries
 
 
+GROUP_NAMES = {'看': '查看', '核验': '验证'}
+GROUP_ORDER = ['查看', '分割', '比较', '特征', '运算', '修改', '验证', '结束', '规划']
+
+
 def render_catalog(catalog):
-    from agent_baseline.make_demo import CSS, esc, text_block
+    """G1 style (results/agent_baseline/demo_g1): one table per tool group, parameter details folded."""
+    from html import escape
+    esc = lambda v: escape(str(v), quote=True)
+    css = ''.join((Path(__file__).resolve().parent / 'site_assets' / name).read_text(encoding='utf-8') for name in ('hub.css', 'site.css'))
     groups = {}
     for item in catalog:
-        groups.setdefault(item['group'], []).append(item)
-    cards = []
-    for group, entries in groups.items():
-        cards.append(f'<section><h2>{esc(group)}</h2><div class="catalog-grid">')
-        for item in entries:
-            rows = []
-            for p in item['parameters']:
-                detail = dict(p['schema'])
-                detail.pop('description', None)
-                rows.append(f'<tr><td><code>{esc(p["name"])}</code></td><td>{esc(p["type"])}</td><td>{"是" if p["required"] else "否"}</td><td>{esc(p["meaning"])}{text_block(detail,"schema 约束")}{"仅 --external-examples" if p["switch"] else ""}</td></tr>')
-            cards.append(f'<article class="panel"><h3><code>{item["name"]}</code></h3><p>{esc(item["description"])}</p><div class="tablewrap"><table><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>含义 / 约束</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
-                         f'<p><strong>输出：</strong>{esc(item["output"])}</p><p><strong>后端：</strong>{esc(item["backend"])}</p><p><strong>开关：</strong>{esc(item["switch"]["label"])}</p><p><strong>任务：</strong>{esc(item["tasks"])}</p><p><strong>当前答案：</strong>{esc(item["changes_current_mask"])}</p><ul>'
-                         + ''.join(f'<li>{esc(rule)}</li>' for rule in item['rules']) + '</ul>'
-                         + text_block(item['source_description'],'代码中的用途原文') + '</article>')
-        cards.append('</div></section>')
-    css = '''.catalog{max-width:1400px;margin:auto;padding:20px}.catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:14px;margin-bottom:24px}.catalog-grid>article{min-width:0}.catalog h2{margin:18px 0 10px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border-bottom:1px solid var(--line);padding:7px;text-align:left;vertical-align:top}td{min-width:50px}td:last-child{min-width:160px}.dataflow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.dataflow>div{flex:1;min-width:150px;border:1px solid var(--line);padding:12px;background:var(--tint)}.catalog-grid li{margin:6px 0}.catalog-grid ul{padding-left:20px}@media(max-width:600px){.catalog{padding:12px}}'''
-    flow = '<section class="panel"><h2>数据流</h2><div class="dataflow"><div>输入<br>T1、T2、指令<br>可选给定掩码 / 区域 / 示例 / 反馈 / 旧地图</div><span>→</span><div>规划器调用原子工具<br>查看、分割、比较、特征、运算、修改、核验</div><span>→</span><div>句柄与证据<br>mask#k、inst#k、props#k、feat#k<br>输入 region#0、map#0<br>外部 example#k、exmask#k；视图 view#k</div><span>→</span><div>submit → 提交门<br>报告 → 规划器复核<br>通过后输出二值掩码</div></div></section>'
-    foot = '''<section class="panel"><h2>句柄、核验与提交</h2><p>工具创建新句柄，保留旧 mask / inst / props / feat 数据。select 和 remove_region 保留未删区域的 ID，其余编辑可重编号。当前答案是单独的指针；set_current=false 保留中间候选，不覆盖当前答案。map#0 与 region#0 是输入，不自动成为当前答案。特征网格只读；外部示例会缓存特征，核验账本与待办清单也会更新，因此“只出新句柄”不等于没有任何状态变化。</p>
-<p>map_input.py 与 feedback.py 不注册额外工具。旧地图通过 --map-input 进入 map#0；外部示例通过 --external-examples 扩展 match_exemplar 的 exemplar，并增加可选 negative。反馈点和方位进入指令及 G3 相关组件筛选。完整参数来自 session_schemas，schema 没有单独定义参数含义时写“未定义”。</p>
-<p>ask 不接收规划器的对话或理由。后端接收组件的 T1/T2 裁图与任务核验问题；--ask-correspondence 开启时是近景两张与环境两张，关闭时为两张近景。输出 yes/no、type、reason、可空 p_yes 及解析状态；p_yes 未校准。ask 不自动修改掩码。G3 自动核验受反馈相关性约束，显式 ids 仍可指定组件。</p>
-<p>提交门需 --verify-stage。首次提交或仍欠核验时返回报告，规划器复核后编辑或再次 submit。G3 大框限制只用于 segment_prompt；区域外像素与方向违反进入报告。G4 在有区域时才对实际提交掩码与 region#0 求交；当前答案提醒仅比较句柄，方向违反仍只报告。异常/预算耗尽仍可兜底，页面选例会排除非 model 提交，除非全部兜底。</p></section>'''
-    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>核心工具 · 变化检测 Agent</title><style>' + CSS + css + '</style></head><body><header><h1>核心工具</h1><p>Agent 只能通过这些原子工具工作，没有一键输出变化掩码的工具。</p><p>工具名与参数直接读取注册 schema；后端及行为说明依据实现。共 ' + str(len(catalog)) + ' 个工具（含可选开关）。</p></header><main class="catalog">' + flow + ''.join(cards) + foot + '</main></body></html>')
+        groups.setdefault(GROUP_NAMES.get(item['group'], item['group']), []).append(item)
+    sections = []
+    for group in sorted(groups, key=lambda g: GROUP_ORDER.index(g) if g in GROUP_ORDER else 99):
+        rows, details = [], []
+        for item in groups[group]:
+            params = '、'.join(('<strong>' if p['required'] else '') + f'<code>{esc(p["name"])}</code>' + ('</strong>' if p['required'] else '') for p in item['parameters']) or '无'
+            switch = '默认可用' if item['switch']['default'] is True else item['switch']['flag']
+            rows.append(f'<tr><td><code>{esc(item["name"])}</code></td><td>{esc(item["description"])}</td><td>{params}</td><td>{esc(item["output"])}</td>'
+                        f'<td>{esc(item["backend"])}</td><td>{esc(switch)}</td><td>{esc(item["changes_current_mask"])}</td></tr>')
+            prow = ''.join(f'<tr><td><code>{esc(p["name"])}</code></td><td>{esc(p["type"])}</td><td>{"是" if p["required"] else "否"}</td><td>{esc(p["meaning"])}</td></tr>' for p in item['parameters'])
+            details.append(f'<details><summary><code>{esc(item["name"])}</code> 的参数和规则</summary>'
+                           + (f'<div class="tablewrap"><table class="hubtable"><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明（代码原文）</th></tr></thead><tbody>{prow}</tbody></table></div>' if prow else '<p>没有参数。</p>')
+                           + '<ul>' + ''.join(f'<li>{esc(r)}</li>' for r in item['rules']) + '</ul></details>')
+        sections.append(f'<section class="panel example"><h2>{esc(group)}（{len(groups[group])} 个）</h2><div class="tablewrap"><table class="hubtable"><thead><tr><th>工具</th><th>功能</th><th>输入（粗体为必填）</th><th>输出</th><th>后端</th><th>开关</th><th>当前掩码</th></tr></thead>'
+                        f'<tbody>{"".join(rows)}</tbody></table></div>' + ''.join(details) + '</section>')
+    default = sum(1 for item in catalog if item['switch']['default'] is True)
+    head = ('<header><div class="eyebrow"><a href="../demo_g3/index.html">回放列表</a></div><h1>核心工具</h1>'
+            '<p>Agent 只能通过下面的原子工具工作。没有一次输出变化掩码的工具。</p>'
+            f'<p>共 {len(catalog)} 个工具。{default} 个默认可用。其余 {len(catalog) - default} 个要用命令行开关打开。工具名和参数从代码中注册的定义读取。</p></header>')
+    rules = ('<section class="panel example"><h2>编号、验证器和提交门</h2><div class="capgrid">'
+             '<div><h3>结果编号</h3><ul><li>工具只生成带新编号的结果，不修改已有结果。</li><li>编号种类：mask#k、inst#k、props#k、feat#k、view#k。</li>'
+             '<li>输入编号：给定掩码 mask#0、区域 region#0、旧地图 map#0、外部示例 example#k、exmask#k。</li>'
+             '<li>当前掩码是一个单独的指针。set_current=false 时，工具不修改当前掩码。</li></ul></div>'
+             '<div><h3>验证器（ask）</h3><ul><li>验证器只接收组件的 T1、T2 裁剪图和验证问题。</li><li>验证器不接收规划器的理由和对话。</li>'
+             '<li>输出：yes 或 no、变化类型、理由、p_yes。p_yes 没有校准。</li><li>每次最多验证 64 个组件。答案无法解析时，不等于 no。</li>'
+             '<li>ask 不修改掩码。规划器决定是否删除组件。</li></ul></div>'
+             '<div><h3>提交门（submit）</h3><ul><li>第一次 submit 时，提交门暂停提交并返回报告。</li><li>再次 submit 时，掩码含未验证组件才暂停。</li>'
+             '<li>G3：报告列出区域外像素和方向错误。</li><li>G4：有 region#0 时，提交的掩码与区域求交。</li>'
+             '<li>预算用完或会话异常结束时，harness 提交当前掩码。</li></ul></div></div></section>')
+    return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>核心工具</title><style>'
+            + css + '.example code{font-family:var(--font-mono);font-size:12.5px}</style></head><body>' + head + ''.join(sections) + rules + '</body></html>')
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--gate5', action='store_true', help='Include G5 segmentation region parameters.')
     parser.add_argument('--out-dir', type=Path, required=True)
     args = parser.parse_args()
-    catalog = build_catalog()
+    catalog = build_catalog(gate5=args.gate5)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / 'tools_catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     (args.out_dir / 'index.html').write_text(render_catalog(catalog),encoding='utf-8')

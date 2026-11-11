@@ -1,0 +1,37 @@
+
+/* Additions for the G3/G4 site. Same tokens as the G1 pages (hub.css). */
+.entry{max-width:1752px;margin:16px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.entry a.card{display:block;text-decoration:none;color:var(--text);background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:2px;padding:14px 16px}
+.entry a.card:hover{border-color:var(--accent)}
+.entry .card h2{font-size:16px;margin:0 0 6px;color:var(--accent)}
+.entry .card p{margin:4px 0;color:var(--muted);font-size:13px}
+.entry .card .go{color:var(--accent);font-size:13px;margin-top:8px}
+.hubtable td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.hubtable td.best{font-weight:700}
+.hubtable .task{white-space:normal!important}
+.hubtable .task span{display:block;color:var(--muted);font-size:12.5px}
+.hubtable .hv{font-family:var(--font-mono);font-size:12.5px}
+.compare{margin:16px 24px 0;max-width:1752px}
+.compare .trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.compare .trio>div{min-width:0}
+.compare .trio h3{font-size:14.5px;margin:0 0 6px}
+.compare .trio img{max-height:360px;object-fit:contain;background:var(--bg)}
+.compare .score{font-variant-numeric:tabular-nums;margin:4px 0 0}
+.compare .route{font-size:13px;color:var(--muted)}
+.compare table,.example table{border-collapse:collapse;width:100%;font-size:12.5px}
+.compare th,.compare td,.example th,.example td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.tabs button{border-radius:2px;padding:6px 14px}
+.tabs button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.subtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.subtabs button{font-size:12.5px;padding:4px 10px;border-radius:2px}
+.subtabs button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);font-weight:600}
+.routebox{border:1px solid var(--line);border-radius:2px;padding:12px 14px;background:var(--panel)}
+.routebox .scores{font-size:13px;color:var(--muted)}
+.steps-figs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:start}
+.steps-figs figure{margin:0}
+.steps-figs .empty{aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin:0;font-size:12.5px}
+.example{margin:16px 24px 0;max-width:1752px}
+.example .pairs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;align-items:start}
+.has-js .route-panel[hidden]{display:none}
+@media(max-width:900px){.entry{grid-template-columns:1fr;padding:0 16px}.compare,.example{margin:12px 16px 0}.compare .trio{grid-template-columns:1fr}.steps-figs{grid-template-columns:1fr 1fr}.example .pairs{grid-template-columns:1fr}}

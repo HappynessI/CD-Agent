@@ -27,7 +27,7 @@ def apply_rule(mask, labels, answers):
     return mask & ~np.isin(labels, no)
 
 
-def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=None):
+def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=None, ask_variant=None):
     if not rows or concurrency < 1 or max_cost <= 0:
         raise ValueError('Require nonempty tasks and positive concurrency/cost cap')
     policies = {(direction or r['change_direction'], scope or r.get('scope')) for r in rows}
@@ -44,6 +44,8 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
                     masks=[dict(name=Path(r['id']).stem + '.png',
                         size=(Path(mask_dir)/(Path(r['id']).stem + '.png')).stat().st_size,
                         mtime=(Path(mask_dir)/(Path(r['id']).stem + '.png')).stat().st_mtime_ns) for r in rows])
+    if ask_variant is not None:
+        settings['ask_variant'] = ask_variant
     config = dest / 'settings.json'
     if config.exists() and json.loads(config.read_text()) != settings:
         raise ValueError('Existing rule answers have different inputs or scope; use a fresh directory')
@@ -60,7 +62,7 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
             labels, comps = components(mask)
             rgb = load_pair(row)
             session = Session(mask.shape, target=row['target'], change_direction=actual_direction, scope=actual_scope,
-                              source_classes=row.get('source_classes'))
+                              source_classes=row.get('source_classes'), ask_variant=ask_variant)
             if row.get('task_type') == 'T5.4':
                 from agent_baseline.map_input import attach_map
                 attach_map(session, rgb[0])
@@ -68,6 +70,9 @@ def run(rows, mask_dir, output, max_cost, concurrency=4, scope=None, direction=N
                 uid = f"{stem}:{comp['id']}"
                 pair = ask_images(rgb, labels == comp['id'], comp['bbox'], True)
                 result = api_answer(pair, VARIANTS['f37_corr'], guard, sum(map(ord, uid)) % (2**31), session)
+                if ask_variant == 't2_state':
+                    from agent_baseline.map_input import t2_state_change
+                    result = t2_state_change(result, session.get('map#0').data, labels == comp['id'])
                 return dict(uid=uid, **result)
             todo = [comp for comp in comps if f"{stem}:{comp['id']}" not in done]
             # At most concurrency requests are in flight; spending is recorded by RunGuard.

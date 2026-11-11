@@ -105,6 +105,13 @@ def api_answer(images, spec, guard, seed, session=None):
         question = settings['CORRESPONDENCE'] if spec.get('correspondence') else settings['VERIFY']
         if spec.get('context') and not spec.get('correspondence'):
             question = 'The first two images are close-ups and the last two show the same place with more surroundings. ' + question
+    state_question = session is not None and session.ask_variant == 't2_state'
+    if state_question:
+        from .map_input import T2_STATE_SYSTEM, T2_STATE_QUESTION
+        if not getattr(session, 'old_map', None):
+            raise ValueError('t2_state requires map input')
+        words, images = [words[i] for i in (1, 3)], [images[i] for i in (1, 3)]
+        system, question = T2_STATE_SYSTEM, T2_STATE_QUESTION
     if spec.get('only'):
         keep = (0, 1) if spec['only'] == 'close' else (2, 3)
         words = [words[i] for i in keep]
@@ -128,7 +135,12 @@ def api_answer(images, spec, guard, seed, session=None):
         if not spec.get('first_token'):
             parameters['response_format'] = {'type': 'json_object'}
     # The guard stops every thread on a quota error or when the batch budget is spent.
-    planner = Planner(seed=seed, guard=guard, parameters=parameters, max_attempts=12)
+    def stop_on_error(event):
+        body = event.get('error_body', '').lower()
+        if spec.get('strict_stop') and (event.get('http_status') in (429, 403, 402)
+                or any(word in body for word in ('insufficient balance', 'arrearage', 'payment required', '欠费'))):
+            guard.trip(f"HTTP {event['http_status']}")
+    planner = Planner(seed=seed, guard=guard, parameters=parameters, max_attempts=12, record=stop_on_error)
     result = planner.complete([dict(role='system', content=system), dict(role='user', content=content)], [], 1)
     tokens = usage_tokens(result['usage'])
     raw = result['message'].get('content') or ''
@@ -138,8 +150,11 @@ def api_answer(images, spec, guard, seed, session=None):
     else:
         parsed = parse_json(raw)
         parsed = parsed if isinstance(parsed, dict) else {}
-    return dict(answer=parsed.get('change'), type=parsed.get('type'), reason=parsed.get('reason'), raw=raw,
-                p_yes=yes_probability(result['raw']['choices'][0]), tokens=tokens, cost_cny=request_cost(spec['model'], tokens))
+    probability = yes_probability(result['raw']['choices'][0])
+    if state_question and probability is None:
+        probability = parsed.get('p_yes')
+    return dict(answer=parsed.get('building' if state_question else 'change'), type=parsed.get('type'), reason=parsed.get('reason'), raw=raw,
+                p_yes=probability, tokens=tokens, cost_cny=request_cost(spec['model'], tokens))
 
 
 def presence_answer(rgb, labels, row, spec, guard, seed):

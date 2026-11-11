@@ -518,9 +518,11 @@ def system_figure_current(version='G3', info=None, counts=None):
         body += '</div>'
     body += '</div><p>' + ('灰显为本会话未开启；开关状态来自本会话 input.json.schemas，不把未调用当作未开启。' if 'schemas' in info else '灰显为默认关闭、需要命令行开关的工具（T1.3/T1.2/T3 新工具用 --tools-t13）。各回放页按该会话实际开启的工具显示。') + '</p>'
     body += '<p><strong>G3 三处改动：</strong>segment_prompt 的纯框提示面积超过整图 10%（默认阈值，可配置）会报错；报告框外像素及验证器记录的反向类型；反馈任务只自动核验反馈附近或相对给定掩码发生编辑的相关组件。显式 ask 的 ids 仍按指定组件核验。</p>'
-    if version == 'G4':
+    if version in ('G4', 'G5'):
         body += '<p><strong>G4：</strong>最后 3 次回复及预算报告可提醒当前答案与最新生成掩码不一致；实际提交与 region#0 求交并保存前后掩码，方向违反仍只报告。用途句由独立的 --tool-hints off/a/b 控制，只追加给已开启的 T1.3 工具，默认 off。</p>'
         body += f'<p>本会话用途句开关：{esc(info.get("tool_hints", "未记录"))}。无区域时没有提交求交。</p>'
+    if version == 'G5':
+        body += '<p><strong>G5：</strong>segment_text、segment_everything 可用 region 参数将整图分割结果裁到已有区域掩码；保留至少 1 像素的实例。调用轨迹记录裁剪前后实例数和并集像素数。</p>'
     return f'<section class="panel system"><h2>系统流程（{version}）</h2>{body}</section>'
 
 
@@ -602,7 +604,7 @@ def render(run_dir, split, config_summary=None, fixed=None, note='', selection=N
     info, final = read_json(directory / 'input.json'), read_json(directory / 'final.json')
     rows = read_steps(directory)
     task = final.get('task_id', info.get('task_id', ''))
-    version = 'G4' if (info.get('backends') or {}).get('gate4') else 'G3' if (info.get('backends') or {}).get('gate3') else 'G1'
+    version = 'G5' if (info.get('backends') or {}).get('gate5') else 'G4' if (info.get('backends') or {}).get('gate4') else 'G3' if (info.get('backends') or {}).get('gate3') else 'G1'
     modern = version != 'G1' or selection is not None
     encode = (lambda im, limit=512: jpeg(im, min(limit, 512), image_quality)) if modern else jpeg
     name = directory.name
@@ -725,6 +727,12 @@ def render(run_dir, split, config_summary=None, fixed=None, note='', selection=N
                 body += '</div>'
             if modern:
                 provenance = call.get('provenance') or {}
+                clip = provenance.get('region_clip')
+                if clip:
+                    body += (f'<div class="reportbox"><h3>G5 分割结果区域裁剪</h3>'
+                             f'<p>结果已裁到 {esc(clip["region"])}；实例 {esc(clip["instances_before"])} → {esc(clip["instances_after"])}；'
+                             f'并集像素 {esc(clip["pixels_before"])} → {esc(clip["pixels_after"])}；'
+                             f'裁掉 {esc(clip["dropped_instances"])} 个实例 / {esc(clip["clipped_px"])} 像素。</p></div>')
                 if provenance.get('pre_region_handle'):
                     pre = provenance['pre_region_handle']
                     post = call.get('current_after')

@@ -35,7 +35,8 @@ class Session:
                 or list(source_classes) != ['low vegetation', 'non-vegetated ground surface']):
             raise ValueError('Source classes require the declared ground/vegetation to building conversion')
         from .scope_t13 import ASK_CANDIDATES
-        if ask_variant is not None and (target != 'any change' or ask_variant not in ASK_CANDIDATES):
+        if ask_variant is not None and not ((target == 'any change' and ask_variant in ASK_CANDIDATES)
+                                            or (target == 'building' and ask_variant == 't2_state')):
             raise ValueError('ask_variant requires any change and a declared candidate')
         self.source_classes = tuple(source_classes) if source_classes is not None else None
         self.ask_variant = ask_variant
