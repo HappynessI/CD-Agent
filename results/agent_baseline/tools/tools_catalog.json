@@ -1,0 +1,2574 @@
+[
+  {
+    "name": "view",
+    "group": "看",
+    "description": "查看两期影像，可叠加轮廓、组件编号并裁切区域。",
+    "parameters": [
+      {
+        "name": "region",
+        "type": "array",
+        "required": false,
+        "meaning": "Full-image [x0,y0,x1,y1], exclusive end.",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "switch": null
+      },
+      {
+        "name": "overlay",
+        "type": "string",
+        "required": false,
+        "meaning": "An existing mask#k or inst#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k or inst#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "label_components",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": false
+        },
+        "switch": null
+      },
+      {
+        "name": "ids",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "overlay": {
+          "type": "string",
+          "description": "An existing mask#k or inst#k handle."
+        },
+        "label_components": {
+          "type": "boolean",
+          "default": false
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "overlay": {
+          "type": "string",
+          "description": "An existing mask#k or inst#k handle."
+        },
+        "label_components": {
+          "type": "boolean",
+          "default": false
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "source_description": "Look at T1 and T2 with full-image coordinate ticks. Optional thin red contours of a mask or inst set; component IDs can be labelled on masks only. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "output": "view#k、两张图、坐标与缩放信息",
+    "backend": "纯绘图",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。"
+    ]
+  },
+  {
+    "name": "inspect",
+    "group": "看",
+    "description": "按面积列出掩码组件或实例的编号、面积和边界框。",
+    "parameters": [
+      {
+        "name": "mask",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k or inst#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k or inst#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "offset",
+        "type": "integer",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "switch": null
+      },
+      {
+        "name": "limit",
+        "type": "integer",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 50
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k or inst#k handle."
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 50
+        }
+      },
+      "required": [
+        "mask"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k or inst#k handle."
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 50
+        }
+      },
+      "required": [
+        "mask"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "output": "组件表、总数和分页信息",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。"
+    ]
+  },
+  {
+    "name": "segment_text",
+    "group": "分割",
+    "description": "在一个时相按类别文字分割目标实例。",
+    "parameters": [
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      },
+      {
+        "name": "tile",
+        "type": "integer",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            512
+          ],
+          "default": 512
+        },
+        "switch": null
+      },
+      {
+        "name": "score_thr",
+        "type": "number",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "tile": {
+          "type": "integer",
+          "enum": [
+            0,
+            512
+          ],
+          "default": 512
+        },
+        "score_thr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        }
+      },
+      "required": [
+        "time",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "tile": {
+          "type": "integer",
+          "enum": [
+            0,
+            512
+          ],
+          "default": 512
+        },
+        "score_thr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        }
+      },
+      "required": [
+        "time",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.",
+    "output": "inst#k、数量、面积和分数统计",
+    "backend": "SAM3（缓存或 worker）",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "segment_prompt",
+    "group": "分割",
+    "description": "用一个框或带标签的点分割单个时相的目标。",
+    "parameters": [
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "box",
+        "type": "array",
+        "required": false,
+        "meaning": "Full-image [x0,y0,x1,y1], exclusive end.",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "switch": null
+      },
+      {
+        "name": "points",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "switch": null
+      },
+      {
+        "name": "point_labels",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "box": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "point_labels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "required": [
+        "time"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "box": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "point_labels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        }
+      },
+      "required": [
+        "time"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.",
+    "output": "mask#k、面积、组件数、sam_quality",
+    "backend": "SAM ViT-H",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。",
+      "G3：只有 box 且无 points 时，框占比超过 big_box_share（默认 0.10）报 box_too_large；不作用于 refine_region。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "match_instances",
+    "group": "比较",
+    "description": "用跨时相的单实例重叠判断出现、消失和仍存在。",
+    "parameters": [
+      {
+        "name": "inst_t1",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing inst#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "inst_t2",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing inst#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "overlap_thr",
+        "type": "number",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.25
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "inst_t1": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "inst_t2": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "overlap_thr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.25
+        }
+      },
+      "required": [
+        "inst_t1",
+        "inst_t2"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "inst_t1": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "inst_t2": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "overlap_thr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.25
+        }
+      },
+      "required": [
+        "inst_t1",
+        "inst_t2"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.",
+    "output": "appeared / disappeared / present_t2 的 inst#k 及数量",
+    "backend": "纯重叠运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。"
+    ]
+  },
+  {
+    "name": "ask",
+    "group": "核验",
+    "description": "向独立验证器询问掩码组件是否符合任务变化要求。",
+    "parameters": [
+      {
+        "name": "regions",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mask": {
+                "type": "string",
+                "description": "An existing mask#k handle."
+              },
+              "ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "mask"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mask": {
+                "type": "string",
+                "description": "An existing mask#k handle."
+              },
+              "ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "mask"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mask": {
+                "type": "string",
+                "description": "An existing mask#k handle."
+              },
+              "ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "mask"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "source_description": "Ask the independent verifier about building change in mask components. With no arguments it checks the components of your current answer that have no answer yet, largest first, up to 64 per call; remaining_unverified says how many are left. For a mask without ids, the same on that mask. With ids it asks about exactly those components, up to 64 in total. Returns answer, type, reason, p_yes (relative yes/no reading, may be null), status. Unparsed is not no.",
+    "output": "逐组件 answer、type、reason、p_yes、status；剩余未核验数",
+    "backend": "可配置验证器；CLI 默认 qwen3.7-plus，G3/G4 本批轨迹用 qwen3.7-flash；也支持本地验证器",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变；更新核验账本",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "G3：自动选择仅包含反馈点半径 32 像素/方位格内或被编辑的相关组件；显式 ids 不经过此筛选。每次最多 64 个组件，无法解析不等于 no。"
+    ]
+  },
+  {
+    "name": "select",
+    "group": "运算",
+    "description": "通过编号、面积或分数条件筛选实例并保留 ID。",
+    "parameters": [
+      {
+        "name": "set",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing inst#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "ids",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "switch": null
+      },
+      {
+        "name": "where",
+        "type": "string",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      },
+      {
+        "name": "area_min",
+        "type": "number",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "number",
+          "minimum": 0
+        },
+        "switch": null
+      },
+      {
+        "name": "area_max",
+        "type": "number",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "number",
+          "minimum": 0
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "set": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "where": {
+          "type": "string"
+        },
+        "area_min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "area_max": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "set"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "set": {
+          "type": "string",
+          "description": "An existing inst#k handle."
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "where": {
+          "type": "string"
+        },
+        "area_min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "area_max": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "set"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "output": "新 inst#k 或 props#k、数量和面积",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。"
+    ]
+  },
+  {
+    "name": "to_mask",
+    "group": "运算",
+    "description": "将一个或多个实例集合并成二值掩码。",
+    "parameters": [
+      {
+        "name": "sets",
+        "type": "array",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "An existing inst#k handle."
+          },
+          "minItems": 1
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "sets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "An existing inst#k handle."
+          },
+          "minItems": 1
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "sets"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "sets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "An existing inst#k handle."
+          },
+          "minItems": 1
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "sets"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Union one or more instance sets into a binary mask. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "output": "mask#k、面积、组件数",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认改变；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。"
+    ]
+  },
+  {
+    "name": "combine",
+    "group": "运算",
+    "description": "对两个已有掩码求并、交或相减。",
+    "parameters": [
+      {
+        "name": "op",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "union",
+            "intersect",
+            "subtract"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "a",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "b",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "union",
+            "intersect",
+            "subtract"
+          ]
+        },
+        "a": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "b": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "op",
+        "a",
+        "b"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "union",
+            "intersect",
+            "subtract"
+          ]
+        },
+        "a": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "b": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "op",
+        "a",
+        "b"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Combine masks; subtract means a minus b. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "output": "mask#k、面积、组件数",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认改变；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。"
+    ]
+  },
+  {
+    "name": "morph",
+    "group": "运算",
+    "description": "对已有掩码进行开闭运算或填洞。",
+    "parameters": [
+      {
+        "name": "mask",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "op",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "open",
+            "close",
+            "fill_holes"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "radius",
+        "type": "integer",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "op": {
+          "type": "string",
+          "enum": [
+            "open",
+            "close",
+            "fill_holes"
+          ]
+        },
+        "radius": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "op"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "op": {
+          "type": "string",
+          "enum": [
+            "open",
+            "close",
+            "fill_holes"
+          ]
+        },
+        "radius": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "op"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Open/close with a disk of positive integer radius in original pixels; fill_holes uses no radius. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "output": "mask#k、面积、组件数",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认改变；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。"
+    ]
+  },
+  {
+    "name": "remove_region",
+    "group": "修改",
+    "description": "删除指定的完整组件，剩余组件保留 ID。",
+    "parameters": [
+      {
+        "name": "mask",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "ids",
+        "type": "array",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "ids"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "ids"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Remove full components identified on mask. The remaining components keep their IDs; other edits renumber components. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "output": "mask#k、面积、组件数和增删像素数",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认改变；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。"
+    ]
+  },
+  {
+    "name": "add_region",
+    "group": "修改",
+    "description": "从另一个掩码或实例集中加入所选区域。",
+    "parameters": [
+      {
+        "name": "mask",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "other",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      },
+      {
+        "name": "ids",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "other": {
+          "type": "string"
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "other"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "other": {
+          "type": "string"
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "uniqueItems": true
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "other"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Add selected regions from other: mask component IDs or inst instance IDs; omitted IDs mean all. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "output": "mask#k、面积、组件数和增删像素数",
+    "backend": "纯运算",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认改变；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。"
+    ]
+  },
+  {
+    "name": "refine_region",
+    "group": "修改",
+    "description": "用提示分割替换目标组件，并裁到编辑区域内。",
+    "parameters": [
+      {
+        "name": "mask",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle.",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "id",
+        "type": "integer",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "switch": null
+      },
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "box",
+        "type": "array",
+        "required": false,
+        "meaning": "Full-image [x0,y0,x1,y1], exclusive end.",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "switch": null
+      },
+      {
+        "name": "points",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "switch": null
+      },
+      {
+        "name": "point_labels",
+        "type": "array",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "box": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "point_labels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "id",
+        "time"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+        },
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "box": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "Full-image [x0,y0,x1,y1], exclusive end."
+        },
+        "points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "point_labels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ]
+          }
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "mask",
+        "id",
+        "time"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Replace only the target component using SAM at the required time, clipped to the editing ROI. Without a prompt use its box; default ROI expands that box by 10%, at least 4 pixels. An explicit box is the ROI. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "output": "mask#k、面积、组件数和增删像素数",
+    "backend": "SAM ViT-H",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认改变；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "submit",
+    "group": "结束",
+    "description": "提交已有掩码或空答案，并写下决定说明。",
+    "parameters": [
+      {
+        "name": "mask",
+        "type": "string",
+        "required": true,
+        "meaning": "An existing mask#k handle, or \"empty\".",
+        "schema": {
+          "type": "string",
+          "description": "An existing mask#k handle, or \"empty\"."
+        },
+        "switch": null
+      },
+      {
+        "name": "summary",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle, or \"empty\"."
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mask",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": {
+      "type": "object",
+      "properties": {
+        "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle, or \"empty\"."
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mask",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "source_description": "Finish with any existing mask and a short summary. Pass mask=\"empty\" to answer that nothing changed. Subsequent calls in this reply are skipped.",
+    "output": "最终 mask#k、面积、组件数、submitted；可返回报告",
+    "backend": "纯运算；提交门可触发独立验证器",
+    "switch": {
+      "label": "默认开",
+      "default": true,
+      "flag": null
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "通过提交门后设为当前及最终答案",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "开启 --verify-stage：首次提交及尚欠核验组件会被拦下，返回报告；答案是证据，规划器决定是否修改。G2/G3 预算报告给出复核机会；异常或预算耗尽仍会兜底。",
+      "G3：报告区域外像素及已核验的反向类型；方向只报告。",
+      "G4：有 region#0 时在实际提交处求交，保存前后句柄及删除像素数；显式提交与兜底都适用。"
+    ]
+  },
+  {
+    "name": "python",
+    "group": "运算",
+    "description": "在隔离子进程中对只读数组做运算并保存新掩码。",
+    "parameters": [
+      {
+        "name": "code",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      },
+      {
+        "name": "set_current",
+        "type": "boolean",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "boolean",
+          "default": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "set_current": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Run array calculations in an isolated Python subprocess with np and ndi. Inputs: masks[handle] (H,W bool), instances[handle] (N,H,W bool, only for handles written out in the code), images[\"t1\"/\"t2\"] (H,W,3 uint8), all read-only. Call save_mask(array) for each output mask. No filesystem, network or submission access. New handles become usable in the next reply; submit them with submit. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "output": "零个或多个 mask#k、标准输出文字及统计",
+    "backend": "纯 NumPy / SciPy 运算",
+    "switch": {
+      "label": "--python",
+      "default": false,
+      "flag": "--python",
+      "declaration": {
+        "action": "store_true",
+        "help": "Offer the isolated Python array tool."
+      }
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "默认将最后保存掩码设为当前；set_current=false 时不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。"
+    ]
+  },
+  {
+    "name": "segment_everything",
+    "group": "分割",
+    "description": "在一个时相生成不限类别的区域候选。",
+    "parameters": [
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        }
+      },
+      "required": [
+        "time"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Propose class-agnostic SAM masks at one date. Returns props handle, count and area statistics.",
+    "output": "props#k、数量、总面积和统计",
+    "backend": "SAM ViT-H（DynamicEarth 区域提案，可读缓存）",
+    "switch": {
+      "label": "--tools-t13（all 或按工具名开启）",
+      "default": "",
+      "flag": "--tools-t13",
+      "declaration": {
+        "nargs": "?",
+        "const": "all",
+        "default": "",
+        "help": "Enable all new vision tools, or comma-separated tool names. Default off."
+      }
+    },
+    "tasks": "T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "extract_features",
+    "group": "特征",
+    "description": "提取并缓存一个时相的 patch 特征网格。",
+    "parameters": [
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        }
+      },
+      "required": [
+        "time"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Extract a cached DINOv2 patch feature grid at one date. Returns feat handle and grid size.",
+    "output": "feat#k、时相、网格形状",
+    "backend": "DINOv2",
+    "switch": {
+      "label": "--tools-t13（all 或按工具名开启）",
+      "default": "",
+      "flag": "--tools-t13",
+      "declaration": {
+        "nargs": "?",
+        "const": "all",
+        "default": "",
+        "help": "Enable all new vision tools, or comma-separated tool names. Default off."
+      }
+    },
+    "tasks": "T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "compare_features",
+    "group": "特征",
+    "description": "按区域两期平均特征的 1−cosine 给候选附上变化分数。",
+    "parameters": [
+      {
+        "name": "props",
+        "type": "string",
+        "required": true,
+        "meaning": "Existing props#k proposal set; IDs persist through select.",
+        "schema": {
+          "type": "string",
+          "description": "Existing props#k proposal set; IDs persist through select."
+        },
+        "switch": null
+      },
+      {
+        "name": "feat_t1",
+        "type": "string",
+        "required": true,
+        "meaning": "Existing feat#k DINOv2 feature handle.",
+        "schema": {
+          "type": "string",
+          "description": "Existing feat#k DINOv2 feature handle."
+        },
+        "switch": null
+      },
+      {
+        "name": "feat_t2",
+        "type": "string",
+        "required": true,
+        "meaning": "Existing feat#k DINOv2 feature handle.",
+        "schema": {
+          "type": "string",
+          "description": "Existing feat#k DINOv2 feature handle."
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "props": {
+          "type": "string",
+          "description": "Existing props#k proposal set; IDs persist through select."
+        },
+        "feat_t1": {
+          "type": "string",
+          "description": "Existing feat#k DINOv2 feature handle."
+        },
+        "feat_t2": {
+          "type": "string",
+          "description": "Existing feat#k DINOv2 feature handle."
+        }
+      },
+      "required": [
+        "props",
+        "feat_t1",
+        "feat_t2"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Attach score = 1 - cosine of region-mean T1 and T2 DINOv2 features to each proposal. Returns new props handle and score distribution.",
+    "output": "新 props#k、分数范围",
+    "backend": "纯运算（输入 DINOv2 特征）",
+    "switch": {
+      "label": "--tools-t13（all 或按工具名开启）",
+      "default": "",
+      "flag": "--tools-t13",
+      "declaration": {
+        "nargs": "?",
+        "const": "all",
+        "default": "",
+        "help": "Enable all new vision tools, or comma-separated tool names. Default off."
+      }
+    },
+    "tasks": "T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "--tool-hints off/a/b：仅追加用途句，参数不变；独立于 --gate4，默认 off。",
+      "--map-input：不支持此操作。"
+    ]
+  },
+  {
+    "name": "classify",
+    "group": "比较",
+    "description": "计算各候选区域的类别平均概率，背景自动加入。",
+    "parameters": [
+      {
+        "name": "props",
+        "type": "string",
+        "required": true,
+        "meaning": "Existing props#k proposal set; IDs persist through select.",
+        "schema": {
+          "type": "string",
+          "description": "Existing props#k proposal set; IDs persist through select."
+        },
+        "switch": null
+      },
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "classes",
+        "type": "array",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "props": {
+          "type": "string",
+          "description": "Existing props#k proposal set; IDs persist through select."
+        },
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "props",
+        "time",
+        "classes"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Mean SegEarth-OV class probabilities in each proposal at one date. Softmax vocabulary includes background and the supplied classes. Returns new props handle and per-ID probabilities.",
+    "output": "新 props#k、逐 ID 类别概率",
+    "backend": "SegEarth-OV",
+    "switch": {
+      "label": "--tools-t13（all 或按工具名开启）",
+      "default": "",
+      "flag": "--tools-t13",
+      "declaration": {
+        "nargs": "?",
+        "const": "all",
+        "default": "",
+        "help": "Enable all new vision tools, or comma-separated tool names. Default off."
+      }
+    },
+    "tasks": "T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "segment_semantic",
+    "group": "分割",
+    "description": "在一个时相生成指定前景类别的语义掩码。",
+    "parameters": [
+      {
+        "name": "time",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "switch": null
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "enum": [
+            "t1",
+            "t2"
+          ]
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "time",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Dense SegEarth-OV segmentation for one class at one date, against background. Returns a mask; does not change current answer.",
+    "output": "mask#k、面积和组件数",
+    "backend": "SegEarth-OV",
+    "switch": {
+      "label": "--tools-t13（all 或按工具名开启）",
+      "default": "",
+      "flag": "--tools-t13",
+      "declaration": {
+        "nargs": "?",
+        "const": "all",
+        "default": "",
+        "help": "Enable all new vision tools, or comma-separated tool names. Default off."
+      }
+    },
+    "tasks": "T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：若此工具新建 mask#k，会计入最新掩码提醒；旧输入掩码及 region#0 除外。",
+      "--tool-hints off/a/b：仅追加用途句，参数不变；独立于 --gate4，默认 off。",
+      "--map-input：T1 为旧地图，光学工具只允许 time=t2。"
+    ]
+  },
+  {
+    "name": "match_exemplar",
+    "group": "比较",
+    "description": "按外观或时相特征差与示例的余弦相似度排列候选。",
+    "parameters": [
+      {
+        "name": "props",
+        "type": "string",
+        "required": true,
+        "meaning": "Existing props#k proposal set; IDs persist through select.",
+        "schema": {
+          "type": "string",
+          "description": "Existing props#k proposal set; IDs persist through select."
+        },
+        "switch": null
+      },
+      {
+        "name": "exemplar",
+        "type": "object",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "mask": {
+              "type": "string"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "example": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "switch": null
+      },
+      {
+        "name": "mode",
+        "type": "string",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "change",
+            "t1",
+            "t2"
+          ],
+          "default": "change"
+        },
+        "switch": null
+      },
+      {
+        "name": "negative",
+        "type": "object",
+        "required": false,
+        "meaning": "未定义",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "mask": {
+              "type": "string"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "example": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "switch": "--external-examples"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "props": {
+          "type": "string",
+          "description": "Existing props#k proposal set; IDs persist through select."
+        },
+        "exemplar": {
+          "type": "object",
+          "properties": {
+            "mask": {
+              "type": "string"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "example": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "change",
+            "t1",
+            "t2"
+          ],
+          "default": "change"
+        },
+        "negative": {
+          "type": "object",
+          "properties": {
+            "mask": {
+              "type": "string"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "example": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "props",
+        "exemplar"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Rank proposals by cosine similarity to a mask handle or [x,y] point. change uses T2 minus T1 region-mean DINOv2 features; t1/t2 uses appearance. Returns new props handle and per-ID similarities. External exemplar accepts {\"example\":\"example#k\"} or {\"mask\":\"exmask#k\"}. Use its own crop features; a single T2 example requires mode=t2. Optional negative uses the same mode; score=positive cosine minus negative cosine, range [-2,2].",
+    "output": "新 props#k、逐 ID 相似度；可选正例减负例分数",
+    "backend": "DINOv2 + 纯余弦运算",
+    "switch": {
+      "label": "--tools-t13（all 或按工具名开启）",
+      "default": "",
+      "flag": "--tools-t13",
+      "declaration": {
+        "nargs": "?",
+        "const": "all",
+        "default": "",
+        "help": "Enable all new vision tools, or comma-separated tool names. Default off."
+      }
+    },
+    "tasks": "T1.2 / T1.3 / T3.1 / T3.2 / T3.3 等；按开关启用，不按任务名硬限制",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。",
+      "--tool-hints off/a/b：仅追加用途句，参数不变；独立于 --gate4，默认 off。",
+      "--map-input：不支持此操作。"
+    ]
+  },
+  {
+    "name": "plan",
+    "group": "规划",
+    "description": "写入或替换待办清单，不执行清单中的动作。",
+    "parameters": [
+      {
+        "name": "items",
+        "type": "array",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "todo",
+                  "doing",
+                  "done",
+                  "dropped"
+                ]
+              }
+            },
+            "required": [
+              "text",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "todo",
+                  "doing",
+                  "done",
+                  "dropped"
+                ]
+              }
+            },
+            "required": [
+              "text",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Write or replace your own short to-do list for this image. Each item has a text and a status. The list is only your notes: it runs nothing and adds no evidence.",
+    "output": "清单文字和状态",
+    "backend": "纯记录",
+    "switch": {
+      "label": "--plan",
+      "default": false,
+      "flag": "--plan",
+      "declaration": {
+        "action": "store_true",
+        "help": "Offer the plan tool."
+      }
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。"
+    ]
+  },
+  {
+    "name": "load_skill",
+    "group": "规划",
+    "description": "读取已启用技能的说明文本。",
+    "parameters": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "meaning": "未定义",
+        "schema": {
+          "type": "string"
+        },
+        "switch": null
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "base_schema": null,
+    "source_description": "Read the full text of one skill from the index in the system prompt.",
+    "output": "技能名称与说明文字",
+    "backend": "纯文本读取",
+    "switch": {
+      "label": "--skills",
+      "default": "",
+      "flag": "--skills",
+      "declaration": {
+        "default": "",
+        "help": "Comma-separated skill names, or all."
+      }
+    },
+    "tasks": "T1 / T3 / T4 / T5；实际取决于会话输入与开关，代码未定义逐任务白名单",
+    "changes_current_mask": "不改变",
+    "rules": [
+      "G4：此工具不直接产生最新 mask 提醒。"
+    ]
+  }
+]

@@ -1,16 +1,88 @@
 #!/usr/bin/env python3
-"""Print every session's showcase criteria and failure candidates; never select one."""
+"""Legacy G1 report, or reproducible three-seed median selection with --typical."""
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
 import sys
+from statistics import median
 
 sys.dont_write_bytecode = True
 if __package__:
-    from .make_demo import read_json, read_steps, metric_f1, pct
+    from .make_demo import read_json, read_steps, metric_f1, pct, CATEGORIES, retry_read
 else:
-    from make_demo import read_json, read_steps, metric_f1, pct
+    from make_demo import read_json, read_steps, metric_f1, pct, CATEGORIES, retry_read
+
+
+TASK_RUNS = [
+    ('levir_c0', 'LEVIR', 'T1.1xC0', 'json_qwen37flash_g3_s{n}'),
+    ('levir_t51', 'LEVIR', 'T5.1', 'json_qwen37flash_g3_s{n}'),
+    ('second_c1', 'SECOND', 'T1.1xC1', 'second_g3_appeared_s{n}'),
+    ('second_c2', 'SECOND', 'T1.1xC2', 'second_g3box_any_s{n}'),
+    ('second_c4', 'SECOND', 'T1.1xC4', 'second_g3box_appeared_s{n}'),
+    ('levir_t52', 'LEVIR', 'T5.2', 'json_qwen37flash_g3_t52_k3_s{n}'),
+    ('levir_t53', 'LEVIR', 'T5.3', 'json_qwen37flash_g3_t53v2_fb_s{n}'),
+    ('second_t13', 'SECOND', 'T1.3', 'json_qwen37flash_g4_t13_any_s{n}'),
+    ('second_t31', 'SECOND', 'T3.1', 'json_qwen37flash_g3_t31_any_s{n}'),
+]
+
+
+def select_typical(records):
+    """Median of all recorded final F1s; only model submissions are eligible.
+
+    Fallbacks affect the task distribution, but cannot be selected unless every
+    session is a fallback. Ties: successful tool-category count, image, run.
+    """
+    measured = [r for r in records if r.get('f1') is not None]
+    if not measured:
+        raise ValueError('没有已记录最终 F1 的会话。')
+    middle = median(r['f1'] for r in measured)
+    eligible = [r for r in measured if r.get('submitted_by') == 'model'] or measured
+    distance = min(abs(r['f1'] - middle) for r in eligible)
+    # Treat arithmetic roundoff at the two middle values as a true tie.
+    tied = [r for r in eligible if abs(abs(r['f1'] - middle) - distance) <= 1e-12]
+    chosen = min(tied, key=lambda r: (-r.get('category_count', 0), r['image'], r.get('run', '')))
+    return dict(chosen, median=middle, population=len(measured), eligible=len(eligible),
+                fallback_count=sum(r.get('submitted_by') != 'model' for r in measured),
+                all_fallback=not any(r.get('submitted_by') == 'model' for r in measured))
+
+
+def collect_typical(root, task, run_pattern):
+    records, counts = [], {}
+    root = Path(root)
+    for seed in (1, 2, 3):
+        run = run_pattern.format(n=seed)
+        directory = root / run / task / 'val'
+        paths = retry_read(lambda: sorted(directory.glob('*/final.json')))
+        if not paths:
+            raise ValueError(f'{run}/{task}/val 没有会话；不以缺种子的结果代替。')
+        counts[run] = len(paths)
+        for path in paths:
+            final = read_json(path)
+            records.append(dict(run=run, seed_index=seed, task=task, image=path.parent.name,
+                f1=metric_f1(final.get('eval')), submitted_by=final.get('submitted_by')))
+    chosen = select_typical(records)
+    middle = chosen['median']
+    distance = abs(chosen['f1'] - middle)
+    # Only nearest eligible sessions need trace reads for the tie-break.
+    for record in records:
+        if (record['f1'] is not None and
+                (record['submitted_by'] == 'model' or chosen['all_fallback']) and
+                abs(abs(record['f1'] - middle) - distance) <= 1e-12):
+            rows = read_steps(root / record['run'] / task / 'val' / record['image'])
+            categories = {CATEGORIES.get(c['tool'], '其他') for row in rows for c in row.get('calls', [])
+                          if c.get('ok') and c.get('status') != 'skipped_due_to_submit'}
+            record['categories'] = sorted(categories)
+            record['category_count'] = len(categories)
+    result = select_typical(records)
+    result['seed_counts'] = counts
+    result['missing_f1'] = sum(r['f1'] is None for r in records)
+    return result
+
+
+def select_all(root):
+    return [dict(collect_typical(root, task, pattern), page=page, dataset=dataset)
+            for page, dataset, task, pattern in TASK_RUNS]
 
 GROUPS = {
     '看': {'view', 'inspect'},
@@ -139,11 +211,18 @@ def report(config_dir, init_f1_from_final=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--config-dir', type=Path, required=True)
+    parser.add_argument('--config-dir', type=Path)
+    parser.add_argument('--typical', type=Path, help='Run root: select all nine tasks from three seeds, emit JSON.')
     parser.add_argument('--init-f1-from-final', action='store_true', help='Use final.initial_eval instead of step 0 eval.')
     parser.add_argument('--out', type=Path, help='Also write the exact printed Markdown report.')
     args = parser.parse_args()
-    result = report(args.config_dir, args.init_f1_from_final)
+    if args.typical:
+        import json
+        result = json.dumps(select_all(args.typical), ensure_ascii=False, indent=2) + '\n'
+    else:
+        if not args.config_dir:
+            parser.error('--config-dir or --typical is required')
+        result = report(args.config_dir, args.init_f1_from_final)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(result, encoding='utf-8')
