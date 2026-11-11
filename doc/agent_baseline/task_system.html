@@ -1403,87 +1403,237 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 </section>
 <section class="am-panel" id="panel-I">
 <header class="am-panel-head"><span class="am-panel-id">I</span><h2>任务进展</h2></header>
-<div class="am-panel-body"><div class="am-md"><p>更新于 2026-11-10 03:03（分支提交 89fbc0f）。数字来自 <code>doc/agent_baseline/README_ai.md</code> 第 0.1 和 10.11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次；SECOND 为验证部分 128 张，3 次，G3。</p>
+<div class="am-panel-body"><div class="am-md"><p>更新于 2026-11-11（分支提交 5bece89）。数字来自 <code>doc/agent_baseline/README_ai.md</code> 第 0.1、10.11、10.12 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次；SECOND 为验证部分 128 张，3 次。行颜色按 Agent 与最强合理对照比较：绿色为确认胜，灰色为没有确认差异，红色为确认输，无色为尚未跑完。</p>
+<p><strong>结果对比</strong></p>
+<div class="am-table-wrap"><table>
+<thead>
+<tr>
+<th>任务</th>
+<th>数据</th>
+<th>Agent</th>
+<th>固定路线</th>
+<th>规则或其他对照</th>
+<th>Agent − 最强对照 [95% CI]</th>
+<th>结论</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C0</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">LEVIR 验证</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">85.76（G3）</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">83.15</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 86.35</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">约 −0.6</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">测试集 1 次（G1）：82.63 / 78.26 / 80.97</td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T5.1 × C0</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">LEVIR 验证</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">86.23</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">给定掩码 83.15</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 86.35</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">约 −0.1</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">测试集：81.19 / 78.26 / 80.97</td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C0</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">SECOND</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">64.24</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">51.83</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">—</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">比固定路线 +12.4</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">只有固定路线一个对照</td>
+</tr>
+<tr>
+<td style="background:var(--ok-bg)">T1.1 × C1 新建</td>
+<td style="background:var(--ok-bg)">SECOND</td>
+<td style="background:var(--ok-bg)">71.31</td>
+<td style="background:var(--ok-bg)">57.04</td>
+<td style="background:var(--ok-bg)">规则 63.74</td>
+<td style="background:var(--ok-bg)">+7.57 [+2.36, +13.87]</td>
+<td style="background:var(--ok-bg)"><strong>胜</strong></td>
+<td style="background:var(--ok-bg)"></td>
+</tr>
+<tr>
+<td style="background:var(--ok-bg)">T1.1 × C1 拆除</td>
+<td style="background:var(--ok-bg)">SECOND</td>
+<td style="background:var(--ok-bg)">48.45</td>
+<td style="background:var(--ok-bg)">32.84</td>
+<td style="background:var(--ok-bg)">规则 37.96</td>
+<td style="background:var(--ok-bg)">+10.49 [+0.74, +21.40]</td>
+<td style="background:var(--ok-bg)"><strong>胜</strong></td>
+<td style="background:var(--ok-bg)"></td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T5.1 × C1 新建 / 拆除</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">SECOND</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">65.67 / 37.52</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">—</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 63.73 / 37.95</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+1.94 / −0.43，区间跨零</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"></td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C1 转换</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">SECOND</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">64.84</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">62.82</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 62.70</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+2.02 [−3.30, +7.73]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"></td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C2</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">SECOND</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">62.77</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">—</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">事后 ∩ 框 66.71</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">−3.94 [−8.11, +0.24]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"></td>
+</tr>
+<tr>
+<td style="background:var(--err-bg)">T1.1 × C4</td>
+<td style="background:var(--err-bg)">SECOND</td>
+<td style="background:var(--err-bg)">71.94</td>
+<td style="background:var(--err-bg)">—</td>
+<td style="background:var(--err-bg)">事后 ∩ 框 76.12</td>
+<td style="background:var(--err-bg)">−4.18 [−7.43, −1.55]</td>
+<td style="background:var(--err-bg)"><strong>输</strong></td>
+<td style="background:var(--err-bg)"></td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T5.2 k=1 / k=3</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">LEVIR 验证</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">84.19 / 84.59</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">给定掩码 83.15</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">固定响应 C 84.07 / 84.73</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+0.12 / −0.15</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">比给定掩码 +1.03 / +1.43，确认</td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T5.3（待讨论）</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">LEVIR 验证</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">82.89</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">给定掩码 83.15</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">验证器挑选 83.22</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">−0.33 [−1.12, +0.33]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">待讨论：格子词反馈可能退化为框定位，数据和任务定义要重新考虑</td>
+</tr>
+<tr>
+<td style="background:var(--err-bg)">T1.3 × C0</td>
+<td style="background:var(--err-bg)">SECOND</td>
+<td style="background:var(--err-bg)">46.53（G3）/ 47.71（G4）</td>
+<td style="background:var(--err-bg)">60.88</td>
+<td style="background:var(--err-bg)">规则 61.11</td>
+<td style="background:var(--err-bg)">−14.35 [−17.28, −11.26]</td>
+<td style="background:var(--err-bg)"><strong>输</strong></td>
+<td style="background:var(--err-bg)"></td>
+</tr>
+<tr>
+<td style="background:var(--err-bg)">T1.2 × C0</td>
+<td style="background:var(--err-bg)">SECOND</td>
+<td style="background:var(--err-bg)">41.22（G3）/ 38.95（G4）</td>
+<td style="background:var(--err-bg)">46.26</td>
+<td style="background:var(--err-bg)">规则 47.50</td>
+<td style="background:var(--err-bg)">−5.04 [−7.94, −2.19]</td>
+<td style="background:var(--err-bg)"><strong>输</strong></td>
+<td style="background:var(--err-bg)"></td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T3.1</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">SECOND，128 个任务</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">20.34</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">19.39</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">—</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+0.95 [−7.68, +11.21]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">两者都很低</td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C0</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">WHU-CD</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">64.27</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">56.59</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 62.75</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+1.52 [−2.88, +7.19]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">比固定路线确认胜，+7.67</td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C1 新建</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">WHU-CD</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">72.86</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">62.25</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 70.26</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+2.58 [−2.81, +9.61]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">比固定路线确认胜，+10.58</td>
+</tr>
+<tr>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">T1.1 × C1 拆除</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">WHU-CD</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">25.86</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">21.71</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">规则 22.17</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))">+3.71 [−1.57, +12.52]</td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"><strong>平</strong></td>
+<td style="background:color-mix(in srgb, var(--ink-2) 14%, var(--paper))"></td>
+</tr>
+<tr>
+<td style="background:var(--paper)">T4.1 按尺寸</td>
+<td style="background:var(--paper)">LEVIR 验证</td>
+<td style="background:var(--paper)">10 张试跑 82.52</td>
+<td style="background:var(--paper)">全量：固定 + 面积 77.13</td>
+<td style="background:var(--paper)">全量：规则 + 面积 78.48</td>
+<td style="background:var(--paper)">—</td>
+<td style="background:var(--paper)"><strong>—</strong></td>
+<td style="background:var(--paper)">全量待跑</td>
+</tr>
+<tr>
+<td style="background:var(--paper)">T5.4 地图更新</td>
+<td style="background:var(--paper)">WHU-CD</td>
+<td style="background:var(--paper)">未跑</td>
+<td style="background:var(--paper)">59.40</td>
+<td style="background:var(--paper)">规则 30.97</td>
+<td style="background:var(--paper)">—</td>
+<td style="background:var(--paper)"><strong>—</strong></td>
+<td style="background:var(--paper)">旧地图用 2012 年真值标签；验证器读不了地图</td>
+</tr>
+<tr>
+<td style="background:var(--paper)">T3.2 / T3.3 / T3.4</td>
+<td style="background:var(--paper)">SECOND</td>
+<td style="background:var(--paper)">未跑</td>
+<td style="background:var(--paper)">14.44 / 15.43 / 12.84</td>
+<td style="background:var(--paper)">—</td>
+<td style="background:var(--paper)">—</td>
+<td style="background:var(--paper)"><strong>—</strong></td>
+<td style="background:var(--paper)">只有固定路线</td>
+</tr>
+</tbody></table></div>
+<p><strong>进展与下一步</strong></p>
 <div class="am-table-wrap"><table>
 <thead>
 <tr>
 <th>状态</th>
-<th>任务</th>
+<th>事项</th>
 <th>数据</th>
-<th>结果或说明</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C0</td>
-<td>LEVIR-CD 建筑</td>
-<td>验证 85.76（G3），测试 82.63（G1）；规则 86.35 / 80.97。验证集低于规则，测试集高于规则</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T5.1 × C0（修正 SAM 3 掩码）</td>
-<td>LEVIR-CD</td>
-<td>验证 86.23，测试 81.19，与规则持平</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C1 新建 / 拆除</td>
-<td>SECOND</td>
-<td>71.31 / 48.45（G3），比规则高 7.57 / 10.49，区间在零以上：胜</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T5.1 × C1</td>
-<td>SECOND</td>
-<td>新建 65.67、拆除 37.52（G2），与规则持平</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C1 转换（低矮植被或裸地 → 建筑）</td>
-<td>SECOND</td>
-<td>Agent 64.84，固定路线 62.82，没有确认差异</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.1 × C2 / C4</td>
-<td>SECOND</td>
-<td>62.77 / 71.94（G3），比事后 ∩ 框低 3.94 / 4.18：平 / 输</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T5.2 点框反馈</td>
-<td>LEVIR-CD 验证</td>
-<td>84.19（k=1）、84.59（k=3），与固定响应 C 持平</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T5.3 语言反馈</td>
-<td>LEVIR-CD 验证</td>
-<td>82.89，与验证器挑选对照持平；定位比例 37% 对 79%</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.3 × C0 全部变化</td>
-<td>SECOND</td>
-<td>Agent 46.53，固定路线 60.88，−14.35：输</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T1.2 × C0（建筑 + 低矮植被）</td>
-<td>SECOND</td>
-<td>Agent 41.22，固定路线 46.26，−5.04：输</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>T3.1 图内点选</td>
-<td>SECOND，每图 1 个任务，共 128 个</td>
-<td>Agent 20.34，固定路线 19.39，没有确认差异，两者都低；保留 T3</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
-<td>G3 回归，采用</td>
-<td>LEVIR、SECOND</td>
-<td>没有确认变差的任务，C4 +6.70；之后的任务都用 G3</td>
+<td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>不采用</strong></td>
+<td>G4</td>
+<td>T1.3、T1.2</td>
+<td>对 T1.3 和 T1.2 没有确认效果</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>不采用</strong></td>
@@ -1492,44 +1642,68 @@ html[data-theme="paper"] .am-md table { font-family: var(--font-sans); }
 <td>放大 2 倍 −9.81</td>
 </tr>
 <tr>
-<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
-<td>G4</td>
-<td>—</td>
-<td>当前答案提醒、提交时强制区域约束、新工具用途说明；之后重跑 T1.3、T1.2、T3.1、C2、C4</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>并行</strong></td>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
 <td>WHU-CD T1.1 × C0 / C1</td>
 <td>WHU-CD</td>
+<td>见上表</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>T4.1、T5.4、T3.2 / T3.3 / T3.4 的固定路线</td>
+<td>LEVIR、WHU-CD、SECOND</td>
+<td>见上表</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>构造数据 R1（T4.3）、R2（T1.3 × C3）、R3（T4.4）</td>
+<td>—</td>
+<td>已生成；审核等 Ethan 汇报之后</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>标注页面</td>
+<td>1,587 个组件</td>
+<td>可以开始标注</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--ok-bg);color:var(--ok)"><strong>已完成</strong></td>
+<td>xBD 链接到服务器</td>
+<td>xBD</td>
+<td>已链接，供 C1 程度分级使用</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
+<td>G5 修 bug</td>
+<td>—</td>
+<td>当前答案提醒；提交时与区域求交；分割工具加区域参数；新增免训练的 find_missed 补漏候选工具</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
+<td>T4.1 全量、T3.1 用 G4 重跑、T5.4 试跑</td>
+<td>LEVIR、SECOND、WHU-CD</td>
 <td>—</td>
 </tr>
 <tr>
-<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>并行</strong></td>
-<td>T4.1 按尺寸</td>
-<td>LEVIR-CD</td>
-<td>—</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>代码</strong></td>
-<td>跨图示例输入（T3.2 / T3.3 / T3.4）、地图输入（T5.4）</td>
-<td>WHU-CD</td>
-<td>—</td>
-</tr>
-<tr>
-<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>排队 1</strong></td>
-<td>T1.3 × C3：除植被类型之间的变化以外的全部变化</td>
+<td style="white-space:nowrap;background:var(--warn-bg);color:var(--warn)"><strong>进行中</strong></td>
+<td>T3 工具诊断</td>
 <td>SECOND</td>
-<td>SECOND 可推出，排在 G4 后</td>
+<td>T3 保留在范围内，固定路线低说明工作流或工具有问题</td>
+</tr>
+<tr>
+<td style="white-space:nowrap;background:var(--accent-bg);color:var(--accent)"><strong>待讨论</strong></td>
+<td>T5.3 语言反馈</td>
+<td>LEVIR</td>
+<td>数据和任务定义重新考虑</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
-<td>T2、T4.2–T4.4、颜色属性、细粒度排除</td>
+<td>T2、T4.2、颜色属性、细粒度排除</td>
 <td>—</td>
 <td>等 Ethan 构造数据</td>
 </tr>
 <tr>
 <td style="white-space:nowrap;background:var(--fill);color:var(--ink-2)"><strong>暂缓</strong></td>
-<td>C1 程度分级（xBD）、异源输入（BRIGHT）</td>
+<td>异源输入（BRIGHT）</td>
 <td>—</td>
 <td>需要下载数据</td>
 </tr>
@@ -1687,30 +1861,50 @@ T3 靠外观匹配，地图没有外观，因此不适用。T5.4 本身就是地
 | AnyChange | 自动模式与点查询模式 | T1.3 与 T3.1 |
 | 交互式分割 | 点击反馈迭代修正 | T5.2 |
 ## 任务进展
-更新于 2026-11-10 03:03（分支提交 89fbc0f）。数字来自 `doc/agent_baseline/README_ai.md` 第 0.1 和 10.11 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次；SECOND 为验证部分 128 张，3 次，G3。
+更新于 2026-11-11（分支提交 5bece89）。数字来自 `doc/agent_baseline/README_ai.md` 第 0.1、10.11、10.12 节，指标为 F1^c：验证集重复 3 次取均值，测试集跑 1 次；SECOND 为验证部分 128 张，3 次。行颜色按 Agent 与最强合理对照比较：绿色为确认胜，灰色为没有确认差异，红色为确认输，无色为尚未跑完。
 
-| 状态 | 任务 | 数据 | 结果或说明 |
+**结果对比**
+
+| 任务 | 数据 | Agent | 固定路线 | 规则或其他对照 | Agent − 最强对照 [95% CI] | 结论 | 说明 |
+|---|---|---|---|---|---|---|---|
+| T1.1 × C0 | LEVIR 验证 | 85.76（G3） | 83.15 | 规则 86.35 | 约 −0.6 | 平 | 测试集 1 次（G1）：82.63 / 78.26 / 80.97 |
+| T5.1 × C0 | LEVIR 验证 | 86.23 | 给定掩码 83.15 | 规则 86.35 | 约 −0.1 | 平 | 测试集：81.19 / 78.26 / 80.97 |
+| T1.1 × C0 | SECOND | 64.24 | 51.83 | — | 比固定路线 +12.4 | 平 | 只有固定路线一个对照 |
+| T1.1 × C1 新建 | SECOND | 71.31 | 57.04 | 规则 63.74 | +7.57 [+2.36, +13.87] | 胜 |  |
+| T1.1 × C1 拆除 | SECOND | 48.45 | 32.84 | 规则 37.96 | +10.49 [+0.74, +21.40] | 胜 |  |
+| T5.1 × C1 新建 / 拆除 | SECOND | 65.67 / 37.52 | — | 规则 63.73 / 37.95 | +1.94 / −0.43，区间跨零 | 平 |  |
+| T1.1 × C1 转换 | SECOND | 64.84 | 62.82 | 规则 62.70 | +2.02 [−3.30, +7.73] | 平 |  |
+| T1.1 × C2 | SECOND | 62.77 | — | 事后 ∩ 框 66.71 | −3.94 [−8.11, +0.24] | 平 |  |
+| T1.1 × C4 | SECOND | 71.94 | — | 事后 ∩ 框 76.12 | −4.18 [−7.43, −1.55] | 输 |  |
+| T5.2 k=1 / k=3 | LEVIR 验证 | 84.19 / 84.59 | 给定掩码 83.15 | 固定响应 C 84.07 / 84.73 | +0.12 / −0.15 | 平 | 比给定掩码 +1.03 / +1.43，确认 |
+| T5.3（待讨论） | LEVIR 验证 | 82.89 | 给定掩码 83.15 | 验证器挑选 83.22 | −0.33 [−1.12, +0.33] | 平 | 待讨论：格子词反馈可能退化为框定位，数据和任务定义要重新考虑 |
+| T1.3 × C0 | SECOND | 46.53（G3）/ 47.71（G4） | 60.88 | 规则 61.11 | −14.35 [−17.28, −11.26] | 输 |  |
+| T1.2 × C0 | SECOND | 41.22（G3）/ 38.95（G4） | 46.26 | 规则 47.50 | −5.04 [−7.94, −2.19] | 输 |  |
+| T3.1 | SECOND，128 个任务 | 20.34 | 19.39 | — | +0.95 [−7.68, +11.21] | 平 | 两者都很低 |
+| T1.1 × C0 | WHU-CD | 64.27 | 56.59 | 规则 62.75 | +1.52 [−2.88, +7.19] | 平 | 比固定路线确认胜，+7.67 |
+| T1.1 × C1 新建 | WHU-CD | 72.86 | 62.25 | 规则 70.26 | +2.58 [−2.81, +9.61] | 平 | 比固定路线确认胜，+10.58 |
+| T1.1 × C1 拆除 | WHU-CD | 25.86 | 21.71 | 规则 22.17 | +3.71 [−1.57, +12.52] | 平 |  |
+| T4.1 按尺寸 | LEVIR 验证 | 10 张试跑 82.52 | 全量：固定 + 面积 77.13 | 全量：规则 + 面积 78.48 | — | — | 全量待跑 |
+| T5.4 地图更新 | WHU-CD | 未跑 | 59.40 | 规则 30.97 | — | — | 旧地图用 2012 年真值标签；验证器读不了地图 |
+| T3.2 / T3.3 / T3.4 | SECOND | 未跑 | 14.44 / 15.43 / 12.84 | — | — | — | 只有固定路线 |
+
+**进展与下一步**
+
+| 状态 | 事项 | 数据 | 说明 |
 |---|---|---|---|
-| 已完成 | T1.1 × C0 | LEVIR-CD 建筑 | 验证 85.76（G3），测试 82.63（G1）；规则 86.35 / 80.97。验证集低于规则，测试集高于规则 |
-| 已完成 | T5.1 × C0（修正 SAM 3 掩码） | LEVIR-CD | 验证 86.23，测试 81.19，与规则持平 |
-| 已完成 | T1.1 × C1 新建 / 拆除 | SECOND | 71.31 / 48.45（G3），比规则高 7.57 / 10.49，区间在零以上：胜 |
-| 已完成 | T5.1 × C1 | SECOND | 新建 65.67、拆除 37.52（G2），与规则持平 |
-| 已完成 | T1.1 × C1 转换（低矮植被或裸地 → 建筑） | SECOND | Agent 64.84，固定路线 62.82，没有确认差异 |
-| 已完成 | T1.1 × C2 / C4 | SECOND | 62.77 / 71.94（G3），比事后 ∩ 框低 3.94 / 4.18：平 / 输 |
-| 已完成 | T5.2 点框反馈 | LEVIR-CD 验证 | 84.19（k=1）、84.59（k=3），与固定响应 C 持平 |
-| 已完成 | T5.3 语言反馈 | LEVIR-CD 验证 | 82.89，与验证器挑选对照持平；定位比例 37% 对 79% |
-| 已完成 | T1.3 × C0 全部变化 | SECOND | Agent 46.53，固定路线 60.88，−14.35：输 |
-| 已完成 | T1.2 × C0（建筑 + 低矮植被） | SECOND | Agent 41.22，固定路线 46.26，−5.04：输 |
-| 已完成 | T3.1 图内点选 | SECOND，每图 1 个任务，共 128 个 | Agent 20.34，固定路线 19.39，没有确认差异，两者都低；保留 T3 |
-| 已完成 | G3 回归，采用 | LEVIR、SECOND | 没有确认变差的任务，C4 +6.70；之后的任务都用 G3 |
+| 不采用 | G4 | T1.3、T1.2 | 对 T1.3 和 T1.2 没有确认效果 |
 | 不采用 | H1 skill、P1 python、SECOND 放大 2 倍 | — | 放大 2 倍 −9.81 |
-| 进行中 | G4 | — | 当前答案提醒、提交时强制区域约束、新工具用途说明；之后重跑 T1.3、T1.2、T3.1、C2、C4 |
-| 并行 | WHU-CD T1.1 × C0 / C1 | WHU-CD | — |
-| 并行 | T4.1 按尺寸 | LEVIR-CD | — |
-| 代码 | 跨图示例输入（T3.2 / T3.3 / T3.4）、地图输入（T5.4） | WHU-CD | — |
-| 排队 1 | T1.3 × C3：除植被类型之间的变化以外的全部变化 | SECOND | SECOND 可推出，排在 G4 后 |
-| 暂缓 | T2、T4.2–T4.4、颜色属性、细粒度排除 | — | 等 Ethan 构造数据 |
-| 暂缓 | C1 程度分级（xBD）、异源输入（BRIGHT） | — | 需要下载数据 |
+| 已完成 | WHU-CD T1.1 × C0 / C1 | WHU-CD | 见上表 |
+| 已完成 | T4.1、T5.4、T3.2 / T3.3 / T3.4 的固定路线 | LEVIR、WHU-CD、SECOND | 见上表 |
+| 已完成 | 构造数据 R1（T4.3）、R2（T1.3 × C3）、R3（T4.4） | — | 已生成；审核等 Ethan 汇报之后 |
+| 已完成 | 标注页面 | 1,587 个组件 | 可以开始标注 |
+| 已完成 | xBD 链接到服务器 | xBD | 已链接，供 C1 程度分级使用 |
+| 进行中 | G5 修 bug | — | 当前答案提醒；提交时与区域求交；分割工具加区域参数；新增免训练的 find_missed 补漏候选工具 |
+| 进行中 | T4.1 全量、T3.1 用 G4 重跑、T5.4 试跑 | LEVIR、SECOND、WHU-CD | — |
+| 进行中 | T3 工具诊断 | SECOND | T3 保留在范围内，固定路线低说明工作流或工具有问题 |
+| 待讨论 | T5.3 语言反馈 | LEVIR | 数据和任务定义重新考虑 |
+| 暂缓 | T2、T4.2、颜色属性、细粒度排除 | — | 等 Ethan 构造数据 |
+| 暂缓 | 异源输入（BRIGHT） | — | 需要下载数据 |
 </textarea>
 <script>
 (() => {
