@@ -134,37 +134,55 @@ def build_catalog(gate5=False):
     return entries
 
 
-GROUP_NAMES = {'看': '查看', '核验': '验证'}
-GROUP_ORDER = ['查看', '分割', '比较', '特征', '运算', '修改', '验证', '结束', '规划']
+CLASSES = [
+    ('感知工具', '读取影像或已有结果，不修改当前掩码。', ['view', 'inspect', 'segment_text', 'segment_prompt', 'segment_everything', 'segment_semantic',
+                                         'match_instances', 'match_exemplar', 'classify', 'extract_features', 'compare_features']),
+    ('执行工具', '筛选实例，或生成新掩码。默认把新掩码设为当前掩码。', ['select', 'to_mask', 'combine', 'morph', 'python', 'remove_region', 'add_region', 'refine_region']),
+    ('事件触发工具', '调用后启动验证器或提交门。', ['ask', 'submit']),
+    ('规划工具', '只写清单或读说明，不处理影像。G1–G4 都没有打开。', ['plan', 'load_skill']),
+]
 
 
 def render_catalog(catalog):
-    """G1 style (results/agent_baseline/demo_g1): one table per tool group, parameter details folded."""
+    """G1 style (results/agent_baseline/demo_g1): the toolbox figure, then one card per tool in the G1 classes."""
     from html import escape
+    from agent_baseline.site_svg import agent_figure, SWITCH_TOOLS
     esc = lambda v: escape(str(v), quote=True)
     css = ''.join((Path(__file__).resolve().parent / 'site_assets' / name).read_text(encoding='utf-8') for name in ('hub.css', 'site.css'))
-    groups = {}
-    for item in catalog:
-        groups.setdefault(GROUP_NAMES.get(item['group'], item['group']), []).append(item)
-    sections = []
-    for group in sorted(groups, key=lambda g: GROUP_ORDER.index(g) if g in GROUP_ORDER else 99):
-        rows, details = [], []
-        for item in groups[group]:
-            params = '、'.join(('<strong>' if p['required'] else '') + f'<code>{esc(p["name"])}</code>' + ('</strong>' if p['required'] else '') for p in item['parameters']) or '无'
-            switch = '默认可用' if item['switch']['default'] is True else item['switch']['flag']
-            rows.append(f'<tr><td><code>{esc(item["name"])}</code></td><td>{esc(item["description"])}</td><td>{params}</td><td>{esc(item["output"])}</td>'
-                        f'<td>{esc(item["backend"])}</td><td>{esc(switch)}</td><td>{esc(item["changes_current_mask"])}</td></tr>')
-            prow = ''.join(f'<tr><td><code>{esc(p["name"])}</code></td><td>{esc(p["type"])}</td><td>{"是" if p["required"] else "否"}</td><td>{esc(p["meaning"])}</td></tr>' for p in item['parameters'])
-            details.append(f'<details><summary><code>{esc(item["name"])}</code> 的参数和规则</summary>'
-                           + (f'<div class="tablewrap"><table class="hubtable"><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明（代码原文）</th></tr></thead><tbody>{prow}</tbody></table></div>' if prow else '<p>没有参数。</p>')
-                           + '<ul>' + ''.join(f'<li>{esc(r)}</li>' for r in item['rules']) + '</ul></details>')
-        sections.append(f'<section class="panel example"><h2>{esc(group)}（{len(groups[group])} 个）</h2><div class="tablewrap"><table class="hubtable"><thead><tr><th>工具</th><th>功能</th><th>输入（粗体为必填）</th><th>输出</th><th>后端</th><th>开关</th><th>当前掩码</th></tr></thead>'
-                        f'<tbody>{"".join(rows)}</tbody></table></div>' + ''.join(details) + '</section>')
+    by_name = {item['name']: item for item in catalog}
+    missing = set(by_name) - {n for _, _, names in CLASSES for n in names}
+    if missing:
+        raise ValueError(f'Tools without a class: {sorted(missing)}')
     default = sum(1 for item in catalog if item['switch']['default'] is True)
+    sections = []
+    for title, note, names in CLASSES:
+        cards = []
+        for name in names:
+            item = by_name.get(name)
+            if item is None:
+                continue
+            on = item['switch']['default'] is True
+            badge = '<span class="badge">默认可用</span>' if on else f'<span class="badge off">需 {esc(item["switch"]["flag"])}</span>'
+            params = ''.join(f'<li><code>{esc(p["name"])}</code>{"（必填）" if p["required"] else ""}</li>' for p in item['parameters']) or '<li>没有参数</li>'
+            prow = ''.join(f'<tr><td><code>{esc(p["name"])}</code></td><td>{esc(p["type"])}</td><td>{"是" if p["required"] else "否"}</td><td>{esc(p["meaning"])}</td></tr>' for p in item['parameters'])
+            cards.append(f'<article class="toolcard{"" if on else " sw"}"><h3><code>{esc(name)}</code>{badge}</h3><p>{esc(item["description"])}</p>'
+                         f'<dl><dt>输入</dt><dd><ul>{params}</ul></dd><dt>输出</dt><dd>{esc(item["output"])}</dd><dt>后端</dt><dd>{esc(item["backend"])}</dd>'
+                         f'<dt>当前掩码</dt><dd>{esc(item["changes_current_mask"])}</dd></dl>'
+                         f'<details><summary>参数说明和规则</summary>'
+                         + (f'<div class="tablewrap"><table class="hubtable"><thead><tr><th>参数</th><th>类型</th><th>必填</th><th>说明（代码原文）</th></tr></thead><tbody>{prow}</tbody></table></div>' if prow else '')
+                         + '<ul>' + ''.join(f'<li>{esc(r)}</li>' for r in item['rules']) + '</ul></details></article>')
+        sections.append(f'<section class="panel example"><h2>{esc(title)}（{len(cards)} 个）</h2><p class="muted">{esc(note)}</p><div class="toolcards">{"".join(cards)}</div></section>')
     head = ('<header><div class="eyebrow"><a href="../demo_g3/index.html">回放列表</a></div><h1>核心工具</h1>'
-            '<p>Agent 只能通过下面的原子工具工作。没有一次输出变化掩码的工具。</p>'
-            f'<p>共 {len(catalog)} 个工具。{default} 个默认可用。其余 {len(catalog) - default} 个要用命令行开关打开。工具名和参数从代码中注册的定义读取。</p></header>')
-    rules = ('<section class="panel example"><h2>编号、验证器和提交门</h2><div class="capgrid">'
+            '<p>Agent 只能通过下面的原子工具工作。没有一次输出变化掩码的工具。工具名和参数从代码中注册的定义读取。</p>'
+            f'<div class="metrics"><div class="metric"><strong>{len(catalog)}</strong><span>工具总数</span></div>'
+            f'<div class="metric"><strong>{default}</strong><span>默认可用</span></div>'
+            f'<div class="metric"><strong>{len(catalog) - default}</strong><span>要用命令行开关打开</span></div></div></header>')
+    svg = agent_figure('G3', ['T1 较早影像', 'T2 较晚影像', '指令（一句话任务）', '给定掩码、区域或示例', '系统提示和工具定义'], '其他输入',
+                       switch_tools=SWITCH_TOOLS, harness_notes=['python、plan、load_skill 默认关闭，图中没有画出。'],
+                       toolbox_note='14 个默认工具和 6 个要开关的工具。工具只生成带新编号的结果。')
+    figure = (f'<section class="panel system"><h2>工具在系统中的位置</h2><figure><div class="sysscroll">{svg}</div>'
+              '<figcaption class="syscap"><strong>只有规划器可以调用工具箱。虚线框的工具默认关闭，用 --tools-t13 打开。</strong></figcaption></figure></section>')
+    rules = ('<section class="panel example"><h2>结果编号、验证器和提交门</h2><div class="capgrid">'
              '<div><h3>结果编号</h3><ul><li>工具只生成带新编号的结果，不修改已有结果。</li><li>编号种类：mask#k、inst#k、props#k、feat#k、view#k。</li>'
              '<li>输入编号：给定掩码 mask#0、区域 region#0、旧地图 map#0、外部示例 example#k、exmask#k。</li>'
              '<li>当前掩码是一个单独的指针。set_current=false 时，工具不修改当前掩码。</li></ul></div>'
@@ -174,8 +192,14 @@ def render_catalog(catalog):
              '<div><h3>提交门（submit）</h3><ul><li>第一次 submit 时，提交门暂停提交并返回报告。</li><li>再次 submit 时，掩码含未验证组件才暂停。</li>'
              '<li>G3：报告列出区域外像素和方向错误。</li><li>G4：有 region#0 时，提交的掩码与区域求交。</li>'
              '<li>预算用完或会话异常结束时，harness 提交当前掩码。</li></ul></div></div></section>')
+    extra = ('.toolcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}'
+             '.toolcard{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:2px;padding:10px 12px;background:var(--panel);min-width:0}'
+             '.toolcard.sw{border-left-style:dashed}.toolcard h3{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px;margin:0 0 6px}'
+             '.toolcard h3 code{font-family:var(--font-mono);font-size:14px}.toolcard .badge{font-size:12px;font-weight:400}.toolcard .badge.off{background:var(--warnbg);color:var(--warn)}'
+             '.toolcard dl{display:grid;grid-template-columns:64px 1fr;gap:4px 8px;margin:8px 0;font-size:13px}.toolcard dt{color:var(--muted)}.toolcard dd{margin:0}'
+             '.toolcard dd ul{margin:0;padding-left:16px}.toolcard code{font-family:var(--font-mono);font-size:12.5px}')
     return ('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>核心工具</title><style>'
-            + css + '.example code{font-family:var(--font-mono);font-size:12.5px}</style></head><body>' + head + ''.join(sections) + rules + '</body></html>')
+            + css + extra + '</style></head><body>' + head + figure + ''.join(sections) + rules + '</body></html>')
 
 
 def main():

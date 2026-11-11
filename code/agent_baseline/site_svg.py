@@ -19,13 +19,13 @@ GROUPS = [
 ]
 COLUMNS = [(372, 140), (518, 116), (640, 104), (750, 66)]
 VERIFIER_TOOLS = {'ask', 'submit'}
-# Tools offered only with a command-line switch (T1.2/T1.3/T3); shown as a fourth group when a session has them.
-SWITCH_GROUP = ('开关工具', '--tools-t13 打开。SAM ViT-H、DINOv2、SegEarth-OV', [
-    ('分割', ['segment_everything', 'segment_semantic']),
-    ('特征', ['extract_features', 'compare_features']),
-    ('比较', ['classify', 'match_exemplar']),
-])
-SWITCH_COLUMNS = [(372, 160), (538, 150)]
+# Tools offered only with the --tools-t13 switch (T1.2, T1.3, T3). They are sensing tools like the others:
+# they join the sensing group in extra rows and get a dashed outline.
+SENSING_WITH_SWITCH = [('查看', ['view', 'inspect']), ('分割', ['segment_text', 'segment_prompt']),
+                       ('', ['segment_everything', 'segment_semantic']), ('比较', ['match_instances', 'match_exemplar', 'classify']),
+                       ('特征', ['extract_features', 'compare_features'])]
+SWITCH_TOOLS = {'segment_everything', 'segment_semantic', 'match_exemplar', 'classify', 'extract_features', 'compare_features'}
+WIDE_COLUMNS = [(372, 140), (518, 130), (654, 90)]
 
 
 class Svg:
@@ -54,7 +54,11 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
     session = counts is not None
     inputs = inputs or ['T1 较早影像', 'T2 较晚影像', '指令（一句话任务）', '给定掩码（仅 T5.1）', '系统提示和工具定义']
     notes = harness_notes if harness_notes is not None else ['G1 不启用：plan、python、skill、L2 仔细验证。L1 是快速验证。']
-    extra = 30 * len(SWITCH_GROUP[2]) + 28 + 6 if switch_tools else 0   # height of the fourth tool group
+    groups = GROUPS
+    if switch_tools:
+        rows = [(cat, [n for n in names if n not in SWITCH_TOOLS or n in switch_tools]) for cat, names in SENSING_WITH_SWITCH]
+        groups = [(GROUPS[0][0], GROUPS[0][1], [r for r in rows if r[1]])] + GROUPS[1:]
+    extra = sum(30 * len(rows) + 34 for _, _, rows in groups) - 312 + (20 if switch_tools else 0)
     box_bottom = 826 + extra                     # bottom of the toolbox
     note_top = box_bottom + 20
     frame_h = note_top + 22 * (len(notes) - 1) + 10 - 16
@@ -100,18 +104,19 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
     s.bits[-1] = s.bits[-1].replace('class="box"', 'class="box plan"')
     s.text(320, 428, '工具箱 Toolbox', 'head')
     s.text(820, 428, toolbox_note or f'{total} 个工具。工具只生成带新编号的结果，不修改已有结果。', 'label', 'end')
-    ends = {}
+    ends, ys = {}, {}
 
     def tool(x, width, y, name, kind):
         count = (counts or {}).get(name, 0)
-        s.rect(x, y, width, 24, f'tool tool-{kind}' + (' off' if session and not count else ''))
+        s.rect(x, y, width, 24, f'tool tool-{kind}' + (' sw' if name in SWITCH_TOOLS else '') + (' off' if session and not count else ''))
+        ys[name] = y
         s.text(x + 7, y + 17, name, 'mono')
         if count:
             s.text(x + width - 6, y + 17, f'×{count}', 'mono', 'end')
         ends[name] = x + width
 
     y = 440
-    for title, note, rows in GROUPS:
+    for title, note, rows in groups:
         height_g = 30 * len(rows) + 28
         s.rect(316, y, 508, height_g, 'group')
         s.text(328, y + 18, title, 'small strong')
@@ -119,22 +124,16 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
         for r, (cat, names) in enumerate(rows):
             ty = y + 26 + 30 * r
             s.text(328, ty + 17, cat, 'cat')
-            for (x, width), name in zip(COLUMNS, names):
+            columns = WIDE_COLUMNS if switch_tools and title == '感知工具' and (cat in ('', '特征') or len(names) == 3) else COLUMNS
+            if cat == '比较' and len(names) == 3:
+                columns = [(372, 140), (518, 116), (640, 104)]
+            for (x, width), name in zip(columns, names):
                 tool(x, width, ty, name, 'ver' if name in VERIFIER_TOOLS else 'plan')
         y += height_g + 6
-    if switch_tools:
-        title, note, rows = SWITCH_GROUP
-        s.rect(316, y, 508, 30 * len(rows) + 28, 'group')
-        s.text(328, y + 18, title, 'small strong')
-        s.text(428, y + 18, note, 'label')
-        for r, (cat, names) in enumerate(rows):
-            ty = y + 26 + 30 * r
-            s.text(328, ty + 17, cat, 'cat')
-            for (x, width), name in zip(SWITCH_COLUMNS, names):
-                if name in switch_tools:
-                    tool(x, width, ty, name, 'plan')
-        y += 30 * len(rows) + 28 + 6
     s.text(320, y + 17, 'segment_text 使用 SAM3。segment_prompt 使用 SAM ViT-H。', 'label')
+    if switch_tools:
+        y += 20
+        s.text(320, y + 17, '虚线框：默认关闭，用 --tools-t13 打开（SAM ViT-H、DINOv2、SegEarth-OV）。', 'label')
     s.rect(316, y + 30, 508, 30, 'chip')
     s.text(328, y + 50, '工作状态：结果编号（mask#k、inst#k）、当前掩码、验证记录', 'label')
 
@@ -150,7 +149,7 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
     s.line([(960, 150), (840, 150)], 'ver')
     s.text(900, 140, '答案和报告', 'label', 'middle')
     s.text(900, 170, '不自动删除组件', 'label strong', 'middle')
-    s.line([(ends['ask'], 696), (900, 696), (900, 270), (960, 270)], 'ver')
+    s.line([(ends['ask'], ys['ask'] + 12), (900, ys['ask'] + 12), (900, 270), (960, 270)], 'ver')
     s.text(908, 400, 'ask', 'label mono')
     s.text(908, 420, '规划器按需请求验证', 'label')
 
@@ -163,7 +162,7 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
     s.text(980, 750, '不读取真值，不修改掩码。', 'small muted')
     if session:
         s.text(980, 782, f'这个会话暂停提交 {holds} 次', 'small strong')
-    s.line([(ends['submit'], 726), (960, 726)], 'ver')
+    s.line([(ends['submit'], ys['submit'] + 12), (960, ys['submit'] + 12)], 'ver')
     s.line([(1150, 600), (1150, 334)], 'ver')
     s.text(1142, 450, '任一条件成立时：', 'label', 'end')
     s.text(1142, 470, '自动验证并返回报告', 'label', 'end')
@@ -194,54 +193,41 @@ def agent_figure(version='G1', inputs=None, input_label='影像和掩码', count
     return ''.join(s.bits)
 
 
-VERIFIER_LINES = ('每个组件发送一次独立请求。', '输入：4 张裁剪图。', '红线标出被验证的组件。', '与 Agent 使用同一个验证器和问法。',
-                  '输出：yes 或 no、变化类型、理由。')
-
-
-def route_figure(title, inputs, steps, output='固定路线掩码', rule=None, label=None):
-    """A fixed route (row 1) and, when rule is given, the deletion rule on its components (row 2).
-
-    steps: [(head, tools, lines)]; tools are drawn as tool chips, lines as body text.
-    rule: None, or dict(question=..., decide=[...], output=...).
-    Classes are the G1 figure classes, so the page CSS styles both figures alike.
-    """
-    s = Svg()
-    box_w, gap, x0 = 250, 44, 232
-    line_h = 22
-
-    def block_height(tools, lines):
-        return 46 + 30 * len(tools) + line_h * len(lines) + 10
-
-    row1_h = max([block_height(t, l) for _, t, l in steps] + [44 + 46 * len(inputs), 130])
-    row2_h = 0
-    if rule:
-        row2_h = max(block_height([], VERIFIER_LINES + (rule.get('question', ''),)), block_height([], rule['decide']), 150)
-    top1, top2 = 70, 70 + row1_h + 70
-    height = top2 + (row2_h + 30 if rule else 0) + 20
-    width = x0 + len(steps) * (box_w + gap) + 220
-    width = max(width, 1100)
-    s.bits.append(f'<svg class="sys route" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)}"><defs>')
+def _figure_start(s, title, width, height, label):
+    s.bits.append(f'<svg class="sys route" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(label or title)}"><defs>')
     for name in ('main', 'plan', 'ver', 'mute'):
         s.bits.append(f'<marker id="r-arrow-{name}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
                       f'<path class="head-{name}" d="M0 0 10 5 0 10z"/></marker>')
     s.bits.append('</defs>')
-
-    def edge(points, kind, dashed=False):
-        path = ' '.join(f'{x},{y}' for x, y in points)
-        s.bits.append(f'<polyline class="edge edge-{kind}{" dash" if dashed else ""}" points="{path}" marker-end="url(#r-arrow-{kind})"/>')
-
     s.text(20, 40, title, 'title')
-    s.rect(20, top1, 180, row1_h)
-    s.text(36, top1 + 28, '输入', 'head')
+
+
+def _edge(s, points, kind, dashed=False):
+    path = ' '.join(f'{x},{y}' for x, y in points)
+    s.bits.append(f'<polyline class="edge edge-{kind}{" dash" if dashed else ""}" points="{path}" marker-end="url(#r-arrow-{kind})"/>')
+
+
+def route_figure(title, inputs, steps, output='固定路线掩码', label=None):
+    """One fixed route: input -> numbered steps (tool chips and text) -> output. No planner, no verifier."""
+    s = Svg()
+    box_w, gap, x0, line_h = 250, 44, 232, 22
+    block = lambda tools, lines: 46 + 30 * len(tools) + line_h * len(lines) + 10
+    row_h = max([block(t, l) for _, t, l in steps] + [44 + 46 * len(inputs), 130])
+    top = 70
+    mid = top + row_h // 2
+    width = max(x0 + len(steps) * (box_w + gap) + 210, 1100)
+    _figure_start(s, title, width, top + row_h + 30, label)
+    s.rect(20, top, 180, row_h)
+    s.text(36, top + 28, '输入', 'head')
     for n, item in enumerate(inputs):
-        s.rect(32, top1 + 44 + 46 * n, 156, 36, 'chip')
-        s.text(110, top1 + 67 + 46 * n, item, 'chiptext', 'middle')
+        s.rect(32, top + 44 + 46 * n, 156, 36, 'chip')
+        s.text(110, top + 67 + 46 * n, item, 'chiptext', 'middle')
     x = x0
-    edge([(200, top1 + row1_h // 2), (x, top1 + row1_h // 2)], 'main')
+    _edge(s, [(200, mid), (x, mid)], 'main')
     for n, (head, tools, lines) in enumerate(steps):
-        s.rect(x, top1, box_w, row1_h, 'box plan')
-        s.text(x + 14, top1 + 26, f'{n + 1}. {head}', 'head')
-        y = top1 + 40
+        s.rect(x, top, box_w, row_h, 'box plan')
+        s.text(x + 14, top + 26, f'{n + 1}. {head}', 'head')
+        y = top + 40
         for tool in tools:
             s.rect(x + 14, y, box_w - 28, 24, 'tool tool-plan')
             s.text(x + 21, y + 17, tool, 'mono')
@@ -250,48 +236,68 @@ def route_figure(title, inputs, steps, output='固定路线掩码', rule=None, l
             s.text(x + 14, y + 16, line, 'body')
             y += line_h
         x += box_w
-        edge([(x, top1 + row1_h // 2), (x + gap, top1 + row1_h // 2)], 'main')
+        _edge(s, [(x, mid), (x + gap, mid)], 'main')
         x += gap
-    out_x = x
-    s.rect(out_x, top1, 190, 110)
-    s.text(out_x + 16, top1 + 28, '输出', 'head')
-    s.text(out_x + 16, top1 + 56, output, 'body')
-    s.text(out_x + 16, top1 + 80, '不用规划器。', 'small muted')
-    s.text(out_x + 16, top1 + 100, '不用验证器。', 'small muted')
-    if rule:
-        # Row 2: components -> the same verifier -> program decision -> output.
-        mid = top2 + row2_h // 2
-        edge([(out_x + 95, top1 + 110), (out_x + 95, top1 + row1_h + 30), (110, top1 + row1_h + 30), (110, top2)], 'main')
-        s.text(130, top1 + row1_h + 22, '固定路线掩码', 'label')
-        s.rect(20, top2, 180, row2_h)
-        s.text(36, top2 + 28, '拆成组件', 'head')
-        for k, line in enumerate(('8 连通组件。', '每个组件', '问一次验证器。')):
-            s.text(36, top2 + 56 + 22 * k, line, 'body')
-        edge([(200, mid), (x0, mid)], 'main')
-        s.rect(x0, top2, box_w + 90, row2_h, 'box ver')
-        s.text(x0 + 14, top2 + 26, '验证器 Verifier', 'head')
-        s.text(x0 + box_w + 76, top2 + 26, 'flash · L1', 'mono', 'end')
-        y = top2 + 40
-        for line in VERIFIER_LINES + ((rule['question'],) if rule.get('question') else ()):
-            s.text(x0 + 14, y + 16, line, 'body')
-            y += line_h
-        x = x0 + box_w + 90
-        edge([(x, mid), (x + gap, mid)], 'ver')
-        x += gap
-        s.rect(x, top2, box_w + 40, row2_h, 'box')
-        s.text(x + 14, top2 + 26, '程序判断', 'head')
-        y = top2 + 40
-        for line in rule['decide']:
-            s.text(x + 14, y + 16, line, 'body')
-            y += line_h
-        x += box_w + 40
-        edge([(x, mid), (x + gap, mid)], 'main')
-        x += gap
-        s.rect(x, top2, 190, 96)
-        s.text(x + 16, top2 + 28, '输出', 'head')
-        s.text(x + 16, top2 + 56, rule.get('output', '固定规则掩码'), 'body')
-        s.text(x + 16, top2 + 80, '不用规划器。不补漏。', 'small muted')
-    if label:
-        s.text(20, height - 8, label, 'label')
+    oy = mid - 55
+    s.rect(x, oy, 190, 110)
+    s.text(x + 16, oy + 28, '输出', 'head')
+    s.text(x + 16, oy + 56, output, 'body')
+    s.text(x + 16, oy + 80, '不用规划器。', 'small muted')
+    s.text(x + 16, oy + 100, '不用验证器。', 'small muted')
+    s.bits.append('</svg>')
+    return ''.join(s.bits)
+
+
+def rule_figure():
+    """The fixed rule, one structure for every task: the fixed-route mask -> components -> all of them to
+    the verifier in one batch (one independent request per component) -> program decision -> output."""
+    s = Svg()
+    width, height, top, h = 1540, 400, 70, 290
+    mid = top + h // 2
+    _figure_start(s, '固定规则：在固定路线掩码上批量验证组件，删除答 no 的组件', width, height, None)
+    # Input: the fixed-route mask of the task.
+    s.rect(20, top, 200, h)
+    s.text(36, top + 28, '输入', 'head')
+    for n, item in enumerate(['固定路线掩码', 'T1、T2 影像（裁剪用）', '任务的验证问题']):
+        s.rect(32, top + 50 + 50 * n, 176, 38, 'chip')
+        s.text(120, top + 74 + 50 * n, item, 'chiptext', 'middle')
+    _edge(s, [(220, mid), (264, mid)], 'main')
+    # Split into components.
+    s.rect(264, top, 220, h, 'box plan')
+    s.text(280, top + 28, '1. 拆成组件', 'head')
+    for k, line in enumerate(('8 连通组件。', '每个组件一个编号。', '组件 1、2 … N。')):
+        s.text(280, top + 60 + 24 * k, line, 'body')
+    _edge(s, [(484, mid), (528, mid)], 'main')
+    # The batch: a stack of component cards.
+    s.rect(528, top, 250, h, 'box plan')
+    s.text(544, top + 28, '2. 批量送出', 'head')
+    for k in range(4):
+        y = top + 52 + 34 * k
+        s.rect(552 + 6 * k, y, 180, 28, 'tool tool-plan')
+        s.text(562 + 6 * k, y + 19, f'组件 {k + 1}' if k < 3 else '组件 N', 'mono')
+    s.text(544, top + 220, '全部 N 个组件一起送出。', 'body')
+    s.text(544, top + 244, '每个组件一次独立请求，', 'body')
+    s.text(544, top + 268, '请求并发执行。', 'body')
+    for k in range(3):
+        _edge(s, [(778, mid - 30 + 30 * k), (822, mid - 30 + 30 * k)], 'ver')
+    # The verifier: the same one the Agent uses.
+    s.rect(822, top, 290, h, 'box ver')
+    s.text(838, top + 28, '3. 验证器 Verifier', 'head')
+    s.text(1098, top + 28, 'flash · L1', 'mono', 'end')
+    for k, line in enumerate(('与 Agent 使用同一个验证器和问法。', '输入：一个组件的 4 张裁剪图。', 'T1、T2 各一张近景和一张远景。',
+                              '红线标出这个组件。', '输出：yes 或 no、变化类型、理由。')):
+        s.text(838, top + 60 + 24 * k, line, 'body')
+    _edge(s, [(1112, mid), (1156, mid)], 'ver')
+    # Program decision and output.
+    s.rect(1156, top, 190, h, 'box')
+    s.text(1172, top + 28, '4. 程序判断', 'head')
+    for k, line in enumerate(('答 no：删除组件。', '答 yes：保留组件。', '无法解析：保留组件。', '只删除，不补漏。')):
+        s.text(1172, top + 60 + 24 * k, line, 'body')
+    _edge(s, [(1346, mid), (1370, mid)], 'main')
+    s.rect(1370, mid - 55, 150, 110)
+    s.text(1386, mid - 27, '输出', 'head')
+    s.text(1386, mid + 1, '固定规则掩码', 'body')
+    s.text(1386, mid + 25, '不用规划器。', 'small muted')
+    s.text(20, height - 12, '规划器不参与。程序不看图，只按验证器的答案删除组件。', 'label')
     s.bits.append('</svg>')
     return ''.join(s.bits)

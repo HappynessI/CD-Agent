@@ -11,4 +11,9 @@
 
 表中的 F1 是这一张图上的分数，不代表整个任务。全部图上的分数见 `baselines.html` 中每条路线的结构图下方。
 
-生成：`python -m agent_baseline.make_site --run-root <运行目录> --out-dir results/agent_baseline/demo_g3 --selections <pick_demo --typical 的输出>`。程序只读取已有轨迹、对照掩码和验证器答案，不运行模型。
+生成分两步（`code/agent_baseline/make_site.py`）：
+
+1. 数据步骤（计算节点，只在数据变化时运行）：`python -m agent_baseline.make_site --stage data --run-root <运行目录> --cache <缓存目录> --out-dir <任意> --selections <pick_demo --typical 的输出>`。读取轨迹、对照掩码、验证器答案和原图，把图片和分数写入缓存。
+2. 页面步骤（登录节点）：`python -m agent_baseline.make_site --stage page --cache <缓存目录> --out-dir results/agent_baseline/demo_g3`。只读缓存。修改文字、样式、结构图后只运行这一步。
+
+程序不运行模型。

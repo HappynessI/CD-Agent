@@ -24,7 +24,7 @@ from agent_baseline.make_demo import (JS, chart, esc, jpeg, mask_path, metric_f1
                                       text_block, after_stop_count)
 from agent_baseline.make_baselines_page import load_baselines, measures, scored_image, image_answers, select_example
 from agent_baseline.make_g3_pages import audit_html
-from agent_baseline.site_svg import agent_figure, route_figure
+from agent_baseline.site_svg import agent_figure, route_figure, rule_figure
 
 ASSETS = Path(__file__).resolve().parent / 'site_assets'
 CSS = (ASSETS / 'hub.css').read_text(encoding='utf-8') + (ASSETS / 'site.css').read_text(encoding='utf-8')
@@ -54,7 +54,7 @@ INSTRUCTION_CHIP = {'levir_t52': '指令（含点反馈）', 'levir_t53': '指�
 HARNESS_NOTES = {
     'G2': 'G2：补上答案到不了规划器的漏洞；预算用完时补报告。',
     'G3': 'G3：框提示的框超过整图 10% 时报错；报告区域外像素和方向错误；反馈任务只验证相关组件。',
-    'G4': 'G4：最后 3 步提醒当前答案；提交时与 region#0 求交；开关工具附用途说明。',
+    'G4': 'G4：最后 3 步提醒当前答案；提交时与 region#0 求交；虚线框工具附用途说明。',
 }
 OFF_NOTE = '不启用：plan、python、skill、L2 仔细验证。'
 
@@ -156,6 +156,32 @@ def page(title, body, script=''):
             f'<title>{esc(title)}</title><style>{CSS}</style></head><body>{body}{script}</body></html>')
 
 
+class Store:
+    """Values that need the server data (images, masks, traces), cached per page.
+
+    Data step (mode 'build'): every get() computes its value and the store is saved as JSON.
+    Page step (mode 'read'): get() only reads the saved value, so the HTML is assembled in seconds
+    without the server data. Text, CSS and figures live in the page step and need no data step.
+    """
+    def __init__(self, path, mode):
+        self.path, self.mode = Path(path), mode
+        self.data = json.loads(self.path.read_text(encoding='utf-8')) if mode == 'read' else {}
+
+    def get(self, key, compute):
+        if self.mode == 'read':
+            if key not in self.data:
+                raise KeyError(f'{self.path.name} has no cached value {key!r}; run the data step (--stage data) again.')
+            return self.data[key]
+        if key not in self.data:
+            self.data[key] = compute()
+        return self.data[key]
+
+    def save(self):
+        if self.mode == 'build':
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.path.write_text(json.dumps(self.data, ensure_ascii=False), encoding='utf-8')
+
+
 def harness_of(info):
     backends = info.get('backends') or {}
     return 'G5' if backends.get('gate5') else 'G4' if backends.get('gate4') else 'G3' if backends.get('gate3') else 'G2' if backends.get('gate2') else 'G1'
@@ -180,7 +206,7 @@ def gate_caption(version, stops=None):
                '反馈任务：自动验证只覆盖反馈附近和改动过的组件。'],
         'G4': ['最后 3 步，当前答案不是最新掩码时，状态行提醒规划器。harness 不替换掩码。',
                '有 region#0 时，提交的掩码与区域求交。求交前后的掩码都写入轨迹。',
-               '开关工具的说明附一句用途。'],
+               '虚线框工具的说明附一句用途。'],
     }
     order = ['G2', 'G3', 'G4']
     rows = ''.join(f'<li><strong>{v}</strong>：{esc(c)}</li>' for v in order[:order.index(version) + 1] if version in order for c in changes[v])
@@ -203,7 +229,8 @@ TERMS = [
     ('提交门 Gate', 'harness 中的一个结构。规划器调用 submit 时，提交门判断是否暂停提交。'),
     ('固定路线', '程序按固定顺序和固定参数调用工具。不用规划器，不用验证器。'),
     ('固定规则', '在固定路线的组件上运行验证器，删除答 no 的组件。不用规划器。'),
-    ('开关工具', '要用命令行开关 --tools-t13 打开的工具。T1.2、T1.3、T3 使用。'),
+    ('固定响应', '反馈任务（T5.2、T5.3）的固定路线。程序按反馈的位置直接修改给定掩码，不用规划器。'),
+    ('虚线框工具', '默认关闭的感知工具，用命令行开关 --tools-t13 打开。T1.2、T1.3、T3 使用。'),
     ('F1ᶜ', '累计全部图的 TP、FP、FN 后计算的 F1。单张图的 F1 写作 F1。'), ('真值', '数据集提供的变化标注。真值只用于事后评分。'),
 ]
 
@@ -236,39 +263,50 @@ def baseline_names(key):
     return '固定路线', '固定规则'
 
 
-def comparison_panel(record, data, agent, truth, t2, encode):
-    key = record['page']
+def comparison_data(record, data, agent, truth, t2, encode):
+    """Data step: the 3 pictures and scores of one image."""
     scores_, truth_used, ignore = comparison_scores(data, agent, truth)
-    fixed_name, rule_name = baseline_names(key)
     fixed, rule = data.get('fixed'), data.get('rule') if data.get('rule') is not None else data.get('response')
     deleted = fixed & ~data['rule'] if fixed is not None and data.get('rule') is not None else None
+    pictures = {}
+    for pred, sk in ((fixed, 'fixed'), (rule, 'rule'), (agent, 'agent')):
+        if pred is not None:
+            pictures[sk] = encode(scored_image(pred & ~ignore if ignore is not None else pred, truth_used, t2, deleted if sk == 'rule' else None))
+    return dict(scores=scores_, pictures=pictures, deleted=deleted is not None, ignore=ignore is not None,
+                same=bool(fixed is not None and rule is not None and np.array_equal(fixed, rule)),
+                answers=[dict(id=a['id'] if isinstance(a['id'], str) else int(a['id']), area=int(a['area']), answer=a.get('answer', '未记录'), reason=a.get('reason', '')) for a in data.get('answers') or []])
+
+
+def comparison_panel(record, c):
+    """Page step: the HTML of the three-method comparison."""
+    key = record['page']
+    fixed_name, rule_name = baseline_names(key)
     family = TASKS[key][5]
     cols = []
-    for name, pred, sk in ((fixed_name, fixed, 'fixed'), (rule_name, rule, 'rule'), ('Agent（最终掩码）', agent, 'agent')):
-        if pred is None:
+    for name, sk in ((fixed_name, 'fixed'), (rule_name, 'rule'), ('Agent（最终掩码）', 'agent')):
+        if sk not in c['pictures']:
             reason = '这个任务没有固定规则。' if sk == 'rule' else '没有找到这个对照的掩码。'
             cols.append(f'<div><h3>{esc(name)}</h3><div class="empty">{reason}</div></div>')
             continue
-        m = scores_[sk]
-        picture = scored_image(pred & ~ignore if ignore is not None else pred, truth_used, t2, deleted if sk == 'rule' else None)
-        cols.append(f'<div><h3>{esc(name)}</h3>{figure(encode(picture), name + "：与真值对比")}'
+        m = c['scores'][sk]
+        cols.append(f'<div><h3>{esc(name)}</h3>{figure(c["pictures"][sk], name + "：与真值对比")}'
                     f'<p class="score"><strong>F1 {m["f1"] * 100:.2f}</strong> · P {m["precision"] * 100:.2f} · R {m["recall"] * 100:.2f}</p></div>')
     body = (f'<section class="panel compare"><h2>同一张图上的三种做法</h2>'
             f'<p class="route">{esc(ROUTES[family]["title"])}。<a href="baselines.html#{family}">查看这条路线的结构</a>。</p>'
             '<div class="trio">' + ''.join(cols) + '</div>'
             '<div class="legend"><span><i class="tp"></i>TP 命中</span><span><i class="fp"></i>FP 误检</span><span><i class="fn"></i>FN 漏检</span>'
-            + ('<span>黄色虚线：固定规则删除的组件</span>' if deleted is not None else '') + '</div>')
-    if fixed is not None and rule is not None and np.array_equal(fixed, rule):
+            + ('<span>黄色虚线：固定规则删除的组件</span>' if c['deleted'] else '') + '</div>')
+    if c['same']:
         body += f'<p class="muted">这张图上，{esc(rule_name)}的掩码与{esc(fixed_name)}的掩码相同。</p>'
-    if ignore is not None:
+    if c['ignore']:
         body += ('<p class="muted">这 3 个分数按 T3.1 的评分方法计算：预测和真值都去掉示例本身的像素。页头的 F1 是记录器的值，没有去掉示例。'
                  'G3 的 384 个 T3.1 会话中，209 个会话按这个方法计算的 F1 是 0。</p>')
-    if data.get('answers'):
-        rows = ''.join(f'<tr><td>{esc(a["id"])}</td><td>{esc(a["area"])}</td><td>{esc(a.get("answer", "未记录"))}</td><td>{esc(a.get("reason", ""))}</td></tr>' for a in data['answers'])
-        body += (f'<details><summary>固定规则的验证器答案（{len(data["answers"])} 个组件，点击展开）</summary>'
+    if c['answers']:
+        rows = ''.join(f'<tr><td>{esc(a["id"])}</td><td>{esc(a["area"])}</td><td>{esc(a["answer"])}</td><td>{esc(a["reason"])}</td></tr>' for a in c['answers'])
+        body += (f'<details><summary>固定规则的验证器答案（{len(c["answers"])} 个组件，点击展开）</summary>'
                  '<p class="muted">固定规则的请求在会话之外单独发送。同一个组件的答案可以与会话中的答案不同。</p>'
                  f'<div class="tablewrap"><table><thead><tr><th>组件</th><th>面积（像素）</th><th>答案</th><th>理由</th></tr></thead><tbody>{rows}</tbody></table></div></details>')
-    return body + '</section>', scores_
+    return body + '</section>'
 
 
 # ---------------------------------------------------------------- replay page
@@ -283,7 +321,7 @@ def input_cell(directory, info, key, sources, encode):
             yy, xx = np.nonzero(read_mask(region))
             if len(xx):
                 ImageDraw.Draw(t2).rectangle((int(xx.min()), int(yy.min()), int(xx.max()), int(yy.max())), outline='#ffd400', width=max(3, t2.width // 120))
-            return figure(encode(t2), 'T2 和区域 region#0（黄框）')
+            return [encode(t2), 'region', None]
     if key in ('levir_t52', 'levir_t53'):
         from agent_baseline.feedback import cell_mask
         canvas = t2
@@ -300,15 +338,23 @@ def input_cell(directory, info, key, sources, encode):
                 yy, xx = np.nonzero(cell_mask(entry['where'], (canvas.height, canvas.width)))
                 if len(xx):
                     draw.rectangle((int(xx.min()), int(yy.min()), int(xx.max()), int(yy.max())), outline='#ffd400', width=max(3, canvas.width // 150))
-        kind = '点' if key == 'levir_t52' else '方位格'
-        return figure(encode(canvas), f'T2、给定掩码（红线）和反馈{kind}（黄色）')
+        return [encode(canvas), 'feedback', None]
     if key == 'second_t31':
         handle = (info.get('initial_view') or {}).get('overlay') or initial
         if handle and mask_path(directory, handle).exists():
-            return figure(encode(open_image(mask_path(directory, handle))), f'示例掩码 {handle}')
+            return [encode(open_image(mask_path(directory, handle))), 'exemplar', handle]
     if initial and mask_path(directory, initial).exists():
-        return figure(encode(open_image(mask_path(directory, initial))), f'给定掩码 {initial}')
-    return f'<figure><div class="empty">没有给定掩码</div><figcaption>{esc(TASKS[key][1])}</figcaption></figure>'
+        return [encode(open_image(mask_path(directory, initial))), 'given', initial]
+    return [None, 'none', None]
+
+
+def input_figure(key, cell):
+    uri, kind, handle = cell
+    if uri is None:
+        return f'<figure><div class="empty">没有给定掩码</div><figcaption>{esc(TASKS[key][1])}</figcaption></figure>'
+    caption = {'region': 'T2 和区域 region#0（黄框）', 'exemplar': f'示例掩码 {handle}', 'given': f'给定掩码 {handle}',
+               'feedback': 'T2、给定掩码（红线）和反馈' + ('点' if key == 'levir_t52' else '方位格') + '（黄色）'}[kind]
+    return figure(uri, caption)
 
 
 def answers_html(call):
@@ -329,11 +375,9 @@ def result_block(value, threshold=420):
     return f'<pre>{esc(text)}</pre>'
 
 
-def ledger_html(directory):
-    path = directory / 'verification.json'
-    if not path.exists():
+def ledger_html(entries):
+    if entries is None:
         return ''
-    entries = read_json(path)
     rows, against = [], 0
     for entry in sorted(entries, key=lambda e: -e.get('area', 0)):
         records = entry.get('records', [])
@@ -351,36 +395,51 @@ def ledger_html(directory):
             + ''.join(rows) + '</tbody></table></div></details>')
 
 
-def render_replay(root, record, quality=62):
+def render_replay(root, record, store, quality=62):
+    from functools import lru_cache
     key = record['page']
     code, text, dataset, chip4, arrow_label, _ = TASKS[key]
-    directory = Path(root) / record['run'] / record['task'] / 'val' / record['image']
-    info, final = read_json(directory / 'input.json'), read_json(directory / 'final.json')
-    rows = read_steps(directory)
+    directory = Path(root or '.') / record['run'] / record['task'] / 'val' / record['image']  # only read in the data step
+    S = store.get
+    info = S('info', lambda: read_json(directory / 'input.json'))
+    final = S('final', lambda: read_json(directory / 'final.json'))
+    rows = S('rows', lambda: read_steps(directory))
+    entries = S('verification', lambda: read_json(directory / 'verification.json') if (directory / 'verification.json').exists() else None)
     version = harness_of(info)
     encode = lambda im, limit=512: jpeg(im, min(limit, 512), quality)
-    name = directory.name
-    gt = read_mask(resolve_asset(directory, info['gt_mask_path'])) if info.get('gt_mask_path') else read_mask(
-        Path(info['source_images'][0]).parent.parent / 'label' / (name + '.png'))
-    sources = [open_image(resolve_asset(directory, p)) for p in info['source_images']]
-    t2 = sources[1].copy(); t2.thumbnail((512, 512), Image.Resampling.LANCZOS)
-    gt_small = np.asarray(Image.fromarray(gt).resize(t2.size, Image.Resampling.NEAREST))
-    masks, thumbs, panels = {}, {}, {}
+    name = record['image']
 
-    def mask_assets(handle, panel=True):
-        if handle not in masks:
-            masks[handle] = read_mask(mask_path(directory, handle))
-            thumbs[handle] = encode(Image.fromarray(masks[handle].astype('uint8') * 255))
-        if panel and handle not in panels:
-            small = Image.fromarray(masks[handle].astype('uint8') * 255).resize(t2.size, Image.Resampling.NEAREST)
-            pred = np.asarray(small) > 127
-            edge = np.asarray(small.filter(ImageFilter.MaxFilter(3))) != np.asarray(small.filter(ImageFilter.MinFilter(3)))
-            overlay = np.array(t2); overlay[edge] = [239, 80, 80]
-            compare = (np.array(t2).astype(float) * .22).astype('uint8')
-            compare[pred & gt_small] = [44, 206, 120]; compare[pred & ~gt_small] = [239, 80, 80]; compare[~pred & gt_small] = [69, 141, 255]
-            panels[handle] = (figure(encode(Image.fromarray(overlay)), 'T2 和当前掩码（红色轮廓）') +
-                              figure(encode(Image.fromarray(compare)), '与真值对比（模型在运行时看不到）'))
-        return thumbs[handle]
+    @lru_cache(None)
+    def gt():
+        return read_mask(resolve_asset(directory, info['gt_mask_path'])) if info.get('gt_mask_path') else read_mask(
+            Path(info['source_images'][0]).parent.parent / 'label' / (name + '.png'))
+
+    @lru_cache(None)
+    def sources():
+        return [open_image(resolve_asset(directory, p)) for p in info['source_images']]
+
+    @lru_cache(None)
+    def t2():
+        im = sources()[1].copy(); im.thumbnail((512, 512), Image.Resampling.LANCZOS)
+        return im
+
+    panels = {}
+
+    def mask_images(handle):
+        mask = read_mask(mask_path(directory, handle))
+        small = Image.fromarray(mask.astype('uint8') * 255).resize(t2().size, Image.Resampling.NEAREST)
+        gt_small = np.asarray(Image.fromarray(gt()).resize(t2().size, Image.Resampling.NEAREST))
+        pred = np.asarray(small) > 127
+        edge = np.asarray(small.filter(ImageFilter.MaxFilter(3))) != np.asarray(small.filter(ImageFilter.MinFilter(3)))
+        overlay = np.array(t2()); overlay[edge] = [239, 80, 80]
+        compare = (np.array(t2()).astype(float) * .22).astype('uint8')
+        compare[pred & gt_small] = [44, 206, 120]; compare[pred & ~gt_small] = [239, 80, 80]; compare[~pred & gt_small] = [69, 141, 255]
+        return [encode(Image.fromarray(mask.astype('uint8') * 255)), encode(Image.fromarray(overlay)), encode(Image.fromarray(compare))]
+
+    def mask_assets(handle):
+        thumb, overlay, compare = S(f'mask:{handle}', lambda: mask_images(handle))
+        panels[handle] = (figure(overlay, 'T2 和当前掩码（红色轮廓）') + figure(compare, '与真值对比（模型在运行时看不到）'))
+        return thumb
 
     final_metric = final.get('eval') or {}
     final_f1 = metric_f1(final_metric)
@@ -405,21 +464,21 @@ def render_replay(root, record, quality=62):
     enabled = {s['function']['name'] for s in info.get('schemas', [])}
     switch = sorted(enabled & SWITCH_TOOLS)
     chips = ['T1 较早影像', 'T2 较晚影像', INSTRUCTION_CHIP.get(key, '指令（一句话任务）')] + ([chip4] if chip4 else []) + ['系统提示和工具定义']
-    answers = sum(len(e.get('records', [])) for e in read_json(directory / 'verification.json')) if (directory / 'verification.json').exists() else 0
+    answers = sum(len(e.get('records', [])) for e in entries) if entries else 0
     svg = agent_figure(version, chips, arrow_label, counts, answers, sum(c.get('status') == 'report' for c in calls),
                        final.get('termination_reason', '没有记录'), switch, harness_notes(version))
     system = (f'<section class="panel system"><h2>系统流程（{version}）</h2><figure><div class="sysscroll">{svg}</div>'
-              + gate_caption(version, after_stop_count(directory)) + '</figure>' + terms_block(False) + '</section>')
+              + gate_caption(version, S('stops', lambda: after_stop_count(directory))) + '</figure>' + terms_block(False) + '</section>')
 
-    data = load_baselines(root, record, directory)
     final_handle = final.get('final_handle')
-    agent_mask = read_mask(resolve_asset(directory, final['mask_path']))
-    compare, scores_ = comparison_panel(record, data, agent_mask, gt, t2, encode)
+    c = S('compare', lambda: comparison_data(record, load_baselines(root, record, directory),
+                                             read_mask(resolve_asset(directory, final['mask_path'])), gt(), t2(), encode))
+    compare, scores_ = comparison_panel(record, c), c['scores']
 
     left = '<aside><section class="inputs panel sticky"><h2>输入和真值</h2><div class="pair">'
-    left += ''.join(figure(encode(im), label) for im, label in zip(sources, ['T1 · 较早影像', 'T2 · 较晚影像']))
-    left += figure(encode(Image.fromarray(gt.astype('uint8') * 255)), '真值（模型在运行时看不到）')
-    left += input_cell(directory, info, key, sources, encode)
+    left += ''.join(figure(S(f'source:{k}', lambda k=k: encode(sources()[k])), label) for k, label in enumerate(['T1 · 较早影像', 'T2 · 较晚影像']))
+    left += figure(S('gt', lambda: encode(Image.fromarray(gt().astype('uint8') * 255))), '真值（模型在运行时看不到）')
+    left += input_figure(key, S('input4', lambda: input_cell(directory, info, key, sources(), encode)))
     left += '</div><p class="muted">页面图像是缩小版。点击图像可以放大。真值和 F1 只用于事后评分。</p></section></aside>'
 
     timeline = ['<section aria-label="步骤时间线"><h2>Agent 做了什么</h2><p class="muted">页面按记录顺序回放。点击步骤卡片可以切换步骤。按 ← 或 → 键也可以切换。第 0 步是初始化。</p>'
@@ -439,10 +498,10 @@ def render_replay(root, record, quality=62):
             kind = '当前答案提醒（G4）' if 'Your current answer is' in row['report'] else '报告'
             body += f'<div class="reportbox">{kind}：{esc(row["report"])}</div>'
         if step == 0:
-            views = [directory / 'images' / f'view_0_{t}.jpg' for t in ('t1', 't2')]
-            if all(p.exists() for p in views):
+            views = S('views0', lambda: [encode(open_image(p)) for p in (directory / 'images' / f'view_0_{t}.jpg' for t in ('t1', 't2')) if p.exists()])
+            if len(views) == 2:
                 body += '<details><summary>规划器收到的初始图像（缩小版）</summary><div class="pair">' + ''.join(
-                    figure(encode(open_image(p)), f'初始 T{k + 1}') for k, p in enumerate(views)) + '</div></details>'
+                    figure(uri, f'初始 T{k + 1}') for k, uri in enumerate(views)) + '</div></details>'
         for call in row.get('calls', []):
             tool = call['tool']
             failed = not call.get('ok', False)
@@ -466,16 +525,16 @@ def render_replay(root, record, quality=62):
                     body += answers_html(call)
                 body += '<div class="muted">返回内容</div>' + result_block(call.get('result_text', '没有记录'))
             if call.get('result_images'):
-                body += '<div class="pair">' + ''.join(figure(encode(open_image(resolve_asset(directory, p))), f'规划器收到的 T{j + 1}（缩小版）')
+                body += '<div class="pair">' + ''.join(figure(S(f'image:{p}', lambda p=p: encode(open_image(resolve_asset(directory, p)))), f'规划器收到的 T{j + 1}（缩小版）')
                                                        for j, p in enumerate(call['result_images'][:2])) + '</div>'
             provenance = call.get('provenance') or {}
             if provenance.get('pre_region_handle'):
                 body += f'<div class="reportbox">提交时与区域求交（G4）：删除区域外 {esc(provenance.get("region_clipped_px", "没有记录"))} 像素。</div>'
             for created in dict.fromkeys(call.get('handles_created') or []):
                 if created.startswith(('inst#', 'props#')) and tool in SWITCH_TOOLS | {'segment_everything'}:
-                    im = proposal_thumbnail(directory, created)
-                    if im is not None:
-                        body += figure(encode(im), f'返回的候选（{created}，全部候选的并集）', 'thumb')
+                    uri = S(f'props:{created}', lambda created=created: (lambda im: encode(im) if im is not None else None)(proposal_thumbnail(directory, created)))
+                    if uri is not None:
+                        body += figure(uri, f'返回的候选（{created}，全部候选的并集）', 'thumb')
             before, after = call.get('current_before'), call.get('current_after')
             if before != after:
                 if after:
@@ -516,7 +575,7 @@ def render_replay(root, record, quality=62):
               f'<pre>{esc(final.get("summary", "没有记录"))}</pre>')
     if 'pre_region_handle' in final:
         footer += f'<p>提交时与区域求交（G4）：{esc(final["pre_region_handle"])} → {esc(final_handle)}，删除区域外 {esc(final.get("region_clipped_px", "没有记录"))} 像素。</p>'
-    footer += ledger_html(directory)
+    footer += ledger_html(entries)
     footer += (f'<p>变化组件数：{esc(final.get("change_component_count", "没有记录"))} · 变化面积：{esc(final.get("change_area_px", "没有记录"))} 像素。'
                '<strong>组件按 8 连通计算。组件数不等于目标个数。</strong></p>')
     footer += '<p>工具调用次数（包含失败和跳过的调用）：' + esc('；'.join(f'{k} × {v}（失败或跳过 {errors[k]} 次）' for k, v in sorted(counts.items()))) + '</p>'
@@ -555,7 +614,7 @@ def render_index(records):
             '<p>表中的 F1 是这一张图上的分数。每个任务在全部图上的分数见「三种做法」。</p></header>')
     svg = agent_figure('G3', ['T1 较早影像', 'T2 较晚影像', '指令（一句话任务）', '给定掩码、区域或示例', '系统提示和工具定义'],
                        '其他输入', switch_tools=SWITCH_TOOLS, harness_notes=harness_notes('G4'),
-                       toolbox_note='14 个默认工具和 6 个开关工具。工具只生成带新编号的结果。')
+                       toolbox_note='14 个默认工具和 6 个要开关的工具。工具只生成带新编号的结果。')
     system = (f'<section class="panel system"><h2>系统流程（G3、G4）</h2><figure><div class="sysscroll">{svg}</div>{gate_caption("G4")}</figure></section>')
     table = ('<main class="hub"><section class="panel"><h2>9 个任务</h2><div class="tablewrap"><table class="hubtable"><thead><tr><th>页面</th><th>任务</th><th>数据</th><th>harness</th>'
              '<th>Agent F1</th><th>固定路线 F1</th><th>固定规则 F1</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table></div>'
@@ -569,44 +628,61 @@ def render_index(records):
 # ---------------------------------------------------------------- three methods page
 
 def cached_steps(root, image, encode):
-    """Saved SAM3 instances of both dates and the saved fixed-route mask. Matching outputs are not saved."""
-    path = Path(root) / 'sam3_soft/t512s256/val' / (image + '.npz')
-    figs = []
-    if path.exists():
-        import io
+    """The fixed route on one LEVIR image, step by step, from the saved SAM3 instances.
 
-        def load():
-            with np.load(io.BytesIO(path.read_bytes()), allow_pickle=False) as z:
-                shape = tuple(map(int, z['shape'])); out = []
-                for time in (0, 1):
-                    dense = np.zeros(int(np.prod(shape)), bool)
-                    scores, origins, offsets = z[f'scores{time}'], z[f'origins{time}'], z[f'offs{time}']
-                    pixels, values = z[f'idx{time}'], z[f'val{time}']
-                    n = 0
-                    for i in np.flatnonzero(scores >= .5):
-                        if origins[i][0] % 512 or origins[i][1] % 512:
-                            continue
-                        idx = pixels[offsets[i]:offsets[i + 1]][values[offsets[i]:offsets[i + 1]] >= round(.85 * 255)]
-                        if len(idx):
-                            dense[idx] = True; n += 1
-                    out.append((dense.reshape(shape), n))
-                return out
-        for i, (mask, n) in enumerate(retry_read(load)):
-            figs.append(figure(encode(Image.fromarray(mask.astype('uint8') * 255)), f'1. segment_text(T{i + 1})：{n} 个实例'))
-    else:
-        figs += ['<figure><div class="empty">没有保存</div><figcaption>1. segment_text(T1)</figcaption></figure>',
-                 '<figure><div class="empty">没有保存</div><figcaption>1. segment_text(T2)</figcaption></figure>']
-    figs.append('<figure><div class="empty">匹配结果没有保存</div><figcaption>2. match_instances：出现、消失</figcaption></figure>')
-    fixed = Path(root) / 'init/sam3_imc_p85/val' / (image + '.png')
-    figs.append(figure(encode(open_image(fixed)), '3. to_mask：固定路线掩码') if fixed.exists() else
-                '<figure><div class="empty">没有保存</div><figcaption>3. to_mask</figcaption></figure>')
-    return '<div class="steps-figs">' + ''.join(figs) + '</div>'
+    Step 2 (match_instances) was not saved by the fixed route. It is pure arithmetic on the saved instances
+    (instances.match, overlap 0.25), so it is recomputed here and checked against the saved fixed-route mask.
+    """
+    import io
+    from agent_baseline import instances
+    path = Path(root) / 'sam3_soft/t512s256/val' / (image + '.npz')
+    fixed_path = Path(root) / 'init/sam3_imc_p85/val' / (image + '.png')
+    if not path.exists():
+        return None
+
+    def load():
+        with np.load(io.BytesIO(path.read_bytes()), allow_pickle=False) as z:
+            shape = tuple(map(int, z['shape'])); sets = []
+            for time in (0, 1):
+                rows = []
+                scores, origins, offsets = z[f'scores{time}'], z[f'origins{time}'], z[f'offs{time}']
+                pixels, values = z[f'idx{time}'], z[f'val{time}']
+                for i in np.flatnonzero(scores >= .5):
+                    if origins[i][0] % 512 or origins[i][1] % 512:
+                        continue
+                    idx = np.sort(pixels[offsets[i]:offsets[i + 1]][values[offsets[i]:offsets[i + 1]] >= round(.85 * 255)]).astype(np.int64)
+                    if len(idx):
+                        ys, xs = idx // shape[1], idx % shape[1]
+                        rows.append(dict(idx=idx, area=int(idx.size), bbox=[int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1]))
+                sets.append(rows)
+            return shape, sets
+    shape, (t1, t2) = retry_read(load)
+    appeared, disappeared, _ = instances.match(t1, t2, 0.25)
+    m = lambda rows: instances.to_mask(rows, shape)
+    union = m(appeared) | m(disappeared)
+    saved = read_mask(fixed_path) if fixed_path.exists() else None
+    same = saved is not None and np.array_equal(union, saved)
+    pic = lambda mask: encode(Image.fromarray(mask.astype('uint8') * 255))
+    return dict(images=[pic(m(t1)), pic(m(t2)), pic(m(appeared)), pic(m(disappeared)), pic(union)],
+                counts=[len(t1), len(t2), len(appeared), len(disappeared)], same=bool(same), saved=saved is not None)
+
+
+def steps_html(d):
+    if d is None:
+        return '<p>这张图的 SAM3 实例没有保存。</p>'
+    n1, n2, na, nd = d['counts']
+    captions = [f'1. segment_text(T1)：{n1} 个实例', f'1. segment_text(T2)：{n2} 个实例', f'2. match_instances：出现 {na} 个',
+                f'2. match_instances：消失 {nd} 个', '3. to_mask：出现 ∪ 消失 = 固定路线掩码']
+    note = ('第 2 步的结果在生成页面时用保存的实例重新计算（纯运算，重叠门限 0.25）。'
+            + ('合并后的掩码与保存的固定路线掩码逐像素相同。' if d['same'] else
+               '合并后的掩码与保存的固定路线掩码不完全相同。' if d['saved'] else '没有找到保存的固定路线掩码，无法比对。'))
+    return '<div class="steps-figs">' + ''.join(figure(u, c) for u, c in zip(d['images'], captions)) + f'</div><p class="muted">{note}</p>'
 
 
 def numbered_components(data, t2, encode):
     labels = data.get('labels')
     if labels is None:
-        return '<div class="empty">没有找到组件</div>'
+        return None
     canvas = t2.copy(); w, h = canvas.size
     answers = {r['id']: r.get('answer') for r in data['answers']}
     raw = Image.fromarray((labels > 0).astype('uint8') * 255).resize(canvas.size, Image.Resampling.NEAREST)
@@ -621,54 +697,63 @@ def numbered_components(data, t2, encode):
         yy, xx = np.nonzero(labels == ident)
         if len(xx):
             draw.text((int(xx.mean() * w / labels.shape[1]), int(yy.mean() * h / labels.shape[0])), str(ident), fill='white', stroke_width=1, stroke_fill='black', anchor='mm')
-    n_no = sum(v == 'no' for v in answers.values())
-    return figure(encode(canvas), f'固定路线的 {len(answers)} 个组件。红色：验证器答 no，固定规则删除（{n_no} 个）。绿色：保留。')
+    return [encode(canvas), len(answers), sum(v == 'no' for v in answers.values())]
 
 
-def render_baselines(root, records, example, example_file):
+def render_baselines(root, records, example, example_file, store):
     encode = lambda im, limit=512: jpeg(im, min(limit, 512), 70)
-    groups = [('agent', 'Agent', None), ('fixed', '固定路线', [k for k in ROUTES]), ('rule', '固定规则', [k for k, v in ROUTES.items() if v.get('rule')])]
+    groups = [('agent', 'Agent', None), ('fixed', '固定路线', list(ROUTES)), ('rule', '固定规则', None)]
     agent_svg = agent_figure('G3', ['T1 较早影像', 'T2 较晚影像', '指令（一句话任务）', '给定掩码、区域或示例', '系统提示和工具定义'],
                              '其他输入', switch_tools=SWITCH_TOOLS, harness_notes=harness_notes('G4'),
-                             toolbox_note='14 个默认工具和 6 个开关工具。工具只生成带新编号的结果。')
+                             toolbox_note='14 个默认工具和 6 个要开关的工具。工具只生成带新编号的结果。')
     panels = [f'<div class="route-panel" data-group="agent" id="agent"><div class="routebox"><div class="sysscroll">{agent_svg}</div>'
               '<p>规划器决定调用哪些工具、问哪些组件、是否采纳答案、何时提交。规划器可以补漏，也可以修改组件。</p></div></div>']
     for key, route in ROUTES.items():
         fixed_svg = route_figure(route['title'], route['inputs'], route['steps'], '固定响应掩码' if key in ('t52', 't53') else '固定路线掩码')
+        note = ('<p>固定响应是反馈任务的固定路线：程序按反馈的位置直接修改给定掩码，不用规划器。</p>' if key in ('t52', 't53') else '')
         panels.append(f'<div class="route-panel" data-group="fixed" data-route="{key}" id="{key}"><div class="routebox"><div class="sysscroll">{fixed_svg}</div>'
-                      + ''.join(f'<p class="scores">{esc(line)}</p>' for line in route['scores']) + '</div></div>')
-        if route.get('rule'):
-            rule_svg = route_figure(route['title'].replace('固定路线', '固定规则'), route['inputs'], route['steps'], rule=route['rule'])
-            panels.append(f'<div class="route-panel" data-group="rule" data-route="{key}"><div class="routebox"><div class="sysscroll">{rule_svg}</div>'
-                          + ''.join(f'<p class="scores">{esc(line)}</p>' for line in route['scores']) + '</div></div>')
+                      + note + ''.join(f'<p class="scores">{esc(line)}</p>' for line in route['scores']) + '</div></div>')
+    rows = ''.join(f'<tr><td>{esc(r["label"])}</td><td>{esc(r["rule"].get("question", "与 Agent 相同的问法。"))}</td></tr>' for r in ROUTES.values() if r.get('rule'))
+    without = '、'.join(r['label'] for r in ROUTES.values() if not r.get('rule'))
+    panels.append(f'<div class="route-panel" data-group="rule" id="rule"><div class="routebox"><div class="sysscroll">{rule_figure()}</div>'
+                  '<p>所有任务的固定规则都是这一个结构。不同任务只有两处不同：输入的固定路线掩码，以及验证问题。</p>'
+                  f'<div class="tablewrap"><table class="hubtable"><thead><tr><th>任务</th><th>验证问题</th></tr></thead><tbody>{rows}</tbody></table></div>'
+                  f'<p class="scores">没有固定规则的任务：{esc(without)}。各任务的分数写在「固定路线」中对应任务的下方。</p></div></div>')
     tabs = '<div class="tabs" role="group" aria-label="做法">' + ''.join(
         f'<button type="button" data-tab="{g}" aria-pressed="{"true" if g == "agent" else "false"}">{esc(label)}</button>' for g, label, _ in groups) + '</div>'
     subtabs = ''.join(f'<div class="subtabs js-only" data-for="{g}" role="group" aria-label="任务" hidden>' + ''.join(
         f'<button type="button" data-route="{k}" aria-pressed="false">{esc(ROUTES[k]["label"])}</button>' for k in keys) + '</div>' for g, _, keys in groups if keys)
     structure = ('<section class="panel example" id="structure"><h2>3 种做法的结构</h2>'
                  '<p>3 种做法使用同一套工具。固定规则和 Agent 使用同一个验证器。差别只在谁做决定。</p>'
-                 '<ul><li><strong>固定路线</strong>：程序按固定顺序和固定参数调用工具。不用规划器，不用验证器。</li>'
-                 '<li><strong>固定规则</strong>：程序把固定路线的掩码拆成组件，每个组件问一次验证器，删除答 no 的组件。不用规划器。不补漏。</li>'
+                 '<ul><li><strong>固定路线</strong>：程序按固定顺序和固定参数调用工具。不用规划器，不用验证器。不同任务的固定路线不同。</li>'
+                 '<li><strong>固定规则</strong>：程序把固定路线的掩码拆成组件，全部组件批量送给验证器，删除答 no 的组件。不用规划器。不补漏。所有任务使用同一个结构。</li>'
                  '<li><strong>Agent</strong>：规划器决定每一步。验证器的答案只作为证据。</li></ul>'
-                 '<p>不同任务的固定路线不同。选择「固定路线」或「固定规则」后，再选择任务。</p>'
+                 '<p>选择「固定路线」后，再选择任务。</p>'
                  + tabs + subtabs + ''.join(panels) + '</section>')
 
     # One LEVIR image, step by step.
-    d = Path(root) / example['run'] / example['task'] / 'val' / example['image']
-    info, final = read_json(d / 'input.json'), read_json(d / 'final.json')
-    data = load_baselines(root, example, d)
-    truth = read_mask(Path(info['source_images'][0]).parent.parent / 'label' / (example['image'] + '.png'))
-    agent = read_mask(resolve_asset(d, final['mask_path']))
-    t2 = open_image(resolve_asset(d, info['source_images'][1])); t2.thumbnail((512, 512))
-    compare, scores_ = comparison_panel(dict(example, page='levir_c0'), data, agent, truth, t2, encode)
+    d = Path(root or '.') / example['run'] / example['task'] / 'val' / example['image']
+    from functools import lru_cache
+
+    @lru_cache(None)
+    def loaded():
+        info, final = read_json(d / 'input.json'), read_json(d / 'final.json')
+        t2 = open_image(resolve_asset(d, info['source_images'][1])); t2.thumbnail((512, 512))
+        return (load_baselines(root, example, d), read_mask(resolve_asset(d, final['mask_path'])),
+                read_mask(Path(info['source_images'][0]).parent.parent / 'label' / (example['image'] + '.png')), t2)
+    c = store.get('compare', lambda: comparison_data(dict(example, page='levir_c0'), *loaded(), encode))
+    compare = comparison_panel(dict(example, page='levir_c0'), c)
+    comp = store.get('components', lambda: numbered_components(loaded()[0], loaded()[3], encode))
+    steps = store.get('steps', lambda: cached_steps(root, example['image'], encode))
     compare = compare.replace('<h2>同一张图上的三种做法</h2>', f'<h2>结果：{esc(example["image"])} 上的 3 种做法</h2>')
-    rows = ''.join(f'<tr><td>{esc(a["id"])}</td><td>{esc(a["area"])}</td><td>{esc(a.get("answer", ""))}</td><td>{esc(a.get("reason", ""))}</td></tr>' for a in data['answers'])
+    rows = ''.join(f'<tr><td>{esc(a["id"])}</td><td>{esc(a["area"])}</td><td>{esc(a["answer"])}</td><td>{esc(a["reason"])}</td></tr>' for a in c['answers'])
+    comp_html = '<div class="empty">没有找到组件</div>' if comp is None else figure(
+        comp[0], f'固定路线的 {comp[1]} 个组件。红色：验证器答 no，固定规则删除（{comp[2]} 个）。绿色：保留。')
     walk = (f'<section class="panel example"><h2>一张图的分步示例：LEVIR-CD {esc(example["image"])}</h2>'
             f'<p>这张图来自 LEVIR-CD 验证集。Agent 在这张图上的 F1 接近 T1.1 × C0 全部会话的中位数。<a href="{esc(example_file)}">打开 Agent 在这张图上的回放</a>。</p>'
-            '<h3>固定路线</h3>' + cached_steps(root, example['image'], encode) +
-            '<p class="muted">匹配后的出现、消失没有保存。页面不重新计算这一步。</p>'
-            '<h3>固定规则</h3><div class="pairs">' + numbered_components(data, t2, encode) +
-            f'<details><summary>验证器答案（{len(data["answers"])} 个组件，点击展开）</summary><div class="tablewrap"><table><thead><tr><th>组件</th><th>面积（像素）</th><th>答案</th><th>理由</th></tr></thead><tbody>{rows}</tbody></table></div></details></div></section>')
+            '<h3>固定路线</h3>' + steps_html(steps) +
+            '<h3>固定规则</h3><div class="pairs">' + comp_html +
+            f'<details><summary>验证器答案（{len(c["answers"])} 个组件，点击展开）</summary><div class="tablewrap"><table><thead><tr><th>组件</th><th>面积（像素）</th><th>答案</th><th>理由</th></tr></thead><tbody>{rows}</tbody></table></div></details></div></section>')
     head = ('<header><div class="eyebrow"><a href="index.html">回放列表</a></div><h1>3 种做法：固定路线、固定规则、Agent</h1>'
             '<p>这个页面说明 3 种做法的结构，并在一张图上比较它们的结果。</p></header>')
     limits = ('<section class="panel example"><h2>读分数时的限制</h2><ul>'
@@ -680,10 +765,10 @@ const panels=[...document.querySelectorAll('.route-panel')],tabs=[...document.qu
 const first={fixed:'imc',rule:'imc'};let group='agent',route={fixed:'imc',rule:'imc'};
 function show(){tabs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab===group)));
 subs.forEach(s=>{s.hidden=s.dataset.for!==group;s.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.route===route[group])))});
-panels.forEach(p=>p.hidden=!(p.dataset.group===group&&(group==='agent'||p.dataset.route===route[group])));}
+panels.forEach(p=>p.hidden=!(p.dataset.group===group&&(group!=='fixed'||p.dataset.route===route[group])));}
 tabs.forEach(b=>b.onclick=()=>{group=b.dataset.tab;show()});
 subs.forEach(s=>s.querySelectorAll('button').forEach(b=>b.onclick=()=>{route[s.dataset.for]=b.dataset.route;show()}));
-const h=location.hash.slice(1);if(h&&first[h]===undefined&&document.getElementById(h)&&h!=='agent'&&h!=='structure'){group='fixed';route.fixed=h;if([...document.querySelectorAll('.route-panel[data-group=rule]')].some(p=>p.dataset.route===h))route.rule=h;}
+const h=location.hash.slice(1);if(h==='rule'){group='rule';}else if(h&&document.querySelector('.route-panel[data-group=fixed][data-route="'+h+'"]')){group='fixed';route.fixed=h;}
 show();
 const dialog=document.getElementById('zoom-dialog');document.querySelectorAll('.zoom').forEach(b=>b.addEventListener('click',()=>{const i=b.querySelector('img');document.getElementById('zoom-image').src=i.src;document.getElementById('zoom-caption').textContent=i.alt;dialog.showModal();}));
 document.getElementById('close-zoom').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});})();</script>'''
@@ -691,44 +776,68 @@ document.getElementById('close-zoom').onclick=()=>dialog.close();dialog.addEvent
     return page('3 种做法', head + structure + walk + compare + limits + dialog, script)
 
 
-def build(root, out, selections):
-    from agent_baseline.pick_demo import select_all
-    records = read_json(selections) if selections else select_all(root)
-    out = Path(out); out.mkdir(parents=True, exist_ok=True)
-    for record in records:
-        record['file'] = record['page'] + '.html'
-        document, meta = render_replay(root, record)
-        if audit_html(document)['bytes'] > 3_000_000:
-            document, meta = render_replay(root, record, quality=40)
-        size = audit_html(document)['bytes']
-        if size > 3_000_000:
-            raise ValueError(record['file'] + ' 超过 3 MB')
-        record.update(version=meta['version'], scores=meta['scores'], bytes=size)
-        (out / record['file']).write_text(document, encoding='utf-8')
-        print(f'{record["file"]}: {record["image"]} {meta["version"]} ' + ' '.join(f'{k}={v["f1"] * 100:.2f}' for k, v in meta['scores'].items()) + f' {size} bytes', flush=True)
-    example = select_example(root, records)
-    example_file = next((r['file'] for r in records if r['image'] == example['image'] and r['run'] == example['run']), 'baseline_example.html')
-    if example_file == 'baseline_example.html':
-        document, _ = render_replay(root, dict(example, page='levir_c0'))
-        (out / example_file).write_text(document, encoding='utf-8')
-    for name, document in (('index.html', render_index(records)), ('baselines.html', render_baselines(root, records, example, example_file))):
-        audit_html(document)
-        (out / name).write_text(document, encoding='utf-8')
-    keep = ['page', 'task', 'dataset', 'run', 'image', 'f1', 'median', 'version', 'bytes']
-    (out / 'selection.json').write_text(json.dumps([dict({k: r.get(k) for k in keep}, scores={k: v['f1'] for k, v in r['scores'].items()}) for r in records],
-                                                   ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
-    total = sum(p.stat().st_size for p in out.glob('*') if p.is_file())
-    print(f'总量 {total} bytes')
-    return records
+def build(root, out, selections, cache, stage='all'):
+    """stage 'data': compute and cache (compute node). 'page': HTML from the cache only (seconds). 'all': both."""
+    cache, out = Path(cache), Path(out)
+    stages = ['data', 'page'] if stage == 'all' else [stage]
+    for current in stages:
+        mode = 'build' if current == 'data' else 'read'
+        if current == 'data':
+            from agent_baseline.pick_demo import select_all
+            records = read_json(selections) if selections else select_all(root)
+            example = select_example(root, records)
+            (cache).mkdir(parents=True, exist_ok=True)
+        else:
+            meta = read_json(cache / 'records.json')
+            records, example = meta['records'], meta['example']
+            out.mkdir(parents=True, exist_ok=True)
+        for record in records:
+            record['file'] = record['page'] + '.html'
+            store = Store(cache / f'{record["page"]}.json', mode)
+            document, info = render_replay(root, record, store)
+            store.save()
+            record.update(version=info['version'], scores=info['scores'])
+            if current == 'page':
+                size = audit_html(document)['bytes']
+                if size > 3_000_000:
+                    raise ValueError(record['file'] + ' 超过 3 MB')
+                (out / record['file']).write_text(document, encoding='utf-8')
+                print(f'{record["file"]}: {record["image"]} {info["version"]} ' + ' '.join(f'{k}={v["f1"] * 100:.2f}' for k, v in info['scores'].items()) + f' {size} bytes', flush=True)
+        example_file = next((r['file'] for r in records if r['image'] == example['image'] and r['run'] == example['run']), 'baseline_example.html')
+        if example_file == 'baseline_example.html':
+            store = Store(cache / 'baseline_example.json', mode)
+            document, _ = render_replay(root, dict(example, page='levir_c0'), store)
+            store.save()
+            if current == 'page':
+                (out / example_file).write_text(document, encoding='utf-8')
+        store = Store(cache / 'baselines.json', mode)
+        baselines = render_baselines(root, records, example, example_file, store)
+        store.save()
+        if current == 'data':
+            (cache / 'records.json').write_text(json.dumps(dict(records=records, example=example), ensure_ascii=False, indent=1), encoding='utf-8')
+            print(f'数据已缓存：{cache}')
+            continue
+        for name, document in (('index.html', render_index(records)), ('baselines.html', baselines)):
+            audit_html(document)
+            (out / name).write_text(document, encoding='utf-8')
+        keep = ['page', 'task', 'dataset', 'run', 'image', 'f1', 'median', 'version']
+        (out / 'selection.json').write_text(json.dumps([dict({k: r.get(k) for k in keep}, scores={k: v['f1'] for k, v in r['scores'].items()}) for r in records],
+                                                       ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+        print(f'总量 {sum(p.stat().st_size for p in out.glob("*") if p.is_file())} bytes')
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--run-root', type=Path, required=True)
+    parser.add_argument('--run-root', type=Path, help='Run directory with the traces (data step only).')
     parser.add_argument('--out-dir', type=Path, required=True)
+    parser.add_argument('--cache', type=Path, required=True, help='Directory of the cached page data.')
+    parser.add_argument('--stage', choices=['all', 'data', 'page'], default='all',
+                        help='data: compute node, reads the traces. page: HTML from the cache only; seconds, no server data.')
     parser.add_argument('--selections', type=Path, help='Saved pick_demo --typical output; without it, the selection is recomputed.')
     args = parser.parse_args()
-    build(args.run_root, args.out_dir, args.selections)
+    if args.stage != 'page' and args.run_root is None:
+        parser.error('--run-root is required for the data step')
+    build(args.run_root, args.out_dir, args.selections, args.cache, args.stage)
 
 
 if __name__ == '__main__':

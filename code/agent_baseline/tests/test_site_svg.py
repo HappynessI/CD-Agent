@@ -3,7 +3,7 @@ from pathlib import Path
 import re
 import unittest
 
-from agent_baseline.site_svg import agent_figure, route_figure
+from agent_baseline.site_svg import agent_figure, route_figure, rule_figure
 
 G1 = Path(__file__).resolve().parents[3] / 'results' / 'agent_baseline' / 'demo_g1'
 
@@ -32,17 +32,18 @@ class LaterFigureTest(unittest.TestCase):
     def test_switch_group_and_notes_grow_the_frame(self):
         base = agent_figure()
         more = agent_figure('G3', switch_tools={'segment_everything'}, harness_notes=['a', 'b', 'c'])
+        self.assertIn('tool tool-plan sw', more)
         height = lambda svg: int(re.search(r'viewBox="0 0 1540 (\d+)"', svg).group(1))
         self.assertGreater(height(more), height(base))
         self.assertIn('segment_everything', more)
         self.assertNotIn('segment_semantic', more)
 
-    def test_route_figure_with_and_without_rule(self):
+    def test_route_and_rule_figures(self):
         fixed = route_figure('t', ['T1', 'T2'], [('a', ['segment_text'], ['x'])])
-        rule = route_figure('t', ['T1', 'T2'], [('a', ['segment_text'], ['x'])], rule=dict(decide=['no']))
         self.assertNotIn('验证器 Verifier', fixed)
+        rule = rule_figure()
         self.assertIn('验证器 Verifier', rule)
-
+        self.assertIn('批量', rule)
 
 if __name__ == '__main__':
     unittest.main()
