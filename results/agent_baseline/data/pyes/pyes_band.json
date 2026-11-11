@@ -1,0 +1,1984 @@
+{
+  "grid": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "interval": "closed [a,b], a<b",
+  "bootstrap": {
+    "samples": 5000,
+    "seed": 1016,
+    "unit": "paired images"
+  },
+  "pools": {
+    "levir": {
+      "label": "LEVIR 0.85",
+      "selected_band": [
+        0.1,
+        0.3
+      ],
+      "selection_available": true,
+      "settings_comparison": "L1=f37_corr，模型 qwen3.7-flash，四图对应问法。dev2 与报告集使用同一变体；ask_eval 无独立 settings。历史 p_yes 可读率不同，不能据此假设请求完全同分布。",
+      "dev": {
+        "inventory": {
+          "lines": 11956,
+          "duplicates": 0,
+          "images_expected": 200,
+          "images_with_masks": 200,
+          "components": 11956,
+          "answers": 11956,
+          "valid_answers": 11955,
+          "p_yes_readable": 11867,
+          "p_yes_fraction": 0.9925560388089663,
+          "no_components": 2507,
+          "no_p_yes_readable": 2492,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 2.8439504,
+          "priced_requests": 11956,
+          "unit_cost_cny": 0.00023786804951488795,
+          "sources": {
+            "names": "dev2/names.txt",
+            "mask_dir": "init/sam3_imc_p85/train",
+            "answers": "ask_eval/dev2/f37_corr.jsonl"
+          },
+          "truth_source": "LEVIR-CD/train_original/label"
+        },
+        "settings": {
+          "settings_file": null,
+          "available": false,
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "evidence": "ask 记录 variant 与仓库 VARIANTS；无逐请求 settings 快照"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 2161,
+            "tp": 103366,
+            "fp": 909392
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 118,
+            "tp": 33286,
+            "fp": 41901
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 80,
+            "tp": 32434,
+            "fp": 24591
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 57,
+            "tp": 13703,
+            "fp": 21895
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 58,
+            "tp": 9863,
+            "fp": 20780
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 18,
+            "tp": 706,
+            "fp": 14315
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 15,
+            "tp": 1577,
+            "fp": 11112
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 83.87251483922641,
+          "rule_counts": [
+            8208871,
+            1540952,
+            1615945
+          ],
+          "band": {
+            "f1": 83.97679568389694,
+            "delta_f1": 0.10428084467052656,
+            "ci95": [
+              -0.11415218377640635,
+              0.3866582506522345
+            ],
+            "counts": [
+              8274591,
+              1607444,
+              1550225
+            ]
+          },
+          "perfect_band": {
+            "f1": 84.20861622434033,
+            "delta_f1": 0.3361013851139205,
+            "ci95": [
+              0.1396518023582793,
+              0.6174362013974114
+            ],
+            "counts": [
+              8274278,
+              1552762,
+              1550538
+            ]
+          },
+          "perfect_all_no": {
+            "f1": 84.86835036176137,
+            "delta_f1": 0.9958355225349607,
+            "ci95": [
+              0.6816061857709116,
+              1.3769682281985485
+            ],
+            "counts": [
+              8399943,
+              1570472,
+              1424873
+            ]
+          }
+        }
+      },
+      "report": {
+        "inventory": {
+          "lines": 3295,
+          "duplicates": 0,
+          "images_expected": 64,
+          "images_with_masks": 64,
+          "components": 3295,
+          "answers": 3295,
+          "valid_answers": 3294,
+          "p_yes_readable": 1490,
+          "p_yes_fraction": 0.45220030349013657,
+          "no_components": 593,
+          "no_p_yes_readable": 252,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 7.834894,
+          "priced_requests": 3295,
+          "unit_cost_cny": 0.0023778130500758726,
+          "sources": {
+            "names": "dev2/val_names.txt",
+            "mask_dir": "init/sam3_imc_p85/val",
+            "answers": "ask_eval/val_sam3_imc_p85/f37_corr.jsonl"
+          },
+          "truth_source": "LEVIR-CD/val_original/label"
+        },
+        "settings": {
+          "settings_file": null,
+          "available": false,
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "evidence": "ask 记录 variant 与仓库 VARIANTS；无逐请求 settings 快照"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 210,
+            "tp": 8710,
+            "fp": 99296
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 17,
+            "tp": 4454,
+            "fp": 5196
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 12,
+            "tp": 2272,
+            "fp": 3807
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 8,
+            "tp": 909,
+            "fp": 3152
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 5,
+            "tp": 0,
+            "fp": 2214
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 341,
+            "tp": 22999,
+            "fp": 161956
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 86.35057947959467,
+          "rule_counts": [
+            2472515,
+            437907,
+            343753
+          ],
+          "band": {
+            "f1": 86.34831418605992,
+            "delta_f1": -0.002265293534748025,
+            "ci95": [
+              -0.08868741031039881,
+              0.10433977796966139
+            ],
+            "counts": [
+              2479241,
+              446910,
+              337027
+            ]
+          },
+          "perfect_band": {
+            "f1": 86.46029000309404,
+            "delta_f1": 0.10971052349937338,
+            "ci95": [
+              0.03204590934635938,
+              0.22657106024869034
+            ],
+            "counts": [
+              2478641,
+              438685,
+              337627
+            ]
+          },
+          "perfect_all_no": {
+            "f1": 86.98074287270013,
+            "delta_f1": 0.6301633931054624,
+            "ci95": [
+              0.28655869533181966,
+              1.1405094662207442
+            ],
+            "counts": [
+              2509561,
+              444554,
+              306707
+            ]
+          }
+        }
+      }
+    },
+    "second_appeared": {
+      "label": "SECOND 新建",
+      "selected_band": [
+        0.1,
+        0.5
+      ],
+      "selection_available": true,
+      "settings_comparison": "settings：开发 scope=dev_card_defined，报告 scope=building_rebuild_excluded，名称不同；已逐字段核对 code_k 中开发范围卡与当前最终卡，内容完全相同（含“范围卡加一句定义”）。direction、f37_corr 相同；模型按变体定义为 qwen3.7-flash。未归档逐请求完整 prompt，不能验证服务端历史变更。",
+      "dev": {
+        "inventory": {
+          "lines": 661,
+          "duplicates": 0,
+          "images_expected": 60,
+          "images_with_masks": 60,
+          "components": 661,
+          "answers": 661,
+          "valid_answers": 661,
+          "p_yes_readable": 661,
+          "p_yes_fraction": 1.0,
+          "no_components": 404,
+          "no_p_yes_readable": 404,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.16407220000000003,
+          "priced_requests": 661,
+          "unit_cost_cny": 0.00024821815431164904,
+          "sources": {
+            "names": "second_dev/names.txt",
+            "mask_dir": "second_dev/second/fixed/appeared",
+            "answers": "second_dev/rule_card_defined/appeared/appeared/answers.jsonl",
+            "settings": "second_dev/rule_card_defined/appeared/appeared/settings.json",
+            "saved_rule": "second_dev/rule_card_defined/appeared/appeared/masks"
+          },
+          "truth_source": "second_dev/second/gt/new"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "second_dev/rule_card_defined/appeared/appeared/settings.json",
+          "direction": "appeared",
+          "scope": "dev_card_defined",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [],
+          "mask_dir": "second_dev/second/fixed/appeared",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 360,
+            "tp": 73819,
+            "fp": 429486
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 22,
+            "tp": 21808,
+            "fp": 24602
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 10,
+            "tp": 12434,
+            "fp": 2518
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 5,
+            "tp": 2632,
+            "fp": 311
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 6,
+            "tp": 2455,
+            "fp": 1069
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 1,
+            "tp": 0,
+            "fp": 397
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 65.06808424484372,
+          "rule_counts": [
+            689370,
+            83965,
+            656214
+          ],
+          "band": {
+            "f1": 66.64681984389605,
+            "delta_f1": 1.5787355990523366,
+            "ci95": [
+              -0.20379085370344752,
+              3.893018517140106
+            ],
+            "counts": [
+              728699,
+              112465,
+              616885
+            ]
+          },
+          "perfect_band": {
+            "f1": 67.34394265339144,
+            "delta_f1": 2.2758584085477196,
+            "ci95": [
+              0.753618458348144,
+              4.559993985858121
+            ],
+            "counts": [
+              727522,
+              87510,
+              618062
+            ]
+          },
+          "perfect_all_no": {
+            "f1": 71.35450453128848,
+            "delta_f1": 6.286420286444766,
+            "ci95": [
+              3.099391697373532,
+              11.209808836742948
+            ],
+            "counts": [
+              798022,
+              93175,
+              547562
+            ]
+          }
+        }
+      },
+      "report": {
+        "inventory": {
+          "lines": 1840,
+          "duplicates": 0,
+          "images_expected": 128,
+          "images_with_masks": 128,
+          "components": 1840,
+          "answers": 1840,
+          "valid_answers": 1839,
+          "p_yes_readable": 1840,
+          "p_yes_fraction": 1.0,
+          "no_components": 1075,
+          "no_p_yes_readable": 1075,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.4581816,
+          "priced_requests": 1840,
+          "unit_cost_cny": 0.0002490117391304348,
+          "sources": {
+            "names": "second/second_val128.txt",
+            "mask_dir": "second/fixed/appeared",
+            "answers": "second/rule/appeared/answers.jsonl",
+            "settings": "second/rule/appeared/settings.json",
+            "saved_rule": "second/rule/appeared/masks"
+          },
+          "truth_source": "second/gt/new"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "second/rule/appeared/settings.json",
+          "direction": "appeared",
+          "scope": "building_rebuild_excluded",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [],
+          "mask_dir": "second/fixed/appeared",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 968,
+            "tp": 137780,
+            "fp": 841212
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 37,
+            "tp": 14111,
+            "fp": 54378
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 29,
+            "tp": 2723,
+            "fp": 35755
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 27,
+            "tp": 7348,
+            "fp": 26956
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 8,
+            "tp": 4586,
+            "fp": 11397
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 6,
+            "tp": 2953,
+            "fp": 6131
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 63.73509562168164,
+          "rule_counts": [
+            1494769,
+            295526,
+            1405504
+          ],
+          "band": {
+            "f1": 62.85449424504448,
+            "delta_f1": -0.8806013766371592,
+            "ci95": [
+              -1.8802760015707283,
+              -0.017468277412555498
+            ],
+            "counts": [
+              1523537,
+              424012,
+              1376736
+            ]
+          },
+          "perfect_band": {
+            "f1": 64.39312148086958,
+            "delta_f1": 0.6580258591879442,
+            "ci95": [
+              0.22247835466354504,
+              1.2966855299874154
+            ],
+            "counts": [
+              1518507,
+              297584,
+              1381766
+            ]
+          },
+          "perfect_all_no": {
+            "f1": 68.0273979020091,
+            "delta_f1": 4.292302280327462,
+            "ci95": [
+              2.064658887111197,
+              7.7870817837817015
+            ],
+            "counts": [
+              1655427,
+              311242,
+              1244846
+            ]
+          }
+        }
+      }
+    },
+    "second_disappeared": {
+      "label": "SECOND 拆除",
+      "selected_band": null,
+      "selection_available": true,
+      "settings_comparison": "settings：开发 scope=dev_card_defined，报告 scope=building_rebuild_excluded，名称不同；已逐字段核对 code_k 中开发范围卡与当前最终卡，内容完全相同（含“范围卡加一句定义”）。direction、f37_corr 相同；模型按变体定义为 qwen3.7-flash。未归档逐请求完整 prompt，不能验证服务端历史变更。",
+      "dev": {
+        "inventory": {
+          "lines": 461,
+          "duplicates": 0,
+          "images_expected": 60,
+          "images_with_masks": 60,
+          "components": 461,
+          "answers": 461,
+          "valid_answers": 461,
+          "p_yes_readable": 461,
+          "p_yes_fraction": 1.0,
+          "no_components": 342,
+          "no_p_yes_readable": 342,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.1142718,
+          "priced_requests": 461,
+          "unit_cost_cny": 0.0002478780911062907,
+          "sources": {
+            "names": "second_dev/names.txt",
+            "mask_dir": "second_dev/second/fixed/disappeared",
+            "answers": "second_dev/rule_card_defined/disappeared/disappeared/answers.jsonl",
+            "settings": "second_dev/rule_card_defined/disappeared/disappeared/settings.json",
+            "saved_rule": "second_dev/rule_card_defined/disappeared/disappeared/masks"
+          },
+          "truth_source": "second_dev/second/gt/demolished"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "second_dev/rule_card_defined/disappeared/disappeared/settings.json",
+          "direction": "disappeared",
+          "scope": "dev_card_defined",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [],
+          "mask_dir": "second_dev/second/fixed/disappeared",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 299,
+            "tp": 16530,
+            "fp": 223924
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 12,
+            "tp": 0,
+            "fp": 10516
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 16,
+            "tp": 696,
+            "fp": 6379
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 7,
+            "tp": 728,
+            "fp": 3297
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 6,
+            "tp": 0,
+            "fp": 5832
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 2,
+            "tp": 0,
+            "fp": 1433
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 45.05917122555493,
+          "rule_counts": [
+            89572,
+            73562,
+            144869
+          ],
+          "band": {
+            "f1": 45.05917122555493,
+            "delta_f1": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "counts": [
+              89572,
+              73562,
+              144869
+            ]
+          },
+          "perfect_band": {
+            "f1": 45.05917122555493,
+            "delta_f1": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "counts": [
+              89572,
+              73562,
+              144869
+            ]
+          },
+          "perfect_all_no": {
+            "f1": 50.08283346229319,
+            "delta_f1": 5.023662236738261,
+            "ci95": [
+              0.595119725926217,
+              9.447822390576727
+            ],
+            "counts": [
+              103239,
+              74593,
+              131202
+            ]
+          }
+        }
+      },
+      "report": {
+        "inventory": {
+          "lines": 745,
+          "duplicates": 0,
+          "images_expected": 128,
+          "images_with_masks": 128,
+          "components": 745,
+          "answers": 745,
+          "valid_answers": 744,
+          "p_yes_readable": 745,
+          "p_yes_fraction": 1.0,
+          "no_components": 507,
+          "no_p_yes_readable": 507,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.18535820000000003,
+          "priced_requests": 745,
+          "unit_cost_cny": 0.0002488029530201343,
+          "sources": {
+            "names": "second/second_val128.txt",
+            "mask_dir": "second/fixed/disappeared",
+            "answers": "second/rule/disappeared/answers.jsonl",
+            "settings": "second/rule/disappeared/settings.json",
+            "saved_rule": "second/rule/disappeared/masks"
+          },
+          "truth_source": "second/gt/demolished"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "second/rule/disappeared/settings.json",
+          "direction": "disappeared",
+          "scope": "building_rebuild_excluded",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [],
+          "mask_dir": "second/fixed/disappeared",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 442,
+            "tp": 33216,
+            "fp": 451790
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 32,
+            "tp": 26987,
+            "fp": 45531
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 15,
+            "tp": 459,
+            "fp": 10589
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 8,
+            "tp": 1423,
+            "fp": 4215
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 8,
+            "tp": 1595,
+            "fp": 7982
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 2,
+            "tp": 23,
+            "fp": 554
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 37.959164217049334,
+          "rule_counts": [
+            238896,
+            181436,
+            599472
+          ],
+          "band": {
+            "f1": 37.959164217049334,
+            "delta_f1": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "counts": [
+              238896,
+              181436,
+              599472
+            ]
+          },
+          "perfect_band": {
+            "f1": 37.959164217049334,
+            "delta_f1": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "counts": [
+              238896,
+              181436,
+              599472
+            ]
+          },
+          "perfect_all_no": {
+            "f1": 44.8810281321651,
+            "delta_f1": 6.921863915115765,
+            "ci95": [
+              2.2946800892697787,
+              13.998474898180275
+            ],
+            "counts": [
+              296945,
+              187941,
+              541423
+            ]
+          }
+        }
+      }
+    },
+    "whu_any": {
+      "label": "WHU C0",
+      "selected_band": null,
+      "selection_available": false,
+      "settings_comparison": "报告 settings：building_rebuild_excluded + f37_corr，模型定义为 qwen3.7-flash，与 SECOND 最终范围卡同口径。开发图未找到固定路线和 ask，无法比较开发请求。报告 answers 中没有开发图 uid。",
+      "dev": {
+        "inventory": {
+          "lines": 1322,
+          "duplicates": 0,
+          "images_expected": 60,
+          "images_with_masks": 0,
+          "components": 0,
+          "answers": 0,
+          "valid_answers": 0,
+          "p_yes_readable": 0,
+          "p_yes_fraction": null,
+          "no_components": 0,
+          "no_p_yes_readable": 0,
+          "missing_answers": 0,
+          "extra_answers": 1322,
+          "missing_masks": [
+            "train_1008",
+            "train_1012",
+            "train_1045",
+            "train_1046",
+            "train_106",
+            "train_1081",
+            "train_1124",
+            "train_1230",
+            "train_155",
+            "train_156",
+            "train_157",
+            "train_162",
+            "train_166",
+            "train_182",
+            "train_184",
+            "train_194",
+            "train_219",
+            "train_235",
+            "train_246",
+            "train_276",
+            "train_284",
+            "train_30",
+            "train_306",
+            "train_31",
+            "train_335",
+            "train_356",
+            "train_358",
+            "train_377",
+            "train_397",
+            "train_404",
+            "train_440",
+            "train_460",
+            "train_47",
+            "train_481",
+            "train_488",
+            "train_490",
+            "train_492",
+            "train_500",
+            "train_51",
+            "train_521",
+            "train_532",
+            "train_548",
+            "train_570",
+            "train_615",
+            "train_651",
+            "train_67",
+            "train_68",
+            "train_681",
+            "train_707",
+            "train_723",
+            "train_784",
+            "train_785",
+            "train_8",
+            "train_821",
+            "train_835",
+            "train_866",
+            "train_892",
+            "train_916",
+            "train_975",
+            "train_98"
+          ],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0,
+          "priced_requests": 0,
+          "unit_cost_cny": null,
+          "sources": {
+            "names": "whu/names_dev60.txt",
+            "mask_dir": "whu/fixed/any",
+            "answers": "whu/rule/any/answers.jsonl"
+          },
+          "truth_source": "whu/gt/c0"
+        },
+        "settings": {
+          "settings_file": null,
+          "available": false,
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "evidence": "ask 记录 variant 与仓库 VARIANTS；无逐请求 settings 快照"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": null
+      },
+      "report": {
+        "inventory": {
+          "lines": 1322,
+          "duplicates": 0,
+          "images_expected": 128,
+          "images_with_masks": 128,
+          "components": 1322,
+          "answers": 1322,
+          "valid_answers": 1318,
+          "p_yes_readable": 1322,
+          "p_yes_fraction": 1.0,
+          "no_components": 798,
+          "no_p_yes_readable": 798,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.3250628,
+          "priced_requests": 1322,
+          "unit_cost_cny": 0.0002458871406959153,
+          "sources": {
+            "names": "whu/names_val128.txt",
+            "mask_dir": "whu/fixed/any",
+            "answers": "whu/rule/any/answers.jsonl",
+            "settings": "whu/rule/any/settings.json",
+            "saved_rule": "whu/rule/any/masks"
+          },
+          "truth_source": "whu/gt/c0"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "whu/rule/any/settings.json",
+          "direction": "any",
+          "scope": "building_rebuild_excluded",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [
+            "building"
+          ],
+          "mask_dir": "whu/fixed/any",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 769,
+            "tp": 60553,
+            "fp": 575501
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 12,
+            "tp": 1263,
+            "fp": 4584
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 8,
+            "tp": 233,
+            "fp": 4616
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 5,
+            "tp": 1,
+            "fp": 2842
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 4,
+            "tp": 1241,
+            "fp": 3607
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 62.74855872227028,
+          "rule_counts": [
+            1242920,
+            147311,
+            1328438
+          ],
+          "perfect_all_no": {
+            "f1": 63.41566127330947,
+            "delta_f1": 0.6671025510391857,
+            "ci95": [
+              0.25880462804668714,
+              1.2987974801995346
+            ],
+            "counts": [
+              1263428,
+              149807,
+              1307930
+            ]
+          },
+          "band": null,
+          "perfect_band": null
+        }
+      }
+    },
+    "whu_appeared": {
+      "label": "WHU 新建",
+      "selected_band": null,
+      "selection_available": false,
+      "settings_comparison": "报告 settings：building_rebuild_excluded + f37_corr，模型定义为 qwen3.7-flash，与 SECOND 最终范围卡同口径。开发图未找到固定路线和 ask，无法比较开发请求。报告 answers 中没有开发图 uid。",
+      "dev": {
+        "inventory": {
+          "lines": 1011,
+          "duplicates": 0,
+          "images_expected": 60,
+          "images_with_masks": 0,
+          "components": 0,
+          "answers": 0,
+          "valid_answers": 0,
+          "p_yes_readable": 0,
+          "p_yes_fraction": null,
+          "no_components": 0,
+          "no_p_yes_readable": 0,
+          "missing_answers": 0,
+          "extra_answers": 1011,
+          "missing_masks": [
+            "train_1008",
+            "train_1012",
+            "train_1045",
+            "train_1046",
+            "train_106",
+            "train_1081",
+            "train_1124",
+            "train_1230",
+            "train_155",
+            "train_156",
+            "train_157",
+            "train_162",
+            "train_166",
+            "train_182",
+            "train_184",
+            "train_194",
+            "train_219",
+            "train_235",
+            "train_246",
+            "train_276",
+            "train_284",
+            "train_30",
+            "train_306",
+            "train_31",
+            "train_335",
+            "train_356",
+            "train_358",
+            "train_377",
+            "train_397",
+            "train_404",
+            "train_440",
+            "train_460",
+            "train_47",
+            "train_481",
+            "train_488",
+            "train_490",
+            "train_492",
+            "train_500",
+            "train_51",
+            "train_521",
+            "train_532",
+            "train_548",
+            "train_570",
+            "train_615",
+            "train_651",
+            "train_67",
+            "train_68",
+            "train_681",
+            "train_707",
+            "train_723",
+            "train_784",
+            "train_785",
+            "train_8",
+            "train_821",
+            "train_835",
+            "train_866",
+            "train_892",
+            "train_916",
+            "train_975",
+            "train_98"
+          ],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0,
+          "priced_requests": 0,
+          "unit_cost_cny": null,
+          "sources": {
+            "names": "whu/names_dev60.txt",
+            "mask_dir": "whu/fixed/appeared",
+            "answers": "whu/rule/appeared/answers.jsonl"
+          },
+          "truth_source": "whu/gt/new"
+        },
+        "settings": {
+          "settings_file": null,
+          "available": false,
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "evidence": "ask 记录 variant 与仓库 VARIANTS；无逐请求 settings 快照"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": null
+      },
+      "report": {
+        "inventory": {
+          "lines": 1011,
+          "duplicates": 0,
+          "images_expected": 128,
+          "images_with_masks": 128,
+          "components": 1011,
+          "answers": 1011,
+          "valid_answers": 1011,
+          "p_yes_readable": 1011,
+          "p_yes_fraction": 1.0,
+          "no_components": 524,
+          "no_p_yes_readable": 524,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.25047260000000005,
+          "priced_requests": 1011,
+          "unit_cost_cny": 0.00024774737883283884,
+          "sources": {
+            "names": "whu/names_val128.txt",
+            "mask_dir": "whu/fixed/appeared",
+            "answers": "whu/rule/appeared/answers.jsonl",
+            "settings": "whu/rule/appeared/settings.json",
+            "saved_rule": "whu/rule/appeared/masks"
+          },
+          "truth_source": "whu/gt/new"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "whu/rule/appeared/settings.json",
+          "direction": "appeared",
+          "scope": "building_rebuild_excluded",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [
+            "building"
+          ],
+          "mask_dir": "whu/fixed/appeared",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 512,
+            "tp": 44971,
+            "fp": 534343
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 4,
+            "tp": 1180,
+            "fp": 567
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 2,
+            "tp": 0,
+            "fp": 754
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 5,
+            "tp": 4042,
+            "fp": 4195
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 1,
+            "tp": 146,
+            "fp": 8
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 70.25585099806378,
+          "rule_counts": [
+            1170551,
+            134917,
+            856233
+          ],
+          "perfect_all_no": {
+            "f1": 70.8376649405902,
+            "delta_f1": 0.5818139425264235,
+            "ci95": [
+              0.20819964748992278,
+              1.1889980613742688
+            ],
+            "counts": [
+              1186663,
+              136926,
+              840121
+            ]
+          },
+          "band": null,
+          "perfect_band": null
+        }
+      }
+    },
+    "whu_disappeared": {
+      "label": "WHU 拆除",
+      "selected_band": null,
+      "selection_available": false,
+      "settings_comparison": "报告 settings：building_rebuild_excluded + f37_corr，模型定义为 qwen3.7-flash，与 SECOND 最终范围卡同口径。开发图未找到固定路线和 ask，无法比较开发请求。报告 answers 中没有开发图 uid。",
+      "dev": {
+        "inventory": {
+          "lines": 318,
+          "duplicates": 0,
+          "images_expected": 60,
+          "images_with_masks": 0,
+          "components": 0,
+          "answers": 0,
+          "valid_answers": 0,
+          "p_yes_readable": 0,
+          "p_yes_fraction": null,
+          "no_components": 0,
+          "no_p_yes_readable": 0,
+          "missing_answers": 0,
+          "extra_answers": 318,
+          "missing_masks": [
+            "train_1008",
+            "train_1012",
+            "train_1045",
+            "train_1046",
+            "train_106",
+            "train_1081",
+            "train_1124",
+            "train_1230",
+            "train_155",
+            "train_156",
+            "train_157",
+            "train_162",
+            "train_166",
+            "train_182",
+            "train_184",
+            "train_194",
+            "train_219",
+            "train_235",
+            "train_246",
+            "train_276",
+            "train_284",
+            "train_30",
+            "train_306",
+            "train_31",
+            "train_335",
+            "train_356",
+            "train_358",
+            "train_377",
+            "train_397",
+            "train_404",
+            "train_440",
+            "train_460",
+            "train_47",
+            "train_481",
+            "train_488",
+            "train_490",
+            "train_492",
+            "train_500",
+            "train_51",
+            "train_521",
+            "train_532",
+            "train_548",
+            "train_570",
+            "train_615",
+            "train_651",
+            "train_67",
+            "train_68",
+            "train_681",
+            "train_707",
+            "train_723",
+            "train_784",
+            "train_785",
+            "train_8",
+            "train_821",
+            "train_835",
+            "train_866",
+            "train_892",
+            "train_916",
+            "train_975",
+            "train_98"
+          ],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0,
+          "priced_requests": 0,
+          "unit_cost_cny": null,
+          "sources": {
+            "names": "whu/names_dev60.txt",
+            "mask_dir": "whu/fixed/disappeared",
+            "answers": "whu/rule/disappeared/answers.jsonl"
+          },
+          "truth_source": "whu/gt/demolished"
+        },
+        "settings": {
+          "settings_file": null,
+          "available": false,
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "evidence": "ask 记录 variant 与仓库 VARIANTS；无逐请求 settings 快照"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": null
+      },
+      "report": {
+        "inventory": {
+          "lines": 318,
+          "duplicates": 0,
+          "images_expected": 128,
+          "images_with_masks": 128,
+          "components": 318,
+          "answers": 318,
+          "valid_answers": 317,
+          "p_yes_readable": 318,
+          "p_yes_fraction": 1.0,
+          "no_components": 245,
+          "no_p_yes_readable": 245,
+          "missing_answers": 0,
+          "extra_answers": 0,
+          "missing_masks": [],
+          "saved_rule_count_mismatches": [],
+          "cost_cny": 0.07919480000000001,
+          "priced_requests": 318,
+          "unit_cost_cny": 0.00024904025157232706,
+          "sources": {
+            "names": "whu/names_val128.txt",
+            "mask_dir": "whu/fixed/disappeared",
+            "answers": "whu/rule/disappeared/answers.jsonl",
+            "settings": "whu/rule/disappeared/settings.json",
+            "saved_rule": "whu/rule/disappeared/masks"
+          },
+          "truth_source": "whu/gt/demolished"
+        },
+        "settings": {
+          "available": true,
+          "settings_file": "whu/rule/disappeared/settings.json",
+          "direction": "disappeared",
+          "scope": "building_rebuild_excluded",
+          "variant": "f37_corr",
+          "model": "qwen3.7-flash",
+          "ask_variant": null,
+          "targets": [
+            "building"
+          ],
+          "mask_dir": "whu/fixed/disappeared",
+          "ids_match_names": true,
+          "evidence": "settings + 仓库 f37_corr 定义；原始请求未归档"
+        },
+        "segments": [
+          {
+            "band": "[0.0,0.1)",
+            "components": 237,
+            "tp": 3830,
+            "fp": 44105
+          },
+          {
+            "band": "[0.1,0.2)",
+            "components": 4,
+            "tp": 15,
+            "fp": 1055
+          },
+          {
+            "band": "[0.2,0.3)",
+            "components": 2,
+            "tp": 59,
+            "fp": 132
+          },
+          {
+            "band": "[0.3,0.4)",
+            "components": 1,
+            "tp": 0,
+            "fp": 316
+          },
+          {
+            "band": "[0.4,0.5)",
+            "components": 1,
+            "tp": 2,
+            "fp": 0
+          },
+          {
+            "band": "[0.5,0.6)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.6,0.7)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.7,0.8)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.8,0.9)",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "[0.9,1.0]",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          },
+          {
+            "band": "p_yes 缺失",
+            "components": 0,
+            "tp": 0,
+            "fp": 0
+          }
+        ],
+        "evaluation": {
+          "rule_f1": 22.167496093392362,
+          "rule_counts": [
+            71426,
+            28421,
+            473148
+          ],
+          "perfect_all_no": {
+            "f1": 22.540547819263292,
+            "delta_f1": 0.37305172587092983,
+            "ci95": [
+              0.037569417623726675,
+              0.887167175167366
+            ],
+            "counts": [
+              72816,
+              28699,
+              471758
+            ]
+          },
+          "band": null,
+          "perfect_band": null
+        }
+      }
+    }
+  },
+  "needs_asking": [
+    {
+      "pool": "levir_dev",
+      "reason": "已有 ask 的 p_yes 缺失",
+      "components": 89,
+      "requests": 89,
+      "unit_cost_cny": 0.00023786804951488795,
+      "estimated_cost_cny": 0.021170256406825027,
+      "estimate_basis": "每组件一请求；同池记录 cost_cny / priced_requests；不保证重问能读到 p_yes",
+      "no_only_alternative_requests": 15
+    },
+    {
+      "pool": "levir_report",
+      "reason": "已有 ask 的 p_yes 缺失",
+      "components": 1805,
+      "requests": 1805,
+      "unit_cost_cny": 0.0023778130500758726,
+      "estimated_cost_cny": 4.29195255538695,
+      "estimate_basis": "每组件一请求；同池记录 cost_cny / priced_requests；不保证重问能读到 p_yes",
+      "no_only_alternative_requests": 341
+    },
+    {
+      "pool": "whu_any_dev",
+      "reason": "开发固定掩码缺失，开发 ask 缺失；先生成固定路线再点数组件",
+      "components": null,
+      "requests": null,
+      "estimated_requests": 620,
+      "estimate_basis": "同方向报告集组件数 × 缺失开发图数 / 报告图数，向上取整；不是实测",
+      "unit_cost_cny": 0.0002458871406959153,
+      "estimated_cost_cny": 0.15245002723146747,
+      "no_only_alternative_requests": null
+    },
+    {
+      "pool": "whu_appeared_dev",
+      "reason": "开发固定掩码缺失，开发 ask 缺失；先生成固定路线再点数组件",
+      "components": null,
+      "requests": null,
+      "estimated_requests": 474,
+      "estimate_basis": "同方向报告集组件数 × 缺失开发图数 / 报告图数，向上取整；不是实测",
+      "unit_cost_cny": 0.00024774737883283884,
+      "estimated_cost_cny": 0.1174322575667656,
+      "no_only_alternative_requests": null
+    },
+    {
+      "pool": "whu_disappeared_dev",
+      "reason": "开发固定掩码缺失，开发 ask 缺失；先生成固定路线再点数组件",
+      "components": null,
+      "requests": null,
+      "estimated_requests": 150,
+      "estimate_basis": "同方向报告集组件数 × 缺失开发图数 / 报告图数，向上取整；不是实测",
+      "unit_cost_cny": 0.00024904025157232706,
+      "estimated_cost_cny": 0.03735603773584906,
+      "no_only_alternative_requests": null
+    }
+  ],
+  "conclusions": [
+    "LEVIR 0.85：开发区间迁移到报告集的 ΔF1=-0.002 分，未达到 +1 分门槛；区间内完美复核为 +0.11 分。",
+    "SECOND 新建：开发区间迁移到报告集的 ΔF1=-0.88 分，未达到 +1 分门槛；区间内完美复核为 +0.66 分。",
+    "SECOND 拆除：开发区间迁移到报告集的 ΔF1=+0.00 分，未达到 +1 分门槛；区间内完美复核为 +0.00 分。",
+    "WHU C0：开发数据缺失，不能判断开发区间是否达到 +1 分；全部 no 的 TP 主导组件天花板为 +0.67 分，仅作诊断。",
+    "WHU 新建：开发数据缺失，不能判断开发区间是否达到 +1 分；全部 no 的 TP 主导组件天花板为 +0.58 分，仅作诊断。",
+    "WHU 拆除：开发数据缺失，不能判断开发区间是否达到 +1 分；全部 no 的 TP 主导组件天花板为 +0.37 分，仅作诊断。",
+    "SECOND 全部 no 的 TP 主导组件天花板为新建 +4.29、拆除 +6.92 分；它与开发区间迁移收益是两项结果，不能把天花板写成已通过区间迁移门槛。",
+    "第 10.5 节 V1 在 dev2 全 200 张为 +0.34，但追加的独立 170 张确认区间跨零，因此 L2 没上线；不是证明 V1 无效。V4 针对置信读数可用性。本次利用已有 L1 的 p_yes，不修复 V4，也不证明 flash 规划器复核能实现真值天花板；需统计复核引入的 FP 和净收益。"
+  ],
+  "inventory_seconds": 569.6770224049687,
+  "reused_inventory": true,
+  "estimated_followup_cost_cny": 4.620361134327857,
+  "cost_note": "费用按原记录 cost_cny 的均价（已有 ledger 口径），不是新调用实测或账单。LEVIR 报告记录保留了早期较高计价；不把它当作当前 flash 单价。WHU 开发预算沿用同方向报告均价，组件数按 60/128 的报告密度估计。改首词元格式来提高可读率会改变问法；若决定补问，应另列实验，不与原记录直接混作同一池。",
+  "analysis_seconds": 7.393905656412244,
+  "additional_audit": {
+    "whu_any": {
+      "development_names": 60,
+      "development_uids_in_report_answers": 0
+    },
+    "whu_appeared": {
+      "development_names": 60,
+      "development_uids_in_report_answers": 0
+    },
+    "whu_disappeared": {
+      "development_names": 60,
+      "development_uids_in_report_answers": 0
+    }
+  }
+}

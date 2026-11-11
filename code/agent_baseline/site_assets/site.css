@@ -1,6 +1,6 @@
 
 /* Additions for the G3/G4 site. Same tokens as the G1 pages (hub.css). */
-.entry{max-width:1752px;margin:16px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.entry{max-width:1752px;margin:16px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .entry a.card{display:block;text-decoration:none;color:var(--text);background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:2px;padding:14px 16px}
 .entry a.card:hover{border-color:var(--accent)}
 .entry .card h2{font-size:16px;margin:0 0 6px;color:var(--accent)}
@@ -37,3 +37,4 @@
 @media(max-width:900px){.entry{grid-template-columns:1fr;padding:0 16px}.compare,.example{margin:12px 16px 0}.compare .trio{grid-template-columns:1fr}.steps-figs{grid-template-columns:1fr 1fr}.example .pairs{grid-template-columns:1fr}}
 .sys .sw{stroke:var(--accent);stroke-width:1.2;stroke-dasharray:4 3}
 .controls td{vertical-align:top;font-size:13px;min-width:150px}.controls td:first-child{min-width:120px}.controls td.num{white-space:normal;min-width:170px}
+.trio.duo{grid-template-columns:repeat(2,minmax(0,1fr))}.errfig{margin:8px 0}.err-panel h3{margin-top:6px}.has-js .err-panel[hidden]{display:none}@media(max-width:900px){.trio.duo{grid-template-columns:1fr}}

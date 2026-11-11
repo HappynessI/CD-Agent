@@ -664,6 +664,7 @@ def render_index(records):
         rows.append(f'<tr><td><a href="{r["file"]}">{esc(r["image"])}</a></td><td class="task">{esc(code)}<span>{esc(text)}</span></td><td>{esc(dataset)}</td>'
                     f'<td class="hv">{esc(r["version"])}</td>{cell("agent", "")}{cell("fixed", fixed_name)}{cell("rule", rule_name)}</tr>')
     cards = [('baselines.html', '三种做法', '固定路线、固定规则和 Agent 用同一套工具。差别只在谁做决定。', '按任务查看固定路线和固定规则的结构，以及一张图的分步示例。'),
+             ('errors.html', '典型错误', '固定路线和 Agent 的错误按类统计：LEVIR、SECOND、WHU。', '每类附损失最大的样例。'),
              ('../tools/index.html', '核心工具', '23 个原子工具：功能、输入、输出、后端模型、开关。', '其中 14 个默认可用，9 个要用命令行开关打开。'),
              ('../demo_g1/index.html', 'G1 回放', 'LEVIR-CD 建筑变化，G1 配置，4 个回放。', '包含提示词全文。')]
     entry = '<nav class="entry" aria-label="子页面">' + ''.join(
@@ -834,6 +835,95 @@ document.getElementById('close-zoom').onclick=()=>dialog.close();dialog.addEvent
     return page('3 种做法', head + structure + controls_table() + walk + compare + limits + dialog, script)
 
 
+# ---------------------------------------------------------------- typical errors page
+
+ERROR_SETS = [('LEVIR_C0', 'LEVIR C0'), ('SECOND_C0', 'SECOND C0'), ('SECOND_新建', 'SECOND 新建'), ('SECOND_拆除', 'SECOND 拆除'),
+              ('WHU_C0', 'WHU C0'), ('WHU_新建', 'WHU 新建'), ('WHU_拆除', 'WHU 拆除'), ('SECOND_T1.2', 'T1.2 主路线'), ('SECOND_T1.3', 'T1.3 主路线')]
+PIXEL_CLASSES = ['粘连误检', '整目标误检', '方向错', '原址重建', '整目标漏检', '部分漏检或边界', '小目标漏检', '大目标漏检']
+TRACE_CLASSES = ['兜底提交', '大框失败', '验证器误删 TP', '规划器补进 FP', '主路线选错']
+
+
+def errors_data(root):
+    """Data step: numbers from analysis/error_taxonomy.py and the largest-loss example of each class (JPEG data URIs)."""
+    base = Path(root) / 'error_taxonomy'
+    summary = read_json(base / 'error_taxonomy.json')
+    out = dict(r4=summary.get('r4_comparison'), sets={})
+    for key, _ in ERROR_SETS:
+        out['sets'][key] = {}
+        for method, rec in (summary['summary'].get(key) or {}).items():
+            cats = {}
+            for name, c in rec.get('categories', {}).items():
+                ex = (c.get('examples') or [None])[0]
+                pics = None
+                if ex:
+                    pics = {k: jpeg(open_image(base / ex[k]), 320, 70) for k in ('t2', 'gt', 'overlay') if ex.get(k)}
+                    pics.update(image=ex['image'], session=ex.get('session'))
+                cats[name] = dict(share=c.get('pixel_share'), denominator=c.get('denominator'), images=c.get('images'),
+                                  sessions=c.get('sessions'), repair=c.get('f1_repair_pp'), example=pics)
+            out['sets'][key][method] = dict(f1=rec.get('pooled_f1'), images=rec.get('images'), sessions=rec.get('sessions'), categories=cats)
+    return out
+
+
+def render_errors(d):
+    tabs = '<div class="tabs" role="group" aria-label="数据集">' + ''.join(
+        f'<button type="button" data-set="{k}" aria-pressed="{"true" if i == 0 else "false"}">{esc(label)}</button>' for i, (k, label) in enumerate(ERROR_SETS)) + '</div>'
+    panels = []
+    for i, (key, label) in enumerate(ERROR_SETS):
+        methods = d['sets'].get(key) or {}
+        cols = []
+        for method, rec in methods.items():
+            name = '固定路线' if method == '固定路线' else method.replace('Agent_', 'Agent（') + '）'
+            rows, figs = [], []
+            for cname in PIXEL_CLASSES + TRACE_CLASSES:
+                c = rec['categories'].get(cname)
+                if not c:
+                    continue
+                share = '—' if c['share'] is None else f'{c["share"] * 100:.1f}%'
+                den = {'FP': '占 FP', 'FN': '占 FN'}.get(c['denominator'], '占 FP+FN')
+                repair = '' if c['repair'] is None else f'{c["repair"]:+.2f}'
+                rows.append(f'<tr><td>{esc(cname)}</td><td class="num">{share} <span class="muted">{den}</span></td><td class="num">{esc(c["images"])}</td>'
+                            f'<td class="num">{repair}</td></tr>')
+                ex = c.get('example')
+                if ex and ex.get('overlay'):
+                    cap = f'{cname}：{ex["image"]}' + (f'（{ex["session"].split("/")[0]}）' if ex.get('session') else '')
+                    figs.append(f'<div class="errfig"><div class="pair">{figure(ex["overlay"], cap + " · 预测与真值")}{figure(ex["gt"], "真值")}</div></div>')
+            cols.append(f'<div><h3>{esc(name)} · F1 {rec["f1"]:.2f}</h3><p class="muted">{esc(rec["images"])} 张图，{esc(rec["sessions"])} 个会话</p>'
+                        '<div class="tablewrap"><table class="hubtable"><thead><tr><th>类</th><th>像素占比</th><th>涉及图</th><th>理想修复 ΔF1</th></tr></thead>'
+                        f'<tbody>{"".join(rows)}</tbody></table></div><details><summary>每类损失最大的样例（{len(figs)} 个，点击展开）</summary>{"".join(figs)}</details></div>')
+        panels.append(f'<div class="err-panel" data-set="{key}"{"" if i == 0 else " hidden"}><h3>{esc(label)}</h3><div class="trio duo">{"".join(cols)}</div></div>')
+    r4 = d.get('r4') or {}
+    attach = []
+    for key, label in ERROR_SETS[:7]:
+        c = ((d['sets'].get(key) or {}).get('固定路线') or {}).get('categories', {}).get('粘连误检')
+        if c:
+            attach.append(f'{label} {c["share"] * 100:.1f}%')
+    head = ('<header><div class="eyebrow"><a href="index.html">回放列表</a></div><h1>典型错误</h1>'
+            '<p>离线统计，不调用模型。Agent 合并 3 个种子；固定路线算一次。每个数据集分两栏：固定路线和 Agent。</p></header>')
+    intro = ('<section class="panel example"><h2>读这一页之前</h2><ul>'
+             f'<li><strong>粘连误检</strong>（FP 所在的连通域里也有 TP）占固定路线 FP 的比例：{esc("；".join(attach))}。'
+             f'旧文档写的 LEVIR「54%」是像素门限 0.5 时的整数说法；按门限 0.5 复算是 {r4.get("older_share", 0) * 100:.1f}%，现用门限 0.85 是 {r4.get("current_share", 0) * 100:.1f}%。</li>'
+             '<li>像素类：粘连误检和整目标误检互斥，合起来是全部 FP；整目标漏检和部分漏检互斥，合起来是全部 FN。方向错、原址重建、小目标漏检、大目标漏检是附加标签。</li>'
+             '<li>轨迹类只对 Agent：兜底提交、大框失败、验证器误删 TP、规划器补进 FP、主路线选错（只 T1.2、T1.3）。</li>'
+             '<li>理想修复 ΔF1：只把这一类错误像素改对后的 F1 增量。各类有重叠，不能相加，也不是改 harness 后能拿到的分数。</li>'
+             '<li>SECOND C0 的 Agent 只有 G2 的运行；其他建筑任务用 G3。</li></ul></section>')
+    concl = ('<section class="panel example"><h2>结论</h2><div class="capgrid"><div><h3>Agent 的典型错误（用来改 harness）</h3><ul>'
+             '<li>SECOND 新建、SECOND C0：理想修复最大的是「验证器误删 TP」（2.60、5.33 分）。</li>'
+             '<li>LEVIR、SECOND 拆除、WHU 新建：最大的是「规划器补进 FP」（1.47、5.09、2.64 分）。</li>'
+             '<li>WHU C0、WHU 拆除：最大的是「兜底提交」（2.98、3.18 分），会话数少但单个损失大。</li>'
+             '<li>T1.2、T1.3：「主路线选错」仍是最大来源。G4 把 T1.2 涉及的会话从 293 降到 90，T1.3 从 184 降到 115。</li></ul></div>'
+             '<div><h3>固定路线的典型错误（Agent 有机会拿分的地方）</h3><ul>'
+             '<li>SECOND、WHU：整目标漏检占 FN 的 46%–87%，大目标漏检占 FN 的 10%–41%。补漏是主要机会。</li>'
+             '<li>WHU C0、新建：粘连误检占 FP 的 79%–80%，误检大多和真变化连在一起（边界或相连的伪变化）。</li>'
+             '<li>SECOND：整目标误检占 FP 的 79%–93%，验证器删除这些组件是规则胜过固定路线的原因。</li></ul></div></div></section>')
+    script = """<script>(()=>{document.documentElement.classList.add('has-js');const b=[...document.querySelectorAll('[data-set]')].filter(x=>x.tagName==='BUTTON'),p=[...document.querySelectorAll('.err-panel')];
+b.forEach(x=>x.onclick=()=>{b.forEach(y=>y.setAttribute('aria-pressed',String(y===x)));p.forEach(q=>q.hidden=q.dataset.set!==x.dataset.set)});
+const dialog=document.getElementById('zoom-dialog');document.querySelectorAll('.zoom').forEach(z=>z.addEventListener('click',()=>{const i=z.querySelector('img');document.getElementById('zoom-image').src=i.src;document.getElementById('zoom-caption').textContent=i.alt;dialog.showModal();}));
+document.getElementById('close-zoom').onclick=()=>dialog.close();})();</script>"""
+    dialog = '<dialog id="zoom-dialog" aria-label="放大图像"><button id="close-zoom" class="close" type="button">关闭（Esc）</button><img id="zoom-image" alt=""><p id="zoom-caption"></p></dialog>'
+    body = head + intro + '<section class="panel example"><h2>按数据集、按方法</h2>' + tabs + ''.join(panels) + '</section>' + concl + dialog
+    return page('典型错误', body, script)
+
+
 def build(root, out, selections, cache, stage='all'):
     """stage 'data': compute and cache (compute node). 'page': HTML from the cache only (seconds). 'all': both."""
     cache, out = Path(cache), Path(out)
@@ -871,11 +961,14 @@ def build(root, out, selections, cache, stage='all'):
         store = Store(cache / 'baselines.json', mode)
         baselines = render_baselines(root, records, example, example_file, store)
         store.save()
+        store = Store(cache / 'errors.json', mode)
+        errors = render_errors(store.get('errors', lambda: errors_data(root)))
+        store.save()
         if current == 'data':
             (cache / 'records.json').write_text(json.dumps(dict(records=records, example=example), ensure_ascii=False, indent=1), encoding='utf-8')
             print(f'数据已缓存：{cache}')
             continue
-        for name, document in (('index.html', render_index(records)), ('baselines.html', baselines)):
+        for name, document in (('index.html', render_index(records)), ('baselines.html', baselines), ('errors.html', errors)):
             audit_html(document)
             (out / name).write_text(document, encoding='utf-8')
         keep = ['page', 'task', 'dataset', 'run', 'image', 'f1', 'median', 'version']
