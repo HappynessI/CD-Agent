@@ -146,6 +146,64 @@ ROUTES = {
 }
 
 
+# Per-task controls (README_ai sections 10.5–10.13). Each row: task, data, fixed route, rule, other controls,
+# where the settings were chosen, report-set F1 (fixed / rule / other), section.
+IMC_TEXT = 'I-M-C(SAM3)：两期 segment_text("building")，分块 512，实例分数 ≥ 0.5，像素 ≥ 0.85 → match_instances（重叠 ≥ 0.25）→ 出现 ∪ 消失'
+CONTROLS = [
+    ('T1.1 × C0', 'LEVIR 验证 64 张', IMC_TEXT,
+     '固定路线的组件 → flash 验证器（L1：4 张裁剪图、跨时相对应问法）→ 删除答 no', 'M-C-I 固定路线（参照）',
+     '像素门限 0.85 在验证集 64 张上选（第 10.3 节：有选择偏差）；L2 验证器在 dev2 上比较，没有上线', '83.15 / 86.35', '10.5'),
+    ('T1.1 × C0', 'SECOND 128 张', IMC_TEXT + '（不分方向）', '没有（C0 只做了固定路线）', '—',
+     '沿用 LEVIR 的设置，零样本，不调', '51.83 / — ', '10.6'),
+    ('T1.1 × C0', 'WHU 128 张', IMC_TEXT, '同 LEVIR 的验证器和问法，删除答 no', '对官方变化标签另报一行：固定 64.93、规则 76.35',
+     '沿用 LEVIR 的设置，零样本；WHU 开发 60 张没有用来调参', '56.59 / 62.75', '10.11'),
+    ('T1.1 × C1', 'SECOND、WHU 128 张', 'I-M-C(SAM3)，只取一个方向：新建 = 出现，拆除 = 消失',
+     '带方向的问法 + SECOND 范围卡「范围卡加一句定义」：原址重建不算新建也不算拆除；删除答 no',
+     '不分方向的固定路线（参照，显示不管方向会掉多少分）',
+     '范围卡写法在 SECOND 开发 60 张上从 5 种写法中选（看了 128 张试跑的问题后改，第 10.6 节写明）',
+     'SECOND 新建 57.04 / 63.74，拆除 32.84 / 37.96；WHU 新建 62.25 / 70.26，拆除 21.71 / 22.17', '10.6、10.11'),
+    ('T5.1', 'LEVIR 验证 64 张', '给定掩码 = 不分方向的固定路线（I-M-C(SAM3)，像素 0.85），原样提交', '同 T1.1 × C0 的规则', '—',
+     '同 T1.1 × C0', '83.15 / 86.35', '10.5'),
+    ('T5.1 × C1', 'SECOND 128 张', '给定掩码 = 不分方向的固定路线；对照：给定掩码原样、给定掩码只留对应方向', '带方向的规则（同 T1.1 × C1）', '—',
+     '同 T1.1 × C1', '新建：原样 49.03、只留方向 57.04 / 规则 63.74；拆除：原样 13.11、只留方向 32.84 / 规则 37.96', '10.6'),
+    ('T1.1 × C1 转换', 'SECOND 128 张', '新建组件 ∩ T1 低矮植被或非植被地表（SegEarth-OV）；组件被覆盖 ≥ 25% 时保留整个组件，不设最小面积',
+     '同一个验证器，问法只接受规定的前期地类；删除答 no', '—', 'SECOND 开发 60 张上选（component0.25_min0）', '62.82 / 62.70', '10.10'),
+    ('T1.1 × C2 / C4', 'SECOND 128 张', 'I-M-C(SAM3)（C4 只取出现）→ 与框 region#0 逐像素求交',
+     '在整图组件上删除答 no，再与框求交', '事后 ∩ 框：Agent 的 C0 / C1 结果直接与框求交',
+     '框按种子 1016 冻结；没有新门限', 'C2：54.67 / 60.69，事后 66.71；C4：62.63 / 67.99，事后 76.12', '10.7、10.10'),
+    ('T5.2 点反馈', 'LEVIR 验证 64 张', '固定响应 C（主对照）：误检点删除点所在的给定组件；漏检点在 T1、T2 各做一次 SAM ViT-H 点提示，取面积小的候选并入',
+     '没有', '固定响应 A：点落在 T2 的 SAM3 建筑里用 T2，否则用 T1；固定响应 B：取三个候选里面积最小的',
+     'B、C 是看了 A 的失败后加的，没有调门限（第 10.8 节写明）', 'k=1 / k=3：C 84.07 / 84.73；A 67.00 / 56.47；B 73.83 / 69.36', '10.8'),
+    ('T5.3 语言反馈', 'LEVIR 验证 64 张', '固定响应 1：按 3×3 方位格定位，选格子内面积最大的候选', '没有',
+     '固定响应 2：格子内用验证器 p_yes 挑选（漏检取最高，误检取最低）。它用验证器，但不是删除规则', '沿用 LEVIR 设置；10 张试跑后改了误检句', '给定 83.15；固定响应 1 82.73；固定响应 2 83.22', '10.10'),
+    ('T1.3 不限类别', 'SECOND 128 张', 'SAM ViT-H 两期提议 → DINOv2 区域特征 1 − 余弦 ≥ 0.22 → 候选取并集',
+     'describe 问法，删除答 no', 'AnyChange 46.80；删除 p_yes < 0.9 的变体 61.42',
+     '门限在 SECOND 开发 60 张上选；问法在同 60 张的 1,649 个候选上从 3 种中选', '60.88 / 61.11', '10.10'),
+    ('T1.2 多类别', 'SECOND 128 张', '建筑 = I-M-C(SAM3) 的变化；低矮植被 = SegEarth-OV 两期分割后逐类异或；两类取并集，删除 < 64 像素的组件',
+     '同一个验证器，删除答 no', '—', 'SECOND 开发 60 张上选（类别和 sam3_min64）', '46.26 / 47.50', '10.10'),
+    ('T3.1 图内示例', 'SECOND 128 个任务', 'SAM 提议 → DINOv2 两期变化向量 → 与示例的余弦 ≥ 0.6 的提议取并集；预测和真值都去掉示例像素',
+     '没有', '—', 'SECOND 开发 60 张上选 0.6', '19.39（703 个任务全集 19.80）', '10.10'),
+    ('T3.2 / T3.3 / T3.4', 'SECOND 1,823 个任务', '同 T3.1 的提议和特征：T3.2 比 T2 外观（门限 0.55），T3.3 比两期变化向量（0.15），T3.4 正例减负例（0.20）',
+     '没有', '—', '开发 912 个任务上选门限，并列取小', '14.44 / 15.43 / 12.84', '10.11'),
+    ('T4.1 面积', 'LEVIR 验证 64 张', '固定路线 + 面积筛选：只保留 > 260 m²（> 1,040 像素）的组件', '规则 + 同样的面积筛选', '—',
+     '260 m² 用 dev2 的组件面积分布选（约 1/3 组件达标）', '77.13 / 78.48', '10.11'),
+    ('T5.4 旧地图', 'WHU 128 张', '2016 影像 SAM3 建筑 → 与 2012 旧地图逐像素异或，不删小组件',
+     '旧问法「地图与影像是否不同」：验证器对 82% 的组件答 no', '新问法「只看 T2，轮廓内现在是不是建筑」，方向由 harness 结合旧地图判断（开发 60 张：规则 67.13，固定 66.22）',
+     'min_area=0 在 WHU 开发 60 张上选；问法在同 60 张上比较', '59.40 / 30.97（旧问法）', '10.11、10.13'),
+]
+
+
+def controls_table():
+    rows = ''.join(f'<tr><td class="task">{esc(t)}<span>{esc(d)}</span></td><td>{esc(f)}</td><td>{esc(r)}</td><td>{esc(o)}</td><td>{esc(w)}</td><td class="num">{esc(sc)}</td><td>{esc(sec)}</td></tr>'
+                   for t, d, f, r, o, w, sc, sec in CONTROLS)
+    return ('<section class="panel example" id="controls"><h2>各任务的对照是什么</h2>'
+            '<ul><li>规则只删除，不补漏。</li><li>不同任务的对照是人按任务定义分别写的。Agent 在所有任务上用同一套代码。</li>'
+            '<li>「固定规则」在不同任务里不是同一个东西：验证问题、候选来源和后处理都随任务变化。下表逐项写明。</li>'
+            '<li>分数是报告集上的 F1ᶜ（固定 / 规则），来源是 README_ai 的对应章节。</li></ul>'
+            '<div class="tablewrap"><table class="hubtable controls"><thead><tr><th>任务</th><th>固定路线</th><th>规则</th><th>其他对照</th><th>设置在哪选</th><th>F1（固定 / 规则）</th><th>章节</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table></div></section>')
+
+
 def figure(uri, label, extra=''):
     return (f'<figure class="{extra}"><button type="button" class="zoom" aria-label="放大：{esc(label)}">'
             f'<img src="{uri}" alt="{esc(label)}" loading="lazy"></button><figcaption>{esc(label)}</figcaption></figure>')
@@ -773,7 +831,7 @@ show();
 const dialog=document.getElementById('zoom-dialog');document.querySelectorAll('.zoom').forEach(b=>b.addEventListener('click',()=>{const i=b.querySelector('img');document.getElementById('zoom-image').src=i.src;document.getElementById('zoom-caption').textContent=i.alt;dialog.showModal();}));
 document.getElementById('close-zoom').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});})();</script>'''
     dialog = '<dialog id="zoom-dialog" aria-label="放大图像"><button id="close-zoom" class="close" type="button">关闭（Esc）</button><img id="zoom-image" alt=""><p id="zoom-caption"></p></dialog>'
-    return page('3 种做法', head + structure + walk + compare + limits + dialog, script)
+    return page('3 种做法', head + structure + controls_table() + walk + compare + limits + dialog, script)
 
 
 def build(root, out, selections, cache, stage='all'):
