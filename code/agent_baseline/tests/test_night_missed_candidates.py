@@ -3,10 +3,29 @@ import tempfile
 from pathlib import Path
 import numpy as np
 from agent_baseline import instances
-from agent_baseline.analysis.night_missed_candidates import rematch,gate_features,visual_instances
+from agent_baseline.analysis.night_missed_candidates import rematch,gate_features,visual_instances,rematch_policies,MATCH_POLICIES
 from agent_baseline.analysis.missed_sources import change_candidates,pack,save_npz
 
 class CandidateGatesTest(unittest.TestCase):
+    def test_shared_intersections_equal_original_for_all_directions(self):
+        def box(y,x,h,w):
+            m=np.zeros((12,12),bool);m[y:y+h,x:x+w]=True;return m
+        # One-to-many, asymmetric quarter coverage, disjoint and exact matches.
+        a=[box(0,0,4,4),box(6,6,2,2),box(9,0,1,1)]
+        b=[box(0,0,2,2),box(2,2,2,2),box(6,6,2,2),box(9,9,2,2)]
+        base=box(0,0,1,1)
+        found=dict(t1=instances.from_dense(a,[1]*len(a)),t2=instances.from_dense(b,[1]*len(b)))
+        for direction in ('any','appeared','disappeared'):
+            fast=rematch_policies(found,base,direction)
+            for key,threshold,mode in MATCH_POLICIES:
+                with self.subTest(direction=direction,policy=key):
+                    self.assertTrue(np.array_equal(fast[key],rematch(found,base,direction,threshold,mode)))
+        for empty in ('t1','t2'):
+            sparse=dict(found);sparse[empty]=[]
+            fast=rematch_policies(sparse,base,'any')
+            for key,threshold,mode in MATCH_POLICIES:
+                self.assertTrue(np.array_equal(fast[key],rematch(sparse,base,'any',threshold,mode)))
+
     def test_all_reference_cache_union_matches_original_s5(self):
         # Original SAM3.visual pools every reference/seed before matching.
         # An opposite-date match can come from a different reference.

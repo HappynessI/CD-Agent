@@ -64,6 +64,28 @@ def rematch(found,base,direction,threshold,mode):
     return instances.to_mask(chosen,base.shape)&~base
 
 
+MATCH_POLICIES=(('old_025',.25,'overlap'),('overlap_010',.10,'overlap'),
+                ('overlap_050',.50,'overlap'),('iou_025',.25,'iou'))
+
+
+def rematch_policies(found,base,direction):
+    """Reuse exact pair intersections; preserve instances.match presence rules."""
+    pairs=instances.overlaps(found['t1'],found['t2']);result={}
+    for key,threshold,mode in MATCH_POLICIES:
+        hit_a=set();hit_b=set()
+        for i,j,inter,area_a,area_b in pairs:
+            if mode=='overlap':
+                if inter/area_a>=threshold:hit_a.add(i)
+                if inter/area_b>=threshold:hit_b.add(j)
+            elif inter/(area_a+area_b-inter)>=threshold:
+                hit_a.add(i);hit_b.add(j)
+        a=[v for i,v in enumerate(found['t1']) if i not in hit_a]
+        b=[v for i,v in enumerate(found['t2']) if i not in hit_b]
+        chosen=a+b if direction=='any' else b if direction=='appeared' else a
+        result[key]=instances.to_mask(chosen,base.shape)&~base
+    return result
+
+
 def gate_features(masks,rgb,feature_pair):
     result=[]
     for mask in masks:
@@ -131,10 +153,10 @@ def extract(a):
                    dilate_3=original&~ndi.binary_dilation(base,structure=np.ones((7,7))))
         status={}
         if files:
-            old=rematch(found,base,spec['direction'],.25,'overlap')
+            matched=rematch_policies(found,base,spec['direction'])
+            old=matched.pop('old_025')
             status['old_rematch_equals_cache']=bool(np.array_equal(old,original))
-            for key,thr,mode in (('overlap_010',.10,'overlap'),('overlap_050',.50,'overlap'),('iou_025',.25,'iou')):
-                masks[key]=rematch(found,base,spec['direction'],thr,mode)
+            masks.update(matched)
         else:
             with np.load(a.work/'raw'/group/(stem+'.npz'),allow_pickle=False) as raw:
                 seeds=int(raw['yes_seed_count'])
