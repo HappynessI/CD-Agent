@@ -14,7 +14,7 @@ def load(path):
 def request_cost(night):
     # Disjoint roots; B0 is reused historical evidence, never rebilled here.
     entries={}
-    for name in ('B1','B2','B3','t33','retrieval'):
+    for name in ('B1','B2','B3','t33','retrieval','r1_direct4'):
         for pattern in ('**/answer.json','**/failure_*.json'):
             for path in (night/name).glob(pattern):
                 entries[str(path.resolve())]=float(load(path).get('cost_cny',0))
@@ -52,6 +52,12 @@ def collect(night,old):
                 for split,expected in ([('tune',30),('confirm',30)] if prefix=='retrieval' else [('tune',6),('confirm',6)]):
                     count=sum(r['split']==split for r in records)
                     stages[f'{prefix}/{variant}/{split}']=dict(completed=count,expected=expected,status='complete' if count==expected else 'pending')
+    direct=[]
+    for split in ('tune','confirm'):
+        current=[load(p) for p in sorted((night/'r1_direct4'/split/'tasks').glob('*/metrics.json'))]
+        direct.extend(current)
+        stages['r1_direct4/'+split]=dict(completed=len(current),expected=30,status='complete' if len(current)==30 else ('pending' if split=='tune' else 'not_promoted_or_partial'))
+    if direct:retrieval['r1_direct4']=dict(tasks=len(direct),records=direct,summary=summaries(direct))
     raw_rows=retrieval.get('retrieval/B0_local_raw',{}).get('records',[])
     stages['local_raw/tune']=dict(completed=sum(r['split']=='tune' for r in raw_rows),expected=30,status='not_submitted_zero_TP_headroom' if not raw_rows else ('complete' if sum(r['split']=='tune' for r in raw_rows)==30 else 'partial'))
     stages['local_raw/confirm']=dict(completed=sum(r['split']=='confirm' for r in raw_rows),expected=30,status='not_requested_without_tune_evidence' if not any(r['split']=='confirm' for r in raw_rows) else 'started')
@@ -98,6 +104,7 @@ def markdown(data):
         'R1 geometry-DINO changes the pool relative to unfiltered historical DINO. R2 uses predicted classes, including wrong/unknown predictions; native order is filtered SAM query order with source proposals before target, not confidence ranking or random ranking. R3 local verification is a joint input/prompt change. Unparsed answers follow historical keep policy; drop-unparsed results are sensitivity diagnostics.','',
         'Raw-contour tune30 was prepared but not submitted: the completed B0 R2 pool covers zero GT pixels in fixed tune positives, so a verifier cannot recover TP from this pool. Historical GT-text oracle is reused offline in oracle_cache/report.md to separate semantic and proposal-constraint limits, without new GT-fed model requests.','',
         'Observed local-verifier negative case: train_1136_5to1 candidates0/1 are rejected because the model says the same rectangular building shape persists. Actual inputs show a blue roof then green vegetation; the fixed spotlight support creates the same bright silhouette on both dates. This is evidence of a possible support-shape/object-shape confusion, not proof of causal attribution. This task has only3 remaining GT pixels, so a beneficial rejection score would not establish correct visual reasoning. Inputs/responses are archived under retrieval/B0/tasks/train_1136_5to1/verification.','',
+        'R1-direct4 is a distinct planned tune-first experiment: same fixed R1 Top8 versus no verification, four local raw-RGB Example/Candidate date views, no predicted class pair. R1 eligibility retains candidate overlap with the example; only scoring removes exemplar pixels. No hidden overlap filter is introduced. Old eight-view original-DINO and new two-view text-pool routes are non-paired contextual references.','',
         'Endpoint methods share the original SAM pool with fixed equal weights. Swapping exemplar dates measures ranking sensitivity only; it does not define new GT.','',
         'T3.3 manual uncertainty: the fixed first tune example train_2130_T33_2to4 is clipped at the source crop bottom; close/wide views nearly coincide. Its post-date tan/gray-green support can resemble bare ground or turbid water. Treat the water-label mismatch as requiring visual/label review, not automatically a pure model error. No labels were changed.','',
         '| Stage | Completed/expected | Status |','|---|---:|---|']
