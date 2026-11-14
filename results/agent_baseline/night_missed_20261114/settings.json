@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "pilot": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot",
+  "work": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts",
+  "split_seed": 1016,
+  "split_rule": "dataset-image level; SECOND directions share split",
+  "splits": {
+    "second:train_1166": "tune",
+    "second:train_1136": "tune",
+    "second:train_1344": "tune",
+    "second:train_1065": "tune",
+    "second:train_1129": "tune",
+    "second:train_1177": "confirm",
+    "second:train_1322": "confirm",
+    "second:train_1370": "confirm",
+    "second:train_127": "confirm",
+    "second:train_119": "confirm",
+    "levir:train_116": "tune",
+    "levir:train_11": "tune",
+    "levir:train_123": "tune",
+    "levir:train_106": "tune",
+    "levir:train_109": "tune",
+    "levir:train_118": "confirm",
+    "levir:train_122": "confirm",
+    "levir:train_124": "confirm",
+    "levir:train_121": "confirm",
+    "levir:train_119": "confirm"
+  },
+  "candidates": 526,
+  "variants": {
+    "V0": "exact archived four images/prompt/answers; no API",
+    "V1": "70% outside darkening; old question",
+    "V2": "70% outside darkening, 40% blue baseline overlay; old question plus color legend",
+    "V3": "exact archived images; conservative binary question",
+    "V4": "V2 image; conservative question plus color legend"
+  },
+  "outside_brightness": 0.3,
+  "baseline_blue_alpha": 0.4,
+  "model": "qwen3.7-flash",
+  "max_tokens": 256,
+  "caution": "Current image split controls this round selection only; historical pilot exposure is not an untouched holdout"
+}

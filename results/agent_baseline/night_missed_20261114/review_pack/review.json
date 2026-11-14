@@ -1,0 +1,313 @@
+{
+  "selection": "first tune image per group; first rank and first subsequent S5 candidate (else rank2); no GT/answer-based selection",
+  "reviewer": "Main Agent visual inspection, not independent human truth",
+  "protocol": "Viewed all six contact sheets before reading current five-arm responses; some cases were familiar from prior historical review, so not blind. No task/GT changed.",
+  "cases": [
+    {
+      "uid": "second_appeared:train_1065:1",
+      "area": 5293,
+      "contact": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/review_pack/second_appeared__train_1065__1.png",
+      "observation": "Red support covers a new light roof extension absent at T1; blue initial-mask overlay borders rather than occludes the candidate. All variants say yes, visually consistent. It is part of a larger new building, not necessarily an independent new object.",
+      "answers": {
+        "V0": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "new_building",
+            "reason": "The area contained vegetation and bare soil in T1, while a new building structure is present in the same location in T2."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__1.json"
+        },
+        "V1": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "new_building",
+            "reason": "The area was bare soil in T1 and contains a new building structure with a distinct roof in T2."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V1/second_appeared__train_1065__1.json"
+        },
+        "V2": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "new_building",
+            "reason": "The area inside the red contour changes from bare ground or non-building cover in T1 to a distinct building structure with a visible roof in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V2/second_appeared__train_1065__1.json"
+        },
+        "V3": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "reason": "The area inside the contour shows vegetation and bare ground in T1, which is replaced by a distinct building structure in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V3/second_appeared__train_1065__1.json"
+        },
+        "V4": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "reason": "The area inside the red contour shows bare ground and vegetation in T1, which is replaced by a distinct building structure with a light-colored roof in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__1.json"
+        }
+      }
+    },
+    {
+      "uid": "second_appeared:train_1065:4",
+      "area": 52,
+      "contact": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/review_pack/second_appeared__train_1065__4.png",
+      "observation": "52px candidate is a small interior hole of the initial new-building mask, not a separate whole building. Original RGB context shows ground becoming roof; the blue overlay covers most of the surrounding roof. V0/V1/V3 say yes; V2/V4 reject as unchanged shape/color only. The fixed support shape is not evidence of persistent object identity; masking context may contribute, but this single comparison does not isolate cause.",
+      "answers": {
+        "V0": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "new_building",
+            "reason": "The location shows bare soil and vegetation in T1, while a large building roof is clearly present in the same spot in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__4.json"
+        },
+        "V1": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "new_building",
+            "reason": "The area shows bare soil in T1 and a large building with a structured roof in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V1/second_appeared__train_1065__4.json"
+        },
+        "V2": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "seasonal_or_color",
+            "reason": "The object within the red contour maintains the same shape, size, and position in both T1 and T2, with the only visible difference being a change in tonal brightness (from brownish to grey), which indicates a color or illumination variation rather than construction or demolition."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V2/second_appeared__train_1065__4.json"
+        },
+        "V3": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "reason": "The area inside the red contour shows bare soil/vegetation in T1 and a constructed building roof in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V3/second_appeared__train_1065__4.json"
+        },
+        "V4": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The object inside the red contour is present in both T1 and T2, showing only a change in color/tone (from brown to grey) which is explicitly excluded by the scope card; there is no evidence of new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__4.json"
+        }
+      }
+    },
+    {
+      "uid": "second_disappeared:train_1065:1",
+      "area": 346,
+      "contact": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/review_pack/second_disappeared__train_1065__1.png",
+      "observation": "Small bright structured object at T1 is replaced by darker ground/vegetation at T2. Its fine semantic class is visually less certain than the large roofs. V0/V3 say demolished; V1/V2/V4 cite identical object shape/position and color-only change. The fixed highlighted region preserves shape regardless of object change, so these reasons require scrutiny; no GT is revised.",
+      "answers": {
+        "V0": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "demolished",
+            "reason": "A small building structure visible in the T1 close-up and wider view is absent in T2, where the area appears as bare ground or vegetation."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_disappeared__train_1065__1.json"
+        },
+        "V1": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "seasonal_or_color",
+            "reason": "The object within the contour maintains the same shape, size, and position relative to fixed neighbors in both dates, indicating it is the same building with altered tone and visibility."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V1/second_disappeared__train_1065__1.json"
+        },
+        "V2": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "seasonal_or_color",
+            "reason": "The object within the red contour maintains the same shape, size, and position in both T1 and T2, with the observed difference being a change in roof color/tone from bright white to greyish-green, which falls under excluded seasonal or illumination differences."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V2/second_disappeared__train_1065__1.json"
+        },
+        "V3": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "reason": "The area contains a distinct building structure in T1 that is completely absent in T2, where the location shows only ground/vegetation, indicating the building has been demolished."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V3/second_disappeared__train_1065__1.json"
+        },
+        "V4": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The object inside the red contour persists in T2 with a similar shape and location, merely showing tonal/illumination differences rather than clear evidence of demolition (disappearance)."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_disappeared__train_1065__1.json"
+        }
+      }
+    },
+    {
+      "uid": "second_disappeared:train_1065:2",
+      "area": 234,
+      "contact": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/review_pack/second_disappeared__train_1065__2.png",
+      "observation": "Support is clipped by the image bottom; a bright/gray fragment remains visible in both dates. All variants reject. The narrow truncated support limits semantic certainty; do not attribute an error to rendering without checking the source image boundary.",
+      "answers": {
+        "V0": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The object within the red contour is a small building present in both T1 and T2; although visibility differs due to resolution and surrounding vegetation changes, the structure itself remains."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_disappeared__train_1065__2.json"
+        },
+        "V1": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The object within the red contour maintains its position and general footprint in both dates, with visible differences in roof tone and shadow likely due to illumination or seasonal changes rather than demolition or new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V1/second_disappeared__train_1065__2.json"
+        },
+        "V2": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The red contour marks the same building structure in both dates, with consistent shape and position relative to fixed surroundings, indicating only visibility or illumination differences."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V2/second_disappeared__train_1065__2.json"
+        },
+        "V3": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The object inside the red contour appears to be a small structure or pile present in both T1 and T2; there is no clear evidence of demolition, and changes in appearance are likely due to misregistration or illumination differences."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V3/second_disappeared__train_1065__2.json"
+        },
+        "V4": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The object inside the red contour is present in both T1 and T2 (visible as a bright/white roof fragment in T1 and a grey roof structure in T2), so there is no evidence of disappearance or demolition."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_disappeared__train_1065__2.json"
+        }
+      }
+    },
+    {
+      "uid": "levir_any:train_106:1",
+      "area": 4254,
+      "contact": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/review_pack/levir_any__train_106__1.png",
+      "observation": "Red support is a narrow linear feature near the upper-left road; new residential blocks are mostly outside it. V0/V3 call the candidate a new building complex, an observed region-attribution error. V1/V2/V4 reject, although V1 still calls the linear feature a building. Correct rejection alone does not validate its reasoning.",
+      "answers": {
+        "V0": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "type": "new_building",
+            "reason": "The area marked by the red contour is undeveloped land in T1, while a large new building complex with parking lots has been constructed in the same location in T2."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/levir_any__train_106__1.json"
+        },
+        "V1": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The red contour highlights the same long, linear building structure in both T1 and T2 with consistent shape and position relative to the road, indicating no construction or demolition occurred."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V1/levir_any__train_106__1.json"
+        },
+        "V2": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The red contour highlights a long, linear structure (likely a fence or wall) that remains physically present and unchanged in both T1 and T2; since it is not a building, no building change has occurred."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V2/levir_any__train_106__1.json"
+        },
+        "V3": {
+          "answer": "yes",
+          "parsed": {
+            "change": "yes",
+            "reason": "The area inside the red contour shows a transition from undeveloped or lightly developed land in T1 to a large, multi-building commercial complex with parking lots in T2, indicating new construction."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V3/levir_any__train_106__1.json"
+        },
+        "V4": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The red contour highlights a linear feature (likely a fence or wall) rather than a building footprint, and there is no evidence of a building being newly constructed or demolished within this specific boundary."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/levir_any__train_106__1.json"
+        }
+      }
+    },
+    {
+      "uid": "levir_any:train_106:3",
+      "area": 20734,
+      "contact": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/review_pack/levir_any__train_106__3.png",
+      "observation": "Red support follows the shoreline/beach rather than adjacent houses; close/wide are effectively the whole image. All five variants reject a building change. V1 additionally says nearby buildings remain unchanged, which is unnecessary and not supported by the visible housing development. Prior structured-SoM failure is a different historical prompt arm, not evidence that this V3 failed here.",
+      "answers": {
+        "V0": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "non_building_change",
+            "reason": "The object within the red contour is a shoreline or embankment feature, not a building, and its appearance change is due to non-building land cover modification."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/levir_any__train_106__3.json"
+        },
+        "V1": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The red contour highlights a shoreline and sandy bank feature, which is non-building land cover; the nearby buildings remain unchanged between T1 and T2."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V1/levir_any__train_106__3.json"
+        },
+        "V2": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "type": "no_change",
+            "reason": "The red contour highlights a shoreline and beach area, which is non-building land cover; the scope card specifies that changes of non-building land cover do not count as building changes."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V2/levir_any__train_106__3.json"
+        },
+        "V3": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The area inside the red contour shows changes to the shoreline and water body, but there are no buildings present in either T1 or T2 within this specific boundary to constitute a building change."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V3/levir_any__train_106__3.json"
+        },
+        "V4": {
+          "answer": "no",
+          "parsed": {
+            "change": "no",
+            "reason": "The area inside the red contour represents a shoreline and beach; there are no buildings present in either T1 or T2 to indicate construction or demolition."
+          },
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/levir_any__train_106__3.json"
+        }
+      }
+    }
+  ]
+}
