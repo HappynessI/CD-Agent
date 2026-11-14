@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset,remaining16_diagnostic
+from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset,remaining16_diagnostic,optional_positive_endpoints
 
 
 class ReportTests(unittest.TestCase):
@@ -41,6 +41,21 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(row['available_stage_tasks'],4)
         self.assertEqual([r['id'] for r in row['per_task_counts']],['16','20'])
         self.assertEqual(json.dumps(data,sort_keys=True),before)
+
+    def test_optional_endpoint_missing_and_actual_summary_contract(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);stages,records,value=optional_positive_endpoints(root)
+            self.assertEqual(stages['positive_endpoints/B2']['status'],'not_started')
+            self.assertIsNone(value)
+            folder=root/'positive_endpoints_tune';folder.mkdir()
+            (folder/'inventory.json').write_text(json.dumps(dict(unique_missing=28)))
+            stages,_,_=optional_positive_endpoints(root)
+            self.assertEqual(stages['positive_endpoints/B2']['status'],'pending_cache')
+            item=dict(tasks=30,expected=30,status='complete',records=[],summary=[])
+            (folder/'summary.json').write_text(json.dumps(dict(variants=dict(B0=item))))
+            stages,records,_=optional_positive_endpoints(root)
+            self.assertEqual(stages['positive_endpoints/B0']['status'],'complete')
+            self.assertEqual(records['positive_endpoints/B0']['summary'],[])
 
     def test_reproduction_requires_original_counts(self):
         old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])

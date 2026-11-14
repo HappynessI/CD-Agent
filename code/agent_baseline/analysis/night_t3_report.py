@@ -49,13 +49,27 @@ def optional_patchset(night):
     return stages,records
 
 
+def optional_positive_endpoints(night):
+    value=load(night/'positive_endpoints_tune/summary.json')
+    inventory=load(night/'positive_endpoints_tune/inventory.json')
+    stages={};retrieval={}
+    for variant in ('B0','B2','B3'):
+        item=value['variants'].get(variant) if value else None
+        count=item['tasks'] if item else 0
+        status='complete' if count==30 else ('partial' if count else ('pending_cache' if inventory and inventory['unique_missing'] else 'not_started'))
+        key='positive_endpoints/'+variant
+        stages[key]=dict(completed=count,expected=30,status=status)
+        if item:retrieval[key]=item
+    return stages,retrieval,value
+
+
 def collect(night,old):
     audit=load(night/'audit.json');stages={};semantics={}
     for name,expected in [('B0',60),('B1',60),('B2',60),('B3',30),('t33/B0',12),('t33/B1',12),('t33/B2',12)]:
         value=load(night/name/'summary.json');count=value['tasks'] if value else 0
         stages[name]=dict(completed=count,expected=expected,status='complete' if count>=expected else 'pending')
         if value:semantics[name]=value
-    stages['B3/confirm']=dict(status='not_promoted',reason='tune pair agreement6/30 below B0 8/30; no confirm run justified')
+    stages['B3/confirm']=dict(status='not_promoted',reason='not executed; earlier aggregate-only rationale is qualified by the positive/empty semantic audit, not a claim that all parsing strata worsened')
     retrieval={}
     for prefix in ['retrieval','t33/retrieval']:
         for variant in ['B0','B1','B2','B0_local_raw']:
@@ -96,7 +110,10 @@ def collect(night,old):
         for p in (night/base).glob(pattern):preparation.append(dict(path=str(p),**load(p)))
     endpoint=[load(p) for p in sorted((night/'endpoint/tasks').glob('*/metrics.json'))]
     stages['endpoint']=dict(completed=len(endpoint),expected=60,status='complete' if len(endpoint)==60 else 'pending')
-    return dict(stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
+    positive_stages,positive_records,positive_raw=optional_positive_endpoints(night);stages.update(positive_stages);retrieval.update(positive_records)
+    semantic_strata=load(night/'semantic_strata_tune/summary.json')
+    stages['semantic_strata_tune']=dict(completed=semantic_strata['cohort_sizes']['all'] if semantic_strata else 0,expected=30,status='complete' if semantic_strata and semantic_strata['cohort_sizes']['all']==30 else 'not_started')
+    return dict(positive_endpoints=positive_raw,semantic_strata_tune=semantic_strata,stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
         endpoint=dict(records=endpoint,summary=summaries(endpoint)),delta_reproduction=delta_reproduction(endpoint,old),
         manual_review=load(night/'grounding_review.json'),overlap_audit=overlap,oracle_cache_diagnostic=load(night/'oracle_cache/summary.json'),cost=request_cost(night))
 
@@ -235,6 +252,28 @@ def markdown(data):
             '',f"Predicted text proposals cover {text['tp']} tuning GT pixels. Local verification changes FP from {text['fp']} to {verified['fp']}, but its empty-prediction rate on positive tasks is {positive['methods']['R3_verified@8']['empty_prediction_rate']:.3f}, versus negative accuracy {empty['methods']['R3_verified@8']['empty_prediction_rate']:.3f} on empty tasks. Rejection alone is not reliable recovery.",
             '', 'Do not promote the text bridge or run the planned whole tune raw-view arm when its proposal pool has zero TP headroom. First reuse historical oracle/cache evidence to separate parsing from proposal constraints; evaluate the fixed endpoint alternatives using tune positive-target evidence before considering any method choice. Never select weights or methods from confirmation outcomes.']
     lines+=readable_stage_results(data)
+    strata=data.get('semantic_strata_tune')
+    if strata:
+        lines+=['','## Retrospective semantic positive/empty audit','',strata['interpretation'],
+            'The earlier B3 aggregate6/30 versus B0 8/30 rationale does not establish degradation on positives. These strata qualify that rationale without automatically promoting a method or proving grounding accuracy. B2 has additional cross-date information.','',
+            '| GT | Group | Variant | N | Before | After | Pair | Correct pair IDs |',
+            '|---|---|---|---:|---:|---:|---:|---|']
+        for row in strata['rows']:
+            c=row['correct_counts'];lines.append('| '+' | '.join(map(str,[row['support'],row['group'],row['variant'],row['tasks'],c['before'],c['after'],c['pair'],row['pair_correct_ids']]))+' |')
+    else:lines+=['','Semantic positive/empty audit not yet available; no missing-stage failure is inferred.']
+    positive=data.get('positive_endpoints')
+    if positive:
+        lines+=['','## Predicted positive-endpoint mechanism pairing','',positive['interpretation'],
+            'This new comparison follows correction of the semantic stratification omission. Same predicted pair and SAM queries within each variant; only negative endpoint exclusions change. Primary full-union scores below; fixed delta Top8 also appears in the retrieval table. Partial stages are not full-cohort outcomes. Local SAM3 cache generation has zero external API cost; existing parsing is not rebilled.','',
+            '| Variant | GT | Group | N | Method | F1 | P | R | TP | FP | FN |',
+            '|---|---|---|---:|---|---:|---:|---:|---:|---:|---:|']
+        for variant,item in positive['variants'].items():
+            for row in item['summary']:
+                if row['split']!='tune':continue
+                for method,m in row['methods'].items():
+                    if not method.endswith('@0'):continue
+                    lines.append('| '+' | '.join(map(str,[variant,row['support'],row['group'],row['tasks'],method,number(m['f1_c']),number(m['precision']),number(m['recall']),m['tp'],m['fp'],m['fn']]))+' |')
+    else:lines+=['','Positive-endpoint pairing not yet scored; optional-stage absence is not an experimental failure.']
     lines+=['','## Label agreement only','','| Variant | Split | Group | N | Before | After | Pair |','|---|---|---|---:|---:|---:|---:|']
     for name,value in data['semantic_label_agreement'].items():
         for row in value['summary']:
