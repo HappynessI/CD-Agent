@@ -16,9 +16,11 @@ started=$SECONDS
 finish() { status=$?; trap - EXIT; QQ_SUB="Night missed offline report $SLURM_JOB_ID" QQ_BODY="status=$status; elapsed=$((SECONDS-started))s; output=$OUT/night_report.md" /guisongxia01/pangchao/wangyihan/.local/bin/wangyihan-send-qq >/dev/null 2>&1 || true; exit "$status"; }
 trap finish EXIT
 "$PY" -B -m unittest agent_baseline.tests.test_night_missed_report agent_baseline.tests.test_night_verifier_by_task agent_baseline.tests.test_night_missed_rank agent_baseline.tests.test_night_missed_rank_inventory agent_baseline.tests.test_night_missed_candidates
+# Reuse the full views scoring from 186425; never overwrite its original output.
+# Submit this stage after views completes, not while score_summary is tune-only.
+test -s "$OUT/score_summary.json"
 # Offline only. Never rewrite either frozen selection or launch verify/prepare.
-bash "$CODE/agent_baseline/analysis/run_night_missed_views.sbatch" score --split all
-if [[ -f "$OUT/selected_verifier_by_task.json" ]]; then
+if [[ -f "$OUT/selected_verifier_by_task.json" && ! -f "$OUT/score_verifier_by_task.json" ]]; then
   "$PY" -B -m agent_baseline.analysis.night_verifier_by_task score --report "$OUT/score_summary.json" --selection "$OUT/selected_verifier_by_task.json" --output "$OUT/score_verifier_by_task.json"
 fi
 export NIGHT_VERIFIER=$("$PY" -c 'import json,sys;print(json.load(open(sys.argv[1]))["selected_verifier"])' "$OUT/selected_verifier.json")
