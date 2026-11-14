@@ -1,0 +1,2862 @@
+{
+  "split": "tune",
+  "task_selection": {
+    "status": "frozen",
+    "analysis": "secondary exploratory; historical exposure disclosed",
+    "selection_k": 10,
+    "applied_k": [
+      3,
+      5,
+      10,
+      20
+    ],
+    "groups": {
+      "levir_any": {
+        "variant": "V2",
+        "tune_k10_f1": {
+          "V0": 76.56705817665298,
+          "V1": 77.57541990226463,
+          "V2": 84.54954298400708,
+          "V3": 74.5159378017996,
+          "V4": 82.48083617956415
+        }
+      },
+      "second_appeared": {
+        "variant": "V4",
+        "tune_k10_f1": {
+          "V0": 78.42689855673711,
+          "V1": 76.45153534840856,
+          "V2": 82.6917555771096,
+          "V3": 79.21121681878914,
+          "V4": 83.033271740079
+        }
+      },
+      "second_disappeared": {
+        "variant": "V0",
+        "tune_k10_f1": {
+          "V0": 35.49488054607509,
+          "V1": 19.662363455809334,
+          "V2": 19.662363455809334,
+          "V3": 18.735904701324234,
+          "V4": 10.25201072386059
+        }
+      }
+    },
+    "confirmation_used": false,
+    "rule": "Per group maximum K10 tune pooled F1; ties V0,V1,V2,V3,V4; same variant for all K",
+    "global_selection_unchanged": true,
+    "online_status": "diagnostic only; not promoted"
+  },
+  "groups": {
+    "levir_any": {
+      "10": {
+        "complete": true,
+        "metrics": {
+          "tp": 400255,
+          "fp": 120147,
+          "fn": 26137,
+          "f1": 84.54954298400708,
+          "precision": 76.91265598518069,
+          "recall": 93.87019456274977
+        },
+        "images": 5,
+        "routed_candidates": 0,
+        "delta_vs_task": 0.0,
+        "paired95_vs_task": [
+          0.0,
+          0.0
+        ],
+        "pixel_delta_vs_task": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "delta_vs_v0": 7.982484807354098,
+        "paired95_vs_v0": [
+          0.20449954932409753,
+          14.847856821107612
+        ],
+        "pixel_delta_vs_v0": {
+          "tp": -791,
+          "fp": -99983,
+          "fn": 791
+        },
+        "delta_vs_initial": -4.52247030080845,
+        "paired95_vs_initial": [
+          -8.19706996518019,
+          -1.7361777487359404
+        ],
+        "pixel_delta_vs_initial": {
+          "tp": 649,
+          "fp": 48880,
+          "fn": -649
+        }
+      },
+      "20": {
+        "complete": true,
+        "metrics": {
+          "tp": 400272,
+          "fp": 127875,
+          "fn": 26120,
+          "f1": 83.86708138693129,
+          "precision": 75.78799084345836,
+          "recall": 93.87418150434343
+        },
+        "images": 5,
+        "routed_candidates": 0,
+        "delta_vs_task": 0.0,
+        "paired95_vs_task": [
+          0.0,
+          0.0
+        ],
+        "pixel_delta_vs_task": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "delta_vs_v0": 11.407320476745085,
+        "paired95_vs_v0": [
+          1.1031166929025034,
+          18.214314007992755
+        ],
+        "pixel_delta_vs_v0": {
+          "tp": -1471,
+          "fp": -152862,
+          "fn": 1471
+        },
+        "delta_vs_initial": -5.2049318978842365,
+        "paired95_vs_initial": [
+          -9.014944098435748,
+          -2.3772460149066603
+        ],
+        "pixel_delta_vs_initial": {
+          "tp": 666,
+          "fp": 56608,
+          "fn": -666
+        }
+      }
+    },
+    "second_appeared": {
+      "10": {
+        "complete": true,
+        "metrics": {
+          "tp": 109682,
+          "fp": 14636,
+          "fn": 29825,
+          "f1": 83.14754098360656,
+          "precision": 88.22696632828713,
+          "recall": 78.621144458701
+        },
+        "images": 5,
+        "routed_candidates": 8,
+        "delta_vs_task": 0.11426924352755918,
+        "paired95_vs_task": [
+          0.04615053898731958,
+          0.203661348998736
+        ],
+        "pixel_delta_vs_task": {
+          "tp": 262,
+          "fp": 6,
+          "fn": -262
+        },
+        "delta_vs_v0": 4.720642426869446,
+        "paired95_vs_v0": [
+          -11.752089201325624,
+          21.49946979811901
+        ],
+        "pixel_delta_vs_v0": {
+          "tp": -11306,
+          "fp": -33406,
+          "fn": 11306
+        },
+        "delta_vs_initial": 0.33248238993475354,
+        "paired95_vs_initial": [
+          -1.378913066608547,
+          9.197370516266929
+        ],
+        "pixel_delta_vs_initial": {
+          "tp": 6258,
+          "fp": 7796,
+          "fn": -6258
+        }
+      },
+      "20": {
+        "complete": true,
+        "metrics": {
+          "tp": 110072,
+          "fp": 16192,
+          "fn": 29435,
+          "f1": 82.83221269438728,
+          "precision": 87.1760755242983,
+          "recall": 78.90070032328127
+        },
+        "images": 5,
+        "routed_candidates": 25,
+        "delta_vs_task": 0.24079894913899125,
+        "paired95_vs_task": [
+          0.11462444661165705,
+          0.5971951251685326
+        ],
+        "pixel_delta_vs_task": {
+          "tp": 569,
+          "fp": 34,
+          "fn": -569
+        },
+        "delta_vs_v0": 4.821983714813555,
+        "paired95_vs_v0": [
+          -13.15117699157021,
+          21.14559372766091
+        ],
+        "pixel_delta_vs_v0": {
+          "tp": -13018,
+          "fp": -36785,
+          "fn": 13018
+        },
+        "delta_vs_initial": 0.017154100715472964,
+        "paired95_vs_initial": [
+          -1.9172361109357183,
+          8.989343262276762
+        ],
+        "pixel_delta_vs_initial": {
+          "tp": 6648,
+          "fp": 9352,
+          "fn": -6648
+        }
+      }
+    },
+    "second_disappeared": {
+      "10": {
+        "complete": true,
+        "metrics": {
+          "tp": 2132,
+          "fp": 7547,
+          "fn": 202,
+          "f1": 35.49488054607509,
+          "precision": 22.027068912077695,
+          "recall": 91.34532990574122
+        },
+        "images": 5,
+        "routed_candidates": 0,
+        "delta_vs_task": 0.0,
+        "paired95_vs_task": [
+          0.0,
+          0.0
+        ],
+        "pixel_delta_vs_task": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "delta_vs_v0": 0.0,
+        "paired95_vs_v0": [
+          0.0,
+          0.0
+        ],
+        "pixel_delta_vs_v0": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "delta_vs_initial": 25.19870391710363,
+        "paired95_vs_initial": [
+          0.0,
+          48.51636271668097
+        ],
+        "pixel_delta_vs_initial": {
+          "tp": 1654,
+          "fp": 1074,
+          "fn": -1654
+        }
+      },
+      "20": {
+        "complete": true,
+        "metrics": {
+          "tp": 2280,
+          "fp": 7624,
+          "fn": 54,
+          "f1": 37.26099035790162,
+          "precision": 23.021001615508887,
+          "recall": 97.68637532133675
+        },
+        "images": 5,
+        "routed_candidates": 0,
+        "delta_vs_task": 0.0,
+        "paired95_vs_task": [
+          0.0,
+          0.0
+        ],
+        "pixel_delta_vs_task": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "delta_vs_v0": 0.0,
+        "paired95_vs_v0": [
+          0.0,
+          0.0
+        ],
+        "pixel_delta_vs_v0": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0
+        },
+        "delta_vs_initial": 26.96481372893016,
+        "paired95_vs_initial": [
+          0.0,
+          50.60786536785197
+        ],
+        "pixel_delta_vs_initial": {
+          "tp": 1802,
+          "fp": 1151,
+          "fn": -1802
+        }
+      }
+    }
+  },
+  "images": [
+    {
+      "group": "second_appeared",
+      "stem": "train_1065",
+      "baseline": {
+        "tp": 12050,
+        "fp": 3772,
+        "fn": 6955,
+        "f1": 69.19918454072989,
+        "precision": 76.15977752496524,
+        "recall": 63.40436727177059
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 16924,
+            "fp": 8626,
+            "fn": 2081,
+            "f1": 75.969027045225,
+            "precision": 66.23874755381604,
+            "recall": 89.05024993422784
+          },
+          "task": {
+            "tp": 16839,
+            "fp": 8626,
+            "fn": 2166,
+            "f1": 75.73195412637733,
+            "precision": 66.12605537011585,
+            "recall": 88.60299921073401
+          },
+          "v0": {
+            "tp": 18617,
+            "fp": 10527,
+            "fn": 388,
+            "f1": 77.3307856860994,
+            "precision": 63.87935767224815,
+            "recall": 97.95843199158116
+          },
+          "routed_candidates": 2,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 17035,
+            "fp": 9058,
+            "fn": 1970,
+            "f1": 75.54658743181515,
+            "precision": 65.28570881079217,
+            "recall": 89.63430676137858
+          },
+          "task": {
+            "tp": 16839,
+            "fp": 9058,
+            "fn": 2166,
+            "f1": 75.00334060843615,
+            "precision": 65.02297563424335,
+            "recall": 88.60299921073401
+          },
+          "v0": {
+            "tp": 18672,
+            "fp": 11166,
+            "fn": 333,
+            "f1": 76.45722007247711,
+            "precision": 62.57792077216972,
+            "recall": 98.24782951854775
+          },
+          "routed_candidates": 7,
+          "missing": 0
+        }
+      },
+      "candidates": [
+        {
+          "uid": "second_appeared:train_1065:1",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 5293,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0017003589646703192,
+            "edge_fraction": 0.08501794823351594,
+            "bbox_fill": 0.5352953074433657
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__1.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:2",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 2215,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0009029345372460496,
+            "edge_fraction": 0.13724604966139953,
+            "bbox_fill": 0.37999656887973926
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__2.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:3",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 7831,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.01621759673094113,
+            "edge_fraction": 0.09066530455880473,
+            "bbox_fill": 0.40249794407894735
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__3.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:4",
+          "geometry": {
+            "stratum": "internal_hole",
+            "area": 52,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 1.0,
+            "baseline_adjacency_fraction": 0.6346153846153846,
+            "edge_fraction": 0.6346153846153846,
+            "bbox_fill": 0.6190476190476191
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__4.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:5",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 2060,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.13592233009708743,
+            "bbox_fill": 0.42057982850142916
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__5.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:6",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1767,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1471420486700622,
+            "bbox_fill": 0.4102623635941491
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__6.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:7",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 5361,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.08188770751725424,
+            "edge_fraction": 0.18783808990859918,
+            "bbox_fill": 0.17380450640298264
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__7.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:8",
+          "geometry": {
+            "stratum": "internal_hole",
+            "area": 33,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 1.0,
+            "baseline_adjacency_fraction": 0.8484848484848485,
+            "edge_fraction": 0.8484848484848485,
+            "bbox_fill": 0.5238095238095238
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__8.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:9",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 413,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.3389830508474576,
+            "bbox_fill": 0.3591304347826087
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__9.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:10",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1491,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.13749161636485585,
+            "bbox_fill": 0.5752314814814815
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__10.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:11",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 432,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.25462962962962965,
+            "bbox_fill": 0.5714285714285714
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__11.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:12",
+          "geometry": {
+            "stratum": "internal_hole",
+            "area": 28,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 1.0,
+            "baseline_adjacency_fraction": 0.8571428571428571,
+            "edge_fraction": 0.8571428571428572,
+            "bbox_fill": 0.5
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__12.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:13",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 243,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.3539094650205762,
+            "bbox_fill": 0.5586206896551724
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__13.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:14",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 57,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.8245614035087719,
+            "edge_fraction": 0.9649122807017544,
+            "bbox_fill": 0.08189655172413793
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__14.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:15",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 338,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.30177514792899407,
+            "bbox_fill": 0.5365079365079365
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__15.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:16",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 20,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.8,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.35714285714285715
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__16.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:17",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 83,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.7228915662650602,
+            "edge_fraction": 0.963855421686747,
+            "bbox_fill": 0.08539094650205761
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__17.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:18",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 301,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.10963455149501661,
+            "edge_fraction": 0.33554817275747506,
+            "bbox_fill": 0.4918300653594771
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__18.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:19",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 13,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.9230769230769231,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.20634920634920634
+          },
+          "variant": "V0",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1065__19.json"
+        },
+        {
+          "uid": "second_appeared:train_1065:20",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 82,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.4512195121951219,
+            "bbox_fill": 0.8367346938775511
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1065__20.json"
+        }
+      ]
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_1129",
+      "baseline": {
+        "tp": 57374,
+        "fp": 2071,
+        "fn": 10069,
+        "f1": 90.43250740810794,
+        "precision": 96.51610732609976,
+        "recall": 85.07035570778287
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 57447,
+            "fp": 4872,
+            "fn": 9996,
+            "f1": 88.54210015258704,
+            "precision": 92.1821595340105,
+            "recall": 85.17859525821805
+          },
+          "task": {
+            "tp": 57374,
+            "fp": 4866,
+            "fn": 10069,
+            "f1": 88.48345581147876,
+            "precision": 92.1818766066838,
+            "recall": 85.07035570778287
+          },
+          "v0": {
+            "tp": 61368,
+            "fp": 9010,
+            "fn": 6075,
+            "f1": 89.05464334172586,
+            "precision": 87.19770382790077,
+            "recall": 90.99239357679818
+          },
+          "routed_candidates": 3,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 57567,
+            "fp": 5968,
+            "fn": 9876,
+            "f1": 87.90331200659652,
+            "precision": 90.60675218383568,
+            "recall": 85.35652328633068
+          },
+          "task": {
+            "tp": 57451,
+            "fp": 5962,
+            "fn": 9992,
+            "f1": 87.80797212202727,
+            "precision": 90.59814233674483,
+            "recall": 85.18452619248848
+          },
+          "v0": {
+            "tp": 62424,
+            "fp": 13216,
+            "fn": 5019,
+            "f1": 87.25564881921682,
+            "precision": 82.52776308831307,
+            "recall": 92.55816022418932
+          },
+          "routed_candidates": 7,
+          "missing": 0
+        }
+      },
+      "candidates": [
+        {
+          "uid": "second_appeared:train_1129:1",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 2795,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.13130590339892667,
+            "bbox_fill": 0.4834803667185608
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__1.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:2",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 927,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.16396979503775622,
+            "bbox_fill": 0.7287735849056604
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__2.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:3",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 3554,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.062464828362408555,
+            "edge_fraction": 0.17473269555430504,
+            "bbox_fill": 0.4422048027871096
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__3.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:4",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1418,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.15373765867418898,
+            "bbox_fill": 0.7385416666666667
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__4.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:5",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 1814,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.023153252480705624,
+            "edge_fraction": 0.11245865490628448,
+            "bbox_fill": 0.7022841656987998
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__5.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:6",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 27,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.25925925925925924,
+            "baseline_adjacency_fraction": 0.7037037037037037,
+            "edge_fraction": 0.9259259259259259,
+            "bbox_fill": 0.35064935064935066
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__6.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:7",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 2996,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.08945260347129506,
+            "edge_fraction": 0.19993324432576765,
+            "bbox_fill": 0.16512345679012347
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__7.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:8",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 46,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.717391304347826,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.368
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__8.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:9",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1423,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1496837666900913,
+            "bbox_fill": 0.7411458333333333
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__9.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:10",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 6,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__10.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:11",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 2955,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.1245346869712352,
+            "edge_fraction": 0.2243654822335025,
+            "bbox_fill": 0.16433099766433099
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__11.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:12",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 40,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.225,
+            "baseline_adjacency_fraction": 0.625,
+            "edge_fraction": 0.775,
+            "bbox_fill": 0.45454545454545453
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__12.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:13",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 1229,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.028478437754271765,
+            "edge_fraction": 0.1399511798209927,
+            "bbox_fill": 0.6982954545454545
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__13.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:14",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 3,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__14.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:15",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 1173,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.20460358056265984,
+            "edge_fraction": 0.41773231031543057,
+            "bbox_fill": 0.09517241379310344
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__15.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:16",
+          "geometry": {
+            "stratum": "detached_fragment",
+            "area": 26,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.8076923076923077,
+            "bbox_fill": 0.7222222222222222
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__16.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:17",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 472,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.211864406779661,
+            "bbox_fill": 0.7492063492063492
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__17.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:18",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 3,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__18.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:19",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 1082,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.13031423290203328,
+            "edge_fraction": 0.2828096118299446,
+            "bbox_fill": 0.20968992248062016
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1129__19.json"
+        },
+        {
+          "uid": "second_appeared:train_1129:20",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 24,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.875,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.4
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1129__20.json"
+        }
+      ]
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_1136",
+      "baseline": {
+        "tp": 28851,
+        "fp": 905,
+        "fn": 634,
+        "f1": 97.40213703347344,
+        "precision": 96.95859658556257,
+        "recall": 97.84975411226047
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 28958,
+            "fp": 905,
+            "fn": 527,
+            "f1": 97.5871132978365,
+            "precision": 96.96949402270369,
+            "recall": 98.21265050025437
+          },
+          "task": {
+            "tp": 28854,
+            "fp": 905,
+            "fn": 631,
+            "f1": 97.40733238808993,
+            "precision": 96.95890318895124,
+            "recall": 97.85992877734441
+          },
+          "v0": {
+            "tp": 29401,
+            "fp": 26486,
+            "fn": 84,
+            "f1": 68.8773836855175,
+            "precision": 52.6079410238517,
+            "recall": 99.71510937764965
+          },
+          "routed_candidates": 3,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 28996,
+            "fp": 929,
+            "fn": 489,
+            "f1": 97.61319643157718,
+            "precision": 96.89557226399332,
+            "recall": 98.34152959131762
+          },
+          "task": {
+            "tp": 28860,
+            "fp": 905,
+            "fn": 625,
+            "f1": 97.41772151898734,
+            "precision": 96.95951621031412,
+            "recall": 97.8802781075123
+          },
+          "v0": {
+            "tp": 29438,
+            "fp": 26509,
+            "fn": 47,
+            "f1": 68.91562880419515,
+            "precision": 52.61765599585322,
+            "recall": 99.84059691368492
+          },
+          "routed_candidates": 9,
+          "missing": 0
+        }
+      },
+      "candidates": [
+        {
+          "uid": "second_appeared:train_1136:1",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 2525,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1956435643564356,
+            "bbox_fill": 0.2624740124740125
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__1.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:2",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 966,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.22981366459627328,
+            "bbox_fill": 0.5408734602463606
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__2.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:3",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 25489,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 3.9232610145552985e-05,
+            "baseline_adjacency_fraction": 0.049786182274706735,
+            "edge_fraction": 0.12322962846718188,
+            "bbox_fill": 0.3081507809855409
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__3.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:4",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 4,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__4.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:5",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 990,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.22424242424242424,
+            "bbox_fill": 0.5543113101903695
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__5.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:6",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 911,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.23710208562019763,
+            "bbox_fill": 0.5501207729468599
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__6.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:7",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 103,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.8155339805825242,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.6959459459459459
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__7.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:8",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 3,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__8.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:9",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 591,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.001692047377326565,
+            "edge_fraction": 0.23011844331641285,
+            "bbox_fill": 0.6099071207430341
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__9.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:10",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 345,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.2202898550724638,
+            "bbox_fill": 0.8646616541353384
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__10.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:11",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 27,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.9629629629629629,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.23478260869565218
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__11.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:12",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 3,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__12.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:13",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 228,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.2894736842105263,
+            "bbox_fill": 0.7755102040816326
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__13.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:14",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 194,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.2989690721649485,
+            "bbox_fill": 0.8083333333333333
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__14.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:15",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 18,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.8333333333333334,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.6923076923076923
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__15.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:16",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 3,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__16.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:17",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 160,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.39375000000000004,
+            "bbox_fill": 0.8465608465608465
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__17.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:18",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 156,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.39743589743589747,
+            "bbox_fill": 0.8571428571428571
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1136__18.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:19",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 15,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.8,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.4166666666666667
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__19.json"
+        },
+        {
+          "uid": "second_appeared:train_1136:20",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 2,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 1.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 1.0
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1136__20.json"
+        }
+      ]
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_1166",
+      "baseline": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 5032,
+        "f1": 0.0,
+        "precision": 0,
+        "recall": 0.0
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 1026,
+            "fp": 141,
+            "fn": 4006,
+            "f1": 33.102113244071624,
+            "precision": 87.91773778920309,
+            "recall": 20.389507154213035
+          },
+          "task": {
+            "tp": 1026,
+            "fp": 141,
+            "fn": 4006,
+            "f1": 33.102113244071624,
+            "precision": 87.91773778920309,
+            "recall": 20.389507154213035
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5032,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 1026,
+            "fp": 141,
+            "fn": 4006,
+            "f1": 33.102113244071624,
+            "precision": 87.91773778920309,
+            "recall": 20.389507154213035
+          },
+          "task": {
+            "tp": 1026,
+            "fp": 141,
+            "fn": 4006,
+            "f1": 33.102113244071624,
+            "precision": 87.91773778920309,
+            "recall": 20.389507154213035
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 5032,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      },
+      "candidates": [
+        {
+          "uid": "second_appeared:train_1166:1",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1487,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1613987895090787,
+            "bbox_fill": 0.6175249169435216
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__1.json"
+        },
+        {
+          "uid": "second_appeared:train_1166:2",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 2090,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.09999999999999998,
+            "bbox_fill": 0.7411347517730497
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__2.json"
+        },
+        {
+          "uid": "second_appeared:train_1166:3",
+          "geometry": {
+            "stratum": "detached_fragment",
+            "area": 23,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.27380952380952384
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__3.json"
+        },
+        {
+          "uid": "second_appeared:train_1166:4",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1166,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.144082332761578,
+            "bbox_fill": 0.8542124542124542
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__4.json"
+        },
+        {
+          "uid": "second_appeared:train_1166:5",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1481,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1600270087778528,
+            "bbox_fill": 0.6222689075630252
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__5.json"
+        },
+        {
+          "uid": "second_appeared:train_1166:6",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1146,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.14572425828970337,
+            "bbox_fill": 0.8395604395604396
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__6.json"
+        },
+        {
+          "uid": "second_appeared:train_1166:7",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 566,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.18374558303886923,
+            "bbox_fill": 0.8323529411764706
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1166__7.json"
+        }
+      ]
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_1344",
+      "baseline": {
+        "tp": 5149,
+        "fp": 92,
+        "fn": 13393,
+        "f1": 43.2998360173233,
+        "precision": 98.24460980728868,
+        "recall": 27.76938841548916
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 5327,
+            "fp": 92,
+            "fn": 13215,
+            "f1": 44.46392053754017,
+            "precision": 98.30226979147444,
+            "recall": 28.72937115737245
+          },
+          "task": {
+            "tp": 5327,
+            "fp": 92,
+            "fn": 13215,
+            "f1": 44.46392053754017,
+            "precision": 98.30226979147444,
+            "recall": 28.72937115737245
+          },
+          "v0": {
+            "tp": 11602,
+            "fp": 2019,
+            "fn": 6940,
+            "f1": 72.14501134844386,
+            "precision": 85.17729975772704,
+            "recall": 62.57145938949412
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 5448,
+            "fp": 96,
+            "fn": 13094,
+            "f1": 45.237897533837085,
+            "precision": 98.26839826839827,
+            "recall": 29.38194369539424
+          },
+          "task": {
+            "tp": 5327,
+            "fp": 92,
+            "fn": 13215,
+            "f1": 44.46392053754017,
+            "precision": 98.30226979147444,
+            "recall": 28.72937115737245
+          },
+          "v0": {
+            "tp": 12556,
+            "fp": 2086,
+            "fn": 5986,
+            "f1": 75.67502410800385,
+            "precision": 85.75331238901789,
+            "recall": 67.71653543307086
+          },
+          "routed_candidates": 2,
+          "missing": 0
+        }
+      },
+      "candidates": [
+        {
+          "uid": "second_appeared:train_1344:1",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 7896,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.10891590678824725,
+            "bbox_fill": 0.7139240506329114
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__1.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:2",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 5924,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.08153274814314648,
+            "bbox_fill": 0.8343661971830986
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__2.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:3",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 5565,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.09236298292902068,
+            "bbox_fill": 0.742296918767507
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__3.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:4",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1462,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.12311901504787959,
+            "bbox_fill": 0.8594944150499706
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__4.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:5",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 2621,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.12056466997329263,
+            "bbox_fill": 0.7525122021246052
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__5.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:6",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1169,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.22497861420017107,
+            "bbox_fill": 0.6139705882352942
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__6.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:7",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 178,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.3370786516853933,
+            "bbox_fill": 0.6953125
+          },
+          "variant": "V4",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__7.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:8",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1381,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.13468501086169438,
+            "bbox_fill": 0.6355269213069489
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__8.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:9",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 2126,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.13687676387582315,
+            "bbox_fill": 0.8507402961184474
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__9.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:10",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1135,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.14449339207048462,
+            "bbox_fill": 0.8566037735849057
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__10.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:11",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 94,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.13829787234042554,
+            "edge_fraction": 0.5425531914893618,
+            "bbox_fill": 0.5164835164835165
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1344__11.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:12",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1219,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1386382280557834,
+            "bbox_fill": 0.7993442622950819
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__12.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:13",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1382,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1425470332850941,
+            "bbox_fill": 0.8437118437118437
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__13.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:14",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 922,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0032537960954446853,
+            "edge_fraction": 0.1388286334056399,
+            "bbox_fill": 0.8537037037037037
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__14.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:15",
+          "geometry": {
+            "stratum": "adjacent_edge_fragment",
+            "area": 31,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.9032258064516129,
+            "edge_fraction": 1.0,
+            "bbox_fill": 0.4305555555555556
+          },
+          "variant": "V0",
+          "answer": "yes",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/missed_verifier_20261114/pilot/answers/four/second_appeared__train_1344__15.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:16",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 1147,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.1394943330427202,
+            "bbox_fill": 0.8341818181818181
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__16.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:17",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 957,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.03343782654127482,
+            "edge_fraction": 0.142110762800418,
+            "bbox_fill": 0.8343504795117699
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__17.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:18",
+          "geometry": {
+            "stratum": "detached_region",
+            "area": 901,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.17203107658157601,
+            "bbox_fill": 0.8630268199233716
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__18.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:19",
+          "geometry": {
+            "stratum": "detached_fragment",
+            "area": 23,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.0,
+            "edge_fraction": 0.782608695652174,
+            "bbox_fill": 0.8214285714285714
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__19.json"
+        },
+        {
+          "uid": "second_appeared:train_1344:20",
+          "geometry": {
+            "stratum": "adjacent_region",
+            "area": 942,
+            "components": 1,
+            "baseline_overlap_pixels": 0,
+            "hole_fraction": 0.0,
+            "baseline_adjacency_fraction": 0.014861995753715499,
+            "edge_fraction": 0.13906581740976642,
+            "bbox_fill": 0.8722222222222222
+          },
+          "variant": "V4",
+          "answer": "no",
+          "missing": false,
+          "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/answers/V4/second_appeared__train_1344__20.json"
+        }
+      ]
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1065",
+      "baseline": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "f1": 0,
+        "precision": 0,
+        "recall": 0
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 656,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 656,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 656,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 656,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 656,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 656,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1129",
+      "baseline": {
+        "tp": 0,
+        "fp": 1028,
+        "fn": 0,
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1031,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 1031,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 1031,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1031,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 1031,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 1031,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1136",
+      "baseline": {
+        "tp": 478,
+        "fp": 96,
+        "fn": 1856,
+        "f1": 32.874828060522695,
+        "precision": 83.27526132404181,
+        "recall": 20.47986289631534
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 2132,
+            "fp": 510,
+            "fn": 202,
+            "f1": 85.69131832797427,
+            "precision": 80.69644208932627,
+            "recall": 91.34532990574122
+          },
+          "task": {
+            "tp": 2132,
+            "fp": 510,
+            "fn": 202,
+            "f1": 85.69131832797427,
+            "precision": 80.69644208932627,
+            "recall": 91.34532990574122
+          },
+          "v0": {
+            "tp": 2132,
+            "fp": 510,
+            "fn": 202,
+            "f1": 85.69131832797427,
+            "precision": 80.69644208932627,
+            "recall": 91.34532990574122
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 2280,
+            "fp": 587,
+            "fn": 54,
+            "f1": 87.67544702941741,
+            "precision": 79.52563655388909,
+            "recall": 97.68637532133675
+          },
+          "task": {
+            "tp": 2280,
+            "fp": 587,
+            "fn": 54,
+            "f1": 87.67544702941741,
+            "precision": 79.52563655388909,
+            "recall": 97.68637532133675
+          },
+          "v0": {
+            "tp": 2280,
+            "fp": 587,
+            "fn": 54,
+            "f1": 87.67544702941741,
+            "precision": 79.52563655388909,
+            "recall": 97.68637532133675
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1166",
+      "baseline": {
+        "tp": 0,
+        "fp": 448,
+        "fn": 0,
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 449,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 449,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 449,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 449,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 449,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 449,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1344",
+      "baseline": {
+        "tp": 0,
+        "fp": 4901,
+        "fn": 0,
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 4901,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 4901,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 4901,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 4901,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "task": {
+            "tp": 0,
+            "fp": 4901,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "v0": {
+            "tp": 0,
+            "fp": 4901,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_106",
+      "baseline": {
+        "tp": 55019,
+        "fp": 13587,
+        "fn": 4983,
+        "f1": 85.5607738243344,
+        "precision": 80.19560971343614,
+        "recall": 91.69527682410586
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 55044,
+            "fp": 23052,
+            "fn": 4958,
+            "f1": 79.71730220568003,
+            "precision": 70.48248309772588,
+            "recall": 91.73694210192994
+          },
+          "task": {
+            "tp": 55044,
+            "fp": 23052,
+            "fn": 4958,
+            "f1": 79.71730220568003,
+            "precision": 70.48248309772588,
+            "recall": 91.73694210192994
+          },
+          "v0": {
+            "tp": 55044,
+            "fp": 27306,
+            "fn": 4958,
+            "f1": 77.33505676070585,
+            "precision": 66.8415300546448,
+            "recall": 91.73694210192994
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 55044,
+            "fp": 29053,
+            "fn": 4958,
+            "f1": 76.39747673474486,
+            "precision": 65.4529888105402,
+            "recall": 91.73694210192994
+          },
+          "task": {
+            "tp": 55044,
+            "fp": 29053,
+            "fn": 4958,
+            "f1": 76.39747673474486,
+            "precision": 65.4529888105402,
+            "recall": 91.73694210192994
+          },
+          "v0": {
+            "tp": 55044,
+            "fp": 34178,
+            "fn": 4958,
+            "f1": 73.77365571221787,
+            "precision": 61.69330434197843,
+            "recall": 91.73694210192994
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_109",
+      "baseline": {
+        "tp": 67889,
+        "fp": 13664,
+        "fn": 5256,
+        "f1": 87.76971906553413,
+        "precision": 83.24525155420402,
+        "recall": 92.81427301934514
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 68256,
+            "fp": 32670,
+            "fn": 4889,
+            "f1": 78.42317215389123,
+            "precision": 67.62974852862493,
+            "recall": 93.31601613233987
+          },
+          "task": {
+            "tp": 68256,
+            "fp": 32670,
+            "fn": 4889,
+            "f1": 78.42317215389123,
+            "precision": 67.62974852862493,
+            "recall": 93.31601613233987
+          },
+          "v0": {
+            "tp": 68256,
+            "fp": 32670,
+            "fn": 4889,
+            "f1": 78.42317215389123,
+            "precision": 67.62974852862493,
+            "recall": 93.31601613233987
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 68256,
+            "fp": 32670,
+            "fn": 4889,
+            "f1": 78.42317215389123,
+            "precision": 67.62974852862493,
+            "recall": 93.31601613233987
+          },
+          "task": {
+            "tp": 68256,
+            "fp": 32670,
+            "fn": 4889,
+            "f1": 78.42317215389123,
+            "precision": 67.62974852862493,
+            "recall": 93.31601613233987
+          },
+          "v0": {
+            "tp": 68261,
+            "fp": 33261,
+            "fn": 4884,
+            "f1": 78.1613012188908,
+            "precision": 67.2376430724375,
+            "recall": 93.32285186957414
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_11",
+      "baseline": {
+        "tp": 50282,
+        "fp": 8398,
+        "fn": 3557,
+        "f1": 89.37512775620118,
+        "precision": 85.68847989093388,
+        "recall": 93.39326510522112
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 50282,
+            "fp": 8398,
+            "fn": 3557,
+            "f1": 89.37512775620118,
+            "precision": 85.68847989093388,
+            "recall": 93.39326510522112
+          },
+          "task": {
+            "tp": 50282,
+            "fp": 8398,
+            "fn": 3557,
+            "f1": 89.37512775620118,
+            "precision": 85.68847989093388,
+            "recall": 93.39326510522112
+          },
+          "v0": {
+            "tp": 50311,
+            "fp": 10272,
+            "fn": 3528,
+            "f1": 87.9393822866232,
+            "precision": 83.04474852681446,
+            "recall": 93.44712940433514
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 50282,
+            "fp": 8785,
+            "fn": 3557,
+            "f1": 89.06878288133491,
+            "precision": 85.12705910237527,
+            "recall": 93.39326510522112
+          },
+          "task": {
+            "tp": 50282,
+            "fp": 8785,
+            "fn": 3557,
+            "f1": 89.06878288133491,
+            "precision": 85.12705910237527,
+            "recall": 93.39326510522112
+          },
+          "v0": {
+            "tp": 50362,
+            "fp": 45123,
+            "fn": 3477,
+            "f1": 67.45332297554312,
+            "precision": 52.743362831858406,
+            "recall": 93.54185627519085
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_116",
+      "baseline": {
+        "tp": 156940,
+        "fp": 27202,
+        "fn": 9306,
+        "f1": 89.5806934027421,
+        "precision": 85.22770470615069,
+        "recall": 94.4022713328441
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 157197,
+            "fp": 33301,
+            "fn": 9049,
+            "f1": 88.1287421792658,
+            "precision": 82.51897657718192,
+            "recall": 94.55686151847263
+          },
+          "task": {
+            "tp": 157197,
+            "fp": 33301,
+            "fn": 9049,
+            "f1": 88.1287421792658,
+            "precision": 82.51897657718192,
+            "recall": 94.55686151847263
+          },
+          "v0": {
+            "tp": 157824,
+            "fp": 126893,
+            "fn": 8422,
+            "f1": 69.99421238549505,
+            "precision": 55.43188499457356,
+            "recall": 94.93401344994767
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 157214,
+            "fp": 34641,
+            "fn": 9032,
+            "f1": 87.8042786811542,
+            "precision": 81.94417659169686,
+            "recall": 94.56708732841692
+          },
+          "task": {
+            "tp": 157214,
+            "fp": 34641,
+            "fn": 9032,
+            "f1": 87.8042786811542,
+            "precision": 81.94417659169686,
+            "recall": 94.56708732841692
+          },
+          "v0": {
+            "tp": 158257,
+            "fp": 142342,
+            "fn": 7989,
+            "f1": 67.79851985134252,
+            "precision": 52.64721439525747,
+            "recall": 95.1944708444113
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_123",
+      "baseline": {
+        "tp": 69476,
+        "fp": 8416,
+        "fn": 3684,
+        "f1": 91.98951354500437,
+        "precision": 89.19529605094233,
+        "recall": 94.96446145434663
+      },
+      "budgets": {
+        "10": {
+          "metrics": {
+            "tp": 69476,
+            "fp": 22726,
+            "fn": 3684,
+            "f1": 84.0289788464097,
+            "precision": 75.35194464328323,
+            "recall": 94.96446145434663
+          },
+          "task": {
+            "tp": 69476,
+            "fp": 22726,
+            "fn": 3684,
+            "f1": 84.0289788464097,
+            "precision": 75.35194464328323,
+            "recall": 94.96446145434663
+          },
+          "v0": {
+            "tp": 69611,
+            "fp": 22989,
+            "fn": 3549,
+            "f1": 83.99010617760618,
+            "precision": 75.17386609071275,
+            "recall": 95.14898851831602
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        },
+        "20": {
+          "metrics": {
+            "tp": 69476,
+            "fp": 22726,
+            "fn": 3684,
+            "f1": 84.0289788464097,
+            "precision": 75.35194464328323,
+            "recall": 94.96446145434663
+          },
+          "task": {
+            "tp": 69476,
+            "fp": 22726,
+            "fn": 3684,
+            "f1": 84.0289788464097,
+            "precision": 75.35194464328323,
+            "recall": 94.96446145434663
+          },
+          "v0": {
+            "tp": 69819,
+            "fp": 25833,
+            "fn": 3341,
+            "f1": 82.71805321896548,
+            "precision": 72.99272362313386,
+            "recall": 95.43329688354292
+          },
+          "routed_candidates": 0,
+          "missing": 0
+        }
+      }
+    }
+  ],
+  "api_requests": 0,
+  "rule": "SECOND appeared internal_hole/adjacent_edge_fragment use V0; all other candidates retain frozen task variant",
+  "geometry_uses_gt": false,
+  "gt_role": "offline score only",
+  "confirmation_status": "exploratory previously exposed; no confirm selection"
+}
