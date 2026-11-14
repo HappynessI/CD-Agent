@@ -44,7 +44,7 @@ def collect(night,old):
     stages['B3/confirm']=dict(status='not_promoted',reason='tune pair agreement6/30 below B0 8/30; no confirm run justified')
     retrieval={}
     for prefix in ['retrieval','t33/retrieval']:
-        for variant in ['B0','B1','B2']:
+        for variant in ['B0','B1','B2','B0_local_raw']:
             folder=night/prefix/variant
             records=[load(p) for p in sorted((folder/'tasks').glob('*/metrics.json'))]
             if records:retrieval[f'{prefix}/{variant}']=dict(tasks=len(records),records=records,summary=summaries(records))
@@ -52,6 +52,9 @@ def collect(night,old):
                 for split,expected in ([('tune',30),('confirm',30)] if prefix=='retrieval' else [('tune',6),('confirm',6)]):
                     count=sum(r['split']==split for r in records)
                     stages[f'{prefix}/{variant}/{split}']=dict(completed=count,expected=expected,status='complete' if count==expected else 'pending')
+    raw_rows=retrieval.get('retrieval/B0_local_raw',{}).get('records',[])
+    stages['local_raw/tune']=dict(completed=sum(r['split']=='tune' for r in raw_rows),expected=30,status='complete' if sum(r['split']=='tune' for r in raw_rows)==30 else 'pending')
+    stages['local_raw/confirm']=dict(completed=sum(r['split']=='confirm' for r in raw_rows),expected=30,status='not_requested_without_tune_evidence' if not any(r['split']=='confirm' for r in raw_rows) else 'started')
     preparation=[]
     for base,pattern in [('retrieval','*/prepare_progress_*.json'),('t33/retrieval','*/prepare_progress.json')]:
         for p in (night/base).glob(pattern):preparation.append(dict(path=str(p),**load(p)))
