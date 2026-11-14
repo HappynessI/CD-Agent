@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import time
 from pathlib import Path
 from types import SimpleNamespace
 import numpy as np
@@ -114,10 +115,17 @@ def main():
         for row in rows:
             folder=out/'tasks'/row['id'];result=folder/'metrics.json'
             if exists(result) and not a.prepare_only:records.append(json.loads(read_text(result)));continue
+            started=time.monotonic()
+            def stage(name):
+                value=dict(id=row['id'],stage=name,elapsed_seconds=time.monotonic()-started,updated_unix=time.time())
+                write_json(folder/'stage.json',value);print('retrieval stage',json.dumps(value),flush=True)
+            stage('read_images')
             ex=read_image(row['exemplar_mask'])>0;images=[read_image(row[k],rgb=True) for k in ('image_t1','image_t2')]
+            stage('read_cached_features')
             backend=cache.for_row(row);features=[Features(backend('extract_features',time=t),ex.shape,t) for t in ('t1','t2')]
             prepared=folder/'prepared.npz'
             if exists(prepared):
+                stage('read_prepared')
                 saved=read_npz(prepared);r1=saved['r1'].astype(bool);r2=saved['r2'].astype(bool);order1=saved['order1'].tolist();order3=saved['order3'].tolist()
             else:
                 proposals=np.concatenate([backend('segment_everything',time=t) for t in ('t1','t2')])
@@ -137,6 +145,7 @@ def main():
                     scoring_complete=False,verification_api_requests=0,new_api_cost_cny=0,prepared_root=str(out/'tasks')))
                 print('prepared',len(prepared_ids),row['id'],flush=True)
                 continue
+            stage('verification')
             pair=parses[row['id']]['interpretation']['pair'];answers={}
             if a.verify_k and order3:
                 before,after=[CLASSES[c] for c in pair]
@@ -146,8 +155,10 @@ def main():
                 for index in order3[:a.verify_k]:
                     response=request(folder/'verification'/str(index),'Judge only the supported candidate region in the two local-date images.',question,local_views(images,r2[index]),API_SEED)
                     answer=response['parsed'].get('change');answers[index]=dict(answer=answer if answer in ('yes','no') else 'unparsed',cost_cny=response['cost_cny'])
+            stage('read_gt_and_score')
             truth=read_image(row['gt_mask'])>0;scores=[]
             for k in GRID:
+                stage(f'score_top{k}')
                 scores.extend([score(r1,order1[:k],truth,ex,'R1_geometry_dino',k),
                     score(r2,list(range(min(k,len(r2)))),truth,ex,'R2_native_order',k),score(r2,order3[:k],truth,ex,'R3_dino_noverify',k)])
             scores.append(score(r2,list(range(len(r2))),truth,ex,'R2_all',0))
@@ -155,10 +166,16 @@ def main():
                 chosen=[i for i in order3[:a.verify_k] if answers[i]['answer']!='no']
                 scores.append(score(r2,chosen,truth,ex,'R3_verified',a.verify_k))
                 scores.append(score(r2,[i for i in order3[:a.verify_k] if answers[i]['answer']=='yes'],truth,ex,'R3_drop_unparsed_diagnostic',a.verify_k))
+            stage('text_pool_upper')
+            text_upper=proposal_metrics(r2,truth,ex)
+            stage('geometry_pool_upper')
+            geometry_upper=proposal_metrics(r1,truth,ex)
+            stage('write_metrics')
             record=dict(id=row['id'],split=audit['split'][row['id']],group=group(row),remaining_gt_pixels=int((truth&~ex).sum()),
-                scores=scores,text_proposal_upper=proposal_metrics(r2,truth,ex),geometry_proposal_upper=proposal_metrics(r1,truth,ex),
+                scores=scores,text_proposal_upper=text_upper,geometry_proposal_upper=geometry_upper,
                 verification=answers,verification_stats=verification_stats(answers),cost_cny=sum(v['cost_cny'] for v in answers.values()))
             write_json(result,record);records.append(record)
+            stage('aggregate_summary')
             write_json(out/f'summary_{a.split}.json',dict(tasks=len(records),records=records,summary=summaries(records),cost_cny=sum(r['cost_cny'] for r in records)))
             print('retrieval',len(records),row['id'],flush=True)
     finally:text.pool.close()
