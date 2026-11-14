@@ -53,8 +53,10 @@ def collect(night,old):
                     count=sum(r['split']==split for r in records)
                     stages[f'{prefix}/{variant}/{split}']=dict(completed=count,expected=expected,status='complete' if count==expected else 'pending')
     raw_rows=retrieval.get('retrieval/B0_local_raw',{}).get('records',[])
-    stages['local_raw/tune']=dict(completed=sum(r['split']=='tune' for r in raw_rows),expected=30,status='complete' if sum(r['split']=='tune' for r in raw_rows)==30 else 'pending')
+    stages['local_raw/tune']=dict(completed=sum(r['split']=='tune' for r in raw_rows),expected=30,status='not_submitted_zero_TP_headroom' if not raw_rows else ('complete' if sum(r['split']=='tune' for r in raw_rows)==30 else 'partial'))
     stages['local_raw/confirm']=dict(completed=sum(r['split']=='confirm' for r in raw_rows),expected=30,status='not_requested_without_tune_evidence' if not any(r['split']=='confirm' for r in raw_rows) else 'started')
+    oracle=load(night/'oracle_cache/summary.json')
+    stages['oracle_cache']=dict(completed=oracle['tasks'] if oracle else 0,expected=60,status='complete' if oracle and oracle['tasks']==60 else 'pending')
     preparation=[]
     for base,pattern in [('retrieval','*/prepare_progress_*.json'),('t33/retrieval','*/prepare_progress.json')]:
         for p in (night/base).glob(pattern):preparation.append(dict(path=str(p),**load(p)))
@@ -62,7 +64,7 @@ def collect(night,old):
     stages['endpoint']=dict(completed=len(endpoint),expected=60,status='complete' if len(endpoint)==60 else 'pending')
     return dict(stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
         endpoint=dict(records=endpoint,summary=summaries(endpoint)),delta_reproduction=delta_reproduction(endpoint,old),
-        manual_review=load(night/'grounding_review.json'),cost=request_cost(night))
+        manual_review=load(night/'grounding_review.json'),oracle_cache_diagnostic=load(night/'oracle_cache/summary.json'),cost=request_cost(night))
 
 
 def pool_bounds(data):
@@ -94,6 +96,7 @@ def markdown(data):
         'B1/B2 change support rendering and prompts jointly; B2 also adds both dates. B3 uses four aligned RGB/binary-support panels. B3 tune did not improve B0, so confirmation was not promoted.','',
         'B0 R1/R2/R3 were predeclared fixed full60 diagnostics, reported by tune/confirm; confirmation was not triggered by a tuning win. No B1/B2/B3 promotion or confirm-based winner selection is implied.','',
         'R1 geometry-DINO changes the pool relative to unfiltered historical DINO. R2 uses predicted classes, including wrong/unknown predictions; native order is filtered SAM query order with source proposals before target, not confidence ranking or random ranking. R3 local verification is a joint input/prompt change. Unparsed answers follow historical keep policy; drop-unparsed results are sensitivity diagnostics.','',
+        'Raw-contour tune30 was prepared but not submitted: the completed B0 R2 pool covers zero GT pixels in fixed tune positives, so a verifier cannot recover TP from this pool. Historical GT-text oracle is reused offline in oracle_cache/report.md to separate semantic and proposal-constraint limits, without new GT-fed model requests.','',
         'Observed local-verifier negative case: train_1136_5to1 candidates0/1 are rejected because the model says the same rectangular building shape persists. Actual inputs show a blue roof then green vegetation; the fixed spotlight support creates the same bright silhouette on both dates. This is evidence of a possible support-shape/object-shape confusion, not proof of causal attribution. This task has only3 remaining GT pixels, so a beneficial rejection score would not establish correct visual reasoning. Inputs/responses are archived under retrieval/B0/tasks/train_1136_5to1/verification.','',
         'Endpoint methods share the original SAM pool with fixed equal weights. Swapping exemplar dates measures ranking sensitivity only; it does not define new GT.','',
         'T3.3 manual uncertainty: the fixed first tune example train_2130_T33_2to4 is clipped at the source crop bottom; close/wide views nearly coincide. Its post-date tan/gray-green support can resemble bare ground or turbid water. Treat the water-label mismatch as requiring visual/label review, not automatically a pure model error. No labels were changed.','',
@@ -121,6 +124,12 @@ def markdown(data):
         pixel=row['covered_pixels']/row['truth_pixels'] if row['truth_pixels'] else None
         instance=row['aligned_instances']/row['gt_instances'] if row['gt_instances'] else None
         lines.append('| '+' | '.join(map(str,[row['stage']+'/'+row['pool'],row['split'],row['support'],row['group'],row['tasks'],number(pixel),number(instance)]))+' |')
+    oracle=data.get('oracle_cache_diagnostic')
+    if oracle:
+        lines+=['','## Historical GT-text oracle (offline only)','','| Split | GT | Group | N | Method | F1 | P | R | Covered/GT pixels |','|---|---|---|---:|---|---:|---:|---:|---|']
+        for row in oracle['summary']:
+            for method,v in row['methods'].items():
+                lines.append('| '+' | '.join(map(str,[row['split'],row['support'],row['group'],row['tasks'],method,number(v['f1_c']),number(v['precision']),number(v['recall']),str(v['covered_pixels'])+'/'+str(v['truth_pixels'])]))+' |')
     reproduction=data['delta_reproduction'];cost=data['cost']
     lines+=['','## Reproduction, manual evidence and accounting','',
         f"Historical DINO reproduction: {reproduction['tasks']} completed tasks, {reproduction['comparisons']} TopK comparisons; all available counts agree: {reproduction['all_available_agree']}; mismatches: {len(reproduction['mismatches'])}. This is not a full60 claim until all60 finish.",
