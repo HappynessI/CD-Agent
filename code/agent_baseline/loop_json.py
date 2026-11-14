@@ -419,6 +419,7 @@ def main():
     parser.add_argument('--map-ask-variant', choices=['t2_state'], help='Opt-in T2-only building-state verifier; requires --map-input and API ask.')
     parser.add_argument('--map-input', action='store_true', help='Enable T5.4 old building map as T1; requires a T5.4 manifest.')
     parser.add_argument('--missed-candidates-root', type=Path, help='Opt-in frozen SECOND/LEVIR development candidate cache; returns proposals only.')
+    parser.add_argument('--missed-ranked-manifest', type=Path, help='Opt-in frozen evidence Top10 proposal manifest; no refill or answer-cache reuse.')
     parser.add_argument('--missed-verifier-variant', choices=['four','som','structured'], help='Opt-in serial flash verifier with controlled position marks/question.')
     parser.add_argument('--t3-semantic-bridge', action='store_true', help='Offer independent visual exemplar interpretation and semantic proposal scoring. Default off.')
     parser.add_argument('--tools-t13', nargs='?', const='all', default='', help='Enable all new vision tools, or comma-separated tool names. Default off.')
@@ -501,7 +502,11 @@ def main():
         parser.error('--map-input requires a nonempty T5.4 manifest')
     if (args.task == 'T5.4' or (args.tasks and any(r['task_type'] == 'T5.4' for r in todo))) and not args.map_input:
         parser.error('T5.4 requires --map-input')
-    if args.missed_candidates_root and (not args.tasks or any((r.get('meta') or {}).get('group') not in ('second_appeared','second_disappeared','levir_any') for r in todo)):
+    if args.missed_ranked_manifest and args.missed_candidates_root:
+        parser.error('Choose one missed-candidate provider')
+    if args.missed_ranked_manifest and (args.missed_verifier_variant!='four' or args.planner_model!='qwen3.7-flash'):
+        parser.error('Frozen ranked proposals require four verifier and qwen3.7-flash planner')
+    if (args.missed_candidates_root or args.missed_ranked_manifest) and (not args.tasks or any((r.get('meta') or {}).get('group') not in ('second_appeared','second_disappeared','levir_any') for r in todo)):
         parser.error('--missed-candidates-root requires the frozen development group manifests')
     if args.missed_verifier_variant and (args.ask_backend != 'api' or args.ask_model != 'qwen3.7-flash'):
         parser.error('--missed-verifier-variant requires API qwen3.7-flash')
@@ -583,7 +588,10 @@ def main():
             vision=vision.for_pair(image_paths or source_images) if vision else None,
             map_input=args.map_input,
             big_box_share=args.big_box_share)
-        if args.missed_candidates_root:
+        if args.missed_ranked_manifest:
+            from .frozen_ranked_candidates import FrozenRankedCandidates
+            toolbox.missed_provider = FrozenRankedCandidates(args.missed_ranked_manifest, row['meta']['group'], Path(row['id']).stem, session.shape)
+        elif args.missed_candidates_root:
             from .find_missed import CachedMissedCandidates
             toolbox.missed_provider = CachedMissedCandidates(args.missed_candidates_root, row['meta']['group'], Path(row['id']).stem, session.shape)
         try:
@@ -594,7 +602,8 @@ def main():
                         overlap_thr=.25, match_basis=tool_module.MATCH_BASIS) if needs_init(task) else None,
                     backends=dict(**({'gate2': True} if args.gate2 else {}), ask=args.ask_backend, review=args.review, status=args.status, verify_stage=args.verify_stage,
                         plan=args.plan, skills=skills, ask_correspondence=args.ask_correspondence,
-                        missed_candidates=bool(args.missed_candidates_root), missed_verifier_variant=args.missed_verifier_variant,
+                        missed_candidates=bool(args.missed_candidates_root or args.missed_ranked_manifest), missed_verifier_variant=args.missed_verifier_variant,
+                        **({'missed_ranked_manifest':str(args.missed_ranked_manifest),'missed_pool_limit':10} if args.missed_ranked_manifest else {}),
                         ask_model=args.ask_model if args.ask_backend == 'api' else 'Qwen3.5-4B' if args.ask_backend == 'local' else None,
                         sam3_worker=bool(args.sam3_worker), pixel_thr=args.pixel_thr, sam_prompt='worker' if args.sam_prompt_worker else 'shared_' + args.sam_prompt_device, sam_model='SAM ViT-H'),
                     task_meta=row['meta'] if row else {}, init_error=init_error))

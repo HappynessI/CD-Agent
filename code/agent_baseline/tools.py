@@ -563,6 +563,9 @@ class Toolbox(ProposalTools, SemanticBridgeTools):
         return dict(results=self.verify(expanded, 'ask'), remaining_unverified=left)
 
     def find_missed(self, current=None, limit=20):
+        if getattr(self.missed_provider,'ranking',None)=='frozen_evidence_top10_no_refill':
+            from .frozen_ranked_candidates import offer_ranked
+            return offer_ranked(self,self.missed_provider,current,limit)
         return offer_missed(self, self.missed_provider, current, limit)
 
     def verify(self, expanded, source):

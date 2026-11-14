@@ -2,9 +2,13 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+import subprocess
+import sys
 import numpy as np
 from agent_baseline.frozen_ranked_candidates import FrozenRankedCandidates
 from agent_baseline.analysis.missed_online_runner import arm_arguments,common_arguments
+from agent_baseline.state import Session, Instances
+from agent_baseline.tools import Toolbox
 
 
 class FrozenRankedTest(unittest.TestCase):
@@ -39,11 +43,34 @@ class FrozenRankedTest(unittest.TestCase):
             with self.assertRaises(ValueError):missing.load()
 
     def test_runner_default_and_rank_opt_in_are_separate(self):
-        self.assertEqual(arm_arguments('baseline','four','cache','rank.json'),[])
+        self.assertEqual(arm_arguments('baseline','four','cache','rank.json'),['--missed-verifier-variant','four'])
+        self.assertEqual(arm_arguments('baseline','four','cache'),[])
         self.assertEqual(arm_arguments('find_missed','four','cache'),['--missed-candidates-root','cache','--missed-verifier-variant','four'])
         self.assertEqual(arm_arguments('find_missed','four','cache','rank.json'),['--missed-ranked-manifest','rank.json','--missed-verifier-variant','four'])
         with self.assertRaises(ValueError):arm_arguments('find_missed','structured','cache','rank.json')
         self.assertEqual(common_arguments('tasks','config',1016).count('qwen3.7-flash'),2)
+
+    def test_actual_toolbox_dispatch_keeps_answer_and_rank_metadata(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);masks,order=self.fixture(root)
+            session=Session(masks.shape[1:],masks[order[0]].copy(),target='building',
+                change_direction='appeared',scope='building_rebuild_excluded')
+            toolbox=Toolbox([np.zeros((*session.shape,3),np.uint8)]*2,tmp,session=session)
+            toolbox.missed_provider=FrozenRankedCandidates(root/'manifest.json','second_appeared','train_1884',session.shape)
+            before=session.current_mask
+            result=toolbox.find_missed(limit=20)
+            self.assertEqual(session.current_mask,before)
+            self.assertIsNone(session.submitted)
+            self.assertEqual(result['ranking'],'frozen_evidence_top10_no_refill')
+            self.assertFalse(result['refill_outside_top10'])
+            self.assertEqual(result['candidates'][0]['rank'],2)
+            self.assertEqual(len(session.get(result['props'],Instances).items),9)
+            self.assertNotIn('must-not-reach-planner',json.dumps(result))
+
+    def test_real_entrypoint_accepts_ranked_flag(self):
+        result=subprocess.run([sys.executable,'-B','-m','agent_baseline.loop_json','--help'],
+            capture_output=True,text=True,check=True)
+        self.assertIn('--missed-ranked-manifest',result.stdout)
 
 
 if __name__=='__main__':unittest.main()

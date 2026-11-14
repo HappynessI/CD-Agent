@@ -31,10 +31,11 @@ def common_arguments(tasks,config,seed):
 
 
 def arm_arguments(arm,variant,cache,ranked_manifest=None):
-    if arm=='baseline':return []
     if ranked_manifest:
         if variant!='four':raise ValueError('Frozen evidence online pilot requires V0/four')
+        if arm=='baseline':return ['--missed-verifier-variant','four']
         return ['--missed-ranked-manifest',str(ranked_manifest),'--missed-verifier-variant','four']
+    if arm=='baseline':return []
     return ['--missed-candidates-root',str(cache),'--missed-verifier-variant',variant]
 
 
@@ -81,7 +82,9 @@ def prepare(args):
     settings=json.loads(json.dumps(settings))
     if ranked_manifest:
         settings.update(ranked_manifest=str(ranked_manifest.resolve()),frozen_pool_limit=10,
-            online_rule='original evidence Top10 only; subtract current, no refill beyond10; no API answer reuse across sessions/seeds')
+            online_rule='original evidence Top10 only; subtract current, no refill beyond10; no API answer reuse across sessions/seeds',
+            only_arm_differences=['find_missed frozen evidence Top10 proposal tool'],
+            interpretation='Both arms use fresh four verifier with identical parameters; baseline has original tools but no supplementation pool. This is a tool-availability comparison, not equal proposal-count ranking ablation.')
     path=args.out/'settings.json'
     if path.exists() and read_json(path)!=settings:raise ValueError('Frozen settings differ; use a new online output')
     write_json(path,settings)
