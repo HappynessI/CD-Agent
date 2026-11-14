@@ -103,6 +103,22 @@ def render(report):
             x=arms.get(v,{}).get('10',{});m=x.get('metrics',{})
             rows.append([key,v,x.get('complete',False),scores(baseline),scores(m),fmt(x.get('delta_f1')),interval(x.get('paired_image_bootstrap_95_percentile')),fmt(x.get('delta_vs_v0')),interval(x.get('paired_vs_v0_bootstrap95'))])
     table(lines,['组/划分','臂','完整','初始 F1/P/R','K10 F1/P/R','Δ初始','95%CI','ΔV0','95%CI'],rows)
+    lines+=['','### 共同候选确认 K10：候选代理混淆',
+        '直接读取已有 candidate_proxy_counts，不重新评分。TP>FP 是候选像素收益代理，不是人工语义标签；下表 TP/FP/TN/FN 是候选数量，不是像素数量。代理精确率分母为接受候选数，召回分母为全部 TP>FP 候选数（含 unknown/missing）。unknown 与 truncated 可重叠，不能相加当作不同失败。上表最终答案 union precision 包含初始答案且对重叠去重，不是接受候选的像素精度或其分布。']
+    rows=[]
+    for key,arms in view_groups.items():
+        if not key.endswith('/confirm'):continue
+        for variant in ('V0','V1','V2','V3','V4'):
+            result=arms.get(variant,{}).get('10',{})
+            counts=result.get('candidate_proxy_counts',{})
+            denominators=result.get('candidate_proxy_denominators',{})
+            rows.append([key,variant,result.get('complete',False),
+                '/'.join(str(counts.get(k,'待完成')) for k in ('proxy_true_yes','proxy_false_yes','proxy_true_no','proxy_false_no')),
+                denominators.get('precision_accepted_candidates','待完成'),
+                denominators.get('recall_all_tp_gt_fp_candidates','待完成'),
+                counts.get('proxy_negative_total','待完成'),
+                '/'.join(str(counts.get(k,'待完成')) for k in ('unknown','missing','truncated'))])
+    table(lines,['组/划分','臂','完整','proxy TP/FP/TN/FN','接受数（P分母）','代理正例数（R分母）','代理负例数','unknown/missing/truncated'],rows)
     lines+=['','## 任务条件核验器（次级探索）','每组仅用 K10 tune 选择一个臂，所有 K 沿用；确认结果只评价该冻结策略。']
     task=report['task_selection'].get('data',{});confirmed=report['task_confirmation'].get('data',{});rows=[]
     for group,item in task.get('groups',{}).items():
