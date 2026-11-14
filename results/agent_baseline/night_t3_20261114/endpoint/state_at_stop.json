@@ -1,0 +1,128 @@
+{
+  "name": "cd-night-t3-endpoint-20261114",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-endpoint-20261114/jobs/01-endpoints.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-endpoint-20261114/jobs/02-stage1-report.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-endpoint-20261114/jobs/02-stage1-report.sbatch",
+  "job_id": "186555",
+  "hook_id": "186556",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-14 23:42:40",
+  "started_epoch": 1794670960.9081068,
+  "history": [
+    {
+      "job": "01-endpoints.sbatch",
+      "job_id": "186449",
+      "hook_id": "186450",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "DINO_endpoint_ablation",
+        "cost_cny": 0,
+        "completed": 60
+      },
+      "metric_error": null,
+      "at": "2026-11-15 01:17:47"
+    },
+    {
+      "job": "02-stage1-report.sbatch",
+      "job_id": "186555",
+      "hook_id": "186556",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "endpoint_and_stage1_report",
+        "cost_cny": 0,
+        "tasks": 60,
+        "report_exists": true,
+        "delta_reproduction": {
+          "tasks": 60,
+          "comparisons": 240,
+          "all_available_agree": true,
+          "mismatches": []
+        }
+      },
+      "metric_error": null,
+      "at": "2026-11-15 01:25:04"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 01:24:42",
+  "last_advance_at": "2026-11-15 01:24:42",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 01:25:04",
+    "job_id": "186555",
+    "hook_id": "186556",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-endpoint-20261114/jobs/02-stage1-report.sbatch",
+    "latest": {
+      "job": "02-stage1-report.sbatch",
+      "job_id": "186555",
+      "hook_id": "186556",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "endpoint_and_stage1_report",
+        "cost_cny": 0,
+        "tasks": 60,
+        "report_exists": true,
+        "delta_reproduction": {
+          "tasks": 60,
+          "comparisons": 240,
+          "all_available_agree": true,
+          "mismatches": []
+        }
+      },
+      "metric_error": null,
+      "at": "2026-11-15 01:25:04"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-endpoint-20261114/jobs/02-stage1-report.sbatch",
+      "reason": "Endpoint60completed2tests. Compile completed grounding/R123/T33/oracle/direct4 and fixedendpoint diagnostics; verifyall240 historicaldelta TopKcounts and report tests. NewR1joint remains separate inprogress; no claimof onlineAgent performance.",
+      "at": "2026-11-15 01:24:40"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "Endpoint60 andstage1 report complete;2 endpointtests+2 reporttests passed;240/240 historicalDINO TopKcount comparisons exact. Fixed equaljoint tune recall improvement motivates separate sameR1pool experiment, not onlinepromotion. This completed diagnostic/report stage archives, API0.",
+      "at": "2026-11-15 01:26:34"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "stop_reason": "Endpoint60 andstage1 report complete;2 endpointtests+2 reporttests passed;240/240 historicalDINO TopKcount comparisons exact. Fixed equaljoint tune recall improvement motivates separate sameR1pool experiment, not onlinepromotion. This completed diagnostic/report stage archives, API0.",
+  "finished_at": "2026-11-15 01:26:34",
+  "elapsed_seconds": 6233.2
+}
