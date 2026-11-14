@@ -11,3 +11,8 @@ Fresh-response evidence: runner configs include group/seed/arm/stem/attempt; loo
 Validation pending Slurm: `PYTHONPATH=code python -B -m unittest agent_baseline.tests.test_frozen_ranked_candidates agent_baseline.tests.test_find_missed`. Tests cover actual Toolbox dispatch, no answer mutation, source-only output, fixed Top10 order/no refill, runner arm flags and the real loop --help parser. Management-node checks were limited to source review and git diff --check.
 
 Remaining before an authorized run: integrate/review patch, execute Slurm tests, decide promotion from completed ranking confirmation, independently prepare all six frozen task records and initial masks, validate matching frozen gates/settings, then prepare serial 36-session runner jobs. No pilot manifest substitution is allowed.
+
+
+条件性缓存盘点：原6任务仍为SECOND train1884/train368各新建/拆除，LEVIR train293/train78。`pilot/online_selection`三组清单与初始PNG/RGB存在；历史source根`exp6_staging/batch99_find_missed_pre/artifacts`内base6/6、五来源候选30/30、四张独立图双期DINO8/8均存在。此为路径存在性检查，未解包生成新版候选。
+
+若确认支持在线，最小缺口是独立六任务推理manifest入口：按冻结gate与V0设置，复用原S5 union/组件、gate_features、全来源dedup与evidence排序，输出provider兼容settings/manifest/masks；无需旧pilot答案模板或GT。现有night_missed_rank.prepare依赖旧pilot模板，不能直接套用，也不能把pilot获益图换入六任务。是否实施取决于已声明主对照的实际确认结果；当前没有新Agent会话。

@@ -12,5 +12,9 @@
   "state": "RUNNING",
   "interpretation": "CPU time close to elapsed on requested single CPU: cached preparation is actively consuming CPU; no inference started at this observation. Not evidence of API connectivity failure.",
   "node_process_inspection": "SSH to own allocated gpu42 was denied by authentication; did not change credentials or inspect other jobs.",
-  "action": "Keep original frozen job and per-image checkpoints; no duplicate submission or cancellation."
+  "action": "Keep original frozen job and per-image checkpoints; no duplicate submission or cancellation.",
+  "allocation_inspection": "Read-only srun diagnostic inside own job186463 allocation after SSH denial: sole Python PID1973415, NLWP1, CPU99.3%, stateR at elapsed1:18:05. No other jobs inspected.",
+  "limitation": "This identifies active single-thread CPU preparation, not the exact function consuming time. No claim of measured algorithmic speedup.",
+  "stack_attempt": "One-shot py-spy0.4.3 dump of own PID was permission denied (exit1); no elevated retry or kernel changes. Details runtime_stack/result.json and stack.txt.",
+  "subsequent_progress": "29/30 prepared after inspection; original process continued."
 }
