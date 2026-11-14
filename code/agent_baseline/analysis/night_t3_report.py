@@ -96,6 +96,38 @@ def number(value):
     return 'NA' if value is None else f'{value:.4f}'
 
 
+def readable_stage_results(data):
+    lines=['','## Other completed diagnostics and pending evidence','']
+    choose=lambda rows,support:next(r for r in rows if r['split']=='tune' and r['support']==support and r['group']=='全部')
+    cross=data['retrieval'].get('t33/retrieval/B0')
+    if cross and cross['tasks']==12:
+        tune=choose(cross['summary'],'all');methods=tune['methods']
+        lines.append('T3.3 fixed12 retrieval is complete. Tuning6 Top8 F1: '+', '.join(f"{name}={methods[name]['f1_c']:.3f}" for name in ['R1_geometry_dino@8','R2_native_order@8','R3_verified@8'])+'. These use different proposal pools; only R3 before/after verification shares its fixed text pool. Cross-image label agreement and ambiguous source crops remain separate from achieved pixel scores.')
+    else:lines.append(f"T3.3 actual retrieval remains pending/partial ({cross['tasks'] if cross else 0}/12); GPU preparation is not completed evaluation.")
+    endpoint=data['endpoint']
+    if len(endpoint['records'])==60:
+        for support in ('all','positive','empty'):
+            row=choose(endpoint['summary'],support)
+            lines.append('Endpoint fixed-pool tune '+support+' Top8 F1: '+', '.join(f"{name}={row['methods'][name+'@8']['f1_c']:.3f}" for name in ['delta','endpoint','equal_joint'])+'.')
+        lines.append('Endpoint comparisons alone share the full original SAM pool; R1 geometry-filtered values are not a same-pool scoring contrast. Example-date swaps report ranking sensitivity, not new truth or a causal mechanism claim. No coefficient was fitted on confirmation.')
+    else:lines.append(f"Endpoint result remains pending/partial ({len(endpoint['records'])}/60); do not select a scoring formula from partial outputs.")
+    oracle=data.get('oracle_cache_diagnostic')
+    if oracle and oracle['tasks']==60:
+        row=choose(oracle['summary'],'positive');old=row['methods']['historical_oracle'];pred=row['methods']['predicted']
+        records=[r for r in oracle['records'] if r['split']=='tune' and r['remaining_gt_pixels']>0]
+        complete=[r['constraint_diagnostics']['historical_oracle'] for r in records if r['constraint_diagnostics']['historical_oracle']['status']=='complete']
+        intersection=sum(r['positive_intersection'] for r in complete);strict=sum(r['strict_loss_and_gain'] for r in complete)
+        missing=sum(r['positive_intersection']==0 for r in complete)
+        lines.append(f"Historical oracle tune positives cover {old['covered_pixels']}/{old['truth_pixels']} pixels (F1 {old['f1_c']:.4f}), versus predicted text {pred['covered_pixels']}/{pred['truth_pixels']}. Even GT classes do not resolve coverage. Of {len(complete)} cache-complete positive cases, {missing} have zero sourceT1/targetT2 intersection; intersection coverage {intersection} drops to {strict} after strict exclusions. Per-task evidence identifies missing endpoint proposals separately from loss/gain suppression. These oracle masks are historical, not new GT-fed API calls.")
+    else:lines.append('Historical oracle/cache constraint diagnosis is pending; no model fill-in is allowed.')
+    direct=data['retrieval'].get('r1_direct4')
+    if direct and sum(r['split']=='tune' for r in direct['records'])==30:
+        row=choose(direct['summary'],'positive');m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_direct4_verified@8']
+        lines.append(f"R1-direct4 tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. Judge positive-target preservation, empty-task behavior and manual response evidence together before any confirmation promotion; no single mechanical F1 cutoff decides it.")
+    else:lines.append(f"R1-direct4 remains pending/partial ({sum(r['split']=='tune' for r in direct['records']) if direct else 0}/30 tune). Unlike the cancelled text-pool raw arm, it keeps the R1 pool with positive-target coverage.")
+    return lines
+
+
 def markdown(data):
     lines=['# T3 night actual evidence','',
         'Label agreement is not manual semantic or support-grounding accuracy. The existing dev60 was historically inspected; the new image split isolates new method selection, not unseen data. All original tasks remain, including empty remaining GT.','',
@@ -119,6 +151,7 @@ def markdown(data):
             f"Predeclared geometry filtering changes tune Top8 F1 from {prior['f1_c']:.3f} to {geometry['f1_c']:.3f}, TP from {prior['tp']} to {geometry['tp']}, and FP from {prior['fp']} to {geometry['fp']}. Recall remains {geometry['recall']:.3f}%; this supports keeping it as a low-cost baseline, not a solved-task claim.",
             '',f"Predicted text proposals cover {text['tp']} tuning GT pixels. Local verification changes FP from {text['fp']} to {verified['fp']}, but its empty-prediction rate on positive tasks is {positive['methods']['R3_verified@8']['empty_prediction_rate']:.3f}, versus negative accuracy {empty['methods']['R3_verified@8']['empty_prediction_rate']:.3f} on empty tasks. Rejection alone is not reliable recovery.",
             '', 'Do not promote the text bridge or run the planned whole tune raw-view arm when its proposal pool has zero TP headroom. First reuse historical oracle/cache evidence to separate parsing from proposal constraints; evaluate the fixed endpoint alternatives using tune positive-target evidence before considering any method choice. Never select weights or methods from confirmation outcomes.']
+    lines+=readable_stage_results(data)
     lines+=['','## Label agreement only','','| Variant | Split | Group | N | Before | After | Pair |','|---|---|---|---:|---:|---:|---:|']
     for name,value in data['semantic_label_agreement'].items():
         for row in value['summary']:
