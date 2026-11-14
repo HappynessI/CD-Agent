@@ -1,0 +1,753 @@
+{
+  "policy": {
+    "stem": "train_124",
+    "indices": [
+      0,
+      119,
+      239,
+      359
+    ],
+    "orders": [
+      "AB",
+      "BA",
+      "AB",
+      "BA"
+    ],
+    "api_requests": 0,
+    "gt_read": false,
+    "scope": "Four deterministic files only; cache/order effects remain; do not extrapolate overall acceleration",
+    "path_A": "np.load(path) once; each key materialized once then copied",
+    "path_B": "one open/read/close to bytes, then BytesIO np.load; each key materialized once then copied",
+    "cache_modified": false
+  },
+  "files": [
+    {
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/visual/levir_any/train_124/t1_0001_t1.npz",
+      "order": "AB",
+      "timing_scope": "process CPU is current process only; wall includes filesystem waits",
+      "arms": {
+        "A": {
+          "open_directory": {
+            "wall_seconds": 0.0006709247827529907,
+            "cpu_seconds": 0.0004888690000000029
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 0.0023205000907182693,
+                "cpu_seconds": 0.002321922000000004
+              },
+              "copy": {
+                "wall_seconds": 0.00011024624109268188,
+                "cpu_seconds": 0.00011092999999998132
+              },
+              "shape": [
+                5,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 655360
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 0.0001915469765663147,
+                "cpu_seconds": 0.00019174499999999317
+              },
+              "copy": {
+                "wall_seconds": 2.074986696243286e-06,
+                "cpu_seconds": 2.0480000000044907e-06
+              },
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "nbytes": 20
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 0.00013209693133831024,
+                "cpu_seconds": 0.0001326360000000193
+              },
+              "copy": {
+                "wall_seconds": 1.6521662473678589e-06,
+                "cpu_seconds": 1.6449999999945675e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 1.574493944644928e-05,
+            "cpu_seconds": 1.5789999999987758e-05
+          }
+        },
+        "B": {
+          "open_directory": {
+            "wall_seconds": 0.0001041460782289505,
+            "cpu_seconds": 0.00010360400000000713
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 0.002718942239880562,
+                "cpu_seconds": 0.0027202420000000116
+              },
+              "copy": {
+                "wall_seconds": 5.089491605758667e-05,
+                "cpu_seconds": 5.109999999999837e-05
+              },
+              "shape": [
+                5,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 655360
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 0.000146450474858284,
+                "cpu_seconds": 0.00014677600000001512
+              },
+              "copy": {
+                "wall_seconds": 2.1122395992279053e-06,
+                "cpu_seconds": 2.0840000000132974e-06
+              },
+              "shape": [
+                5
+              ],
+              "dtype": "float32",
+              "nbytes": 20
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 0.00011035613715648651,
+                "cpu_seconds": 0.00011074199999999701
+              },
+              "copy": {
+                "wall_seconds": 1.605600118637085e-06,
+                "cpu_seconds": 1.6640000000123223e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 7.269904017448425e-06,
+            "cpu_seconds": 7.279999999998399e-06
+          },
+          "raw_file": {
+            "open": {
+              "wall_seconds": 0.00010990165174007416,
+              "cpu_seconds": 5.024900000000221e-05
+            },
+            "read": {
+              "wall_seconds": 8.059665560722351e-06,
+              "cpu_seconds": 8.116000000002455e-06
+            },
+            "close": {
+              "wall_seconds": 4.539266228675842e-06,
+              "cpu_seconds": 4.567000000010868e-06
+            },
+            "bytes": 2043
+          }
+        }
+      },
+      "zip_members": [
+        {
+          "name": "masks.npy",
+          "compressed_size": 1519,
+          "expanded_size": 655488
+        },
+        {
+          "name": "scores.npy",
+          "compressed_size": 84,
+          "expanded_size": 148
+        },
+        {
+          "name": "shape.npy",
+          "compressed_size": 74,
+          "expanded_size": 144
+        }
+      ],
+      "equal": {
+        "keys_equal": true,
+        "fields": {
+          "masks": true,
+          "scores": true,
+          "shape": true
+        }
+      },
+      "decode": {
+        "unpack": {
+          "wall_seconds": 18.653852611780167,
+          "cpu_seconds": 18.646651686000002
+        },
+        "flatnonzero": {
+          "wall_seconds": 0.008948972448706627,
+          "cpu_seconds": 0.008950386999998727
+        },
+        "bytes_set": {
+          "wall_seconds": 3.071688115596771e-05,
+          "cpu_seconds": 3.079600000077676e-05
+        },
+        "rows": 5,
+        "unique_nonempty": 5,
+        "unpacked_nbytes": 5242880
+      },
+      "index": 0,
+      "stage": "complete"
+    },
+    {
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/visual/levir_any/train_124/t1_0060_t2.npz",
+      "order": "BA",
+      "timing_scope": "process CPU is current process only; wall includes filesystem waits",
+      "arms": {
+        "B": {
+          "open_directory": {
+            "wall_seconds": 9.164400398731232e-05,
+            "cpu_seconds": 9.1342999997579e-05
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 0.0001790374517440796,
+                "cpu_seconds": 0.00017944300000038993
+              },
+              "copy": {
+                "wall_seconds": 5.790963768959045e-06,
+                "cpu_seconds": 5.840000000034706e-06
+              },
+              "shape": [
+                0,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 0
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 8.064322173595428e-05,
+                "cpu_seconds": 8.091500000162455e-05
+              },
+              "copy": {
+                "wall_seconds": 1.55717134475708e-06,
+                "cpu_seconds": 1.5559999972936112e-06
+              },
+              "shape": [
+                0
+              ],
+              "dtype": "float32",
+              "nbytes": 0
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 7.845275104045868e-05,
+                "cpu_seconds": 7.87019999997085e-05
+              },
+              "copy": {
+                "wall_seconds": 1.0319054126739502e-06,
+                "cpu_seconds": 1.1009999987265928e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 5.709007382392883e-06,
+            "cpu_seconds": 5.670000000179698e-06
+          },
+          "raw_file": {
+            "open": {
+              "wall_seconds": 0.04177933558821678,
+              "cpu_seconds": 5.41439999999227e-05
+            },
+            "read": {
+              "wall_seconds": 5.766749382019043e-06,
+              "cpu_seconds": 5.780999998705738e-06
+            },
+            "close": {
+              "wall_seconds": 3.0100345611572266e-06,
+              "cpu_seconds": 3.035999998957095e-06
+            },
+            "bytes": 583
+          }
+        },
+        "A": {
+          "open_directory": {
+            "wall_seconds": 0.0019313469529151917,
+            "cpu_seconds": 0.00013180399999868087
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 0.00013982877135276794,
+                "cpu_seconds": 0.0001402610000020843
+              },
+              "copy": {
+                "wall_seconds": 4.930421710014343e-06,
+                "cpu_seconds": 4.929999999347956e-06
+              },
+              "shape": [
+                0,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 0
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 7.006898522377014e-05,
+                "cpu_seconds": 7.027399999870454e-05
+              },
+              "copy": {
+                "wall_seconds": 1.5068799257278442e-06,
+                "cpu_seconds": 1.5150000010066833e-06
+              },
+              "shape": [
+                0
+              ],
+              "dtype": "float32",
+              "nbytes": 0
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 7.841549813747406e-05,
+                "cpu_seconds": 7.85770000000241e-05
+              },
+              "copy": {
+                "wall_seconds": 9.760260581970215e-07,
+                "cpu_seconds": 1.013999998633608e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 1.055002212524414e-05,
+            "cpu_seconds": 1.055399999927431e-05
+          }
+        }
+      },
+      "zip_members": [
+        {
+          "name": "masks.npy",
+          "compressed_size": 75,
+          "expanded_size": 128
+        },
+        {
+          "name": "scores.npy",
+          "compressed_size": 68,
+          "expanded_size": 128
+        },
+        {
+          "name": "shape.npy",
+          "compressed_size": 74,
+          "expanded_size": 144
+        }
+      ],
+      "equal": {
+        "keys_equal": true,
+        "fields": {
+          "masks": true,
+          "scores": true,
+          "shape": true
+        }
+      },
+      "decode": {
+        "unpack": {
+          "wall_seconds": 3.7575140595436096e-05,
+          "cpu_seconds": 3.664199999775519e-05
+        },
+        "flatnonzero": {
+          "wall_seconds": 2.2705644369125366e-06,
+          "cpu_seconds": 2.2989999983735743e-06
+        },
+        "bytes_set": {
+          "wall_seconds": 1.560896635055542e-06,
+          "cpu_seconds": 1.5550000007635845e-06
+        },
+        "rows": 0,
+        "unique_nonempty": 0,
+        "unpacked_nbytes": 0
+      },
+      "index": 119,
+      "stage": "complete"
+    },
+    {
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/visual/levir_any/train_124/t2_0030_t2.npz",
+      "order": "AB",
+      "timing_scope": "process CPU is current process only; wall includes filesystem waits",
+      "arms": {
+        "A": {
+          "open_directory": {
+            "wall_seconds": 0.07416086457669735,
+            "cpu_seconds": 0.00017966900000132568
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 7.901705056428909,
+                "cpu_seconds": 7.901205879999999
+              },
+              "copy": {
+                "wall_seconds": 0.014360543340444565,
+                "cpu_seconds": 0.01436203699999794
+              },
+              "shape": [
+                79,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 10354688
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 0.0009195413440465927,
+                "cpu_seconds": 0.0009203259999992497
+              },
+              "copy": {
+                "wall_seconds": 3.0517578125e-05,
+                "cpu_seconds": 3.379600000030791e-05
+              },
+              "shape": [
+                79
+              ],
+              "dtype": "float32",
+              "nbytes": 316
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 0.00014469027519226074,
+                "cpu_seconds": 0.000144994999999426
+              },
+              "copy": {
+                "wall_seconds": 4.5709311962127686e-06,
+                "cpu_seconds": 4.620999998650177e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 5.698762834072113e-05,
+            "cpu_seconds": 5.701399999935575e-05
+          }
+        },
+        "B": {
+          "open_directory": {
+            "wall_seconds": 0.0003145560622215271,
+            "cpu_seconds": 0.0003138729999996315
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 0.02635524794459343,
+                "cpu_seconds": 0.0263516139999993
+              },
+              "copy": {
+                "wall_seconds": 0.00974360667169094,
+                "cpu_seconds": 0.009738897999998386
+              },
+              "shape": [
+                79,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 10354688
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 0.00018435902893543243,
+                "cpu_seconds": 0.00018460700000133556
+              },
+              "copy": {
+                "wall_seconds": 1.6838312149047852e-06,
+                "cpu_seconds": 1.694000001606355e-06
+              },
+              "shape": [
+                79
+              ],
+              "dtype": "float32",
+              "nbytes": 316
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 8.617155253887177e-05,
+                "cpu_seconds": 8.63740000021096e-05
+              },
+              "copy": {
+                "wall_seconds": 4.550442099571228e-06,
+                "cpu_seconds": 4.59299999988616e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 7.696449756622314e-06,
+            "cpu_seconds": 7.669999998682897e-06
+          },
+          "raw_file": {
+            "open": {
+              "wall_seconds": 0.03262783959507942,
+              "cpu_seconds": 4.0953999999260304e-05
+            },
+            "read": {
+              "wall_seconds": 1.0816380381584167e-05,
+              "cpu_seconds": 1.0880000001378676e-05
+            },
+            "close": {
+              "wall_seconds": 3.2633543014526367e-06,
+              "cpu_seconds": 3.2750000009684754e-06
+            },
+            "bytes": 23076
+          }
+        }
+      },
+      "zip_members": [
+        {
+          "name": "masks.npy",
+          "compressed_size": 22430,
+          "expanded_size": 10354816
+        },
+        {
+          "name": "scores.npy",
+          "compressed_size": 206,
+          "expanded_size": 444
+        },
+        {
+          "name": "shape.npy",
+          "compressed_size": 74,
+          "expanded_size": 144
+        }
+      ],
+      "equal": {
+        "keys_equal": true,
+        "fields": {
+          "masks": true,
+          "scores": true,
+          "shape": true
+        }
+      },
+      "decode": {
+        "unpack": {
+          "wall_seconds": 37.62598215416074,
+          "cpu_seconds": 37.60532894399999
+        },
+        "flatnonzero": {
+          "wall_seconds": 0.2063685841858387,
+          "cpu_seconds": 0.2017819000000003
+        },
+        "bytes_set": {
+          "wall_seconds": 0.0005032438784837723,
+          "cpu_seconds": 0.0005034320000021353
+        },
+        "rows": 79,
+        "unique_nonempty": 79,
+        "unpacked_nbytes": 82837504
+      },
+      "index": 239,
+      "stage": "complete"
+    },
+    {
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/visual/levir_any/train_124/t2_0090_t2.npz",
+      "order": "BA",
+      "timing_scope": "process CPU is current process only; wall includes filesystem waits",
+      "arms": {
+        "B": {
+          "open_directory": {
+            "wall_seconds": 0.00023559294641017914,
+            "cpu_seconds": 0.00023561099999369617
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 1.4707013089209795,
+                "cpu_seconds": 1.4683218589999996
+              },
+              "copy": {
+                "wall_seconds": 0.0037809964269399643,
+                "cpu_seconds": 0.0037842419999947197
+              },
+              "shape": [
+                81,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 10616832
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 0.0003036763519048691,
+                "cpu_seconds": 0.00030413300000020627
+              },
+              "copy": {
+                "wall_seconds": 4.652887582778931e-06,
+                "cpu_seconds": 4.548999996245584e-06
+              },
+              "shape": [
+                81
+              ],
+              "dtype": "float32",
+              "nbytes": 324
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 0.00015295110642910004,
+                "cpu_seconds": 0.00015332399999579138
+              },
+              "copy": {
+                "wall_seconds": 1.1939555406570435e-06,
+                "cpu_seconds": 1.5689999912638086e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 1.2440606951713562e-05,
+            "cpu_seconds": 1.2506999993888712e-05
+          },
+          "raw_file": {
+            "open": {
+              "wall_seconds": 0.01388520561158657,
+              "cpu_seconds": 9.387699999763299e-05
+            },
+            "read": {
+              "wall_seconds": 0.01915128156542778,
+              "cpu_seconds": 2.619200000708588e-05
+            },
+            "close": {
+              "wall_seconds": 3.874301910400391e-06,
+              "cpu_seconds": 3.893000013022174e-06
+            },
+            "bytes": 23741
+          }
+        },
+        "A": {
+          "open_directory": {
+            "wall_seconds": 0.00024116598069667816,
+            "cpu_seconds": 0.00019116299999666353
+          },
+          "keys": {
+            "masks": {
+              "materialize": {
+                "wall_seconds": 0.02596188336610794,
+                "cpu_seconds": 0.025957309000006035
+              },
+              "copy": {
+                "wall_seconds": 0.016631213948130608,
+                "cpu_seconds": 0.01636990100000446
+              },
+              "shape": [
+                81,
+                131072
+              ],
+              "dtype": "uint8",
+              "nbytes": 10616832
+            },
+            "scores": {
+              "materialize": {
+                "wall_seconds": 0.0003724079579114914,
+                "cpu_seconds": 0.00037287799999319304
+              },
+              "copy": {
+                "wall_seconds": 8.352100849151611e-06,
+                "cpu_seconds": 8.398999995051781e-06
+              },
+              "shape": [
+                81
+              ],
+              "dtype": "float32",
+              "nbytes": 324
+            },
+            "shape": {
+              "materialize": {
+                "wall_seconds": 0.00012486614286899567,
+                "cpu_seconds": 0.00012501700000200344
+              },
+              "copy": {
+                "wall_seconds": 3.3508986234664917e-06,
+                "cpu_seconds": 3.429999992476951e-06
+              },
+              "shape": [
+                2
+              ],
+              "dtype": "int64",
+              "nbytes": 16
+            }
+          },
+          "close": {
+            "wall_seconds": 2.4845823645591736e-05,
+            "cpu_seconds": 2.4896999988754942e-05
+          }
+        }
+      },
+      "zip_members": [
+        {
+          "name": "masks.npy",
+          "compressed_size": 23093,
+          "expanded_size": 10616960
+        },
+        {
+          "name": "scores.npy",
+          "compressed_size": 208,
+          "expanded_size": 452
+        },
+        {
+          "name": "shape.npy",
+          "compressed_size": 74,
+          "expanded_size": 144
+        }
+      ],
+      "equal": {
+        "keys_equal": true,
+        "fields": {
+          "masks": true,
+          "scores": true,
+          "shape": true
+        }
+      },
+      "decode": {
+        "unpack": {
+          "wall_seconds": 1.8727662432938814,
+          "cpu_seconds": 1.8673888379999966
+        },
+        "flatnonzero": {
+          "wall_seconds": 0.14895328134298325,
+          "cpu_seconds": 0.1485805110000058
+        },
+        "bytes_set": {
+          "wall_seconds": 0.0007603149861097336,
+          "cpu_seconds": 0.0007609319999914987
+        },
+        "rows": 81,
+        "unique_nonempty": 81,
+        "unpacked_nbytes": 84934656
+      },
+      "index": 359,
+      "stage": "complete"
+    }
+  ]
+}

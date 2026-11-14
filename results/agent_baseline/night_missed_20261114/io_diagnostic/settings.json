@@ -1,0 +1,21 @@
+{
+  "stem": "train_124",
+  "indices": [
+    0,
+    119,
+    239,
+    359
+  ],
+  "orders": [
+    "AB",
+    "BA",
+    "AB",
+    "BA"
+  ],
+  "api_requests": 0,
+  "gt_read": false,
+  "scope": "Four deterministic files only; cache/order effects remain; do not extrapolate overall acceleration",
+  "path_A": "np.load(path) once; each key materialized once then copied",
+  "path_B": "one open/read/close to bytes, then BytesIO np.load; each key materialized once then copied",
+  "cache_modified": false
+}

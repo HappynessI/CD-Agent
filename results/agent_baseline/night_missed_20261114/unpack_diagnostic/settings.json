@@ -1,0 +1,15 @@
+{
+  "indices": [
+    0,
+    119,
+    239,
+    359
+  ],
+  "order": "ABBA once per file",
+  "A": "batch unpackbits(axis=1) then reshape",
+  "B": "preallocated output; row unpackbits(axis=None) then assign",
+  "timing": "unpack includes output allocation/row assignment; index measured separately; loading excluded",
+  "limitation": "Four fixed files; order/allocation/cache effects remain. No overall speedup claim.",
+  "api_requests": 0,
+  "gt_read": false
+}

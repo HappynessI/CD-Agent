@@ -1,0 +1,114 @@
+{
+  "name": "cd-night-io-diagnostic-20261115",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-io-diagnostic-20261115/jobs/01-io.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-io-diagnostic-20261115/jobs/02-unpack.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-io-diagnostic-20261115/jobs/02-unpack.sbatch",
+  "job_id": "186688",
+  "hook_id": "186689",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-15 03:16:55",
+  "started_epoch": 1794683815.836221,
+  "history": [
+    {
+      "job": "01-io.sbatch",
+      "job_id": "186685",
+      "hook_id": "186686",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "fixed_four_file_IO",
+        "cost_cny": 0,
+        "completed": 4
+      },
+      "metric_error": null,
+      "at": "2026-11-15 03:18:12"
+    },
+    {
+      "job": "02-unpack.sbatch",
+      "job_id": "186688",
+      "hook_id": "186689",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "fixed_four_file_IO",
+        "cost_cny": 0,
+        "completed": 4
+      },
+      "metric_error": null,
+      "at": "2026-11-15 03:23:29"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 03:23:16",
+  "last_advance_at": "2026-11-15 03:23:16",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 03:23:29",
+    "job_id": "186688",
+    "hook_id": "186689",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-io-diagnostic-20261115/jobs/02-unpack.sbatch",
+    "latest": {
+      "job": "02-unpack.sbatch",
+      "job_id": "186688",
+      "hook_id": "186689",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "fixed_four_file_IO",
+        "cost_cny": 0,
+        "completed": 4
+      },
+      "metric_error": null,
+      "at": "2026-11-15 03:23:29"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-io-diagnostic-20261115/jobs/02-unpack.sbatch",
+      "reason": "186685 fourfile arrays exact;read mostlymilliseconds and order-dependentmaterialization do not support BytesIO replacement. Batchunpack5/79/81masks took18.65/37.63/1.87s CPU~=wall. Test samefixedarrays batchaxis1 vsrowaxisNone ABBA withlayout/equality;no modifications to activeextraction or globaltools.",
+      "at": "2026-11-15 03:23:15"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "FourfileIO and ABBA unpack complete,all arraysequal. ABBA batch0.002to0.138s did not reproduce18/37s delays,nor establish row/BytesIO improvement. No global loading changes;preserve timing ambiguity. OriginalS5 recovery186610 completed30/30;no further performance scan needed.",
+      "at": "2026-11-15 03:26:31"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "stop_reason": "FourfileIO and ABBA unpack complete,all arraysequal. ABBA batch0.002to0.138s did not reproduce18/37s delays,nor establish row/BytesIO improvement. No global loading changes;preserve timing ambiguity. OriginalS5 recovery186610 completed30/30;no further performance scan needed.",
+  "finished_at": "2026-11-15 03:26:31",
+  "elapsed_seconds": 575.5
+}
