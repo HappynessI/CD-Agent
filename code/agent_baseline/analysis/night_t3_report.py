@@ -58,6 +58,12 @@ def collect(night,old):
         direct.extend(current)
         stages['r1_direct4/'+split]=dict(completed=len(current),expected=30,status='complete' if len(current)==30 else ('pending' if split=='tune' else 'not_promoted_or_partial'))
     if direct:retrieval['r1_direct4']=dict(tasks=len(direct),records=direct,summary=summaries(direct))
+    joint=[]
+    for split in ('tune','confirm'):
+        current=[load(p) for p in sorted((night/'r1_endpoint'/split/'tasks').glob('*/metrics.json'))]
+        joint.extend(current)
+        stages['r1_endpoint/'+split]=dict(completed=len(current),expected=30,status='complete' if len(current)==30 else ('pending' if split=='tune' else 'not_promoted_or_partial'))
+    if joint:retrieval['r1_endpoint']=dict(tasks=len(joint),records=joint,summary=summaries(joint))
     raw_rows=retrieval.get('retrieval/B0_local_raw',{}).get('records',[])
     stages['local_raw/tune']=dict(completed=sum(r['split']=='tune' for r in raw_rows),expected=30,status='not_submitted_zero_TP_headroom' if not raw_rows else ('complete' if sum(r['split']=='tune' for r in raw_rows)==30 else 'partial'))
     stages['local_raw/confirm']=dict(completed=sum(r['split']=='confirm' for r in raw_rows),expected=30,status='not_requested_without_tune_evidence' if not any(r['split']=='confirm' for r in raw_rows) else 'started')
@@ -125,6 +131,11 @@ def readable_stage_results(data):
         row=choose(direct['summary'],'positive');m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_direct4_verified@8']
         lines.append(f"R1-direct4 tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. Judge positive-target preservation, empty-task behavior and manual response evidence together before any confirmation promotion; no single mechanical F1 cutoff decides it.")
     else:lines.append(f"R1-direct4 remains pending/partial ({sum(r['split']=='tune' for r in direct['records']) if direct else 0}/30 tune). Unlike the cancelled text-pool raw arm, it keeps the R1 pool with positive-target coverage.")
+    joint=data['retrieval'].get('r1_endpoint')
+    if joint and sum(r['split']=='tune' for r in joint['records'])==30:
+        row=choose(joint['summary'],'positive');m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_equal_joint@8']
+        lines.append(f"R1 fixed-pool endpoint/delta combination tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. This is the same-pool scoring contrast; fullpool joint remains a different-pool reference. Coefficients and geometry gates were not tuned.")
+    else:lines.append('R1 same-pool joint-score experiment is pending/partial; confirmation is not automatically promoted.')
     return lines
 
 
