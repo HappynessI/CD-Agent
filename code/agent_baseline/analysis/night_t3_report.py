@@ -102,6 +102,16 @@ def markdown(data):
         'T3.3 manual uncertainty: the fixed first tune example train_2130_T33_2to4 is clipped at the source crop bottom; close/wide views nearly coincide. Its post-date tan/gray-green support can resemble bare ground or turbid water. Treat the water-label mismatch as requiring visual/label review, not automatically a pure model error. No labels were changed.','',
         '| Stage | Completed/expected | Status |','|---|---:|---|']
     for name,row in data['stages'].items():lines.append(f"| {name} | {row.get('completed','—')}/{row.get('expected','—')} | {row['status']} |")
+    actual=data['retrieval'].get('retrieval/B0')
+    if actual and actual['tasks']==60 and data['audit']:
+        chosen=lambda rows,support:next(r for r in rows if r['split']=='tune' and r['support']==support and r['group']=='全部')
+        prior=chosen(data['audit']['strata'],'all')['methods']['dino@8']
+        current=chosen(actual['summary'],'all')['methods'];geometry=current['R1_geometry_dino@8'];text=current['R2_all@0'];verified=current['R3_verified@8']
+        positive=chosen(actual['summary'],'positive');empty=chosen(actual['summary'],'empty')
+        lines+=['','## Decisions from tuning evidence only','',
+            f"Predeclared geometry filtering changes tune Top8 F1 from {prior['f1_c']:.3f} to {geometry['f1_c']:.3f}, TP from {prior['tp']} to {geometry['tp']}, and FP from {prior['fp']} to {geometry['fp']}. Recall remains {geometry['recall']:.3f}%; this supports keeping it as a low-cost baseline, not a solved-task claim.",
+            '',f"Predicted text proposals cover {text['tp']} tuning GT pixels. Local verification changes FP from {text['fp']} to {verified['fp']}, but its empty-prediction rate on positive tasks is {positive['methods']['R3_verified@8']['empty_prediction_rate']:.3f}, versus negative accuracy {empty['methods']['R3_verified@8']['empty_prediction_rate']:.3f} on empty tasks. Rejection alone is not reliable recovery.",
+            '', 'Do not promote the text bridge or run the planned whole tune raw-view arm when its proposal pool has zero TP headroom. First reuse historical oracle/cache evidence to separate parsing from proposal constraints; evaluate the fixed endpoint alternatives using tune positive-target evidence before considering any method choice. Never select weights or methods from confirmation outcomes.']
     lines+=['','## Label agreement only','','| Variant | Split | Group | N | Before | After | Pair |','|---|---|---|---:|---:|---:|---:|']
     for name,value in data['semantic_label_agreement'].items():
         for row in value['summary']:
