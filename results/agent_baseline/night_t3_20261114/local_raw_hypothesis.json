@@ -1,0 +1,8 @@
+{
+  "hypothesis": "Fixed spotlight silhouette may be mistaken for persistent physical object shape; compare natural RGB local contour inputs.",
+  "evidence": "retrieval/B0/tasks/train_1136_5to1/verification/0: no verdict cites unchanged shape although actual roof-to-green appearance is visible; tiny remainingGT3px means this is mechanism evidence only.",
+  "design": "Same B0 R2 candidates and DINO Top8, predicted classes, seed and decoding; old spotlight answers reused, rawRGB thin-contour local pair is new joint view and support-instruction intervention.",
+  "split": "Fixed original tuning30 first, positive and empty strata separately; no confirmation choice or parameter sweep.",
+  "next_stage": "Not submitted: full60 diagnostic found R2 tuning positive coverageTP=0 across11 positive cases. A verifier on this same pool cannot recover any TP. Retain hypothesis untested, diagnose proposal recall first.",
+  "cost": "No new request yet; raw answers incrementally persisted when run."
+}

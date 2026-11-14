@@ -1,0 +1,18 @@
+{
+  "system": "Judge only the supported candidate region in the two local-date images.",
+  "question": "Does the bright supported candidate region change from building at T1 to low vegetation at T2? Ignore darkened outside pixels and holes. Unchanged or reversed transitions are no. Reply JSON {\"change\":\"yes\" or \"no\", \"before\":\"visible class\", \"after\":\"visible class\", \"reason\":\"local visual evidence\"}.",
+  "images": [
+    {
+      "label": "T1 local support spotlight",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/retrieval/B0/tasks/train_1136_5to1/verification/1/00.png"
+    },
+    {
+      "label": "T2 local support spotlight",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/retrieval/B0/tasks/train_1136_5to1/verification/1/01.png"
+    }
+  ],
+  "model": "qwen3.7-flash",
+  "seed": 1016,
+  "max_tokens": 768,
+  "temperature": 0
+}

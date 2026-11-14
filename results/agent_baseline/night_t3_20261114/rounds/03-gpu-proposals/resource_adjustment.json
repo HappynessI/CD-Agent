@@ -1,0 +1,17 @@
+{
+  "job_id": "186439",
+  "reason": "Reduce inherited resource reservation while queued; one persistent SAM3 worker, CPU thread limits remain1; model checkpoint3.45GB. No model/code/node/output changes.",
+  "old": {
+    "cpus": 4,
+    "mem_gb": 64
+  },
+  "new": {
+    "cpus": 2,
+    "mem_gb": 32
+  },
+  "applied": "scontrol update accepted; future retries use updated sbatch",
+  "note": "Actual peak memory still requires execution; resume prepared task cache on memory failure.",
+  "node_policy": "gre scheduler may select GPU node for local SAM3 preparation only; prepare-only contract disallows external requests; dependent API verification remains fixed gpu42",
+  "node_update": "scontrol update JobId=186439 ReqNodeList= accepted",
+  "slurm_reference": "https://slurm.schedmd.com/scontrol.html"
+}

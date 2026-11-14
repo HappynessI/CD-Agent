@@ -1,0 +1,47 @@
+{
+  "status": "frozen",
+  "analysis": "secondary exploratory; historical exposure disclosed",
+  "selection_k": 10,
+  "applied_k": [
+    3,
+    5,
+    10,
+    20
+  ],
+  "groups": {
+    "levir_any": {
+      "variant": "V2",
+      "tune_k10_f1": {
+        "V0": 76.56705817665298,
+        "V1": 77.57541990226463,
+        "V2": 84.54954298400708,
+        "V3": 74.5159378017996,
+        "V4": 82.48083617956415
+      }
+    },
+    "second_appeared": {
+      "variant": "V4",
+      "tune_k10_f1": {
+        "V0": 78.42689855673711,
+        "V1": 76.45153534840856,
+        "V2": 82.6917555771096,
+        "V3": 79.21121681878914,
+        "V4": 83.033271740079
+      }
+    },
+    "second_disappeared": {
+      "variant": "V0",
+      "tune_k10_f1": {
+        "V0": 35.49488054607509,
+        "V1": 19.662363455809334,
+        "V2": 19.662363455809334,
+        "V3": 18.735904701324234,
+        "V4": 10.25201072386059
+      }
+    }
+  },
+  "confirmation_used": false,
+  "rule": "Per group maximum K10 tune pooled F1; ties V0,V1,V2,V3,V4; same variant for all K",
+  "global_selection_unchanged": true,
+  "online_status": "diagnostic only; not promoted"
+}
