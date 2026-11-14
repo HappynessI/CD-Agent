@@ -36,6 +36,8 @@ def collect(root):
     report=dict(views=read(root/'score_summary.json'),smoke=read(root/'score_smoke.json'),
         selected_verifier=read(root/'selected_verifier.json'),gates=gates,
         task_selection=read(root/'selected_verifier_by_task.json'),task_confirmation=read(root/'score_verifier_by_task.json'),
+        geometry_route_tune=read(root/'geometry_route/tune/summary.json'),geometry_route_confirm=read(root/'geometry_route/confirm/summary.json'),
+        geometry=read(root/'candidate_geometry_tune/summary.json'),
         matching_validation=read(root/'rematch_equivalence_train106.json'),packed_validation=read(root/'rematch_packed_equivalence_train106.json'),
         whu_official=read(root/'candidate_gates_pilot/whu_official_summary.json'),
         views_usage=usage(root),rankings={},s4={},exact_cases=[])
@@ -131,6 +133,24 @@ def render(report):
     for group,data in report['whu_official'].get('data',{}).get('groups',{}).items():
         for source,x in data['sources'].items():rows.append([group,source,data['images'],x['tp'],x['fp'],x['unique_tp'],x['unique_fp'],f"{x['missing_pixels_covered']}/{x['missing_pixels']}",f"{x['components_covered']}/{x['missing_components']}"])
     table(lines,['组','来源','图数','TP','FP','独有TP','独有FP','剩余FN像素覆盖','剩余FN组件覆盖≥50%'],rows)
+    lines+=['','## 固定 tune 几何诊断']
+    geometry_data=report['geometry'].get('data',{});candidates=[c for r in geometry_data.get('images',[]) for c in r['candidates']]
+    if candidates:
+        multi=sum(c['geometry']['components']>1 for c in candidates)
+        lines+=['',f'全部 {len(candidates)} 个候选中多组件 {multi} 个。固定池不支持多组件假说，不新增split工具。内部洞/邻接碎片也不能自动接受。']
+    rows=[]
+    for key,x in geometry_data.get('groups',{}).items():
+        parts=key.split('/')
+        if parts[1]=='20' and parts[2] in ('internal_hole','adjacent_edge_fragment'):
+            e=x['errors'];rows.append([key,x['candidates'],f"{x['candidate_union_tp']}/{x['candidate_union_fp']}",f"{x['accepted_union_tp']}/{x['accepted_union_fp']}",'/'.join(str(e[k]) for k in ('true_yes','false_yes','true_no','false_no'))])
+    table(lines,['组/K/几何/臂','候选','候选union TP/FP','接受union TP/FP','proxy TP/FP/TN/FN'],rows)
+    lines+=['','分层像素可能重叠，不可跨层相加；完整诊断见 [几何解释](candidate_geometry_tune/interpretation.md)。',
+        '', '## 几何路由次级验证（不推广）',
+        '固定规则仅将新建内部洞/邻接碎片改用已有V0响应；其余沿用任务策略，零API。tune改善未在确认集泛化，不改变冻结主方法，不继续扫描几何阈值。逐UID审查见 [路由失败审查](geometry_route/failure_review.md)。'];rows=[]
+    for split,key in (('tune','geometry_route_tune'),('confirm','geometry_route_confirm')):
+        for k,x in report[key].get('data',{}).get('groups',{}).get('second_appeared',{}).items():
+            rows.append([split,k,x.get('complete',False),scores(x.get('metrics',{})),fmt(x.get('delta_vs_task')),interval(x.get('paired95_vs_task')),str(x.get('pixel_delta_vs_task')),x.get('routed_candidates')])
+    table(lines,['划分','K','完整','F1/P/R','Δ原任务','95%CI','ΔTP/FP/FN','路由候选数'],rows)
     lines+=['','## 费用、复用和失败记录'];rows=[]
     for name,x in [('views',report['views_usage'])]+[(n,v['usage']) for n,v in report['rankings'].items()]:
         rows.append([name,x['successful_requests'],x['failed_attempts'],fmt(x['recorded_cost_cny']),x['missing_cost_records'],len(x['read_errors'])])
