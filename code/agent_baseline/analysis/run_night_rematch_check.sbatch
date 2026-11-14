@@ -15,4 +15,4 @@ export PYTHONNOUSERSITE=1 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_N
 "$PY" -B -m agent_baseline.analysis.night_rematch_check \
   --work "$ROOT/exp6_staging/batch99_find_missed_pre/artifacts" \
   --gates "$ROOT/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot" \
-  --output "$ROOT/CD-Agent/results/agent_baseline/night_missed_20261114/rematch_equivalence_train106.json"
+  --output "$ROOT/CD-Agent/results/agent_baseline/night_missed_20261114/rematch_packed_equivalence_train106.json"

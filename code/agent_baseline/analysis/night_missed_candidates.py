@@ -7,6 +7,7 @@ import argparse
 import json
 from pathlib import Path
 import random
+from time import perf_counter
 import numpy as np
 from scipy import ndimage as ndi
 from agent_baseline import instances
@@ -43,18 +44,28 @@ def frozen_rows(a):
     return [(s,r,mapping[s['dataset']+':'+Path(r['id']).stem]) for s,r in allrows if a.all_dev or (s['group'],Path(r['id']).stem) in selected]
 
 
-def visual_instances(work,group,stem,shape):
+def visual_instances(work,group,stem,shape,stats=None):
     folder=work/'gpu_cache'/'visual'/group/stem;found={'t1':[],'t2':[]};seen={'t1':set(),'t2':set()}
+    counters=dict(raw_rows=0,unique_packed_rows=0,unpack_calls=0,load_seconds=0.,decode_seconds=0.)
     files=sorted(folder.glob('*.npz'))
     for path in files:
         time=path.stem.rsplit('_',1)[-1]
         if time not in found:continue
-        z=load_npz(path)
-        for mask in unpack(z['masks'],tuple(z['shape'])):
-            idx=np.flatnonzero(mask).astype(np.int32);identity=idx.tobytes()
-            if not len(idx) or identity in seen[time]:continue
-            seen[time].add(identity);y,x=np.divmod(idx,shape[1])
+        started=perf_counter();z=load_npz(path);counters['load_seconds']+=perf_counter()-started
+        started=perf_counter()
+        # Source pack() writes one uint8 row per flattened bool mask, with
+        # np.packbits zero padding. Compare these exact bytes before decoding.
+        for packed in z['masks']:
+            counters['raw_rows']+=1;identity=packed.tobytes()
+            if identity in seen[time]:continue
+            seen[time].add(identity);counters['unique_packed_rows']+=1;counters['unpack_calls']+=1
+            mask=np.unpackbits(packed,count=int(np.prod(z['shape'])))
+            idx=np.flatnonzero(mask).astype(np.int32)
+            if not len(idx):continue
+            y,x=np.divmod(idx,shape[1])
             found[time].append(dict(idx=idx,area=len(idx),score=1.,bbox=[int(x.min()),int(y.min()),int(x.max()+1),int(y.max()+1)]))
+        counters['decode_seconds']+=perf_counter()-started
+    if stats is not None:stats.update(counters,nonempty_unique_instances=sum(map(len,found.values())))
     return found,len(files)
 
 

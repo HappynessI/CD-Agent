@@ -4,9 +4,36 @@ from pathlib import Path
 import numpy as np
 from agent_baseline import instances
 from agent_baseline.analysis.night_missed_candidates import rematch,gate_features,visual_instances,rematch_policies,MATCH_POLICIES
-from agent_baseline.analysis.missed_sources import change_candidates,pack,save_npz
+from agent_baseline.analysis.missed_sources import change_candidates,pack,save_npz,load_npz,unpack
 
 class CandidateGatesTest(unittest.TestCase):
+    def test_packed_dedup_matches_original_across_files_and_dates(self):
+        shape=(7,7) # Includes zero-padded trailing packbits byte.
+        a=np.zeros(shape,bool);a[1:3,1:3]=True
+        b=a.copy();b[1,1]=False
+        empty=np.zeros(shape,bool)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);folder=root/'gpu_cache/visual/levir_any/sample';folder.mkdir(parents=True)
+            for name,masks in [('t1_0001_t1',[a,a,empty]),('t2_0001_t1',[b,a,empty]),('t2_0001_t2',[a,a])]:
+                save_npz(folder/(name+'.npz'),masks=pack(masks,shape),shape=shape)
+            expected={'t1':[],'t2':[]};seen={'t1':set(),'t2':set()}
+            for path in sorted(folder.glob('*.npz')):
+                time=path.stem.rsplit('_',1)[-1];z=load_npz(path)
+                for mask in unpack(z['masks'],tuple(z['shape'])):
+                    idx=np.flatnonzero(mask).astype(np.int32);identity=idx.tobytes()
+                    if not len(idx) or identity in seen[time]:continue
+                    seen[time].add(identity);y,x=np.divmod(idx,shape[1])
+                    expected[time].append(dict(idx=idx,area=len(idx),score=1.,bbox=[int(x.min()),int(y.min()),int(x.max()+1),int(y.max()+1)]))
+            stats={};actual,_=visual_instances(root,'levir_any','sample',shape,stats)
+            for time in expected:
+                self.assertEqual(len(actual[time]),len(expected[time]))
+                for got,want in zip(actual[time],expected[time]):
+                    self.assertTrue(np.array_equal(got['idx'],want['idx']))
+                    for field in ('area','score','bbox'):self.assertEqual(got[field],want[field])
+            self.assertEqual(stats['raw_rows'],8)
+            self.assertEqual(stats['unpack_calls'],4) # Three t1 unique incl empty, one t2.
+            self.assertEqual(stats['nonempty_unique_instances'],3)
+
     def test_shared_intersections_equal_original_for_all_directions(self):
         def box(y,x,h,w):
             m=np.zeros((12,12),bool);m[y:y+h,x:x+w]=True;return m
