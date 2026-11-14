@@ -13,12 +13,15 @@ def load(path):
 
 def request_cost(night):
     # Disjoint roots; B0 is reused historical evidence, never rebilled here.
-    entries={}
+    entries={};by_root={}
     for name in ('B1','B2','B3','t33','retrieval','r1_direct4','r1_residual'):
         for pattern in ('**/answer.json','**/failure_*.json'):
             for path in (night/name).glob(pattern):
                 entries[str(path.resolve())]=float(load(path).get('cost_cny',0))
-    return dict(cost_cny=sum(entries.values()),request_artifacts=len(entries),entries=entries,
+    for path,value in entries.items():
+        root=Path(path).relative_to(night.resolve()).parts[0]
+        by_root[root]=by_root.get(root,0)+value
+    return dict(cost_cny=sum(entries.values()),by_root=by_root,request_artifacts=len(entries),entries=entries,
         rule='sum each unique successful answer or billed failed attempt artifact once; exclude B0 reuse and all summary/attempt mirrors')
 
 
@@ -70,6 +73,9 @@ def collect(night,old):
     raw_rows=retrieval.get('retrieval/B0_local_raw',{}).get('records',[])
     stages['local_raw/tune']=dict(completed=sum(r['split']=='tune' for r in raw_rows),expected=30,status='not_submitted_zero_TP_headroom' if not raw_rows else ('complete' if sum(r['split']=='tune' for r in raw_rows)==30 else 'partial'))
     stages['local_raw/confirm']=dict(completed=sum(r['split']=='confirm' for r in raw_rows),expected=30,status='not_requested_without_tune_evidence' if not any(r['split']=='confirm' for r in raw_rows) else 'started')
+    overlap=load(night/'r1_overlap_tune/summary.json')
+    overlap_complete=sum(r['answers_complete'] for r in overlap['records']) if overlap else 0
+    stages['r1_overlap_tune']=dict(completed=overlap['tasks'] if overlap else 0,answers_complete_tasks=overlap_complete,expected=30,status='complete' if overlap and overlap['tasks']==30 and overlap_complete==30 else 'pending')
     oracle=load(night/'oracle_cache/summary.json')
     stages['oracle_cache']=dict(completed=oracle['tasks'] if oracle else 0,expected=60,status='complete' if oracle and oracle['tasks']==60 else 'pending')
     preparation=[]
@@ -79,7 +85,7 @@ def collect(night,old):
     stages['endpoint']=dict(completed=len(endpoint),expected=60,status='complete' if len(endpoint)==60 else 'pending')
     return dict(stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
         endpoint=dict(records=endpoint,summary=summaries(endpoint)),delta_reproduction=delta_reproduction(endpoint,old),
-        manual_review=load(night/'grounding_review.json'),oracle_cache_diagnostic=load(night/'oracle_cache/summary.json'),cost=request_cost(night))
+        manual_review=load(night/'grounding_review.json'),overlap_audit=overlap,oracle_cache_diagnostic=load(night/'oracle_cache/summary.json'),cost=request_cost(night))
 
 
 def pool_bounds(data):
@@ -139,6 +145,19 @@ def readable_stage_results(data):
         row=choose(joint['summary'],'positive');m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_equal_joint@8']
         lines.append(f"R1 fixed-pool endpoint/delta combination tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. This is the same-pool scoring contrast; fullpool joint remains a different-pool reference. Coefficients and geometry gates were not tuned.")
     else:lines.append('R1 same-pool joint-score experiment is pending/partial; confirmation is not automatically promoted.')
+    overlap=data.get('overlap_audit')
+    if overlap and sum(r['answers_complete'] for r in overlap['records'])==30:
+        row=next(r for r in overlap['strata'] if r['support']=='all' and r['group']=='全部')
+        yes=row['categories']['overlap_nonempty'];no=row['categories']['no_overlap']
+        lines.append(f"Fixed tune overlap audit: {yes['accepted_candidates']}/{yes['candidates']} overlapping nonempty-residual candidates were accepted, versus {no['accepted_candidates']}/{no['candidates']} nonoverlap candidates. Overlap-accepted union covers {row['accepted_overlap_union']['fp']} of {row['complete_verified']['fp']} final FP pixels. These pixels may also be covered by nonoverlap candidates: this is neither exclusive attribution nor a forecast of removable FP.")
+    else:lines.append('R1 overlap audit is pending/partial; incomplete responses are not treated as completed evidence.')
+    residual=data['retrieval'].get('r1_residual')
+    if residual and residual['tasks']==30:
+        for support in ('positive','empty'):
+            row=choose(residual['summary'],support);methods=row['methods'];old=methods['R1_direct4_verified@8'];new=methods['R1_residual_verified@8']
+            lines.append(f"Residual paired tune {support}: TP {old['tp']} → {new['tp']}, FP {old['fp']} → {new['fp']}, F1 {old['f1_c']:.3f} → {new['f1_c']:.3f}. Comparison is against original direct4, using task-level unions.")
+        lines.append(f"Residual decisions include {sum(r['new_api_requests'] for r in residual['records'])} new logical candidate requests and {sum(r['reused_answers'] for r in residual['records'])} exactly reused answers at zero new cost. R1 without verification is reference only; this intervention does not re-ask the unchanged nonoverlap candidates previously rejected by direct4.")
+    else:lines.append(f"Residual paired tune is pending/partial ({residual['tasks'] if residual else 0}/30); no completed benefit is asserted.")
     return lines
 
 
@@ -198,7 +217,7 @@ def markdown(data):
     reproduction=data['delta_reproduction'];cost=data['cost']
     lines+=['','## Reproduction, manual evidence and accounting','',
         f"Historical DINO reproduction: {reproduction['tasks']} completed tasks, {reproduction['comparisons']} TopK comparisons; all available counts agree: {reproduction['all_available_agree']}; mismatches: {len(reproduction['mismatches'])}. This is not a full60 claim until all60 finish.",
-        '',f"New cumulative API cost: CNY {cost['cost_cny']:.7f}, from {cost['request_artifacts']} unique request artifacts. Historical B0 is reused without rebilling; summary totals are not added.",
+        '',f"New cumulative API cost: CNY {cost['cost_cny']:.7f}, from {cost['request_artifacts']} unique request artifacts. Breakdown by root: {cost['by_root']}. Independent exp-loop cumulative ledgers are not added to these file-level costs. Historical B0 is reused without rebilling; summary totals are not added.",
         '', 'The Main Agent visual review, not independent human truth, is embedded in report.json and remains in grounding_review.json/md. It distinguishes wrong support localization, uncertain visual states and class-label disagreement. Fixed-pool upper bounds, per-task coverage, counterfactual rank overlap and unparsed diagnostics remain separately recorded; none are actual achieved Agent performance.']
     return '\n'.join(lines)+'\n'
 
