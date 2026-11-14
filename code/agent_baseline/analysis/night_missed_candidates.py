@@ -260,6 +260,14 @@ def whu(a):
             stem=Path(row['id']).stem
             directory=a.run/'whu'/'gt_official_v3';kind={'any':'c0','appeared':'new','disappeared':'demolished'}[spec['direction']]
             gtpath=directory/kind/(stem+'.png');ignore=directory/'ignore'/(stem+'.png') if spec['direction']!='any' else None
+            saved=a.out/'whu_official'/group/(stem+'.json')
+            if getattr(a,'resume_whu',False) and saved.exists():
+                record=load(saved)
+                if record.get('gt')!=str(gtpath) or record.get('ignore')!=(str(ignore) if ignore else None) or set(record.get('sources',{}))!=set(SOURCES):
+                    raise ValueError('Existing WHU record differs from official source audit')
+                records.append(record)
+                write_json(a.out/'whu_progress.json',dict(group=group,completed_in_group=len(records),expected_in_group=spec['expected'],last=stem,reused=True))
+                continue
             truth,valid=load_reference(gtpath,ignore)
             base=load_npz(a.work/'base'/group/(stem+'.npz'))['start']&valid;sources={}
             candidate_counts={}
@@ -278,7 +286,8 @@ def whu(a):
                     unique_tp=int((unique&truth).sum()),unique_fp=int((unique&~truth).sum()),
                     add_all=metrics(pixel_counts(base|mask,truth&valid)))
             record=dict(stem=stem,gt=str(gtpath),ignore=str(ignore) if ignore else None,baseline=metrics(pixel_counts(base,truth&valid)),sources=values)
-            write_json(a.out/'whu_official'/group/(stem+'.json'),record);records.append(record)
+            write_json(saved,record);records.append(record)
+            write_json(a.out/'whu_progress.json',dict(group=group,completed_in_group=len(records),expected_in_group=spec['expected'],last=stem,reused=False))
         summary[group]=dict(images=len(records),records=records,sources={s:{key:sum(r['sources'][s][key] for r in records) for key in (
             'tp','fp','unique_tp','unique_fp','candidates','missing_pixels','missing_pixels_covered','missing_components','components_covered')} for s in SOURCES})
     write_json(a.out/'whu_official_summary.json',dict(gt_version='official_v3',candidate_provenance='unchanged historical batch99 candidates, historical thresholds',groups=summary))
@@ -287,6 +296,6 @@ def whu(a):
 def main():
     p=argparse.ArgumentParser();p.add_argument('command',choices=['extract','evaluate','whu','fill_features']);p.add_argument('--out',type=Path,required=True)
     p.add_argument('--views',type=Path,required=True);p.add_argument('--run',type=Path,required=True);p.add_argument('--work',type=Path,required=True)
-    p.add_argument('--all-dev',action='store_true');a=p.parse_args();globals()[a.command](a)
+    p.add_argument('--all-dev',action='store_true');p.add_argument('--resume-whu',action='store_true');a=p.parse_args();globals()[a.command](a)
 
 if __name__=='__main__':main()
