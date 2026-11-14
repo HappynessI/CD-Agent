@@ -1,9 +1,20 @@
 import unittest
+import json
+import tempfile
+from pathlib import Path
 import numpy as np
-from agent_baseline.analysis.night_t3_overlap_audit import candidate_geometry
+from agent_baseline.analysis.night_t3_overlap_audit import candidate_geometry,cached_complete
 
 
 class OverlapTests(unittest.TestCase):
+    def test_complete_answers_resume_but_pending_refreshes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'diagnostic.json'
+            path.write_text(json.dumps(dict(id='case',answers_complete=False)))
+            self.assertIsNone(cached_complete(path))
+            path.write_text(json.dumps(dict(id='case',answers_complete=True)))
+            self.assertEqual(cached_complete(path)['id'],'case')
+
     def test_residual_support_and_counts_exclude_example_only(self):
         mask=np.array([[1,1],[1,0]],bool);ex=np.array([[1,0],[0,0]],bool);truth=np.array([[1,1],[0,1]],bool)
         r=candidate_geometry(mask,ex,truth)

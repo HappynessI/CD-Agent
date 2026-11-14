@@ -7,7 +7,7 @@
 #SBATCH --time=02:00:00
 set -euo pipefail
 : "${SLURM_JOB_ID:?Submit through Slurm}"
-: "${T3_OVERLAP_OUTPUT:?Set a new audit output directory}"
+: "${T3_OVERLAP_OUTPUT:?Set a new or resumed audit output directory}"
 ROOT=/guisongxia01/pangchao/wangyihan
 REPO=${T3_CODE:-$ROOT/wyh/cd-t3-bridge}
 OUT=$ROOT/wyh/CD-Agent/results/agent_baseline/night_t3_20261114
@@ -25,4 +25,4 @@ finish() {
 }
 trap finish EXIT
 "$PY" -B -m unittest agent_baseline.tests.test_night_t3_overlap_audit
-"$PY" -B -m agent_baseline.analysis.night_t3_overlap_audit --run "$ROOT/wyh/exp6_staging/agent_baseline_run" --night "$OUT" --output "${T3_OVERLAP_OUTPUT:?Set a new audit output directory}"
+"$PY" -B -m agent_baseline.analysis.night_t3_overlap_audit --run "$ROOT/wyh/exp6_staging/agent_baseline_run" --night "$OUT" --output "${T3_OVERLAP_OUTPUT:?Set a new or resumed audit output directory}"

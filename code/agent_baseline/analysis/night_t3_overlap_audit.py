@@ -17,13 +17,27 @@ def candidate_geometry(mask,exemplar,truth):
         category='empty_residual' if not residual.any() else ('overlap_nonempty' if overlap else 'no_overlap'))
 
 
+def cached_complete(path):
+    if not exists(path):return None
+    record=json.loads(read_text(path))
+    return record if record['answers_complete'] else None
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--night',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     if not os.environ.get('SLURM_JOB_ID'):raise RuntimeError('Read and process masks through Slurm')
-    if exists(a.output/'summary.json'):raise ValueError('Use a new audit directory to preserve prior partial observations')
     audit=json.loads(read_text(a.night/'audit.json'));records=[]
+    def checkpoint(record):
+        records.append(record)
+        write_json(a.output/'progress.json',dict(tasks=len(records),answers_complete_tasks=sum(r['answers_complete'] for r in records),
+            ids=[r['id'] for r in records],model_calls=0,api_cost_cny=0))
+        print('overlap audit',len(records),record['id'],record['answers_complete'],flush=True)
     for row in load_dev(a.run):
         if audit['split'][row['id']]!='tune':continue
+        task_output=a.output/'tasks'/row['id']/'diagnostic.json'
+        cached=cached_complete(task_output)
+        if cached is not None:
+            checkpoint(cached);continue
         source=a.night/'retrieval/B0/tasks'/row['id'];prior=json.loads(read_text(source/'metrics.json'));prepared=read_npz(source/'prepared.npz')
         masks=prepared['r1'].astype(bool);indices=prepared['order1'].tolist()[:8]
         ex=read_image(row['exemplar_mask'])>0;truth=read_image(row['gt_mask'])>0;candidates=[]
@@ -45,7 +59,7 @@ def main():
             answers_complete=known,baseline_counts=baseline,
             verified_counts=pixel_counts(union(accepted),truth,ex) if known else None,
             accepted_overlap_union_counts=pixel_counts(union(overlap),truth,ex) if known else None)
-        records.append(record)
+        write_json(task_output,record);checkpoint(record)
     strata=[]
     for support in ('all','positive','empty'):
         for label in ('全部',*GROUPS):
