@@ -79,9 +79,18 @@ MATCH_POLICIES=(('old_025',.25,'overlap'),('overlap_010',.10,'overlap'),
                 ('overlap_050',.50,'overlap'),('iou_025',.25,'iou'))
 
 
-def rematch_policies(found,base,direction):
+def rematch_policies(found,base,direction,overlap_method='reference'):
     """Reuse exact pair intersections; preserve instances.match presence rules."""
-    pairs=instances.overlaps(found['t1'],found['t2']);result={}
+    if overlap_method=='reference':pairs=instances.overlaps(found['t1'],found['t2'])
+    elif overlap_method=='csr':
+        from .night_sparse_overlap import sparse_overlaps
+        pairs=sparse_overlaps(found,base.shape)
+    else:raise ValueError('Unknown experiment overlap backend')
+    return matched_masks(found,base,direction,pairs)
+
+
+def matched_masks(found,base,direction,pairs):
+    result={}
     for key,threshold,mode in MATCH_POLICIES:
         hit_a=set();hit_b=set()
         for i,j,inter,area_a,area_b in pairs:
