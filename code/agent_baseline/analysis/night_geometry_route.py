@@ -87,6 +87,16 @@ def evaluate(a):
         rule='SECOND appeared internal_hole/adjacent_edge_fragment use V0; all other candidates retain frozen task variant',
         geometry_uses_gt=False,gt_role='offline score only',confirmation_status='exploratory previously exposed; no confirm selection')
     write_json(a.out/a.split/'summary.json',report)
+    lines=['# 固定几何路由：'+a.split,'','零新增API；K10主指标，K20描述；确认集历史曝光，不用于改规则。','',
+        '|组|K|完整|F1/P/R|Δ原任务|95%CI|ΔTP/FP/FN vs任务|Δ初始|ΔV0|路由数|',
+        '|---|---|---|---|---|---|---|---|---|---|']
+    for group,budgets in groups.items():
+        for k,v in budgets.items():
+            if not v['complete']:lines.append(f'|{group}|{k}|False|待完成|—|—|—|—|—|—|');continue
+            lines.append('|'+ '|'.join((group,k,'True','/'.join(f"{v['metrics'][x]:.4f}" for x in ('f1','precision','recall')),
+                f"{v['delta_vs_task']:.4f}",str(v['paired95_vs_task']),str(v['pixel_delta_vs_task']),
+                f"{v['delta_vs_initial']:.4f}",f"{v['delta_vs_v0']:.4f}",str(v['routed_candidates'])))+'|')
+    (a.out/a.split/'report.md').write_text('\n'.join(lines)+'\n')
 
 
 def main():
