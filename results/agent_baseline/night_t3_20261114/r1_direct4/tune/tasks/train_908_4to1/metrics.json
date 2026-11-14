@@ -1,0 +1,157 @@
+{
+  "id": "train_908_4to1",
+  "split": "tune",
+  "group": "地表类",
+  "remaining_gt_pixels": 0,
+  "scores": [
+    {
+      "method": "R1_geometry_dino",
+      "k": 8,
+      "counts": [
+        0,
+        1307,
+        0
+      ],
+      "coverage": {
+        "gt_instances": 0,
+        "aligned_instances": 0,
+        "truth_pixels": 0,
+        "covered_pixels": 0,
+        "proposals": 8,
+        "instance_recall_upper": null,
+        "pixel_coverage_upper": null,
+        "pixel_f1_upper": null
+      },
+      "candidates": [
+        16,
+        19,
+        23,
+        8,
+        38,
+        9,
+        32,
+        30
+      ]
+    },
+    {
+      "method": "R1_direct4_verified",
+      "k": 8,
+      "counts": [
+        0,
+        975,
+        0
+      ],
+      "coverage": {
+        "gt_instances": 0,
+        "aligned_instances": 0,
+        "truth_pixels": 0,
+        "covered_pixels": 0,
+        "proposals": 5,
+        "instance_recall_upper": null,
+        "pixel_coverage_upper": null,
+        "pixel_f1_upper": null
+      },
+      "candidates": [
+        19,
+        23,
+        38,
+        32,
+        30
+      ]
+    },
+    {
+      "method": "R1_direct4_drop_unparsed_diagnostic",
+      "k": 8,
+      "counts": [
+        0,
+        975,
+        0
+      ],
+      "coverage": {
+        "gt_instances": 0,
+        "aligned_instances": 0,
+        "truth_pixels": 0,
+        "covered_pixels": 0,
+        "proposals": 5,
+        "instance_recall_upper": null,
+        "pixel_coverage_upper": null,
+        "pixel_f1_upper": null
+      },
+      "candidates": [
+        19,
+        23,
+        38,
+        32,
+        30
+      ]
+    }
+  ],
+  "verification": {
+    "16": {
+      "answer": "no",
+      "cost_cny": 0.0002498
+    },
+    "19": {
+      "answer": "yes",
+      "cost_cny": 0.0002298
+    },
+    "23": {
+      "answer": "yes",
+      "cost_cny": 0.00022820000000000004
+    },
+    "8": {
+      "answer": "no",
+      "cost_cny": 0.00023940000000000005
+    },
+    "38": {
+      "answer": "yes",
+      "cost_cny": 0.00023300000000000003
+    },
+    "9": {
+      "answer": "no",
+      "cost_cny": 0.0002378
+    },
+    "32": {
+      "answer": "yes",
+      "cost_cny": 0.00023700000000000004
+    },
+    "30": {
+      "answer": "yes",
+      "cost_cny": 0.0002298
+    }
+  },
+  "verification_stats": {
+    "requests": 8,
+    "yes": 5,
+    "no": 3,
+    "unparsed": 0,
+    "policy": "keep unparsed as historical verifier; strict parsed-yes is diagnostic only"
+  },
+  "geometry_proposal_upper": {
+    "gt_instances": 0,
+    "aligned_instances": 0,
+    "truth_pixels": 0,
+    "covered_pixels": 0,
+    "proposals": 60,
+    "instance_recall_upper": null,
+    "pixel_coverage_upper": null,
+    "pixel_f1_upper": null
+  },
+  "paired_counts_delta": {
+    "tp": 0,
+    "fp": -332,
+    "fn": 0
+  },
+  "candidate_ids": [
+    16,
+    19,
+    23,
+    8,
+    38,
+    9,
+    32,
+    30
+  ],
+  "unverified_reused_from": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/retrieval/B0/tasks/train_908_4to1",
+  "cost_cny": 0.0018848000000000003
+}

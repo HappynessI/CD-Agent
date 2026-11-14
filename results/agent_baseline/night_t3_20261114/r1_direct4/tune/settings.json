@@ -1,0 +1,16 @@
+{
+  "code": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/direct4-v1/code/agent_baseline/analysis/night_t3_direct4.py",
+  "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/retrieval/B0",
+  "split": "tune",
+  "model": "qwen3.7-flash",
+  "seed": 1016,
+  "temperature": 0,
+  "max_tokens": 768,
+  "k": 8,
+  "pool": "existing geometry-filtered R1 masks/order1; candidate IDs are indices in prepared r1, not original SAM pool",
+  "overlap": "R1 eligible does not exclude exemplar overlap. Candidate can contain the example; retain fixed pool and exclude exemplar pixels only during scoring.",
+  "intervention": "4 local original RGB views with thin support contour and explicit support instruction; joint view/prompt intervention",
+  "semantics": "direct example/candidate comparison; no parsed class pair, task ID, or GT to model",
+  "contrast": "same R1 Top8 without verification; old8 original-pool verifier and R3 parsed-text two-view verifier are contextual references, not strict paired controls",
+  "selection": "fixed tune30 first; confirm only after positive-target evidence; no weight or TopK tuning"
+}

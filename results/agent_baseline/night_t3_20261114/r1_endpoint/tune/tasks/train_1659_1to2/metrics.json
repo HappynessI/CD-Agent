@@ -1,0 +1,132 @@
+{
+  "id": "train_1659_1to2",
+  "split": "tune",
+  "group": "地表类",
+  "remaining_gt_pixels": 7720,
+  "scores": [
+    {
+      "method": "R1_geometry_dino",
+      "k": 8,
+      "counts": [
+        1927,
+        1755,
+        5793
+      ],
+      "coverage": {
+        "gt_instances": 5,
+        "aligned_instances": 3,
+        "truth_pixels": 7720,
+        "covered_pixels": 1927,
+        "proposals": 8,
+        "instance_recall_upper": 0.6,
+        "pixel_coverage_upper": 0.24961139896373058,
+        "pixel_f1_upper": 39.95024359904634
+      },
+      "candidates": [
+        44,
+        38,
+        85,
+        43,
+        76,
+        27,
+        58,
+        74
+      ]
+    },
+    {
+      "method": "R1_equal_joint",
+      "k": 8,
+      "counts": [
+        1960,
+        1352,
+        5760
+      ],
+      "coverage": {
+        "gt_instances": 5,
+        "aligned_instances": 3,
+        "truth_pixels": 7720,
+        "covered_pixels": 1960,
+        "proposals": 8,
+        "instance_recall_upper": 0.6,
+        "pixel_coverage_upper": 0.2538860103626943,
+        "pixel_f1_upper": 40.49586776859504
+      },
+      "candidates": [
+        44,
+        38,
+        85,
+        43,
+        76,
+        27,
+        58,
+        18
+      ]
+    },
+    {
+      "method": "fullpool_equal_joint_reference",
+      "k": 8,
+      "counts": [
+        2515,
+        8892,
+        5205
+      ],
+      "coverage": {
+        "gt_instances": 5,
+        "aligned_instances": 2,
+        "truth_pixels": 7720,
+        "covered_pixels": 2515,
+        "proposals": 8,
+        "instance_recall_upper": 0.4,
+        "pixel_coverage_upper": 0.32577720207253885,
+        "pixel_f1_upper": 49.14509037616023
+      },
+      "candidates": [
+        92,
+        81,
+        8,
+        100,
+        31,
+        145,
+        93,
+        40
+      ]
+    }
+  ],
+  "geometry_proposal_upper": {
+    "gt_instances": 5,
+    "aligned_instances": 3,
+    "truth_pixels": 7720,
+    "covered_pixels": 3514,
+    "proposals": 99,
+    "instance_recall_upper": 0.6,
+    "pixel_coverage_upper": 0.45518134715025904,
+    "pixel_f1_upper": 62.560085454869146
+  },
+  "verification": {},
+  "baseline_candidate_ids": [
+    44,
+    38,
+    85,
+    43,
+    76,
+    27,
+    58,
+    74
+  ],
+  "joint_candidate_ids": [
+    44,
+    38,
+    85,
+    43,
+    76,
+    27,
+    58,
+    18
+  ],
+  "paired_counts_delta": {
+    "tp": 33,
+    "fp": -403,
+    "fn": -33
+  },
+  "api_cost_cny": 0
+}
