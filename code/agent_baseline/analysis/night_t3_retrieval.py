@@ -84,7 +84,7 @@ def summaries(records):
                         aligned_instances=sum(r['coverage']['aligned_instances'] for r in rows),gt_instances=sum(r['coverage']['gt_instances'] for r in rows))
                 output.append(dict(split=split,support=support,group=label,tasks=len(tasks),methods=methods,
                     verification_unparsed=sum(verification_stats(t['verification'])['unparsed'] for t in tasks),
-                    verification_requests=sum(len(t['verification']) for t in tasks)))
+                    verification_requests=sum(t.get('new_api_requests',len(t['verification'])) for t in tasks)))
     return output
 
 
