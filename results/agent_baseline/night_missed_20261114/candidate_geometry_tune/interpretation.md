@@ -1,5 +1,7 @@
 # 246个固定 tune 候选的几何证据与下一最小实验提案
 
+最终更新：零API路由已完成确认，K10相对原任务−0.394808 F1（+16TP/+1077FP），K20−0.407130（+98TP/+1296FP）。不推广该rule；tune增益不代表泛化。详见 `../geometry_route/failure_review.md`。以下提案仅保留研究历史，不再实施新的几何变种或API。
+
 更新：主Agent已选择更小的零API策略验证，以下新API上下文提案暂不实施。当前实际方案仅在SECOND新建的internal_hole/adjacent_edge_fragment用已有V0响应，其余沿用冻结任务策略；先跑tune K10/K20，K10实际改善后才独立冻结并评confirm，结果在 `../geometry_route/`。不修改候选、不自动接受像素，不改主排名。
 
 来源为本目录完整 `report.md`/`summary.json`，15张tune图。Top20含新建87、拆除59、LEVIR100，共246候选；各分层候选数均等于8连通组件数，多组件比例0/246。Top10共136个，也无多组件。**本轮固定候选池不支持“一个proposal包含多个ask组件”作为主因**；不据此增设split工具。该结论不外推到Agent动态扣除current后的候选。
