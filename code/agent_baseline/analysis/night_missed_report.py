@@ -40,6 +40,8 @@ def collect(root):
         geometry=read(root/'candidate_geometry_tune/summary.json'),
         matching_validation=read(root/'rematch_equivalence_train106.json'),packed_validation=read(root/'rematch_packed_equivalence_train106.json'),
         whu_official=read(root/'candidate_gates_pilot/whu_official_summary.json'),
+        same_time=read(root/'same_time_counterfactual/summary.json'),
+        same_time_events=[read(p) for p in sorted((root/'same_time_counterfactual/events').glob('*.json'))],
         views_usage=usage(root),rankings={},s4={},exact_cases=[])
     for row in gates.get('data',{}).get('images',[]):
         key=row['group']+'/'+row['split'];dest=report['s4'].setdefault(key,dict(images=0,unique_tp=0,unique_fp=0))
@@ -51,7 +53,9 @@ def collect(root):
             row=read(answer)
             if row.get('data',{}).get('reused') or row.get('data',{}).get('reused_from'):
                 report['exact_cases'].append(dict(path=str(answer),record=row['data']))
-    report['new_recorded_cost_cny']=report['views_usage']['recorded_cost_cny']+sum(r['usage']['recorded_cost_cny'] for r in report['rankings'].values())
+    control_events=[r['data'] for r in report['same_time_events'] if r['status']=='available']
+    report['same_time_cost_cny']=sum(e.get('cost_cny') or 0 for e in control_events)
+    report['new_recorded_cost_cny']=report['views_usage']['recorded_cost_cny']+sum(r['usage']['recorded_cost_cny'] for r in report['rankings'].values())+report['same_time_cost_cny']
     report['limitations']=['Tune/confirmation image split is exploratory and historically exposed.',
         'Historical batch99 S3/S4 thresholds were selected using all development GT (SECOND 60 per direction; LEVIR 200), including current confirmation images. Current gate/verifier tune isolation does not make the candidate pool independently held out.',
         'TP>FP candidate proxy is not a semantic truth label.',
@@ -208,6 +212,16 @@ def render(report):
         for k,x in report[key].get('data',{}).get('groups',{}).get('second_appeared',{}).items():
             rows.append([split,k,x.get('complete',False),scores(x.get('metrics',{})),fmt(x.get('delta_vs_task')),interval(x.get('paired95_vs_task')),str(x.get('pixel_delta_vs_task')),x.get('routed_candidates')])
     table(lines,['划分','K','完整','F1/P/R','Δ原任务','95%CI','ΔTP/FP/FN','路由候选数'],rows)
+    lines+=['','## 固定六例同日期反事实（不参与方法选择）',
+        '原review_pack六UID分别用T1/T1和T2/T2，共12槽；原V0仅作自然双期对照。此控制检验时序不变性，不是自然任务F1或在线晋级证据。两期相同不要求原V0回答也相同。']
+    control=report.get('same_time',{});control_data=control.get('data',{})
+    responses=control_data.get('responses',[])
+    events=[r['data'] for r in report.get('same_time_events',[]) if r['status']=='available']
+    if control.get('status')!='available':lines+=['','状态：pending（尚无完整摘要；如已有事件，费用仍计入下方独立账目）。']
+    else:lines+=['',f"预定6UID/12槽；completed={control_data.get('completed','缺失')}，attempted={control_data.get('attempted','缺失')}，error事件={sum(bool(e.get('error_type')) for e in events)}，unknown已完成回答={sum(r.get('answer') not in ('yes','no') for r in responses)}。error与未完成槽不混作no。"]
+    table(lines,['组','UID','控制输入','原V0','控制回答','finish_reason'],[
+        [r['uid'].split(':')[0],r['uid'],r.get('condition'),r.get('original_answer'),r.get('answer'),r.get('finish_reason')] for r in responses])
+    lines+=['',f"同日期控制独立usage费用：¥{fmt(report.get('same_time_cost_cny'))}；事件数={len(events)}，缺费用字段={sum(e.get('cost_cny') is None for e in events)}。不重复并入views或rank账目。"]
     lines+=['','## 费用、复用和失败记录'];rows=[]
     for name,x in [('views',report['views_usage'])]+[(n,v['usage']) for n,v in report['rankings'].items()]:
         rows.append([name,x['successful_requests'],x['failed_attempts'],fmt(x['recorded_cost_cny']),x['missing_cost_records'],len(x['read_errors'])])
