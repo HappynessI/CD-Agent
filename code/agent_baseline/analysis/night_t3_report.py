@@ -38,6 +38,16 @@ def delta_reproduction(records,old):
         mismatches=[r for r in result if not r['agrees']],records=result)
 
 
+def optional_patchset(night):
+    records=[];stages={}
+    for split in ('tune','confirm'):
+        rows=[load(p) for p in sorted((night/'r1_patchset'/split/'tasks').glob('*/metrics.json'))]
+        records.extend(rows)
+        stages['r1_patchset/'+split]=dict(completed=len(rows),expected=30,
+            status='complete' if len(rows)==30 else ('partial' if rows else ('pending' if split=='tune' else 'not_started')))
+    return stages,records
+
+
 def collect(night,old):
     audit=load(night/'audit.json');stages={};semantics={}
     for name,expected in [('B0',60),('B1',60),('B2',60),('B3',30),('t33/B0',12),('t33/B1',12),('t33/B2',12)]:
@@ -67,6 +77,8 @@ def collect(night,old):
         joint.extend(current)
         stages['r1_endpoint/'+split]=dict(completed=len(current),expected=30,status='complete' if len(current)==30 else ('pending' if split=='tune' else 'not_promoted_or_partial'))
     if joint:retrieval['r1_endpoint']=dict(tasks=len(joint),records=joint,summary=summaries(joint))
+    patch_stages,patch_records=optional_patchset(night);stages.update(patch_stages)
+    if patch_records:retrieval['r1_patchset']=dict(tasks=len(patch_records),records=patch_records,summary=summaries(patch_records))
     residual=[load(p) for p in sorted((night/'r1_residual/tune/tasks').glob('*/metrics.json'))]
     stages['r1_residual/tune']=dict(completed=len(residual),expected=30,status='complete' if len(residual)==30 else 'pending')
     if residual:retrieval['r1_residual']=dict(tasks=len(residual),records=residual,summary=summaries(residual))
@@ -145,6 +157,17 @@ def readable_stage_results(data):
         row=choose(joint['summary'],'positive');m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_equal_joint@8']
         lines.append(f"R1 fixed-pool endpoint/delta combination tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. This is the same-pool scoring contrast; fullpool joint remains a different-pool reference. Coefficients and geometry gates were not tuned.")
     else:lines.append('R1 same-pool joint-score experiment is pending/partial; confirmation is not automatically promoted.')
+    patch=data['retrieval'].get('r1_patchset')
+    for split in ('tune','confirm'):
+        count=sum(r['split']==split for r in patch['records']) if patch else 0
+        if count!=30:
+            lines.append(f'Patchset {split} pending/partial ({count}/30); no completed benefit is asserted.')
+            continue
+        for support in ('positive','empty'):
+            row=next(r for r in patch['summary'] if r['split']==split and r['support']==support and r['group']=='全部')
+            m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_patchset@8'];swap=m['R1_patchset_swapped_example@8']
+            lines.append(f"Patchset {split} {support}, fixed R1 pool: F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}, TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}; example-swapped TP {swap['tp']}, FP {swap['fp']}. Swap is formula-direction sensitivity, not independent evidence of semantic understanding.")
+        lines.append(f"Patchset {split} delta Top8 reproduction: {sum(r.get('delta_top8_reproduced',False) for r in patch['records'] if r['split']==split)}/30. Any confirmation is multiply exposed exploratory confirmation, never unseen data.")
     overlap=data.get('overlap_audit')
     if overlap and sum(r['answers_complete'] for r in overlap['records'])==30:
         row=next(r for r in overlap['strata'] if r['support']=='all' and r['group']=='全部')
@@ -171,6 +194,7 @@ def markdown(data):
         'Observed local-verifier negative case: train_1136_5to1 candidates0/1 are rejected because the model says the same rectangular building shape persists. Actual inputs show a blue roof then green vegetation; the fixed spotlight support creates the same bright silhouette on both dates. This is evidence of a possible support-shape/object-shape confusion, not proof of causal attribution. This task has only3 remaining GT pixels, so a beneficial rejection score would not establish correct visual reasoning. Inputs/responses are archived under retrieval/B0/tasks/train_1136_5to1/verification.','',
         'R1-direct4 is a distinct planned tune-first experiment: same fixed R1 Top8 versus no verification, four local raw-RGB Example/Candidate date views, no predicted class pair. R1 eligibility retains candidate overlap with the example; only scoring removes exemplar pixels. No hidden overlap filter is introduced. Old eight-view original-DINO and new two-view text-pool routes are non-paired contextual references.','',
         'R1 residual pairing changes only the overlapping Candidate support to C minus E (and its crop), with original Example, prompt and Top8 fixed. Nonoverlap answers are referenced at zero new cost, not copied as new billed responses. Original direct4 is the strict control; overlap-associated FP is not an exclusive or guaranteed removable contribution.','',
+        'Patchset uses the unchanged R1 geometry pool and one fixed bidirectional support-weighted maximum cosine of two-date patch deltas. Bilinear support weights follow original pooling; near-zero vectors contribute zero without weight redistribution. It uses cached features only, no new API/model. Joint and delta references remain unchanged. Partial stages do not justify promotion.','',
         'Endpoint methods share the original SAM pool with fixed equal weights. Swapping exemplar dates measures ranking sensitivity only; it does not define new GT.','',
         'T3.3 visual-review uncertainty: the fixed first tune example train_2130_T33_2to4 is clipped at the source crop bottom; close/wide views nearly coincide. Its post-date tan/gray-green support can resemble bare ground or turbid water. Treat the water-label mismatch as requiring visual/label review, not automatically a pure model error. No labels were changed.','',
         '| Stage | Completed/expected | Status |','|---|---:|---|']

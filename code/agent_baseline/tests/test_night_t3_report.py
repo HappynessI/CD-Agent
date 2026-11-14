@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction
+from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset
 
 
 class ReportTests(unittest.TestCase):
@@ -16,6 +16,18 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(result['request_artifacts'],4)
             self.assertAlmostEqual(result['by_root']['r1_residual'],.05)
             self.assertAlmostEqual(result['by_root']['t33'],.4)
+
+    def test_patchset_partial_does_not_claim_completion(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            stages,rows=optional_patchset(root)
+            self.assertEqual(stages['r1_patchset/confirm']['status'],'not_started')
+            path=root/'r1_patchset/tune/tasks/example/metrics.json'
+            path.parent.mkdir(parents=True);path.write_text(json.dumps(dict(id='example',split='tune')))
+            stages,rows=optional_patchset(root)
+            self.assertEqual(len(rows),1)
+            self.assertEqual(stages['r1_patchset/tune']['status'],'partial')
+            self.assertEqual(stages['r1_patchset/tune']['expected'],30)
 
     def test_reproduction_requires_original_counts(self):
         old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])
