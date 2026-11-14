@@ -1,6 +1,9 @@
 import unittest
+import json
+import tempfile
+from pathlib import Path
 import numpy as np
-from agent_baseline.analysis.night_t3_positive_endpoints import construct,needs
+from agent_baseline.analysis.night_t3_positive_endpoints import construct,needs,inventory,save_summary
 from agent_baseline.analysis.t3_diag import directed_proposals
 from agent_baseline.analysis.night_t3_retrieval import score,summaries
 
@@ -18,6 +21,21 @@ class PositiveEndpointsTests(unittest.TestCase):
         self.assertTrue(positive.any(axis=0).all())
         self.assertEqual(strict.any(axis=0).tolist(),[[True,False,False,True]])
         self.assertTrue(np.all(strict<=positive[ss]))
+
+    def test_confirmation_inventory_and_summary_use_only_requested_variants(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);rows=[dict(id='a')]
+            parses={v:{'a':dict(interpretation=dict(pair=[1,1]))} for v in ('B0','B2')}
+            plan=inventory(rows,parses,root,root,root,('B0','B2'))
+            self.assertEqual(plan['variants'],['B0','B2'])
+            self.assertEqual(len(plan['cases']),2)
+            self.assertEqual(plan['unique_missing'],0)
+            save_summary(root,dict(B0=[],B2=[]),'confirm')
+            result=json.loads((root/'summary.json').read_text())
+            self.assertEqual(set(result['variants']),{'B0','B2'})
+            self.assertIn('Full confirm30',result['interpretation'])
+            self.assertIn('multiply exposed',result['confirmation_scope'])
+            self.assertEqual(result['status'],'partial')
 
     def test_empty_candidate_scoring_summary_contract(self):
         masks=np.zeros((0,2,2),bool);truth=np.array([[1,0],[0,0]],bool);ex=np.zeros((2,2),bool)
