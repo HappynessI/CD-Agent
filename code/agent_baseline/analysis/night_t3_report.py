@@ -49,15 +49,22 @@ def optional_patchset(night):
     return stages,records
 
 
-def optional_positive_endpoints(night):
-    value=load(night/'positive_endpoints_tune/summary.json')
-    inventory=load(night/'positive_endpoints_tune/inventory.json')
+def optional_positive_endpoints(night,split='tune'):
+    folder=night/f'positive_endpoints_{split}'
+    value=load(folder/'summary.json')
+    inventory=load(folder/'inventory.json')
+    if split=='confirm':
+        variants={}
+        for variant in ('B0','B2'):
+            rows=[load(p) for p in sorted((folder/variant/'tasks').glob('*/metrics.json'))]
+            if rows:variants[variant]=dict(tasks=len(rows),records=rows,summary=summaries(rows))
+        value=dict(variants=variants,interpretation='Independent B0/B2 exploratory confirmation; summaries recomputed from actual per-task metrics.') if variants else None
     stages={};retrieval={}
-    for variant in ('B0','B2','B3'):
+    for variant in (('B0','B2','B3') if split=='tune' else ('B0','B2')):
         item=value['variants'].get(variant) if value else None
         count=item['tasks'] if item else 0
         status='complete' if count==30 else ('partial' if count else ('pending_cache' if inventory and inventory['unique_missing'] else 'not_started'))
-        key='positive_endpoints/'+variant
+        key=('positive_endpoints/' if split=='tune' else 'positive_endpoints_confirm/')+variant
         stages[key]=dict(completed=count,expected=30,status=status)
         if item:retrieval[key]=item
     return stages,retrieval,value
@@ -111,9 +118,10 @@ def collect(night,old):
     endpoint=[load(p) for p in sorted((night/'endpoint/tasks').glob('*/metrics.json'))]
     stages['endpoint']=dict(completed=len(endpoint),expected=60,status='complete' if len(endpoint)==60 else 'pending')
     positive_stages,positive_records,positive_raw=optional_positive_endpoints(night);stages.update(positive_stages);retrieval.update(positive_records)
+    confirm_stages,confirm_records,confirm_raw=optional_positive_endpoints(night,'confirm');stages.update(confirm_stages);retrieval.update(confirm_records)
     semantic_strata=load(night/'semantic_strata_tune/summary.json')
     stages['semantic_strata_tune']=dict(completed=semantic_strata['cohort_sizes']['all'] if semantic_strata else 0,expected=30,status='complete' if semantic_strata and semantic_strata['cohort_sizes']['all']==30 else 'not_started')
-    return dict(positive_endpoints=positive_raw,semantic_strata_tune=semantic_strata,stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
+    return dict(positive_endpoints_confirm=confirm_raw,positive_endpoints=positive_raw,semantic_strata_tune=semantic_strata,stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
         endpoint=dict(records=endpoint,summary=summaries(endpoint)),delta_reproduction=delta_reproduction(endpoint,old),
         manual_review=load(night/'grounding_review.json'),overlap_audit=overlap,oracle_cache_diagnostic=load(night/'oracle_cache/summary.json'),cost=request_cost(night))
 
@@ -274,6 +282,18 @@ def markdown(data):
                     if not method.endswith('@0'):continue
                     lines.append('| '+' | '.join(map(str,[variant,row['support'],row['group'],row['tasks'],method,number(m['f1_c']),number(m['precision']),number(m['recall']),m['tp'],m['fp'],m['fn']]))+' |')
     else:lines+=['','Positive-endpoint pairing not yet scored; optional-stage absence is not an experimental failure.']
+    confirmation=data.get('positive_endpoints_confirm')
+    if confirmation:
+        lines+=['','## Independent positive-endpoint exploratory confirmation','',confirmation['interpretation'],
+            'B2 was fixed from positive-tune label agreement and complete parsing availability. All new tune TP had been concentrated in train1808, motivating validation rather than establishing stability. Confirmation images were multiply exposed; this is not unseen validation, method selection for another round, or an online Agent result. Existing parsing is reused without rebilling; local SAM cache preparation has zero API cost.','',
+            '| Variant | GT | Group | N | Method | F1 | P | R | TP | FP | FN |',
+            '|---|---|---|---:|---|---:|---:|---:|---:|---:|---:|']
+        for variant,item in confirmation['variants'].items():
+            for row in item['summary']:
+                if row['split']!='confirm':continue
+                for method,m in row['methods'].items():
+                    lines.append('| '+' | '.join(map(str,[variant,row['support'],row['group'],row['tasks'],method,number(m['f1_c']),number(m['precision']),number(m['recall']),m['tp'],m['fp'],m['fn']]))+' |')
+    else:lines+=['','Positive-endpoint confirmation not started or not yet scored; no failure or completed outcome is inferred.']
     lines+=['','## Label agreement only','','| Variant | Split | Group | N | Before | After | Pair |','|---|---|---|---:|---:|---:|---:|']
     for name,value in data['semantic_label_agreement'].items():
         for row in value['summary']:

@@ -57,6 +57,22 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(stages['positive_endpoints/B0']['status'],'complete')
             self.assertEqual(records['positive_endpoints/B0']['summary'],[])
 
+    def test_confirmation_reads_records_not_stale_aggregate(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            stages,_,_=optional_positive_endpoints(root,'confirm')
+            self.assertEqual(stages['positive_endpoints_confirm/B0']['status'],'not_started')
+            folder=root/'positive_endpoints_confirm';folder.mkdir()
+            (folder/'summary.json').write_text(json.dumps(dict(variants=dict(B0=dict(tasks=30)))))
+            path=folder/'B0/tasks/a/metrics.json';path.parent.mkdir(parents=True)
+            path.write_text(json.dumps(dict(id='a',split='confirm',group='目标类',remaining_gt_pixels=0,scores=[],verification={})))
+            stages,records,value=optional_positive_endpoints(root,'confirm')
+            self.assertEqual(stages['positive_endpoints_confirm/B0']['completed'],1)
+            self.assertEqual(stages['positive_endpoints_confirm/B0']['status'],'partial')
+            self.assertEqual(value['variants']['B0']['tasks'],1)
+            self.assertNotIn('positive_endpoints/B0',records)
+            self.assertNotIn('B3',value['variants'])
+
     def test_reproduction_requires_original_counts(self):
         old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])
         new=[dict(id='a',scores=[dict(method='delta',k=8,counts=[1,2,3]),dict(method='endpoint',k=8,counts=[9,9,9])])]
