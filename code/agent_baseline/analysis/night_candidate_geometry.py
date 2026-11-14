@@ -53,7 +53,7 @@ def run(a):
         strata='hole_fraction>=0.5 first; else any baseline adjacency; edge_fraction>=0.5 fragment; remaining detached_region',
         interpretation='Geometry proxies, not whole-object/semantic ground truth; fixed thresholds are descriptive, never online filtering',
         errors='TP>FP proxy, not semantic annotation; parse/truncation/unknown retained separately',
-        denominator='Candidate confusion counts include overlapping candidates; pixel TP/FP use per-image union within each stratum',
+        denominator='Candidate confusion counts include overlapping candidates; pixel TP/FP use per-image union within each stratum; different strata may overlap and must not be summed as a global pixel count',
         no_source_regeneration=True)
     summary={};records=[]
     for item in items:
