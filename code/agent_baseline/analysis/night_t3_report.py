@@ -53,7 +53,8 @@ def collect(night,old):
                     count=sum(r['split']==split for r in records)
                     stages[f'{prefix}/{variant}/{split}']=dict(completed=count,expected=expected,status='complete' if count==expected else 'pending')
     preparation=[]
-    for p in (night/'retrieval').glob('*/prepare_progress_*.json'):preparation.append(dict(path=str(p),**load(p)))
+    for base,pattern in [('retrieval','*/prepare_progress_*.json'),('t33/retrieval','*/prepare_progress.json')]:
+        for p in (night/base).glob(pattern):preparation.append(dict(path=str(p),**load(p)))
     endpoint=[load(p) for p in sorted((night/'endpoint/tasks').glob('*/metrics.json'))]
     stages['endpoint']=dict(completed=len(endpoint),expected=60,status='complete' if len(endpoint)==60 else 'pending')
     return dict(stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,

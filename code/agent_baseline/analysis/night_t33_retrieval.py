@@ -37,6 +37,7 @@ def geometry_indices(masks,query_images,reference_mask,reference_images):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--run',type=Path,required=True);p.add_argument('--night',type=Path,required=True)
+    p.add_argument('--prepare-only',action='store_true')
     p.add_argument('--parse-variant',choices=['B0','B1','B2'],default='B0');a=p.parse_args()
     if not os.environ.get('SLURM_JOB_ID'):raise RuntimeError('Run through Slurm GPU')
     audit=json.loads(read_text(a.night/'t33/audit.json'));pilot=audit['pilot_ids']
@@ -47,7 +48,7 @@ def main():
     rows=[r for r in rows if r['id'] in pilot]
     query_cache=CachedVision(a.run/'t3_diag/cache/vision');reference_cache=CachedVision(a.run/'vision_t13')
     cache_rows={str(Path(r['image_t1']).resolve()):r for r in load_dev(a.run)}
-    text=TextProposals(a.run,a.night);out=a.night/'t33/retrieval'/a.parse_variant;records=[]
+    text=TextProposals(a.run,a.night);out=a.night/'t33/retrieval'/a.parse_variant;records=[];prepared_ids=[]
     write_json(out/'settings.json',dict(pilot_ids=pilot,parse_variant=a.parse_variant,verify_k=8,
         model='qwen3.7-flash',source=str(a.night/'t33'/a.parse_variant/'summary.json'),
         query_cache=str(a.run/'t3_diag/cache/vision'),reference_cache=str(a.run/'vision_t13'),
@@ -60,7 +61,7 @@ def main():
     try:
         for row in rows:
             folder=out/'tasks'/row['id'];final=folder/'metrics.json'
-            if exists(final):records.append(json.loads(read_text(final)));continue
+            if exists(final) and not a.prepare_only:records.append(json.loads(read_text(final)));continue
             images=[read_image(row[k],rgb=True) for k in ('image_t1','image_t2')];shape=images[0].shape[:2]
             example=row['examples'][0];ref_images=[read_image(example[k],rgb=True) for k in ('image_t1','image_t2')]
             ref_mask=read_image(example['mask'])>0;zero=np.zeros(shape,bool)
@@ -84,6 +85,12 @@ def main():
                 order3=sorted(range(len(r2)),key=lambda i:(-float(similarities[i]),i))
                 write_npz(prepared,r1=r1,r2=r2,order1=np.asarray(order1,int),order3=np.asarray(order3,int))
                 write_json(folder/'provenance.json',dict(predicted_pair=pair,text_cache_reused=text.reused));text.reused=[]
+            if a.prepare_only:
+                prepared_ids.append(row['id'])
+                write_json(out/'prepare_progress.json',dict(stage='prepare_only',tasks=len(prepared_ids),ids=prepared_ids,
+                    scoring_complete=False,verification_api_requests=0,new_api_cost_cny=0,prepared_root=str(out/'tasks')))
+                print('T3.3 prepared',len(prepared_ids),row['id'],flush=True)
+                continue
             answers={}
             for index in order3[:8]:
                 before,after=[CLASSES[c] for c in pair]
@@ -105,6 +112,7 @@ def main():
             write_json(out/'summary.json',dict(tasks=len(records),records=records,summary=summaries(records),cost_cny=sum(r['cost_cny'] for r in records)))
             print('T3.3 retrieval',len(records),row['id'],flush=True)
     finally:text.pool.close()
+    if a.prepare_only:return
     write_json(out/'summary.json',dict(tasks=len(records),records=records,summary=summaries(records),cost_cny=sum(r['cost_cny'] for r in records)))
 
 

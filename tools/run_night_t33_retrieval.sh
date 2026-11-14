@@ -16,6 +16,8 @@ export OVCD_CODE=${T3_OVCD_CODE:-$REPO/code/ovcd_v0}
 export PYTHONPATH=$REPO/code:$OVCD_CODE PYTHONNOUSERSITE=1 PYTHONDONTWRITEBYTECODE=1
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
 while IFS= read -r var; do if [[ ${var,,} == *proxy* ]]; then unset "$var"; fi; done < <(compgen -e)
+extra=()
+if [[ ${2:-} == prepare ]]; then extra+=(--prepare-only); fi
 started=$SECONDS
 finish() {
     status=$?;trap - EXIT
@@ -26,4 +28,4 @@ finish() {
 trap finish EXIT
 "$PY" -B -m unittest agent_baseline.tests.test_night_t33_retrieval
 "$PY" "$ROOT/Chang-Agent/tools/run_with_bailian_csv.py" "$ROOT/wyh/默认业务空间-apiKey-6214720.csv" \
-  "$PY" -B -m agent_baseline.analysis.night_t33_retrieval --run "$ROOT/wyh/exp6_staging/agent_baseline_run" --night "$OUT" --parse-variant "${1:-B0}"
+  "$PY" -B -m agent_baseline.analysis.night_t33_retrieval --run "$ROOT/wyh/exp6_staging/agent_baseline_run" --night "$OUT" --parse-variant "${1:-B0}" "${extra[@]}"
