@@ -204,6 +204,19 @@ def score(a):
                         ids=rng.integers(0,len(rows),len(rows));delta.append(metrics(after[ids].sum(axis=0))['f1']-metrics(before[ids].sum(axis=0))['f1'])
                     report[ranking][str(k)]=dict(complete=True,metrics=metrics(after.sum(axis=0)),
                         delta_vs_ungated_same_verifier=metrics(after.sum(axis=0))['f1']-metrics(before.sum(axis=0))['f1'],paired_image_bootstrap95=np.quantile(delta,[.025,.975]).tolist())
+                    # Isolate ranking from the S5 gate using the same gated pool,
+                    # same verifier and K. This is descriptive, never selection.
+                    balanced=[r['rankings']['balanced'].get(str(k),{}).get('metrics') for r in rows]
+                    if all(balanced):
+                        control=np.asarray([[m[n] for n in ('tp','fp','fn')] for m in balanced])
+                        rng=np.random.default_rng(1016);paired=[]
+                        for _ in range(2000):
+                            ids=rng.integers(0,len(rows),len(rows))
+                            paired.append(metrics(after[ids].sum(axis=0))['f1']-metrics(control[ids].sum(axis=0))['f1'])
+                        report[ranking][str(k)].update(
+                            delta_vs_gated_balanced=metrics(after.sum(axis=0))['f1']-metrics(control.sum(axis=0))['f1'],
+                            paired_vs_gated_balanced_bootstrap95=np.quantile(paired,[.025,.975]).tolist(),
+                            per_image_delta_vs_gated_balanced=[dict(stem=r['stem'],delta_f1=r['rankings'][ranking][str(k)]['metrics']['f1']-m['f1']) for r,m in zip(rows,balanced)])
             groups[group][split]=report
     write_json(a.out/'score_summary.json',dict(groups=groups,images=records,verifier=a.variant,sources_preserved=list(SOURCES),
         interpretation='S5 gate plus ranking at frozen verifier; comparison uses equal K and same verifier on old ungated balanced pool'))
