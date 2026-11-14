@@ -21,6 +21,14 @@ class DenseTests(unittest.TestCase):
         np.testing.assert_array_equal(pred,directed_dense([p1.argmax(0),p2.argmax(0)],pair,ex))
         self.assertEqual(int(pred.sum()),1)
 
+    def test_confirm_only_actual_methods_without_unrun_B3(self):
+        record=dict(group='目标类',remaining_gt_pixels=2,scores=[dict(method=m,counts=[1,1,1]) for m in METHODS[:3]])
+        rows=aggregate([record],'confirm')
+        self.assertTrue(all(r['split']=='confirm' for r in rows))
+        row=next(r for r in rows if r['support']=='all' and r['group']=='全部')
+        self.assertEqual(list(row['methods']),list(METHODS[:3]))
+        self.assertNotIn('B3_dense',row['methods'])
+
     def test_original_positive_and_sensitivity_denominators(self):
         records=[dict(group='目标类',remaining_gt_pixels=n,scores=[dict(method=m,counts=[n,1,0]) for m in METHODS]) for n in (0,1,16)]
         rows=aggregate(records)

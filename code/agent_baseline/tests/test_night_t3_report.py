@@ -88,6 +88,12 @@ class ReportTests(unittest.TestCase):
             group=next(r for r in value['summary'] if r['support']=='positive' and r['group']=='全部')
             self.assertEqual(group['methods']['B2_dense']['tp'],4)
             self.assertNotIn('covered_pixels',group['methods']['B2_dense'])
+            row['split']='confirm';row['scores']=row['scores'][:3]
+            confirm=root/'segearth_dense_confirm/tasks/a/metrics.json';confirm.parent.mkdir(parents=True);confirm.write_text(json.dumps(row))
+            _,value=optional_segearth_dense(root,'confirm')
+            group=next(r for r in value['summary'] if r['support']=='positive' and r['group']=='全部')
+            self.assertEqual(group['split'],'confirm')
+            self.assertNotIn('B3_dense',group['methods'])
 
     def test_reproduction_requires_original_counts(self):
         old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])
