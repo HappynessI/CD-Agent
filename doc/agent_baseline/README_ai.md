@@ -120,6 +120,8 @@
 
 夜间运行补记：start hook在gpu06两次0秒失败（exit0:53、无输出日志），本夜活跃实验通过可选`exp.json: hook_node=gpu42`固定hook节点，由原watchdog重挂；此设置不改变默认实验逻辑。T3追加的同R1池patch集合tune30亦完成：正F1 11.2769→8.0136、空FP+13190，不推广、不扫描参数。原delta复现30/30，API0。
 
+语义结论补充（186660）：正11例B0/B1/B2/B3标签对吻合1/2/4/2，不能从总体下降推断正目标解析都变差。已有R2仅B0下游；B2/B3效果与严格端点排除瓶颈须区分。分层结果保留原全部30例及GT定义。
+
 #### 0.2-N5 夜间启动方式
 
 启动 Prompt 不重复本节长方案，只需：「同步 `claude/project-thread-2tuaib`，阅读 `doc/agent_baseline/README_ai.md` §0.2-N1–N4，核实现有 Slurm 与结果，随后自主运行 T3 和 `find_missed` 夜间实验；按现有 README 的数据隔离和归档规范执行，明早汇报。API 不必按旧 ¥100 限额停工。」

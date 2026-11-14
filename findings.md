@@ -381,3 +381,5 @@ S5解包优化真实验证186495：train106四组结果与历史完全一致、�
 2026-11-15 在线依赖只读核查：原冻结补漏6任务为SECOND train1884/train368两方向、LEVIR train293/train78，与night30方向×图像记录完全无交集（0/6，原在线共4张独立图）。现CachedMissedCandidates只重建旧round-robin，不能直接读取night gate/evidence manifest；若将来晋级，需要显式opt-in provider及原6任务独立冻结准备，不按pilot赢家换任务，不复用跨seed模型回答，不直接写Agent答案。此项仅方案，未实施或提交在线。
 
 2026-11-15 固定R1 patch集合186628完成30/30、3测试、原delta Top8复现30/30，API0：正11例F1 11.2769→8.0136、TP9826→6627、FP124127→118452；空19例FP191988→205178，NAcc0。换例时相仅为公式方向敏感性，不是语义理解独立证明。该固定集合匹配未改善，不跑confirm、不扫权重；本夜T3实验收尾，新报告版本追加patch及remainingGT>=16敏感性，原分数/基准不变。
+
+语义分层job186660：tune正11例B0/B1/B2/B3有向标签对吻合1/2/4/2，>=16诊断8例0/0/2/1；empty19为7/2/2/4。修正整体6/30<8/30可推正目标退化的错误推论；现R2只有B0下游，不冒充B2/B3结果。证据night_t3_20261114/semantic_strata_tune。

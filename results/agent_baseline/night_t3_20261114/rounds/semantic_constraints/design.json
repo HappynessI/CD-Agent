@@ -1,0 +1,33 @@
+{
+  "hypothesis": "Predicted positive endpoint overlap is suppressed by false-positive opposite-date category masks; a pure parsing intervention cannot test that proposal mechanism.",
+  "scope": "fixed tune30; B0/B2/B3 existing predicted semantics; no new GT labels as method inputs",
+  "arms": [
+    "B0_strict",
+    "B0_positive_only",
+    "B2_strict",
+    "B2_positive_only",
+    "B3_strict",
+    "B3_positive_only"
+  ],
+  "positive_only": "sourceT1 AND targetT2, removing the two opposite-date negative exclusions; keep original proposal slots/order and empty/same-class handling",
+  "primary": "all-candidate union pixel counts/F1/P/R and candidate coverage",
+  "secondary": "same original DINO delta Top8 without verification",
+  "guards": [
+    "Original B0 strict R2_all and R3_dino counts must reproduce",
+    "Full fixed30 each arm; missing cache is not zero prediction",
+    "Report all/positive11/empty19 and target/surface separately",
+    "No confirmation selection and no weight/threshold search"
+  ],
+  "cache_inventory": {
+    "B0_requests": 68,
+    "B0_missing": 0,
+    "B2_requests": 52,
+    "B2_missing": 14,
+    "B3_requests": 64,
+    "B3_missing": 18,
+    "unique_missing_requests": 28
+  },
+  "compute": "Existing cache plus missing predicted-class SAM3 requests on Slurm GPU; no external VLM requests",
+  "reason": "Semantic strata job186660 found positive B2 pair agreement4/11 vs B0 1/11. Earlier B0 retrieval and overall parse decline cannot stand in for B2/B3 downstream evidence. Historical oracle train1808 independently exposed 3479to4 strict exclusion bottleneck.",
+  "status": "predeclared before new proposal generation or scoring"
+}
