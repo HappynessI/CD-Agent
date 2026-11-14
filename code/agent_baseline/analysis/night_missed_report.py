@@ -53,6 +53,7 @@ def collect(root):
                 report['exact_cases'].append(dict(path=str(answer),record=row['data']))
     report['new_recorded_cost_cny']=report['views_usage']['recorded_cost_cny']+sum(r['usage']['recorded_cost_cny'] for r in report['rankings'].values())
     report['limitations']=['Tune/confirmation image split is exploratory and historically exposed.',
+        'Historical batch99 S3/S4 thresholds were selected using all development GT (SECOND 60 per direction; LEVIR 200), including current confirmation images. Current gate/verifier tune isolation does not make the candidate pool independently held out.',
         'TP>FP candidate proxy is not a semantic truth label.',
         'Gates add-all metrics are unverified, not Agent performance.',
         'Missing stages remain pending; recorded costs exclude unreported provider usage.',
@@ -87,7 +88,8 @@ def render(report):
     decision=report['selected_verifier'].get('data',{});winner=decision.get('selected_verifier')
     lines=['# 夜间补漏研究实际结果','',
         '全局核验器：'+str(winner or '待冻结')+'。主排名方法预声明为 evidence@10；任务条件核验器仅作次级探索。确认集不用于重新选择核验器、门控、排序或 K。',
-        '图像级调参/确认划分存在历史曝光；置信区间为探索性图像配对 bootstrap，不能据单图结果或区间宣称已获在线 Agent 验证。',
+        '历史batch99的S3/S4阈值曾使用全部开发图GT（SECOND各方向60图、LEVIR200图），包含现在的确认图。本轮gate/verifier选择隔离成立，但候选池不是全新未见确认集，不能宣称独立泛化。详见 [候选来源限制](historical_candidate_selection_limit.md)。',
+        '置信区间为探索性图像配对 bootstrap，不能据单图结果或区间宣称已获在线 Agent 验证。',
         '', '新请求已记录费用（含失败证据，复用答案不重复收费）：¥'+fmt(report['new_recorded_cost_cny'])]
     table(lines,['阶段','记录状态','证据'],[[key,report[key]['status'],report[key]['path']] for key in
         ('views','selected_verifier','task_selection','task_confirmation','gates','whu_official')])
