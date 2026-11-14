@@ -70,6 +70,17 @@ def optional_positive_endpoints(night,split='tune'):
     return stages,retrieval,value
 
 
+def optional_segearth_dense(night):
+    from .night_t3_segearth_dense import aggregate
+    folder=night/'segearth_dense_tune'
+    records=[load(p) for p in sorted((folder/'tasks').glob('*/metrics.json'))]
+    stage=dict(completed=len(records),expected=30,status='complete' if len(records)==30 else ('partial' if records else 'not_started'))
+    if not records:return stage,None
+    return stage,dict(records=records,tasks=len(records),summary=aggregate(records),
+        historical_reproduction=dict(routeA=sum(r['routeA_reproduced'] for r in records),B0=sum(r['B0_reproduced'] for r in records)),
+        scope='routeA and B0 are historical dense-method reproductions; only B2/B3 parsed-pair dense predictions are new. Same cached seven-channel SegEarth argmax, zero new model/API calls.')
+
+
 def collect(night,old):
     audit=load(night/'audit.json');stages={};semantics={}
     for name,expected in [('B0',60),('B1',60),('B2',60),('B3',30),('t33/B0',12),('t33/B1',12),('t33/B2',12)]:
@@ -121,7 +132,8 @@ def collect(night,old):
     confirm_stages,confirm_records,confirm_raw=optional_positive_endpoints(night,'confirm');stages.update(confirm_stages);retrieval.update(confirm_records)
     semantic_strata=load(night/'semantic_strata_tune/summary.json')
     stages['semantic_strata_tune']=dict(completed=semantic_strata['cohort_sizes']['all'] if semantic_strata else 0,expected=30,status='complete' if semantic_strata and semantic_strata['cohort_sizes']['all']==30 else 'not_started')
-    return dict(positive_endpoints_confirm=confirm_raw,positive_endpoints=positive_raw,semantic_strata_tune=semantic_strata,stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
+    dense_stage,dense=optional_segearth_dense(night);stages['segearth_dense_tune']=dense_stage
+    return dict(segearth_dense_tune=dense,positive_endpoints_confirm=confirm_raw,positive_endpoints=positive_raw,semantic_strata_tune=semantic_strata,stages=stages,audit=audit,semantic_label_agreement=semantics,retrieval=retrieval,preparation=preparation,
         endpoint=dict(records=endpoint,summary=summaries(endpoint)),delta_reproduction=delta_reproduction(endpoint,old),
         manual_review=load(night/'grounding_review.json'),overlap_audit=overlap,oracle_cache_diagnostic=load(night/'oracle_cache/summary.json'),cost=request_cost(night))
 
@@ -294,6 +306,16 @@ def markdown(data):
                 for method,m in row['methods'].items():
                     lines.append('| '+' | '.join(map(str,[variant,row['support'],row['group'],row['tasks'],method,number(m['f1_c']),number(m['precision']),number(m['recall']),m['tp'],m['fp'],m['fn']]))+' |')
     else:lines+=['','Positive-endpoint confirmation not started or not yet scored; no failure or completed outcome is inferred.']
+    dense=data.get('segearth_dense_tune')
+    if dense:
+        lines+=['','## Cached SegEarth dense comparison','',dense['scope'],
+            f"Available tasks {dense['tasks']}/30; historical reproduction counts {dense['historical_reproduction']}. Incomplete stages remain partial. These are full dense masks, not Top8 proposals or candidate-pool coverage. Example support is excluded. B2 has additional cross-date input information; no new configuration is selected here.", '',
+            '| GT | Group | N | Method | F1 | P | R | TP | FP | FN | Empty prediction rate |',
+            '|---|---|---:|---|---:|---:|---:|---:|---:|---:|---:|']
+        for row in dense['summary']:
+            for method,m in row['methods'].items():
+                lines.append('| '+' | '.join(map(str,[row['support'],row['group'],row['tasks'],method,number(m['f1_c']),number(m['precision']),number(m['recall']),m['tp'],m['fp'],m['fn'],number(m['empty_prediction_rate'])]))+' |')
+    else:lines+=['','Cached SegEarth dense comparison not started or no completed task records yet; no failure is inferred.']
     lines+=['','## Label agreement only','','| Variant | Split | Group | N | Before | After | Pair |','|---|---|---|---:|---:|---:|---:|']
     for name,value in data['semantic_label_agreement'].items():
         for row in value['summary']:

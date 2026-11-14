@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset,remaining16_diagnostic,optional_positive_endpoints
+from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset,remaining16_diagnostic,optional_positive_endpoints,optional_segearth_dense
 
 
 class ReportTests(unittest.TestCase):
@@ -72,6 +72,22 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(value['variants']['B0']['tasks'],1)
             self.assertNotIn('positive_endpoints/B0',records)
             self.assertNotIn('B3',value['variants'])
+
+    def test_dense_counts_only_schema_is_separate_and_partial(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);stage,value=optional_segearth_dense(root)
+            self.assertEqual(stage['status'],'not_started');self.assertIsNone(value)
+            path=root/'segearth_dense_tune/tasks/a/metrics.json';path.parent.mkdir(parents=True)
+            row=dict(id='a',split='tune',group='目标类',remaining_gt_pixels=16,
+                routeA_reproduced=True,B0_reproduced=True,
+                scores=[dict(method=m,k=0,counts=[4,2,12]) for m in ('routeA_historical','B0_historical','B2_dense','B3_dense')])
+            path.write_text(json.dumps(row))
+            stage,value=optional_segearth_dense(root)
+            self.assertEqual(stage['status'],'partial');self.assertEqual(stage['completed'],1)
+            self.assertEqual(value['historical_reproduction'],dict(routeA=1,B0=1))
+            group=next(r for r in value['summary'] if r['support']=='positive' and r['group']=='全部')
+            self.assertEqual(group['methods']['B2_dense']['tp'],4)
+            self.assertNotIn('covered_pixels',group['methods']['B2_dense'])
 
     def test_reproduction_requires_original_counts(self):
         old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])
