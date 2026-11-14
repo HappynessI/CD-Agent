@@ -1,6 +1,6 @@
 # T3 与 find_missed 夜间研究报告
 
-状态：阶段报告；T3 主要对比完成，正目标语义分层及SAM端点约束配对已完成，SegEarth固定B2确认正在执行；S5及WHU官方审计已完整完成，排序尚在执行，完成后补齐本报告。已完成部分来自实际落盘实验，不把计划当结果。
+状态：阶段报告；T3各项对比、分层、SAM端点约束、SegEarth固定B2确认及掩码互补诊断已完成；S5及WHU官方审计已完整完成，排序尚在执行，完成后补齐本报告。已完成部分来自实际落盘实验，不把计划当结果。
 
 ## 范围与复现
 
@@ -8,10 +8,10 @@
 
 全部外部模型请求均为百炼 workspace 端点的 **qwen3.7-flash**。 本报告费用按返回 usage 与仓库价表折算，不冒充账户账单扣费核对；复用回答记零新增费用。SAM3 和 DINO 使用本地模型/缓存。两个研究 Subagent 负责各自代码与分析，主 Agent 审核、提交 Slurm、审查输入和结果、统一集成。管理节点未执行批量实验。原始输入、回答、掩码、旧分数及失败日志保留；GT 仅用于离线评分及已披露的调参选择，不进入实际方法推理；唯一 GT-text oracle 是明确标注的历史缓存诊断。
 
-- [T3 完整逐阶段结果与分组表](../night_t3_20261114/report_final_v2/report.md)；[图像配对差异与区间](../night_t3_20261114/paired_final/report.md)。阶段一版本仍保留。
+- [T3 完整逐阶段结果与分组表](../night_t3_20261114/report_final_v3/report.md)；[图像配对差异与区间](../night_t3_20261114/paired_final/report.md)。阶段一版本仍保留。
 - [T3 12例定位审查](../night_t3_20261114/grounding_review.md)、[可视化入口](../night_t3_20261114/grounding_blind_v1/index.html)。这是主 Agent 视觉审阅，不是独立人工标注真值；个别先见答案及历史曝光有明确记录。
 - [补漏固定确认逐例审查](../night_missed_20261114/frozen_confirmation_review.md)、[固定6例核验输入审查](../night_missed_20261114/review_pack/review.md)。
-- [源码与过程归档](reproducibility/source_archive/inventory.json)已由Slurm作业186652完成，含31份冻结快照和17个实验目录；其中执行状态是当时观察，S5/排序完成后另补最终状态快照。原始产物继续位于两条研究线各自目录。 本轮生成的候选/排序 NPZ 随阶段结果归档（已核实T3有190份NPZ受Git跟踪）；原始数据集、模型权重和复用的外部特征缓存仍通过共享路径引用。复现需使用这些记录中的外部路径。
+- [源码与过程归档](reproducibility/source_archive/inventory.json)已由Slurm作业186652完成，含31份冻结快照和17个实验目录；其中执行状态是当时观察，另有[13份增量源码快照](reproducibility/incremental_sources/inventory.json)已归档，排序完成后另补最终状态快照。原始产物继续位于两条研究线各自目录。 本轮生成的候选/排序 NPZ 随阶段结果归档（已核实T3有190份NPZ受Git跟踪）；原始数据集、模型权重和复用的外部特征缓存仍通过共享路径引用。复现需使用这些记录中的外部路径。
 
 ## T3：从示例理解到候选排序
 
@@ -40,7 +40,9 @@ patch集合失败集中于 train1538（TP−3616），空目标 train2848/train2
 
 [两例完整证据页](../night_t3_20261114/positive_endpoints_tune/review_pages/index.html)及[主Agent复核](../night_t3_20261114/positive_endpoints_tune/review_pages/main_review.md)保留原双期、示例、四端点和掩码。train1745的目标T2掩码不是空：原生14419像素，但对12451剩余GT覆盖0；应归因于定位/分割覆盖不足，而非缓存缺失。train1808的正交集仍带来大块FP，不能因3479TP就称整片区域正确。此为见结果后的机制审查，不冒充盲审。
 
-转用已有SegEarth七通道概率缓存，保留原routeA与B0历史复现，仅新增B2/B3预测解析的稠密转换检索。tune30正11例F1：routeA12.7172、B0 1.6920、B2 12.8931、B3 2.7462；B2 TP3809来自train1745(3117)、1808(686)、2571(6)，与SAM失败模式不同。B2空19例FP103797，尽管正确空集13/19，高于routeA的8/19，仍有严重空目标误检。旧两路线各30/30复现。固定B2确认已提交186709，不据调参局部收益推广，也不推测确认结果。详见[机制预声明](../night_t3_20261114/rounds/semantic_constraints/predeclaration.md)。
+转用已有SegEarth七通道概率缓存，保留原routeA与B0历史复现，仅新增B2/B3预测解析的稠密转换检索。tune30正11例F1：routeA12.7172、B0 1.6920、B2 12.8931、B3 2.7462；B2 TP3809来自train1745(3117)、1808(686)、2571(6)，与SAM失败模式不同。B2空19例FP103797，尽管正确空集13/19，高于routeA的8/19，仍有严重空目标误检。旧两路线各30/30复现。固定B2确认186709完成30/30：正19例F1 5.7570、TP9356/FP113400；历史B0为5.3017、TP9649/FP152076，routeA为18.0119。B2减少FP但也减少TP，空11例FP67323、正确空集4/11。它确能覆盖SAM完全遗漏的真变化，但9352/9356TP集中train2438，地表9正例仅4TP，未证明整体稳定优于旧routeA或可在线晋级。旧两路线各60/60复现。详见[机制预声明](../night_t3_20261114/rounds/semantic_constraints/predeclaration.md)。
+
+固定B2互补诊断另完成原60例，见[调参分解](../night_t3_20261114/b2_mask_complementarity/tune/report.md)和[确认分解](../night_t3_20261114/b2_mask_complementarity/confirm/report.md)。调参正例两工具交集619TP/125FP、并集6669TP/23447FP；确认交集却为0TP/5798FP，SAM正例全部误报包含在dense中。确认并集正例等于dense，空例再多931FP，未显示可推广的互补收益。交集/并集是预定义描述性分解，不是按GT逐图选出的部署策略；不凭调参交集高精度添加一致性接受规则。
 
 ## find_missed：视图、候选粒度与排序
 
@@ -83,3 +85,6 @@ T3 完成请求/费用记录693份，usage折算¥0.1549594（所有分根账单
 ## 参考方法的使用边界
 
 [SoM原论文](https://arxiv.org/abs/2310.11441v2)为显式区域指称提供动机；[细粒度外部知识视觉提示原论文](https://arxiv.org/abs/2407.04681v1)讨论模型级空间表示。它们不是qwen3.7-flash遥感效果的证据；本夜并未训练或注入该类空间嵌入，RGB/二值面板也不称为论文复现。详见 [Grounding实验说明](../night_t3_20261114/grounding_notes.md)。
+
+
+后续技术路线查阅：[OmniOVCD原文](https://arxiv.org/html/2601.13895v1)将SAM3语义、实例与presence输出融合，再拆实例作时相比较；本夜的独立类别掩码硬排除并不等同该方法，故不能将当前负结果推广到全部SAM3方案。[Seg2Change原文](https://arxiv.org/html/2604.11231v1)将类别无关变化图与语义分割结合，并使用训练的变化头；它提示可将变化支持与语义定位分开检查，但不能把现成双期argmax交集称作论文复现。结合本夜train1745/1808的不同覆盖，本夜随后已用存档SAM/dense掩码完成独有TP/FP诊断，确认交集全错、并集未增加正TP，不加入一致性接受或简单union规则；尚未下载新数据、训练变化头或宣称论文收益可直接迁移。
