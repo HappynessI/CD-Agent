@@ -21,6 +21,9 @@ class NightReportTest(unittest.TestCase):
             self.assertEqual(result['views_usage']['failed_attempts'],1)
             self.assertEqual(len(result['exact_cases']),1)
             self.assertIn('pending',render(result))
+            self.assertIn('任务条件核验器',render(result))
+            self.assertIn('固定 evidence@10',render(result))
+            self.assertNotIn('```json',render(result))
 
 
 if __name__=='__main__':unittest.main()
