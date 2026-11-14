@@ -137,6 +137,7 @@ def render(report):
     table(lines,['范围','成功请求','失败尝试','已记录费用','缺失费用记录','读取错误'],rows)
     lines+=['','精确 mask/同核验器复用记录数：'+str(len(report['exact_cases']))+'。逐例 UID、原始响应、实际图像路径、proxy 分母和逐图净 ΔF1 保留在 night_report.json 及对应 scores/answers。',
         '', '## 具体案例与边界',
+        '冻结K10策略的确认区间、逐图净变化和收益集中度见 [确认审查](frozen_confirmation_review.md)。该审查不改变任何冻结选择。',
         '- `second_disappeared:train_1322:1`：原 four 回答 yes+rebuilt，与实际 scope 明确排除重建冲突；不是必须证明没有翻修才能识别的规则错误。见 [定向人审](manual_old_disappeared_contribution.md)。',
         '- `second_appeared:train_1065:4`：52像素屋顶局部在蓝色起点覆盖下被拒绝，提示对象粒度与上下文遮蔽问题；单图不能判定总体方法。见 manual_smoke_review.json。',
         '- `levir_any:train_106:3`：岸线类候选多臂拒绝，V0亦拒绝，不能把拒绝本身计作对V0改进。候选TP>FP只是收益proxy，不是人工语义标签。',
