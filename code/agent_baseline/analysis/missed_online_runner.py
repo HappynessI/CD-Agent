@@ -30,8 +30,11 @@ def common_arguments(tasks,config,seed):
         '--verify-stage','--gate5','--sam-prompt-device','cpu','--batch','missed_online']
 
 
-def arm_arguments(arm,variant,cache):
+def arm_arguments(arm,variant,cache,ranked_manifest=None):
     if arm=='baseline':return []
+    if ranked_manifest:
+        if variant!='four':raise ValueError('Frozen evidence online pilot requires V0/four')
+        return ['--missed-ranked-manifest',str(ranked_manifest),'--missed-verifier-variant','four']
     return ['--missed-candidates-root',str(cache),'--missed-verifier-variant',variant]
 
 
@@ -40,6 +43,8 @@ def prepare(args):
     design=read_json(args.selection/'design.json')
     if design['selection_seed']!=1016 or design['seed_offsets']!=list(SEEDS):
         raise ValueError('Use the frozen six-task selection and three seeds')
+    ranked_manifest=getattr(args,'ranked_manifest',None)
+    if ranked_manifest and args.variant!='four':raise ValueError('Ranked online policy requires four')
     tasks=[]
     for group in GROUPS:
         rows=[json.loads(s) for s in (args.selection/(group+'.jsonl')).read_text().splitlines() if s.strip()]
@@ -49,7 +54,10 @@ def prepare(args):
             stem=Path(row['id']).stem
             with np.load(args.cache/'candidates'/group/'S1_02'/(stem+'.npz'),allow_pickle=False) as z:
                 shape=tuple(int(v) for v in z['shape'])
-            provider=CachedMissedCandidates(args.cache,group,stem,shape)
+            if ranked_manifest:
+                from agent_baseline.frozen_ranked_candidates import FrozenRankedCandidates
+                provider=FrozenRankedCandidates(ranked_manifest,group,stem,shape)
+            else:provider=CachedMissedCandidates(args.cache,group,stem,shape)
             ranked=provider.load()
             # Inference-only candidate archive: no GT and no new source inference.
             folder=args.out/'candidate_manifest'/group;folder.mkdir(parents=True,exist_ok=True)
@@ -57,7 +65,7 @@ def prepare(args):
             for rank,r in enumerate(ranked,1):
                 candidates.append(dict(rank=rank,source=r['source'],sources=r['sources'],original=r['original'],area=len(r['idx'])))
             write_json(folder/(stem+'.json'),dict(group=group,stem=stem,shape=shape,candidates=candidates,
-                initial_top20=candidates[:20],ranking='fixed_source_round_robin_area',
+                initial_top20=candidates[:20],ranking=getattr(provider,'ranking','fixed_source_round_robin_area'),
                 cache=str(args.cache),gt_role='no_label_access',
                 online_rule='subtract current answer; skip emptied or identical residuals, retain original source order'))
             taskpath=args.out/'tasks'/group/(stem+'.jsonl')
@@ -71,6 +79,9 @@ def prepare(args):
         interpretation='joint intervention; not separate attribution to candidate tool versus verifier',
         sources=SOURCES,model=MODEL,expected_sessions=36)
     settings=json.loads(json.dumps(settings))
+    if ranked_manifest:
+        settings.update(ranked_manifest=str(ranked_manifest.resolve()),frozen_pool_limit=10,
+            online_rule='original evidence Top10 only; subtract current, no refill beyond10; no API answer reuse across sessions/seeds')
     path=args.out/'settings.json'
     if path.exists() and read_json(path)!=settings:raise ValueError('Frozen settings differ; use a new online output')
     write_json(path,settings)
@@ -121,7 +132,7 @@ def run(args):
             if prior and not args.retry_failed:continue
             number=len(prior);config=f"{args.group}/seed{args.seed}/{arm}/{row['stem']}/attempt_{number:03d}"
             destination=args.out/'run'/config/row['task_type']/'val'/row['stem']
-            arguments=common_arguments(row['tasks'],config,args.seed)+arm_arguments(arm,settings['variant'],settings['cache'])
+            arguments=common_arguments(row['tasks'],config,args.seed)+arm_arguments(arm,settings['variant'],settings['cache'],settings.get('ranked_manifest'))
             commands.extend(([':::'] if commands else [])+arguments)
             item=dict(group=args.group,seed=args.seed,arm=arm,stem=row['stem'],attempt=number,directory=str(destination),arguments=arguments)
             write_json(destination.parent.parent.parent/'attempt.json',dict(item,status='scheduled',started_at=time.time()))
@@ -153,6 +164,7 @@ def main():
     p.add_argument('--ovcd',type=Path,default=Path('/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/code/ovcd_v0'))
     p.add_argument('--python',default='/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/bin/python')
     p.add_argument('--variant',choices=['four','som','structured'],default='structured')
+    p.add_argument('--ranked-manifest',type=Path,help='Opt-in frozen six-task evidence@10 manifest; needs loop_json integration before launch')
     p.add_argument('--group',choices=GROUPS);p.add_argument('--seed',type=int,choices=SEEDS);p.add_argument('--retry-failed',action='store_true')
     args=p.parse_args();globals()[args.command](args)
 
