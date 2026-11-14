@@ -1,12 +1,31 @@
 import unittest
 import tempfile
+import json
+from types import SimpleNamespace
+from unittest.mock import patch
 from pathlib import Path
 import numpy as np
 from agent_baseline import instances
-from agent_baseline.analysis.night_missed_candidates import rematch,gate_features,visual_instances,rematch_policies,MATCH_POLICIES
+from agent_baseline.analysis.night_missed_candidates import rematch,gate_features,visual_instances,rematch_policies,MATCH_POLICIES,whu,SOURCES
 from agent_baseline.analysis.missed_sources import change_candidates,pack,save_npz,load_npz,unpack
 
 class CandidateGatesTest(unittest.TestCase):
+    def test_whu_resume_reuses_official_record_without_loading_arrays(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);a=SimpleNamespace(run=root/'run',work=root/'work',out=root/'out',resume_whu=True)
+            dest=a.out/'whu_official/whu_appeared/example.json';dest.parent.mkdir(parents=True)
+            fields=('tp','fp','unique_tp','unique_fp','candidates','missing_pixels','missing_pixels_covered','missing_components','components_covered')
+            record=dict(stem='example',gt=str(a.run/'whu/gt_official_v3/new/example.png'),ignore=str(a.run/'whu/gt_official_v3/ignore/example.png'),
+                        sources={s:{key:1 for key in fields} for s in SOURCES})
+            dest.write_text(json.dumps(record))
+            with patch('agent_baseline.analysis.night_missed_candidates.specs',return_value=[dict(dataset='whu',group='whu_appeared',direction='appeared',expected=1)]), \
+                 patch('agent_baseline.analysis.night_missed_candidates.rows_for',return_value=[dict(id='example')]), \
+                 patch('agent_baseline.evaluation.load_reference',side_effect=AssertionError('Should reuse saved score')):
+                whu(a)
+            result=json.loads((a.out/'whu_official_summary.json').read_text())
+            self.assertEqual(result['gt_version'],'official_v3')
+            self.assertEqual(result['groups']['whu_appeared']['sources']['S5']['tp'],1)
+
     def test_packed_dedup_matches_original_across_files_and_dates(self):
         shape=(7,7) # Includes zero-padded trailing packbits byte.
         a=np.zeros(shape,bool);a[1:3,1:3]=True
