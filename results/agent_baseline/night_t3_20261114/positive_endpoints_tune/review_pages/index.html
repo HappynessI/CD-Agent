@@ -1,0 +1,571 @@
+<!doctype html><meta charset="utf-8"><title>Positive endpoint mechanism review</title><style>body{font-family:system-ui;max-width:1400px;margin:24px auto}section{border-top:2px solid #555;padding:20px}figure{margin:8px}img{width:300px;max-width:100%}.images{display:flex;flex-wrap:wrap}figcaption{max-width:300px;font-size:12px}pre{white-space:pre-wrap;background:#eee;padding:12px}</style><h1>Fixed two-case mechanism evidence</h1><p>Post-result mechanism diagnosis: these two cases were selected after seeing results. This is not blind review or independent human truth. GT is shown only for offline inspection. No thresholds, labels, candidate choices or model inputs are changed by this page.</p><section><h2>train_1808_2to1</h2><p>Post-result mechanism diagnosis: these two cases were selected after seeing results. This is not blind review or independent human truth. GT is shown only for offline inspection. No thresholds, labels, candidate choices or model inputs are changed by this page.</p><pre>B2 prediction: {
+  &quot;pair&quot;: [
+    2,
+    1
+  ],
+  &quot;classes&quot;: [
+    &quot;non-vegetated ground&quot;,
+    &quot;low vegetation&quot;
+  ],
+  &quot;evidence&quot;: [
+    &quot;The bright, unmodified pixels in the T1 spotlight view show a light brown, tan-colored surface with a rough, uneven texture. This appearance is consistent with bare earth, dirt, or construction soil. The area lacks the green coloration of vegetation and does not have the defined geometric shapes or textures of buildings or pavement. It appears to be an excavated or cleared strip of land situated between industrial structures.&quot;,
+    &quot;The bright, unmodified pixels in the T2 spotlight view show a strip of green, textured ground cover situated between large industrial buildings. This appearance corresponds to grass or herbaceous plants, distinguishing it from the darker, denser tree canopy visible in the excluded dark regions and the bare earth seen in the T1 reference.&quot;
+  ]
+}</pre><div class="images"><figure><a href="train_1808_2to1/t1_original.png"><img loading="lazy" src="train_1808_2to1/t1_original.png"></a><figcaption>T1 original RGB, full native image (click to inspect)</figcaption></figure><figure><a href="train_1808_2to1/t2_original.png"><img loading="lazy" src="train_1808_2to1/t2_original.png"></a><figcaption>T2 original RGB, full native image (click to inspect)</figcaption></figure><figure><a href="train_1808_2to1/example_support.png"><img loading="lazy" src="train_1808_2to1/example_support.png"></a><figcaption>example_support; white=true, black=false; 13067 native pixels</figcaption></figure><figure><a href="train_1808_2to1/example_support_close.png"><img loading="lazy" src="train_1808_2to1/example_support_close.png"></a><figcaption>Example close support; display crop box (0, 0, 512, 512); other masks remain full-image coordinates</figcaption></figure><figure><a href="train_1808_2to1/example_support_wide.png"><img loading="lazy" src="train_1808_2to1/example_support_wide.png"></a><figcaption>Example wide support; display crop box (0, 0, 512, 512); other masks remain full-image coordinates</figcaption></figure><figure><a href="train_1808_2to1/source_T1_union.png"><img loading="lazy" src="train_1808_2to1/source_T1_union.png"></a><figcaption>source_T1_union; white=true, black=false; 43453 native pixels</figcaption></figure><figure><a href="train_1808_2to1/source_T2_union.png"><img loading="lazy" src="train_1808_2to1/source_T2_union.png"></a><figcaption>source_T2_union; white=true, black=false; 33746 native pixels</figcaption></figure><figure><a href="train_1808_2to1/target_T1_union.png"><img loading="lazy" src="train_1808_2to1/target_T1_union.png"></a><figcaption>target_T1_union; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1808_2to1/target_T2_union.png"><img loading="lazy" src="train_1808_2to1/target_T2_union.png"></a><figcaption>target_T2_union; white=true, black=false; 23830 native pixels</figcaption></figure><figure><a href="train_1808_2to1/strict_all_native.png"><img loading="lazy" src="train_1808_2to1/strict_all_native.png"></a><figcaption>strict_all_native; white=true, black=false; 9 native pixels</figcaption></figure><figure><a href="train_1808_2to1/strict_all_scored.png"><img loading="lazy" src="train_1808_2to1/strict_all_scored.png"></a><figcaption>strict_all_scored; white=true, black=false; 9 native pixels</figcaption></figure><figure><a href="train_1808_2to1/strict_top8_scored.png"><img loading="lazy" src="train_1808_2to1/strict_top8_scored.png"></a><figcaption>strict_top8_scored; white=true, black=false; 9 native pixels</figcaption></figure><figure><a href="train_1808_2to1/positive_only_all_native.png"><img loading="lazy" src="train_1808_2to1/positive_only_all_native.png"></a><figcaption>positive_only_all_native; white=true, black=false; 12062 native pixels</figcaption></figure><figure><a href="train_1808_2to1/positive_only_all_scored.png"><img loading="lazy" src="train_1808_2to1/positive_only_all_scored.png"></a><figcaption>positive_only_all_scored; white=true, black=false; 12002 native pixels</figcaption></figure><figure><a href="train_1808_2to1/positive_only_top8_scored.png"><img loading="lazy" src="train_1808_2to1/positive_only_top8_scored.png"></a><figcaption>positive_only_top8_scored; white=true, black=false; 12002 native pixels</figcaption></figure><figure><a href="train_1808_2to1/GT_original_offline_only.png"><img loading="lazy" src="train_1808_2to1/GT_original_offline_only.png"></a><figcaption>GT_original_offline_only; white=true, black=false; 20708 native pixels</figcaption></figure><figure><a href="train_1808_2to1/GT_remaining_offline_only.png"><img loading="lazy" src="train_1808_2to1/GT_remaining_offline_only.png"></a><figcaption>GT_remaining_offline_only; white=true, black=false; 7641 native pixels</figcaption></figure></div><h3>Existing metrics and cache provenance</h3><pre>{
+  &quot;id&quot;: &quot;train_1808_2to1&quot;,
+  &quot;review_scope&quot;: &quot;Post-result mechanism diagnosis: these two cases were selected after seeing results. This is not blind review or independent human truth. GT is shown only for offline inspection. No thresholds, labels, candidate choices or model inputs are changed by this page.&quot;,
+  &quot;images&quot;: {
+    &quot;t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1808.png&quot;,
+    &quot;t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1808.png&quot;
+  },
+  &quot;original_exemplar&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1808_2to1_exemplar.png&quot;,
+  &quot;original_gt_offline_only&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1808_2to1_gt.png&quot;,
+  &quot;metrics_source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1808_2to1/metrics.json&quot;,
+  &quot;predicted_pair&quot;: [
+    2,
+    1
+  ],
+  &quot;interpretation&quot;: {
+    &quot;pair&quot;: [
+      2,
+      1
+    ],
+    &quot;classes&quot;: [
+      &quot;non-vegetated ground&quot;,
+      &quot;low vegetation&quot;
+    ],
+    &quot;evidence&quot;: [
+      &quot;The bright, unmodified pixels in the T1 spotlight view show a light brown, tan-colored surface with a rough, uneven texture. This appearance is consistent with bare earth, dirt, or construction soil. The area lacks the green coloration of vegetation and does not have the defined geometric shapes or textures of buildings or pavement. It appears to be an excavated or cleared strip of land situated between industrial structures.&quot;,
+      &quot;The bright, unmodified pixels in the T2 spotlight view show a strip of green, textured ground cover situated between large industrial buildings. This appearance corresponds to grass or herbaceous plants, distinguishing it from the darker, denser tree canopy visible in the excluded dark regions and the bare earth seen in the T1 reference.&quot;
+    ]
+  },
+  &quot;source_cache_paths&quot;: [
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t1_t1.npz&quot;,
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t1_t2.npz&quot;,
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t2_t1.npz&quot;,
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t2_t2.npz&quot;
+  ],
+  &quot;panels&quot;: [
+    {
+      &quot;panel&quot;: &quot;example_support&quot;,
+      &quot;native_pixels&quot;: 13067,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        7641
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1808_2to1_exemplar.png&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;source_T1_union&quot;,
+      &quot;native_pixels&quot;: 43453,
+      &quot;remaining_pixels&quot;: 43383,
+      &quot;remaining_tp_fp_fn&quot;: [
+        3512,
+        39871,
+        4129
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t1_t1.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;source_T2_union&quot;,
+      &quot;native_pixels&quot;: 33746,
+      &quot;remaining_pixels&quot;: 28514,
+      &quot;remaining_tp_fp_fn&quot;: [
+        5088,
+        23426,
+        2553
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t1_t2.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;target_T1_union&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        7641
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t2_t1.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;target_T2_union&quot;,
+      &quot;native_pixels&quot;: 23830,
+      &quot;remaining_pixels&quot;: 21516,
+      &quot;remaining_tp_fp_fn&quot;: [
+        5026,
+        16490,
+        2615
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1808_2to1/t2_t2.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;strict_all_native&quot;,
+      &quot;native_pixels&quot;: 9,
+      &quot;remaining_pixels&quot;: 9,
+      &quot;remaining_tp_fp_fn&quot;: [
+        4,
+        5,
+        7637
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1808_2to1/proposals.npz::strict&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;strict_all_scored&quot;,
+      &quot;native_pixels&quot;: 9,
+      &quot;remaining_pixels&quot;: 9,
+      &quot;remaining_tp_fp_fn&quot;: [
+        4,
+        5,
+        7637
+      ],
+      &quot;source&quot;: &quot;above union minus example support&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;strict_top8_scored&quot;,
+      &quot;native_pixels&quot;: 9,
+      &quot;remaining_pixels&quot;: 9,
+      &quot;remaining_tp_fp_fn&quot;: [
+        4,
+        5,
+        7637
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1808_2to1/proposals.npz::strict_rank&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;positive_only_all_native&quot;,
+      &quot;native_pixels&quot;: 12062,
+      &quot;remaining_pixels&quot;: 12002,
+      &quot;remaining_tp_fp_fn&quot;: [
+        3479,
+        8523,
+        4162
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1808_2to1/proposals.npz::positive_only&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;positive_only_all_scored&quot;,
+      &quot;native_pixels&quot;: 12002,
+      &quot;remaining_pixels&quot;: 12002,
+      &quot;remaining_tp_fp_fn&quot;: [
+        3479,
+        8523,
+        4162
+      ],
+      &quot;source&quot;: &quot;above union minus example support&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;positive_only_top8_scored&quot;,
+      &quot;native_pixels&quot;: 12002,
+      &quot;remaining_pixels&quot;: 12002,
+      &quot;remaining_tp_fp_fn&quot;: [
+        3479,
+        8523,
+        4162
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1808_2to1/proposals.npz::positive_rank&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;GT_original_offline_only&quot;,
+      &quot;native_pixels&quot;: 20708,
+      &quot;remaining_pixels&quot;: 7641,
+      &quot;remaining_tp_fp_fn&quot;: [
+        7641,
+        0,
+        0
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1808_2to1_gt.png&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;GT_remaining_offline_only&quot;,
+      &quot;native_pixels&quot;: 7641,
+      &quot;remaining_pixels&quot;: 7641,
+      &quot;remaining_tp_fp_fn&quot;: [
+        7641,
+        0,
+        0
+      ],
+      &quot;source&quot;: &quot;original GT minus example support&quot;
+    }
+  ],
+  &quot;existing_scores&quot;: [
+    {
+      &quot;method&quot;: &quot;strict_all&quot;,
+      &quot;k&quot;: 0,
+      &quot;counts&quot;: [
+        4,
+        5,
+        7637
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 6,
+        &quot;aligned_instances&quot;: 0,
+        &quot;truth_pixels&quot;: 7641,
+        &quot;covered_pixels&quot;: 4,
+        &quot;proposals&quot;: 4,
+        &quot;instance_recall_upper&quot;: 0.0,
+        &quot;pixel_coverage_upper&quot;: 0.0005234916895694281,
+        &quot;pixel_f1_upper&quot;: 0.10464355788096795
+      },
+      &quot;candidates&quot;: [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      &quot;method&quot;: &quot;positive_only_all&quot;,
+      &quot;k&quot;: 0,
+      &quot;counts&quot;: [
+        3479,
+        8523,
+        4162
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 6,
+        &quot;aligned_instances&quot;: 1,
+        &quot;truth_pixels&quot;: 7641,
+        &quot;covered_pixels&quot;: 3479,
+        &quot;proposals&quot;: 5,
+        &quot;instance_recall_upper&quot;: 0.16666666666666666,
+        &quot;pixel_coverage_upper&quot;: 0.4553068970030101,
+        &quot;pixel_f1_upper&quot;: 62.57194244604317
+      },
+      &quot;candidates&quot;: [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      &quot;method&quot;: &quot;strict_delta&quot;,
+      &quot;k&quot;: 8,
+      &quot;counts&quot;: [
+        4,
+        5,
+        7637
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 6,
+        &quot;aligned_instances&quot;: 0,
+        &quot;truth_pixels&quot;: 7641,
+        &quot;covered_pixels&quot;: 4,
+        &quot;proposals&quot;: 4,
+        &quot;instance_recall_upper&quot;: 0.0,
+        &quot;pixel_coverage_upper&quot;: 0.0005234916895694281,
+        &quot;pixel_f1_upper&quot;: 0.10464355788096795
+      },
+      &quot;candidates&quot;: [
+        1,
+        2,
+        0,
+        3
+      ]
+    },
+    {
+      &quot;method&quot;: &quot;positive_only_delta&quot;,
+      &quot;k&quot;: 8,
+      &quot;counts&quot;: [
+        3479,
+        8523,
+        4162
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 6,
+        &quot;aligned_instances&quot;: 1,
+        &quot;truth_pixels&quot;: 7641,
+        &quot;covered_pixels&quot;: 3479,
+        &quot;proposals&quot;: 5,
+        &quot;instance_recall_upper&quot;: 0.16666666666666666,
+        &quot;pixel_coverage_upper&quot;: 0.4553068970030101,
+        &quot;pixel_f1_upper&quot;: 62.57194244604317
+      },
+      &quot;candidates&quot;: [
+        2,
+        3,
+        4,
+        0,
+        1
+      ]
+    }
+  ]
+}</pre></section><section><h2>train_1745_5to2</h2><p>Post-result mechanism diagnosis: these two cases were selected after seeing results. This is not blind review or independent human truth. GT is shown only for offline inspection. No thresholds, labels, candidate choices or model inputs are changed by this page.</p><pre>B2 prediction: {
+  &quot;pair&quot;: [
+    5,
+    2
+  ],
+  &quot;classes&quot;: [
+    &quot;building&quot;,
+    &quot;non-vegetated ground&quot;
+  ],
+  &quot;evidence&quot;: [
+    &quot;The bright, unmodified support pixels in the T1 spotlight views reveal a rectangular structure with a distinct roof. In the close-up reference, this appears as a blue-grey surface typical of metal roofing, situated adjacent to other similar industrial structures. The shape is geometric and rigid, consistent with a man-made building rather than natural features.&quot;,
+    &quot;The bright, unmodified support pixel in the T2 spotlight close view shows a light beige, sandy texture consistent with bare earth or dirt. In the wide view, this bright patch is located within a large, open yard area adjacent to industrial buildings, which appears to be unpaved ground used for storage or access. The color and lack of vegetation or structural features confirm it is non-vegetated ground.&quot;
+  ]
+}</pre><div class="images"><figure><a href="train_1745_5to2/t1_original.png"><img loading="lazy" src="train_1745_5to2/t1_original.png"></a><figcaption>T1 original RGB, full native image (click to inspect)</figcaption></figure><figure><a href="train_1745_5to2/t2_original.png"><img loading="lazy" src="train_1745_5to2/t2_original.png"></a><figcaption>T2 original RGB, full native image (click to inspect)</figcaption></figure><figure><a href="train_1745_5to2/example_support.png"><img loading="lazy" src="train_1745_5to2/example_support.png"></a><figcaption>example_support; white=true, black=false; 140 native pixels</figcaption></figure><figure><a href="train_1745_5to2/example_support_close.png"><img loading="lazy" src="train_1745_5to2/example_support_close.png"></a><figcaption>Example close support; display crop box (266, 293, 342, 369); other masks remain full-image coordinates</figcaption></figure><figure><a href="train_1745_5to2/example_support_wide.png"><img loading="lazy" src="train_1745_5to2/example_support_wide.png"></a><figcaption>Example wide support; display crop box (176, 203, 432, 459); other masks remain full-image coordinates</figcaption></figure><figure><a href="train_1745_5to2/source_T1_union.png"><img loading="lazy" src="train_1745_5to2/source_T1_union.png"></a><figcaption>source_T1_union; white=true, black=false; 64663 native pixels</figcaption></figure><figure><a href="train_1745_5to2/source_T2_union.png"><img loading="lazy" src="train_1745_5to2/source_T2_union.png"></a><figcaption>source_T2_union; white=true, black=false; 54876 native pixels</figcaption></figure><figure><a href="train_1745_5to2/target_T1_union.png"><img loading="lazy" src="train_1745_5to2/target_T1_union.png"></a><figcaption>target_T1_union; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/target_T2_union.png"><img loading="lazy" src="train_1745_5to2/target_T2_union.png"></a><figcaption>target_T2_union; white=true, black=false; 14419 native pixels</figcaption></figure><figure><a href="train_1745_5to2/strict_all_native.png"><img loading="lazy" src="train_1745_5to2/strict_all_native.png"></a><figcaption>strict_all_native; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/strict_all_scored.png"><img loading="lazy" src="train_1745_5to2/strict_all_scored.png"></a><figcaption>strict_all_scored; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/strict_top8_scored.png"><img loading="lazy" src="train_1745_5to2/strict_top8_scored.png"></a><figcaption>strict_top8_scored; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/positive_only_all_native.png"><img loading="lazy" src="train_1745_5to2/positive_only_all_native.png"></a><figcaption>positive_only_all_native; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/positive_only_all_scored.png"><img loading="lazy" src="train_1745_5to2/positive_only_all_scored.png"></a><figcaption>positive_only_all_scored; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/positive_only_top8_scored.png"><img loading="lazy" src="train_1745_5to2/positive_only_top8_scored.png"></a><figcaption>positive_only_top8_scored; white=true, black=false; 0 native pixels</figcaption></figure><figure><a href="train_1745_5to2/GT_original_offline_only.png"><img loading="lazy" src="train_1745_5to2/GT_original_offline_only.png"></a><figcaption>GT_original_offline_only; white=true, black=false; 12591 native pixels</figcaption></figure><figure><a href="train_1745_5to2/GT_remaining_offline_only.png"><img loading="lazy" src="train_1745_5to2/GT_remaining_offline_only.png"></a><figcaption>GT_remaining_offline_only; white=true, black=false; 12451 native pixels</figcaption></figure></div><h3>Existing metrics and cache provenance</h3><pre>{
+  &quot;id&quot;: &quot;train_1745_5to2&quot;,
+  &quot;review_scope&quot;: &quot;Post-result mechanism diagnosis: these two cases were selected after seeing results. This is not blind review or independent human truth. GT is shown only for offline inspection. No thresholds, labels, candidate choices or model inputs are changed by this page.&quot;,
+  &quot;images&quot;: {
+    &quot;t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1745.png&quot;,
+    &quot;t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1745.png&quot;
+  },
+  &quot;original_exemplar&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1745_5to2_exemplar.png&quot;,
+  &quot;original_gt_offline_only&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1745_5to2_gt.png&quot;,
+  &quot;metrics_source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1745_5to2/metrics.json&quot;,
+  &quot;predicted_pair&quot;: [
+    5,
+    2
+  ],
+  &quot;interpretation&quot;: {
+    &quot;pair&quot;: [
+      5,
+      2
+    ],
+    &quot;classes&quot;: [
+      &quot;building&quot;,
+      &quot;non-vegetated ground&quot;
+    ],
+    &quot;evidence&quot;: [
+      &quot;The bright, unmodified support pixels in the T1 spotlight views reveal a rectangular structure with a distinct roof. In the close-up reference, this appears as a blue-grey surface typical of metal roofing, situated adjacent to other similar industrial structures. The shape is geometric and rigid, consistent with a man-made building rather than natural features.&quot;,
+      &quot;The bright, unmodified support pixel in the T2 spotlight close view shows a light beige, sandy texture consistent with bare earth or dirt. In the wide view, this bright patch is located within a large, open yard area adjacent to industrial buildings, which appears to be unpaved ground used for storage or access. The color and lack of vegetation or structural features confirm it is non-vegetated ground.&quot;
+    ]
+  },
+  &quot;source_cache_paths&quot;: [
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t1_t1.npz&quot;,
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t1_t2.npz&quot;,
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t2_t1.npz&quot;,
+    &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t2_t2.npz&quot;
+  ],
+  &quot;panels&quot;: [
+    {
+      &quot;panel&quot;: &quot;example_support&quot;,
+      &quot;native_pixels&quot;: 140,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1745_5to2_exemplar.png&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;source_T1_union&quot;,
+      &quot;native_pixels&quot;: 64663,
+      &quot;remaining_pixels&quot;: 64525,
+      &quot;remaining_tp_fp_fn&quot;: [
+        10358,
+        54167,
+        2093
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t1_t1.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;source_T2_union&quot;,
+      &quot;native_pixels&quot;: 54876,
+      &quot;remaining_pixels&quot;: 54876,
+      &quot;remaining_tp_fp_fn&quot;: [
+        691,
+        54185,
+        11760
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t1_t2.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;target_T1_union&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t2_t1.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;target_T2_union&quot;,
+      &quot;native_pixels&quot;: 14419,
+      &quot;remaining_pixels&quot;: 14419,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        14419,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/t3_sam3/sam3_text/train_1745_5to2/t2_t2.npz&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;strict_all_native&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1745_5to2/proposals.npz::strict&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;strict_all_scored&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;above union minus example support&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;strict_top8_scored&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1745_5to2/proposals.npz::strict_rank&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;positive_only_all_native&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1745_5to2/proposals.npz::positive_only&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;positive_only_all_scored&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;above union minus example support&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;positive_only_top8_scored&quot;,
+      &quot;native_pixels&quot;: 0,
+      &quot;remaining_pixels&quot;: 0,
+      &quot;remaining_tp_fp_fn&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/positive_endpoints_tune/B2/tasks/train_1745_5to2/proposals.npz::positive_rank&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;GT_original_offline_only&quot;,
+      &quot;native_pixels&quot;: 12591,
+      &quot;remaining_pixels&quot;: 12451,
+      &quot;remaining_tp_fp_fn&quot;: [
+        12451,
+        0,
+        0
+      ],
+      &quot;source&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1745_5to2_gt.png&quot;
+    },
+    {
+      &quot;panel&quot;: &quot;GT_remaining_offline_only&quot;,
+      &quot;native_pixels&quot;: 12451,
+      &quot;remaining_pixels&quot;: 12451,
+      &quot;remaining_tp_fp_fn&quot;: [
+        12451,
+        0,
+        0
+      ],
+      &quot;source&quot;: &quot;original GT minus example support&quot;
+    }
+  ],
+  &quot;existing_scores&quot;: [
+    {
+      &quot;method&quot;: &quot;strict_all&quot;,
+      &quot;k&quot;: 0,
+      &quot;counts&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 10,
+        &quot;aligned_instances&quot;: 0,
+        &quot;truth_pixels&quot;: 12451,
+        &quot;covered_pixels&quot;: 0,
+        &quot;proposals&quot;: 0,
+        &quot;instance_recall_upper&quot;: 0.0,
+        &quot;pixel_coverage_upper&quot;: 0.0,
+        &quot;pixel_f1_upper&quot;: 0.0
+      },
+      &quot;candidates&quot;: []
+    },
+    {
+      &quot;method&quot;: &quot;positive_only_all&quot;,
+      &quot;k&quot;: 0,
+      &quot;counts&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 10,
+        &quot;aligned_instances&quot;: 0,
+        &quot;truth_pixels&quot;: 12451,
+        &quot;covered_pixels&quot;: 0,
+        &quot;proposals&quot;: 0,
+        &quot;instance_recall_upper&quot;: 0.0,
+        &quot;pixel_coverage_upper&quot;: 0.0,
+        &quot;pixel_f1_upper&quot;: 0.0
+      },
+      &quot;candidates&quot;: []
+    },
+    {
+      &quot;method&quot;: &quot;strict_delta&quot;,
+      &quot;k&quot;: 8,
+      &quot;counts&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 10,
+        &quot;aligned_instances&quot;: 0,
+        &quot;truth_pixels&quot;: 12451,
+        &quot;covered_pixels&quot;: 0,
+        &quot;proposals&quot;: 0,
+        &quot;instance_recall_upper&quot;: 0.0,
+        &quot;pixel_coverage_upper&quot;: 0.0,
+        &quot;pixel_f1_upper&quot;: 0.0
+      },
+      &quot;candidates&quot;: []
+    },
+    {
+      &quot;method&quot;: &quot;positive_only_delta&quot;,
+      &quot;k&quot;: 8,
+      &quot;counts&quot;: [
+        0,
+        0,
+        12451
+      ],
+      &quot;coverage&quot;: {
+        &quot;gt_instances&quot;: 10,
+        &quot;aligned_instances&quot;: 0,
+        &quot;truth_pixels&quot;: 12451,
+        &quot;covered_pixels&quot;: 0,
+        &quot;proposals&quot;: 0,
+        &quot;instance_recall_upper&quot;: 0.0,
+        &quot;pixel_coverage_upper&quot;: 0.0,
+        &quot;pixel_f1_upper&quot;: 0.0
+      },
+      &quot;candidates&quot;: []
+    }
+  ]
+}</pre></section>
