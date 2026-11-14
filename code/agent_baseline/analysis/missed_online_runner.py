@@ -167,7 +167,7 @@ def main():
     p.add_argument('--ovcd',type=Path,default=Path('/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/code/ovcd_v0'))
     p.add_argument('--python',default='/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/bin/python')
     p.add_argument('--variant',choices=['four','som','structured'],default='structured')
-    p.add_argument('--ranked-manifest',type=Path,help='Opt-in frozen six-task evidence@10 manifest; needs loop_json integration before launch')
+    p.add_argument('--ranked-manifest',type=Path,help='Opt-in frozen evidence@10 manifest prepared separately for the original six tasks')
     p.add_argument('--group',choices=GROUPS);p.add_argument('--seed',type=int,choices=SEEDS);p.add_argument('--retry-failed',action='store_true')
     args=p.parse_args();globals()[args.command](args)
 
