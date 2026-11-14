@@ -29,9 +29,11 @@ def main():
     p.add_argument('--run',type=Path,required=True);p.add_argument('--night',type=Path,required=True);a=p.parse_args()
     if not os.environ.get('SLURM_JOB_ID'):raise RuntimeError('Run cached feature computation through Slurm')
     audit=json.loads(read_text(a.night/'audit.json'));out=a.night/'endpoint';records=[]
+    prior={r['id']:r['proposal_upper'] for r in audit['records']}
     write_json(out/'settings.json',dict(code=str(Path(__file__).resolve()),pool='original cached SAM T1 followed by T2, no geometry or semantic gate',
         endpoint='0.5*(cos(candidateT1,exampleT1)+cos(candidateT2,exampleT2))',joint='0.5*(delta+endpoint)',
         counterfactual='swap exemplar dates only; candidates and query dates unchanged; diagnostic ranking sensitivity, not new ground truth',
+        pool_upper='reuse existing audit original-pool upper bound; candidate count checked; new TopK coverage recomputed',
         selection='fixed coefficients and TopK; no confirm-based choice; original split and all60 retained',api_cost_cny=0))
     cache=CachedVision(a.run/'t3_diag/cache/vision')
     for row in load_dev(a.run):
@@ -46,7 +48,8 @@ def main():
         orders={name:sorted(range(len(masks)),key=lambda i:(-float(v[i]),i)) for name,v in values.items()}
         truth=read_image(row['gt_mask'])>0
         scores=[score(masks,order[:k],truth,ex,name,k) for name,order in orders.items() for k in GRID]
-        upper=proposal_metrics(masks,truth,ex)
+        upper=prior[row['id']]
+        if upper['proposals']!=len(masks):raise ValueError('Historical upper-bound pool size differs')
         record=dict(id=row['id'],split=audit['split'][row['id']],group=group(row),remaining_gt_pixels=int((truth&~ex).sum()),
             fixed_pool_upper=upper,scores=scores,verification={},
             swap_topk_overlap={name:{str(k):len(set(orders[name][:k])&set(orders[name+'_example_swapped'][:k])) for k in GRID} for name in ['delta','endpoint','equal_joint']})
