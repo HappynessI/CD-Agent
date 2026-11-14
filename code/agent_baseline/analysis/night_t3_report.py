@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from .io_retry import read_text,write_json,write_text,exists
 from .night_t3_retrieval import summaries
+from .t3_routes import pooled
 
 
 def load(path):
@@ -184,6 +185,30 @@ def readable_stage_results(data):
     return lines
 
 
+def remaining16_diagnostic(data):
+    """Additional sensitivity table; never alter the formal record collections."""
+    sets={'endpoint':data['endpoint']['records']}
+    sets.update({name:value['records'] for name,value in data['retrieval'].items()})
+    if data['audit']:
+        sets['old_dev60']=[dict(r,scores=r['baseline_records']) for r in data['audit']['records']]
+    rows=[]
+    for stage,records in sets.items():
+        for split in ('all','tune','confirm'):
+            available=[r for r in records if split=='all' or r['split']==split]
+            for group in ('全部','目标类','地表类'):
+                selected=[r for r in available if r['remaining_gt_pixels']>=16 and (group=='全部' or r['group']==group)]
+                methods=sorted({v['method'] for r in available for v in r['scores'] if v['k']==8})
+                for method in methods:
+                    scores=[v for r in selected for v in r['scores'] if v['k']==8 and v['method']==method]
+                    rows.append(dict(stage=stage,split=split,support='remaining_gt>=16_diagnostic',group=group,
+                        available_stage_tasks=len(available),tasks=len(scores),method=method,k=8,**pooled(scores),
+                        per_task_counts=[dict(id=r['id'],counts=v['counts']) for r in selected for v in r['scores'] if v['k']==8 and v['method']==method]))
+    return dict(threshold_remaining_pixels=16,
+        source='analysis/make_t3_tasks.py MIN_AREA=16, original connected-component construction cutoff; also documented in night_t3_grounding.audit',
+        interpretation='remaining_gt>=16_diagnostic filters remaining total GT pixels, not component size: sensitivity only, not the original definition. No benchmark exclusion, parameter tuning or method selection. Partial stages remain partial; only existing completed task metrics are read.',
+        rows=rows)
+
+
 def markdown(data):
     lines=['# T3 night actual evidence','',
         'Units: pixel F1/precision/recall are percentages; label agreement, coverage and empty-prediction rates are fractions in [0,1]. Label agreement is not manual semantic or support-grounding accuracy. The existing dev60 was historically inspected; the new image split isolates new method selection, not unseen data. All original tasks remain, including empty remaining GT.','',
@@ -238,6 +263,12 @@ def markdown(data):
         for row in oracle['summary']:
             for method,v in row['methods'].items():
                 lines.append('| '+' | '.join(map(str,[row['split'],row['support'],row['group'],row['tasks'],method,number(v['f1_c']),number(v['precision']),number(v['recall']),str(v['covered_pixels'])+'/'+str(v['truth_pixels'])]))+' |')
+    diagnostic=data.get('remaining_gt>=16_diagnostic') or remaining16_diagnostic(data)
+    lines+=['','## remaining_gt>=16_diagnostic','',diagnostic['source'],diagnostic['interpretation'],'',
+        '| Stage | Split | Group | N | Method Top8 | F1 | P | R | TP | FP | FN |',
+        '|---|---|---|---:|---|---:|---:|---:|---:|---:|---:|']
+    for row in diagnostic['rows']:
+        lines.append('| '+' | '.join(map(str,[row['stage'],row['split'],row['group'],row['tasks'],row['method'],number(row['f1_c']),number(row['precision']),number(row['recall']),row['tp'],row['fp'],row['fn']]))+' |')
     reproduction=data['delta_reproduction'];cost=data['cost']
     lines+=['','## Reproduction, manual evidence and accounting','',
         f"Historical DINO reproduction: {reproduction['tasks']} completed tasks, {reproduction['comparisons']} TopK comparisons; all available counts agree: {reproduction['all_available_agree']}; mismatches: {len(reproduction['mismatches'])}. This is not a full60 claim until all60 finish.",
@@ -249,7 +280,7 @@ def markdown(data):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--night',type=Path,required=True);p.add_argument('--old',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     if not os.environ.get('SLURM_JOB_ID'):raise RuntimeError('Generate aggregate report through Slurm')
-    data=collect(a.night,load(a.old));data['pool_upper_bounds']=pool_bounds(data);write_json(a.output/'report.json',data);write_text(a.output/'report.md',markdown(data))
+    data=collect(a.night,load(a.old));data['pool_upper_bounds']=pool_bounds(data);data['remaining_gt>=16_diagnostic']=remaining16_diagnostic(data);write_json(a.output/'report.json',data);write_text(a.output/'report.md',markdown(data))
 
 
 if __name__=='__main__':main()

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset
+from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset,remaining16_diagnostic
 
 
 class ReportTests(unittest.TestCase):
@@ -28,6 +28,19 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(len(rows),1)
             self.assertEqual(stages['r1_patchset/tune']['status'],'partial')
             self.assertEqual(stages['r1_patchset/tune']['expected'],30)
+
+    def test_remaining16_is_additional_total_pixel_sensitivity(self):
+        records=[dict(id=str(n),split='tune',group='目标类',remaining_gt_pixels=n,
+            scores=[dict(method='m',k=8,counts=[n,2,0])]) for n in (0,15,16,20)]
+        data=dict(endpoint=dict(records=[]),retrieval=dict(stage=dict(records=records)),audit=None)
+        before=json.dumps(data,sort_keys=True)
+        result=remaining16_diagnostic(data)
+        row=next(r for r in result['rows'] if r['split']=='tune' and r['group']=='全部')
+        self.assertEqual(row['tasks'],2)
+        self.assertEqual(row['tp'],36)
+        self.assertEqual(row['available_stage_tasks'],4)
+        self.assertEqual([r['id'] for r in row['per_task_counts']],['16','20'])
+        self.assertEqual(json.dumps(data,sort_keys=True),before)
 
     def test_reproduction_requires_original_counts(self):
         old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])
