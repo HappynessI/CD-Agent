@@ -377,3 +377,7 @@ S5解包优化真实验证186495：train106四组结果与历史完全一致、�
 2026-11-15 实际hook故障：本夜summary的start hooks186614/186620被调度到gpu06，均FAILED、elapsed0、exit0:53，stdout/stderr未创建；不能把它当研究脚本错误。仅增加exp-loop可选hook_node，给本夜仍活跃的四个实验设gpu42；默认行为不变，现有watchdog负责重挂，不手动advance。准确集群侧原因未知。归档脚本纳入hooks目录及版本信息；T3追加一个固定R1 patch集合表征小试准备，原joint/residual负结果不改。
 
 2026-11-15 hook固定节点后，配对诊断186625/hook186626在gpu42成功完成，3项回归通过；不再卡在gpu06启动失败。固定joint正目标确认ΔF1−.69118，图像配对95%区间[−6.9147,3.6351]；空FP+12741，区间[1450.4,25566.7]。主线T3已归档推送，残余负结果亦推送。新增patch集合小试为独立新假设：同池/Top8、对称加权最大有向patch余弦、不调权重、零API，原结果不覆写。
+
+2026-11-15 在线依赖只读核查：原冻结补漏6任务为SECOND train1884/train368两方向、LEVIR train293/train78，与night30方向×图像记录完全无交集（0/6，原在线共4张独立图）。现CachedMissedCandidates只重建旧round-robin，不能直接读取night gate/evidence manifest；若将来晋级，需要显式opt-in provider及原6任务独立冻结准备，不按pilot赢家换任务，不复用跨seed模型回答，不直接写Agent答案。此项仅方案，未实施或提交在线。
+
+2026-11-15 固定R1 patch集合186628完成30/30、3测试、原delta Top8复现30/30，API0：正11例F1 11.2769→8.0136、TP9826→6627、FP124127→118452；空19例FP191988→205178，NAcc0。换例时相仅为公式方向敏感性，不是语义理解独立证明。该固定集合匹配未改善，不跑confirm、不扫权重；本夜T3实验收尾，新报告版本追加patch及remainingGT>=16敏感性，原分数/基准不变。

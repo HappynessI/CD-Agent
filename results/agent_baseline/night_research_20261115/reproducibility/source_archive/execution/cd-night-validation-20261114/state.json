@@ -1,0 +1,114 @@
+{
+  "name": "cd-night-validation-20261114",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-validation-20261114/jobs/01-followup.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-validation-20261114/jobs/02-review-contacts.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-validation-20261114/jobs/02-review-contacts.sbatch",
+  "job_id": "186447",
+  "hook_id": "186448",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": true,
+  "finalize_requested": false,
+  "started_at": "2026-11-14 23:16:51",
+  "started_epoch": 1794669411.4606562,
+  "history": [
+    {
+      "job": "01-followup.sbatch",
+      "job_id": "186430",
+      "hook_id": "186431",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "followup_validation_and_T33_audit",
+        "completed": 1,
+        "cost_cny": 0
+      },
+      "metric_error": null,
+      "at": "2026-11-14 23:17:33"
+    },
+    {
+      "job": "02-review-contacts.sbatch",
+      "job_id": "186447",
+      "hook_id": "186448",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "anonymous_review_contacts",
+        "completed": 12,
+        "cost_cny": 0
+      },
+      "metric_error": null,
+      "at": "2026-11-14 23:41:28"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-14 23:41:08",
+  "last_advance_at": "2026-11-14 23:41:08",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-14 23:41:28",
+    "job_id": "186447",
+    "hook_id": "186448",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-validation-20261114/jobs/02-review-contacts.sbatch",
+    "latest": {
+      "job": "02-review-contacts.sbatch",
+      "job_id": "186447",
+      "hook_id": "186448",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "anonymous_review_contacts",
+        "completed": 12,
+        "cost_cny": 0
+      },
+      "metric_error": null,
+      "at": "2026-11-14 23:41:28"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "finish",
+      "reason": "186430 passed12 new contracts and audited all358 existing T3.3 dev tasks. No API. Frozen followup code available; this validation does not claim real GPU/Agent gains.",
+      "at": "2026-11-14 23:26:01"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "186447 completed all12 anonymous input contacts; mainAgent inspected each and saved pre-prediction observations, mapped conclusions and ambiguity. No API; this is qualitative Agent review, not independent human accuracy. Earlier12 contract tests remain separately archived.",
+      "at": "2026-11-14 23:48:27"
+    }
+  ],
+  "elapsed_seconds": 1896.1,
+  "finalize_attempts": 1,
+  "git_committed": true,
+  "git_pushed": true,
+  "notified": true,
+  "finalized_at": "2026-11-14 15:50:27",
+  "stop_reason": "186447 completed all12 anonymous input contacts; mainAgent inspected each and saved pre-prediction observations, mapped conclusions and ambiguity. No API; this is qualitative Agent review, not independent human accuracy. Earlier12 contract tests remain separately archived.",
+  "finished_at": "2026-11-14 23:48:27"
+}

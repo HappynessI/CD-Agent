@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#SBATCH --partition=gre
+#SBATCH --nodelist=gpu42
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=12G
+#SBATCH --time=04:00:00
+#SBATCH --output=/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/logs/candidates-%j.out
+#SBATCH --error=/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/logs/candidates-%j.err
+set -euo pipefail
+export NIGHT_MISSED_CODE=/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/missed-s5-v1/code
+started=$SECONDS
+finish() { status=$?; trap - EXIT; QQ_SUB="Night candidate audit $SLURM_JOB_ID" QQ_BODY="status=$status; elapsed=$((SECONDS-started))s; output=/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot; logs=/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/logs" /guisongxia01/pangchao/wangyihan/.local/bin/wangyihan-send-qq >/dev/null 2>&1 || true; exit "$status"; }
+trap finish EXIT
+OUT=/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot
+# Resume only after the original writer has stopped. Completed gate evaluation is reused.
+if [[ ! -s "$OUT/score_summary.json" ]]; then
+  bash "$NIGHT_MISSED_CODE/agent_baseline/analysis/run_night_missed_candidates.sbatch" pilot
+fi

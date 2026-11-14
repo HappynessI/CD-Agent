@@ -1,0 +1,137 @@
+{
+  "name": "cd-night-summary-20261115",
+  "status": "running",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/01-t3-report.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/02-t3-paired.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/03-t3-final-v2.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/04-source-archive.sbatch",
+  "job_id": "186652",
+  "hook_id": "186653",
+  "rounds": 3,
+  "rounds_submitted": 4,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": false,
+  "started_at": "2026-11-15 01:50:53",
+  "started_epoch": 1794678653.4384713,
+  "history": [
+    {
+      "job": "01-t3-report.sbatch",
+      "job_id": "186587",
+      "hook_id": "186588",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "night_final_reports",
+        "cost_cny": 0,
+        "t3_report": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 02:07:13"
+    },
+    {
+      "job": "02-t3-paired.sbatch",
+      "job_id": "186625",
+      "hook_id": "186626",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "night_final_reports",
+        "cost_cny": 0,
+        "t3_report": true
+      },
+      "metric_error": null,
+      "at": "2026-11-14 18:11:25"
+    },
+    {
+      "job": "03-t3-final-v2.sbatch",
+      "job_id": "186648",
+      "hook_id": "186649",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "night_final_reports",
+        "cost_cny": 0,
+        "t3_report": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 02:38:45"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": false,
+  "submitted_at": "2026-11-15 02:41:47",
+  "last_advance_at": "2026-11-15 02:41:47",
+  "hook_attempts": 11,
+  "review_count": 3,
+  "review": {
+    "id": "event-0003",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 02:38:45",
+    "job_id": "186648",
+    "hook_id": "186649",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/03-t3-final-v2.sbatch",
+    "latest": {
+      "job": "03-t3-final-v2.sbatch",
+      "job_id": "186648",
+      "hook_id": "186649",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "night_final_reports",
+        "cost_cny": 0,
+        "t3_report": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 02:38:45"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "continue",
+      "job": null,
+      "reason": "T3 final read-only report186587 completed and tests passed. Fixedjoint confirm30 complete with positiveF1 16.0437to15.3525 and emptyFP+12741; run queued metrics-only paired uncertainty/case diagnostic, no further inference.",
+      "at": "2026-11-15 02:07:45"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/03-t3-final-v2.sbatch",
+      "reason": "Patchset tune30 completed negative; no confirmation. New report revision includes allactual stages and additional remainingGT>=16 sensitivity, preserving report_final and original task/metric records; tests and JSON-only aggregation,API0.",
+      "at": "2026-11-15 02:38:08"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/04-source-archive.sbatch",
+      "reason": "Archive current frozen sources once while S5 continues; actual source files and current execution observations, no inference. Final execution-only snapshot will follow after remaining jobs; this is not a claim that ongoing studies completed.",
+      "at": "2026-11-15 02:41:46"
+    }
+  ],
+  "finalize_attempts": 0,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false
+}

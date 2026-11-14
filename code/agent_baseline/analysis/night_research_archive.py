@@ -7,7 +7,7 @@ import shutil
 import sys
 from importlib import metadata
 
-from .io_retry import write_json
+from .io_retry import retry_io, write_json
 
 
 SOURCE_SUFFIXES = {'.py', '.sh', '.sbatch', '.yaml', '.yml'}
@@ -15,7 +15,7 @@ SOURCE_SUFFIXES = {'.py', '.sh', '.sbatch', '.yaml', '.yml'}
 
 def copy_record(source, destination):
     destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, destination)
+    retry_io(lambda: shutil.copyfile(source, destination))
     return dict(source=str(source), archive=str(destination), bytes=source.stat().st_size)
 
 

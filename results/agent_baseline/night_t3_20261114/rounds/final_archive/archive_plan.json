@@ -2,6 +2,18 @@
   "status": "prepared_not_executed",
   "snapshots": [
     {
+      "name": "archive-v1",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/archive-v1",
+      "job_references": [
+        {
+          "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/04-source-archive.sbatch",
+          "submitted": false,
+          "job_id": null,
+          "state": "prepared_not_submitted"
+        }
+      ]
+    },
+    {
       "name": "candidate-geometry-v1",
       "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/candidate-geometry-v1",
       "job_references": [
@@ -48,6 +60,11 @@
           "state": "active_observation"
         }
       ]
+    },
+    {
+      "name": "final-report-v2",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/final-report-v2",
+      "job_references": []
     },
     {
       "name": "followup-v1",
@@ -111,13 +128,13 @@
           "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/01-candidates.sbatch",
           "submitted": true,
           "job_id": "186417",
-          "state": "active_observation"
+          "state": "TIMEOUT"
         },
         {
           "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/02-resume-candidates.sbatch",
-          "submitted": false,
-          "job_id": null,
-          "state": "prepared_not_submitted"
+          "submitted": true,
+          "job_id": "186610",
+          "state": "active_observation"
         }
       ]
     },
@@ -170,6 +187,18 @@
       ]
     },
     {
+      "name": "patchset-v1",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/patchset-v1",
+      "job_references": [
+        {
+          "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-patchset-20261115/jobs/01-patchset-tune.sbatch",
+          "submitted": true,
+          "job_id": "186628",
+          "state": "COMPLETED"
+        }
+      ]
+    },
+    {
       "name": "r1-joint-v1",
       "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/r1-joint-v1",
       "job_references": [
@@ -195,7 +224,7 @@
           "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-20261114/jobs/10-r1-joint-confirm.sbatch",
           "submitted": true,
           "job_id": "186570",
-          "state": "active_observation"
+          "state": "COMPLETED"
         }
       ]
     },
@@ -219,7 +248,7 @@
           "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-residual-20261115/jobs/01-residual.sbatch",
           "submitted": true,
           "job_id": "186566",
-          "state": "active_observation"
+          "state": "COMPLETED"
         }
       ]
     },
@@ -261,6 +290,47 @@
           "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-s5-rematch-validation-20261115/jobs/02-packed-check.sbatch",
           "submitted": true,
           "job_id": "186495",
+          "state": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "t3-paired-v1",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/t3-paired-v1",
+      "job_references": [
+        {
+          "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/02-t3-paired.sbatch",
+          "submitted": true,
+          "job_id": "186625",
+          "state": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "t3-report-final-v1",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/t3-report-final-v1",
+      "job_references": [
+        {
+          "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/01-t3-report.sbatch",
+          "submitted": true,
+          "job_id": "186587",
+          "state": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "name": "t3-report-final-v2",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/t3-report-final-v2",
+      "job_references": []
+    },
+    {
+      "name": "t3-report-final-v3",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/t3-report-final-v3",
+      "job_references": [
+        {
+          "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115/jobs/03-t3-final-v2.sbatch",
+          "submitted": true,
+          "job_id": "186648",
           "state": "COMPLETED"
         }
       ]
@@ -324,6 +394,18 @@
           "state": "COMPLETED"
         }
       ]
+    },
+    {
+      "name": "whu-resume-v1",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/whu-resume-v1",
+      "job_references": [
+        {
+          "script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/03-whu-resume.sbatch",
+          "submitted": false,
+          "job_id": null,
+          "state": "prepared_not_submitted"
+        }
+      ]
     }
   ],
   "experiments": [
@@ -333,10 +415,12 @@
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-ranking-20261114",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-s5-rematch-validation-20261115",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-summary-20261115",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-20261114",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-endpoint-20261114",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-oracle-20261115",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-overlap-20261115",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-patchset-20261115",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-proposals-20261114",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t3-residual-20261115",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-t33-proposals-20261115",

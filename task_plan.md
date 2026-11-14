@@ -1,6 +1,6 @@
 # task_plan.md — Change Detection Agent 研究与实验迭代计划
 
-> 最后更新：2026-11-14（WHU最终GT修复；最新执行计划在最上方）。以 `claude/project-thread-2tuaib` 的已验证记录为研究依据；开发中的实际 HEAD 与运行档案以服务器核查为准。**用户最新决策取代此前“立即收敛论文主表、暂停 T3/补漏工具”的建议。**
+> 最后更新：2026-11-15（夜间T3/find_missed研究与失败恢复；最新执行计划在最上方）。以 `claude/project-thread-2tuaib` 的已验证记录为研究依据；开发中的实际 HEAD 与运行档案以服务器核查为准。**用户最新决策取代此前“立即收敛论文主表、暂停 T3/补漏工具”的建议。**
 >
 > 长期目标及协作边界：[研究协作与最新决定（README_ai §0.2）](doc/agent_baseline/README_ai.md)；技术历史：[README_ai](doc/agent_baseline/README_ai.md)；任务定义：[task_system.html](doc/agent_baseline/task_system.html)。本文件只维护计划；`findings.md` 记可追溯证据，`progress.md` 记实际操作。
 
@@ -17,7 +17,7 @@
 - [x] R1–R3全60真实检索/核验完成，R2调参正例TP为0；不提交无法挽回召回的同池raw核验。
 - [x] T3.3 CPU检索12/12与历史GT-text oracle缓存诊断60/60完成；调参文本池几乎无召回，不推广文本桥接。
 - [x] 固定池端点、直接四图、自匹配与残余支持区配对完成；同R1池joint确认正F1 16.0437→15.3525、空FP+12741，残余核验正TP不变/FP+726，均不推广。T3完整报告693请求/费用记录、¥.1549594；真实在线未晋级。
-- [ ] T3最后一项不同表征小试：固定R1候选池、双时相patch集合匹配，开发中；不改match_exemplar，不将原均值权重负结果改写为成功。
+- [x] T3最后一项patch集合表征小试30/30完成，3项测试；正F1 11.2769→8.0136、空FP+13190，不推广。原delta排序30/30复现；追加>=16敏感性报告，不改基准。
 - [x] 补漏V0–V4共同候选与冻结任务策略确认完成，2104新增请求；SECOND收益集中且CI跨零，LEVIR仍净退化，不按确认集换赢家。
 - [ ] S5全源门控/WHU官方审计继续，固定evidence@10排名依赖候选完成；tune候选粒度诊断已15/15，正在验收，真实在线尚未晋级。
 - API不作预估费用拦截，真实usage保留；旧socket active-writer故障不再阻断研究，按N4允许的本地顺序状态核查/Slurm依赖继续。所有计算仍在Slurm，无新数据/报告或测试调参。

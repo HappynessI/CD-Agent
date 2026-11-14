@@ -1,0 +1,41 @@
+import json
+from pathlib import Path
+import tempfile
+import unittest
+from agent_baseline.analysis.night_t3_report import request_cost,delta_reproduction,optional_patchset
+
+
+class ReportTests(unittest.TestCase):
+    def test_accounting_ignores_mirrors_and_historical_reuse(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            for name,cost in [('B0/tasks/x/answer.json',8),('B1/tasks/x/answer.json',.2),('B1/tasks/x/failure_000.json',.1),('B1/tasks/x/attempt_001.json',.2),('B1/summary.json',.3),('t33/retrieval/B0/tasks/x/answer.json',.4),('r1_residual/tune/tasks/x/answer.json',.05),('r1_residual/tune/tasks/y/reused.json',9)]:
+                p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(dict(cost_cny=cost)))
+            result=request_cost(root)
+            self.assertAlmostEqual(result['cost_cny'],.75)
+            self.assertEqual(result['request_artifacts'],4)
+            self.assertAlmostEqual(result['by_root']['r1_residual'],.05)
+            self.assertAlmostEqual(result['by_root']['t33'],.4)
+
+    def test_patchset_partial_does_not_claim_completion(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            stages,rows=optional_patchset(root)
+            self.assertEqual(stages['r1_patchset/confirm']['status'],'not_started')
+            path=root/'r1_patchset/tune/tasks/example/metrics.json'
+            path.parent.mkdir(parents=True);path.write_text(json.dumps(dict(id='example',split='tune')))
+            stages,rows=optional_patchset(root)
+            self.assertEqual(len(rows),1)
+            self.assertEqual(stages['r1_patchset/tune']['status'],'partial')
+            self.assertEqual(stages['r1_patchset/tune']['expected'],30)
+
+    def test_reproduction_requires_original_counts(self):
+        old=dict(per_task=[dict(id='a',records=[dict(method='dino',k=8,counts=[1,2,3])])])
+        new=[dict(id='a',scores=[dict(method='delta',k=8,counts=[1,2,3]),dict(method='endpoint',k=8,counts=[9,9,9])])]
+        self.assertTrue(delta_reproduction(new,old)['all_available_agree'])
+        new[0]['scores'][0]['counts']=[1,3,3]
+        self.assertEqual(len(delta_reproduction(new,old)['mismatches']),1)
+        self.assertFalse(delta_reproduction([],old)['all_available_agree'])
+
+
+if __name__=='__main__':unittest.main()
