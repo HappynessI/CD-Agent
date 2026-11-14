@@ -106,9 +106,10 @@ def ensure_hook(exp,cfg,s):
     event=s.get('job_id') or 'start'
     n=s.get('hook_attempts',0)+1;s['hook_attempts']=n
     path=hooks/f"round-{s.get('rounds_submitted',0):03d}-attempt-{n}.sbatch"
+    node_line = f"#SBATCH --nodelist={cfg['hook_node']}\n" if cfg.get('hook_node') else ''
     path.write_text(f'''#!/usr/bin/env bash
 #SBATCH --partition={cfg.get('hook_partition',cfg.get('partition','gre'))}
-#SBATCH --ntasks=1
+{node_line}#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=128M
 #SBATCH --time=00:05:00

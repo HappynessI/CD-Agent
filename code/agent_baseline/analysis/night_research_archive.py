@@ -4,6 +4,8 @@ import json
 import os
 from pathlib import Path
 import shutil
+import sys
+from importlib import metadata
 
 from .io_retry import write_json
 
@@ -25,6 +27,15 @@ def main():
     if not os.environ.get('SLURM_JOB_ID'):
         raise RuntimeError('Archive through Slurm')
     plan = json.loads(args.plan.read_text())
+    packages = {}
+    for name in ('numpy', 'scipy', 'Pillow', 'torch', 'transformers', 'openai', 'requests'):
+        try:
+            packages[name] = metadata.version(name)
+        except metadata.PackageNotFoundError:
+            packages[name] = None
+    write_json(args.output / 'archive_environment.json', dict(
+        executable=sys.executable, python=sys.version, packages=packages,
+        scope='Archive/report interpreter only; original experiment interpreters are recorded in job scripts.'))
     records = []
     for entry in plan['snapshots']:
         source = Path(entry['path'])
@@ -49,7 +60,7 @@ def main():
         if not (source / 'state.json').is_file():
             raise FileNotFoundError(source / 'state.json')
         paths = [source / name for name in ('exp.json', 'state.json', 'metric.py')]
-        for folder in ('jobs', 'logs', 'events'):
+        for folder in ('jobs', 'logs', 'events', 'hooks'):
             paths.extend(sorted((source / folder).glob('*')))
         copied = [copy_record(path, args.output / 'execution' / source.name / path.relative_to(source))
                   for path in paths if path.is_file()]

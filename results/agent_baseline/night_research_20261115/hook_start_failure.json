@@ -1,0 +1,29 @@
+{
+  "jobs": [
+    {
+      "job_id": "186614",
+      "node": "gpu06",
+      "state": "FAILED",
+      "elapsed": "00:00:00",
+      "exit": "0:53"
+    },
+    {
+      "job_id": "186620",
+      "node": "gpu06",
+      "state": "FAILED",
+      "elapsed": "00:00:00",
+      "exit": "0:53"
+    }
+  ],
+  "observed": "Failed before log files were created; exact cluster-side cause unknown",
+  "remedy": "Optional per-experiment hook_node=gpu42 for own active night studies; watchdog retries hook, does not advance experiments",
+  "script": "tools/exp_loop/loop.py",
+  "verification": {
+    "job_id": "186625",
+    "hook_id": "186626",
+    "node": "gpu42",
+    "state": "COMPLETED",
+    "tests": 3,
+    "output": "night_t3_20261114/paired_final"
+  }
+}
