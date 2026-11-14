@@ -1,0 +1,14 @@
+{
+  "code": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/patchset-v1/code/agent_baseline/analysis/night_t3_patchset.py",
+  "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_t3_20261114/retrieval/B0/tasks",
+  "split": "tune",
+  "k": 8,
+  "near_zero_norm": 1e-12,
+  "score": "0.5*(sum_p wC[p]*max_q cos(deltaC[p],deltaE[q])+sum_q wE[q]*max_p cos(deltaC[p],deltaE[q]))",
+  "support": "align_corners bilinear mask mass/area, exactly existing pool_features; all positive-mass patches, no truncation",
+  "zero": "norm<=1e-12 vectors contribute zero; their original weight is not redistributed; no valid vectors on either side gives zero",
+  "pool": "unchanged prepared.r1 and stable candidate indices; exemplar overlaps retained",
+  "policy": "single predefined patch-set score; no mixing, parameter search, extra proposals, models or API; GT only after ranking",
+  "confirmation": "If requested, already multiply exposed exploratory confirmation, never unseen holdout",
+  "counterfactual": "swap example dates only: deltaE negated; original GT retained for ranking sensitivity, not new truth"
+}
