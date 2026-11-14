@@ -186,6 +186,11 @@ def score(a):
                     candidate_tp=int((covered&gt).sum()),candidate_fp=int((covered&~gt).sum()),
                     candidate_fn_recall=float((covered&gt&~base).sum()/(gt&~base).sum()) if (gt&~base).any() else None)
         records.append(result);write_json(a.out/'scores'/group/(stem+'.json'),result)
+    write_json(a.out/'score_summary.json',aggregate_records(records,a.variant))
+
+
+def aggregate_records(records,variant):
+    """Same pooled metrics and paired bootstrap, from recorded pixel counts only."""
     groups={}
     for group in sorted({r['group'] for r in records}):
         groups[group]={}
@@ -218,12 +223,33 @@ def score(a):
                             paired_vs_gated_balanced_bootstrap95=np.quantile(paired,[.025,.975]).tolist(),
                             per_image_delta_vs_gated_balanced=[dict(stem=r['stem'],delta_f1=r['rankings'][ranking][str(k)]['metrics']['f1']-m['f1']) for r,m in zip(rows,balanced)])
             groups[group][split]=report
-    write_json(a.out/'score_summary.json',dict(groups=groups,images=records,verifier=a.variant,sources_preserved=list(SOURCES),
-        interpretation='S5 gate plus ranking at frozen verifier; comparison uses equal K and same verifier on old ungated balanced pool'))
+    return dict(groups=groups,images=records,verifier=variant,sources_preserved=list(SOURCES),
+        interpretation='S5 gate plus ranking at frozen verifier; comparison uses equal K and same verifier on old ungated balanced pool')
+
+
+def recorded_scores(out):
+    items=load(out/'manifest.json');records=[];seen=set()
+    for item in items:
+        key=(item['group'],item['stem'])
+        if key in seen:raise ValueError('Duplicate manifest task')
+        seen.add(key)
+        path=out/'scores'/item['group']/(item['stem']+'.json')
+        if not path.is_file():raise ValueError(f'Missing score record: {path}')
+        record=load(path)
+        if any(record.get(k)!=item[k] for k in ('group','stem','split')):
+            raise ValueError(f'Score identity differs: {path}')
+        records.append(record)
+    if not records:raise ValueError('Empty score manifest')
+    return records
+
+
+def aggregate(a):
+    # Reuse immutable per-image scores; no mask, feature or API access.
+    write_json(a.out/'score_summary.json',aggregate_records(recorded_scores(a.out),a.variant))
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','verify','score'])
+    p=argparse.ArgumentParser();p.add_argument('command',choices=['prepare','verify','score','aggregate'])
     for key in ('out','gates','views','pilot','work','run'):p.add_argument('--'+key,type=Path,required=True)
     p.add_argument('--variant',choices=['V0','V1','V2','V3','V4'],required=True)
     p.add_argument('--split',choices=['tune','confirm','all'],default='all');p.add_argument('--clear-stop',action='store_true')
