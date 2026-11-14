@@ -1,0 +1,3819 @@
+{
+  "analysis": "secondary exploratory; historical exposure disclosed",
+  "selection": {
+    "status": "frozen",
+    "analysis": "secondary exploratory; historical exposure disclosed",
+    "selection_k": 10,
+    "applied_k": [
+      3,
+      5,
+      10,
+      20
+    ],
+    "groups": {
+      "levir_any": {
+        "variant": "V2",
+        "tune_k10_f1": {
+          "V0": 76.56705817665298,
+          "V1": 77.57541990226463,
+          "V2": 84.54954298400708,
+          "V3": 74.5159378017996,
+          "V4": 82.48083617956415
+        }
+      },
+      "second_appeared": {
+        "variant": "V4",
+        "tune_k10_f1": {
+          "V0": 78.42689855673711,
+          "V1": 76.45153534840856,
+          "V2": 82.6917555771096,
+          "V3": 79.21121681878914,
+          "V4": 83.033271740079
+        }
+      },
+      "second_disappeared": {
+        "variant": "V0",
+        "tune_k10_f1": {
+          "V0": 35.49488054607509,
+          "V1": 19.662363455809334,
+          "V2": 19.662363455809334,
+          "V3": 18.735904701324234,
+          "V4": 10.25201072386059
+        }
+      }
+    },
+    "confirmation_used": false,
+    "rule": "Per group maximum K10 tune pooled F1; ties V0,V1,V2,V3,V4; same variant for all K",
+    "global_selection_unchanged": true,
+    "online_status": "diagnostic only; not promoted"
+  },
+  "groups": {
+    "levir_any": {
+      "variant": "V2",
+      "confirmation": {
+        "3": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 421884,
+            "fp": 111270,
+            "fn": 25874,
+            "f1": 86.01872543102745,
+            "precision": 79.12985741455564,
+            "recall": 94.22143211288241
+          },
+          "delta_f1": -0.27370062246131965,
+          "paired_image_bootstrap_95_percentile": [
+            -0.7673037682491319,
+            0.1964571198014795
+          ],
+          "delta_vs_v0": 7.016969537576557,
+          "paired_vs_v0_bootstrap95": [
+            0.2150464338190261,
+            13.795423552267138
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 10,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 13,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.4,
+          "candidate_proxy_recall": 1.0,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 5,
+            "recall_all_tp_gt_fp_candidates": 2,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 2
+        },
+        "5": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 422501,
+            "fp": 118424,
+            "fn": 25257,
+            "f1": 85.46743496145884,
+            "precision": 78.10713130286084,
+            "recall": 94.35922976250563
+          },
+          "delta_f1": -0.8249910920299328,
+          "paired_image_bootstrap_95_percentile": [
+            -1.780292589759739,
+            0.010312422714832792
+          ],
+          "delta_vs_v0": 6.9181635519852165,
+          "paired_vs_v0_bootstrap95": [
+            0.33057416452065524,
+            13.484037294769337
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 8,
+            "proxy_true_no": 14,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 3,
+            "proxy_negative_total": 22,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.2727272727272727,
+          "candidate_proxy_recall": 1.0,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 11,
+            "recall_all_tp_gt_fp_candidates": 3,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 2
+        },
+        "10": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 423119,
+            "fp": 152780,
+            "fn": 24639,
+            "f1": 82.66812027856987,
+            "precision": 73.47104266546738,
+            "recall": 94.49725074705533
+          },
+          "delta_f1": -3.624305774918895,
+          "paired_image_bootstrap_95_percentile": [
+            -6.455095712985738,
+            -0.3879193915749539
+          ],
+          "delta_vs_v0": 8.895205434851775,
+          "paired_vs_v0_bootstrap95": [
+            -0.23809419877643734,
+            19.42327911782182
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 5,
+            "proxy_false_yes": 14,
+            "proxy_true_no": 30,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 6,
+            "proxy_negative_total": 44,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.2631578947368421,
+          "candidate_proxy_recall": 0.8333333333333334,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 19,
+            "recall_all_tp_gt_fp_candidates": 6,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 2
+        },
+        "20": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 423250,
+            "fp": 207266,
+            "fn": 24508,
+            "f1": 78.50509239766515,
+            "precision": 67.12755901515584,
+            "recall": 94.52650762242104
+          },
+          "delta_f1": -7.787333655823616,
+          "paired_image_bootstrap_95_percentile": [
+            -12.168014738403272,
+            -3.5399675170251754
+          ],
+          "delta_vs_v0": 10.616713620069234,
+          "paired_vs_v0_bootstrap95": [
+            -1.6622380752760364,
+            21.519101172900143
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 6,
+            "proxy_false_yes": 25,
+            "proxy_true_no": 65,
+            "proxy_false_no": 4,
+            "proxy_positive_total": 10,
+            "proxy_negative_total": 90,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.1935483870967742,
+          "candidate_proxy_recall": 0.6,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 31,
+            "recall_all_tp_gt_fp_candidates": 10,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 0
+        }
+      }
+    },
+    "second_appeared": {
+      "variant": "V4",
+      "confirmation": {
+        "3": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 39580,
+            "fp": 15382,
+            "fn": 51250,
+            "f1": 54.29653204565408,
+            "precision": 72.01339107019395,
+            "recall": 43.57591104260707
+          },
+          "delta_f1": 8.089931102662227,
+          "paired_image_bootstrap_95_percentile": [
+            -6.082866770135162,
+            15.623838801868239
+          ],
+          "delta_vs_v0": -1.15975696644621,
+          "paired_vs_v0_bootstrap95": [
+            -7.230060347135687,
+            1.3082949438787352
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 4,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 6,
+            "proxy_false_no": 4,
+            "proxy_positive_total": 8,
+            "proxy_negative_total": 7,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.8,
+          "candidate_proxy_recall": 0.5,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 5,
+            "recall_all_tp_gt_fp_candidates": 8,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 2
+        },
+        "5": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 45852,
+            "fp": 15602,
+            "fn": 44978,
+            "f1": 60.21906437971159,
+            "precision": 74.61190483939207,
+            "recall": 50.481118573158646
+          },
+          "delta_f1": 14.012463436719734,
+          "paired_image_bootstrap_95_percentile": [
+            -6.157088674172513,
+            25.63706320360248
+          ],
+          "delta_vs_v0": 2.458655911944817,
+          "paired_vs_v0_bootstrap95": [
+            -7.082814090152816,
+            10.595191805789256
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 7,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 11,
+            "proxy_false_no": 5,
+            "proxy_positive_total": 12,
+            "proxy_negative_total": 13,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.7777777777777778,
+          "candidate_proxy_recall": 0.5833333333333334,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 9,
+            "recall_all_tp_gt_fp_candidates": 12,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 3
+        },
+        "10": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 47761,
+            "fp": 19493,
+            "fn": 43069,
+            "f1": 60.42483742820273,
+            "precision": 71.015850358343,
+            "recall": 52.58284707695695
+          },
+          "delta_f1": 14.218236485210873,
+          "paired_image_bootstrap_95_percentile": [
+            -10.274510377086443,
+            28.02181553755522
+          ],
+          "delta_vs_v0": 2.707935343815528,
+          "paired_vs_v0_bootstrap95": [
+            -6.29664052085986,
+            10.504657942276125
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 10,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 28,
+            "proxy_false_no": 8,
+            "proxy_positive_total": 18,
+            "proxy_negative_total": 31,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.7692307692307693,
+          "candidate_proxy_recall": 0.5555555555555556,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 13,
+            "recall_all_tp_gt_fp_candidates": 18,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 3
+        },
+        "20": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 48237,
+            "fp": 19593,
+            "fn": 42593,
+            "f1": 60.80549602924493,
+            "precision": 71.11455108359134,
+            "recall": 53.10690300561488
+          },
+          "delta_f1": 14.598895086253073,
+          "paired_image_bootstrap_95_percentile": [
+            -10.274510377086443,
+            28.400256937609697
+          ],
+          "delta_vs_v0": 1.867459865071062,
+          "paired_vs_v0_bootstrap95": [
+            -7.516596419724671,
+            10.932751932168806
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 15,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 51,
+            "proxy_false_no": 19,
+            "proxy_positive_total": 34,
+            "proxy_negative_total": 55,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.7894736842105263,
+          "candidate_proxy_recall": 0.4411764705882353,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 19,
+            "recall_all_tp_gt_fp_candidates": 34,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 3
+        }
+      }
+    },
+    "second_disappeared": {
+      "variant": "V0",
+      "confirmation": {
+        "3": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 6963,
+            "fp": 50463,
+            "fn": 32582,
+            "f1": 14.360994524136082,
+            "precision": 12.12516978372166,
+            "recall": 17.60778859527121
+          },
+          "delta_f1": -12.350940105855862,
+          "paired_image_bootstrap_95_percentile": [
+            -24.447543168921047,
+            0.0
+          ],
+          "delta_vs_v0": 0.0,
+          "paired_vs_v0_bootstrap95": [
+            0.0,
+            0.0
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 10,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 13,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.0,
+          "candidate_proxy_recall": 0.0,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 3,
+            "recall_all_tp_gt_fp_candidates": 2,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 0
+        },
+        "5": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 14561,
+            "fp": 57508,
+            "fn": 24984,
+            "f1": 26.091708925403623,
+            "precision": 20.204248706101097,
+            "recall": 36.82134277405488
+          },
+          "delta_f1": -0.6202257045883215,
+          "paired_image_bootstrap_95_percentile": [
+            -21.547924876388894,
+            20.016730996347157
+          ],
+          "delta_vs_v0": 0.0,
+          "paired_vs_v0_bootstrap95": [
+            0.0,
+            0.0
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 5,
+            "proxy_true_no": 16,
+            "proxy_false_no": 3,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 21,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.16666666666666666,
+          "candidate_proxy_recall": 0.25,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 6,
+            "recall_all_tp_gt_fp_candidates": 4,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 1
+        },
+        "10": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 26324,
+            "fp": 60317,
+            "fn": 13221,
+            "f1": 41.722536572995416,
+            "precision": 30.38284414999827,
+            "recall": 66.56720192186117
+          },
+          "delta_f1": 15.010601943003472,
+          "paired_image_bootstrap_95_percentile": [
+            -21.549428134512038,
+            43.77648622640639
+          ],
+          "delta_vs_v0": 0.0,
+          "paired_vs_v0_bootstrap95": [
+            0.0,
+            0.0
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 10,
+            "proxy_true_no": 32,
+            "proxy_false_no": 5,
+            "proxy_positive_total": 8,
+            "proxy_negative_total": 42,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.23076923076923078,
+          "candidate_proxy_recall": 0.375,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 13,
+            "recall_all_tp_gt_fp_candidates": 8,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 1
+        },
+        "20": {
+          "complete": true,
+          "images": 5,
+          "metrics": {
+            "tp": 27509,
+            "fp": 61664,
+            "fn": 12036,
+            "f1": 42.743050699979804,
+            "precision": 30.849023807654785,
+            "recall": 69.56378808951827
+          },
+          "delta_f1": 16.03111606998786,
+          "paired_image_bootstrap_95_percentile": [
+            -21.609627450806112,
+            45.25734615208024
+          ],
+          "delta_vs_v0": 0.0,
+          "paired_vs_v0_bootstrap95": [
+            0.0,
+            0.0
+          ],
+          "candidate_proxy_counts": {
+            "proxy_true_yes": 5,
+            "proxy_false_yes": 25,
+            "proxy_true_no": 52,
+            "proxy_false_no": 9,
+            "proxy_positive_total": 14,
+            "proxy_negative_total": 77,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "candidate_proxy_precision": 0.16666666666666666,
+          "candidate_proxy_recall": 0.35714285714285715,
+          "candidate_proxy_denominators": {
+            "precision_accepted_candidates": 30,
+            "recall_all_tp_gt_fp_candidates": 14,
+            "policy": "TP>FP proxy, not semantic labels; missing/unknown are not accepted but remain in recall denominator"
+          },
+          "positive_images": 1
+        }
+      }
+    }
+  },
+  "images": [
+    {
+      "group": "second_appeared",
+      "stem": "train_1177",
+      "variant": "V4",
+      "baseline": {
+        "tp": 10845,
+        "fp": 65,
+        "fn": 4634,
+        "f1": 82.19333813331312,
+        "precision": 99.40421631530705,
+        "recall": 70.06266554686995
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 10845,
+            "fp": 65,
+            "fn": 4634,
+            "f1": 82.19333813331312,
+            "precision": 99.40421631530705,
+            "recall": 70.06266554686995
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.038411739318083726,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 2,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -0.7237673277971624
+        },
+        "5": {
+          "metrics": {
+            "tp": 10845,
+            "fp": 65,
+            "fn": 4634,
+            "f1": 82.19333813331312,
+            "precision": 99.40421631530705,
+            "recall": 70.06266554686995
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.038411739318083726,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 4,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 4,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -0.7237673277971624
+        },
+        "10": {
+          "metrics": {
+            "tp": 10845,
+            "fp": 3901,
+            "fn": 4634,
+            "f1": 71.76178660049628,
+            "precision": 73.54536823545368,
+            "recall": 70.06266554686995
+          },
+          "delta_f1": -10.43155153281684,
+          "candidate_missing_pixel_recall": 0.041864479930945185,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 7,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 8,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -0.7677797595562765
+        },
+        "20": {
+          "metrics": {
+            "tp": 10845,
+            "fp": 3911,
+            "fn": 4634,
+            "f1": 71.73805192657517,
+            "precision": 73.49552724315532,
+            "recall": 70.06266554686995
+          },
+          "delta_f1": -10.455286206737952,
+          "candidate_missing_pixel_recall": 0.4948208890807078,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 11,
+            "proxy_false_no": 7,
+            "proxy_positive_total": 7,
+            "proxy_negative_total": 13,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -2.524726049018014
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 11023,
+            "fp": 86,
+            "fn": 4456,
+            "f1": 82.91710546111028,
+            "precision": 99.22585291205328,
+            "recall": 71.21261063376187
+          },
+          "delta_f1": 0.7237673277971624,
+          "candidate_missing_pixel_recall": 0.038411739318083726,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 11023,
+            "fp": 86,
+            "fn": 4456,
+            "f1": 82.91710546111028,
+            "precision": 99.22585291205328,
+            "recall": 71.21261063376187
+          },
+          "delta_f1": 0.7237673277971624,
+          "candidate_missing_pixel_recall": 0.038411739318083726,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 4,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 4,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 11039,
+            "fp": 3922,
+            "fn": 4440,
+            "f1": 72.52956636005256,
+            "precision": 73.78517478778157,
+            "recall": 71.31597648426902
+          },
+          "delta_f1": -9.663771773260564,
+          "candidate_missing_pixel_recall": 0.041864479930945185,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 7,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 8,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 11471,
+            "fp": 3943,
+            "fn": 4008,
+            "f1": 74.26277797559318,
+            "precision": 74.41935902426366,
+            "recall": 74.10685444796175
+          },
+          "delta_f1": -7.930560157719938,
+          "candidate_missing_pixel_recall": 0.4948208890807078,
+          "errors": {
+            "proxy_true_yes": 4,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 11,
+            "proxy_false_no": 3,
+            "proxy_positive_total": 7,
+            "proxy_negative_total": 13,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_119",
+      "variant": "V4",
+      "baseline": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1891,
+        "f1": 0.0,
+        "precision": 0,
+        "recall": 0.0
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 0,
+            "fp": 3862,
+            "fn": 1891,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.16657852987837124,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 1,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 65,
+            "fp": 4061,
+            "fn": 1826,
+            "f1": 2.160545122153897,
+            "precision": 1.5753756665050898,
+            "recall": 3.437334743521946
+          },
+          "delta_f1": 2.160545122153897,
+          "candidate_missing_pixel_recall": 0.20095187731359068,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 2.160545122153897
+        },
+        "10": {
+          "metrics": {
+            "tp": 65,
+            "fp": 4061,
+            "fn": 1826,
+            "f1": 2.160545122153897,
+            "precision": 1.5753756665050898,
+            "recall": 3.437334743521946
+          },
+          "delta_f1": 2.160545122153897,
+          "candidate_missing_pixel_recall": 0.20095187731359068,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 5,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 7,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 2.160545122153897
+        },
+        "20": {
+          "metrics": {
+            "tp": 65,
+            "fp": 4061,
+            "fn": 1826,
+            "f1": 2.160545122153897,
+            "precision": 1.5753756665050898,
+            "recall": 3.437334743521946
+          },
+          "delta_f1": 2.160545122153897,
+          "candidate_missing_pixel_recall": 0.20095187731359068,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 5,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 7,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 2.160545122153897
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 1891,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.16657852987837124,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 2,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 0,
+            "fp": 164,
+            "fn": 1891,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.20095187731359068,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 2,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 167,
+            "fn": 1891,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.20095187731359068,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 5,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 7,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 167,
+            "fn": 1891,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.20095187731359068,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 5,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 7,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_127",
+      "variant": "V4",
+      "baseline": {
+        "tp": 5316,
+        "fp": 3896,
+        "fn": 31122,
+        "f1": 23.290251916757942,
+        "precision": 57.70733825445072,
+        "recall": 14.589165157253417
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 9942,
+            "fp": 3988,
+            "fn": 26496,
+            "f1": 39.4774459974587,
+            "precision": 71.37114142139268,
+            "recall": 27.284702782809156
+          },
+          "delta_f1": 16.18719408070076,
+          "candidate_missing_pixel_recall": 0.14864083285135918,
+          "errors": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 0,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 3,
+            "proxy_negative_total": 0,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 11385,
+            "fp": 4009,
+            "fn": 25053,
+            "f1": 43.93039049235993,
+            "precision": 73.95738599454333,
+            "recall": 31.24485427301169
+          },
+          "delta_f1": 20.64013857560199,
+          "candidate_missing_pixel_recall": 0.2269777006619112,
+          "errors": {
+            "proxy_true_yes": 4,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 0,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 5,
+            "proxy_negative_total": 0,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -2.9050046576419604
+        },
+        "10": {
+          "metrics": {
+            "tp": 13294,
+            "fp": 4064,
+            "fn": 23144,
+            "f1": 49.423748977619155,
+            "precision": 76.58716441986404,
+            "recall": 36.48389044404193
+          },
+          "delta_f1": 26.133497060861213,
+          "candidate_missing_pixel_recall": 0.28834907782276203,
+          "errors": {
+            "proxy_true_yes": 7,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 9,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -2.277620439338463
+        },
+        "20": {
+          "metrics": {
+            "tp": 13770,
+            "fp": 4154,
+            "fn": 22668,
+            "f1": 50.660387770869356,
+            "precision": 76.824369560366,
+            "recall": 37.790219002140624
+          },
+          "delta_f1": 27.370135854111414,
+          "candidate_missing_pixel_recall": 0.3289955658376711,
+          "errors": {
+            "proxy_true_yes": 11,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 4,
+            "proxy_positive_total": 15,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -3.9464332222389658
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 9942,
+            "fp": 3988,
+            "fn": 26496,
+            "f1": 39.4774459974587,
+            "precision": 71.37114142139268,
+            "recall": 27.284702782809156
+          },
+          "delta_f1": 16.18719408070076,
+          "candidate_missing_pixel_recall": 0.14864083285135918,
+          "errors": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 0,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 3,
+            "proxy_negative_total": 0,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 12380,
+            "fp": 4048,
+            "fn": 24058,
+            "f1": 46.835395150001894,
+            "precision": 75.35914292671049,
+            "recall": 33.975520061474285
+          },
+          "delta_f1": 23.54514323324395,
+          "candidate_missing_pixel_recall": 0.2269777006619112,
+          "errors": {
+            "proxy_true_yes": 5,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 0,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 5,
+            "proxy_negative_total": 0,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 14290,
+            "fp": 4551,
+            "fn": 22148,
+            "f1": 51.70136941695762,
+            "precision": 75.8452311448437,
+            "recall": 39.217300620231626
+          },
+          "delta_f1": 28.411117500199676,
+          "candidate_missing_pixel_recall": 0.28834907782276203,
+          "errors": {
+            "proxy_true_yes": 9,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 0,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 9,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 15451,
+            "fp": 4701,
+            "fn": 20987,
+            "f1": 54.60682099310832,
+            "precision": 76.67229059150456,
+            "recall": 42.4035347713925
+          },
+          "delta_f1": 31.31656907635038,
+          "candidate_missing_pixel_recall": 0.3289955658376711,
+          "errors": {
+            "proxy_true_yes": 14,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 3,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 15,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_1322",
+      "variant": "V4",
+      "baseline": {
+        "tp": 7712,
+        "fp": 7456,
+        "fn": 988,
+        "f1": 64.62208815149991,
+        "precision": 50.84388185654009,
+        "recall": 88.64367816091954
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 7712,
+            "fp": 7456,
+            "fn": 988,
+            "f1": 64.62208815149991,
+            "precision": 50.84388185654009,
+            "recall": 88.64367816091954
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 3.23058998241855
+        },
+        "5": {
+          "metrics": {
+            "tp": 7712,
+            "fp": 7456,
+            "fn": 988,
+            "f1": 64.62208815149991,
+            "precision": 50.84388185654009,
+            "recall": 88.64367816091954
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 3.3768530816142643
+        },
+        "10": {
+          "metrics": {
+            "tp": 7712,
+            "fp": 7456,
+            "fn": 988,
+            "f1": 64.62208815149991,
+            "precision": 50.84388185654009,
+            "recall": 88.64367816091954
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.3805668016194332,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 10,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 4.717633090951082
+        },
+        "20": {
+          "metrics": {
+            "tp": 7712,
+            "fp": 7456,
+            "fn": 988,
+            "f1": 64.62208815149991,
+            "precision": 50.84388185654009,
+            "recall": 88.64367816091954
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.49291497975708504,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 18,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 18,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 5.697944272812208
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 7712,
+            "fp": 8712,
+            "fn": 988,
+            "f1": 61.39149816908136,
+            "precision": 46.95567462250365,
+            "recall": 88.64367816091954
+          },
+          "delta_f1": -3.23058998241855,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 7712,
+            "fp": 8772,
+            "fn": 988,
+            "f1": 61.245235069885645,
+            "precision": 46.78476098034458,
+            "recall": 88.64367816091954
+          },
+          "delta_f1": -3.3768530816142643,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 8088,
+            "fp": 10215,
+            "fn": 612,
+            "f1": 59.90445506054883,
+            "precision": 44.18947713489592,
+            "recall": 92.96551724137932
+          },
+          "delta_f1": -4.717633090951082,
+          "candidate_missing_pixel_recall": 0.3805668016194332,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 8,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 8199,
+            "fp": 10930,
+            "fn": 501,
+            "f1": 58.9241438786877,
+            "precision": 42.86162371268754,
+            "recall": 94.24137931034483
+          },
+          "delta_f1": -5.697944272812208,
+          "candidate_missing_pixel_recall": 0.49291497975708504,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 15,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 18,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_appeared",
+      "stem": "train_1370",
+      "variant": "V4",
+      "baseline": {
+        "tp": 6850,
+        "fp": 11,
+        "fn": 21472,
+        "f1": 38.93926043827985,
+        "precision": 99.83967351698003,
+        "recall": 24.186145046253795
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 11081,
+            "fp": 11,
+            "fn": 17241,
+            "f1": 56.228751205155525,
+            "precision": 99.90082942661378,
+            "recall": 39.12506178942165
+          },
+          "delta_f1": 17.289490766875673,
+          "candidate_missing_pixel_recall": 0.6447000745156483,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 0,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 3,
+            "proxy_negative_total": 0,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 15845,
+            "fp": 11,
+            "fn": 12477,
+            "f1": 71.73253655665717,
+            "precision": 99.93062563067609,
+            "recall": 55.945907774874655
+          },
+          "delta_f1": 32.793276118377314,
+          "candidate_missing_pixel_recall": 0.8665704172876304,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 15.50378535150164
+        },
+        "10": {
+          "metrics": {
+            "tp": 15845,
+            "fp": 11,
+            "fn": 12477,
+            "f1": 71.73253655665717,
+            "precision": 99.93062563067609,
+            "recall": 55.945907774874655
+          },
+          "delta_f1": 32.793276118377314,
+          "candidate_missing_pixel_recall": 0.86698956780924,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 3,
+            "proxy_positive_total": 5,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 15.50378535150164
+        },
+        "20": {
+          "metrics": {
+            "tp": 15845,
+            "fp": 11,
+            "fn": 12477,
+            "f1": 71.73253655665717,
+            "precision": 99.93062563067609,
+            "recall": 55.945907774874655
+          },
+          "delta_f1": 32.793276118377314,
+          "candidate_missing_pixel_recall": 0.9004750372578242,
+          "errors": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 12,
+            "proxy_false_no": 5,
+            "proxy_positive_total": 8,
+            "proxy_negative_total": 12,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 15.500137723725544
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 11081,
+            "fp": 11,
+            "fn": 17241,
+            "f1": 56.228751205155525,
+            "precision": 99.90082942661378,
+            "recall": 39.12506178942165
+          },
+          "delta_f1": 17.289490766875673,
+          "candidate_missing_pixel_recall": 0.6447000745156483,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 0,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 3,
+            "proxy_negative_total": 0,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 11081,
+            "fp": 11,
+            "fn": 17241,
+            "f1": 56.228751205155525,
+            "precision": 99.90082942661378,
+            "recall": 39.12506178942165
+          },
+          "delta_f1": 17.289490766875673,
+          "candidate_missing_pixel_recall": 0.8665704172876304,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 3,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 11081,
+            "fp": 11,
+            "fn": 17241,
+            "f1": 56.228751205155525,
+            "precision": 99.90082942661378,
+            "recall": 39.12506178942165
+          },
+          "delta_f1": 17.289490766875673,
+          "candidate_missing_pixel_recall": 0.86698956780924,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 4,
+            "proxy_positive_total": 5,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 11082,
+            "fp": 11,
+            "fn": 17240,
+            "f1": 56.23239883293162,
+            "precision": 99.90083836653746,
+            "recall": 39.12859261351599
+          },
+          "delta_f1": 17.29313839465177,
+          "candidate_missing_pixel_recall": 0.9004750372578242,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 12,
+            "proxy_false_no": 6,
+            "proxy_positive_total": 8,
+            "proxy_negative_total": 12,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1177",
+      "variant": "V0",
+      "baseline": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4901,
+        "f1": 0.0,
+        "precision": 0,
+        "recall": 0.0
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 10,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 11,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 11,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 10,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 4901,
+            "f1": 0.0,
+            "precision": 0,
+            "recall": 0.0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 11,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 11,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_119",
+      "variant": "V0",
+      "baseline": {
+        "tp": 5695,
+        "fp": 326,
+        "fn": 23557,
+        "f1": 32.29098744081875,
+        "precision": 94.58561700714166,
+        "recall": 19.468754273212088
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 5695,
+            "fp": 326,
+            "fn": 23557,
+            "f1": 32.29098744081875,
+            "precision": 94.58561700714166,
+            "recall": 19.468754273212088
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.5299486352251984,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 13293,
+            "fp": 6986,
+            "fn": 15959,
+            "f1": 53.67547596454745,
+            "precision": 65.55056955471177,
+            "recall": 45.44304662929031
+          },
+          "delta_f1": 21.3844885237287,
+          "candidate_missing_pixel_recall": 0.8135586025385236,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 3,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 25056,
+            "fp": 9750,
+            "fn": 4196,
+            "f1": 78.2291048737082,
+            "precision": 71.98758834683676,
+            "recall": 85.65568166279229
+          },
+          "delta_f1": 45.93811743288944,
+          "candidate_missing_pixel_recall": 0.8348686165470985,
+          "errors": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 1,
+            "proxy_false_no": 5,
+            "proxy_positive_total": 8,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 26202,
+            "fp": 9999,
+            "fn": 3050,
+            "f1": 80.06355705620827,
+            "precision": 72.3792160437557,
+            "recall": 89.57336250512786
+          },
+          "delta_f1": 47.772569615389514,
+          "candidate_missing_pixel_recall": 0.8812667147769241,
+          "errors": {
+            "proxy_true_yes": 5,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 2,
+            "proxy_false_no": 9,
+            "proxy_positive_total": 14,
+            "proxy_negative_total": 6,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 5695,
+            "fp": 326,
+            "fn": 23557,
+            "f1": 32.29098744081875,
+            "precision": 94.58561700714166,
+            "recall": 19.468754273212088
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.5299486352251984,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 13293,
+            "fp": 6986,
+            "fn": 15959,
+            "f1": 53.67547596454745,
+            "precision": 65.55056955471177,
+            "recall": 45.44304662929031
+          },
+          "delta_f1": 21.3844885237287,
+          "candidate_missing_pixel_recall": 0.8135586025385236,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 1,
+            "proxy_false_no": 3,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 1,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 25056,
+            "fp": 9750,
+            "fn": 4196,
+            "f1": 78.2291048737082,
+            "precision": 71.98758834683676,
+            "recall": 85.65568166279229
+          },
+          "delta_f1": 45.93811743288944,
+          "candidate_missing_pixel_recall": 0.8348686165470985,
+          "errors": {
+            "proxy_true_yes": 3,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 1,
+            "proxy_false_no": 5,
+            "proxy_positive_total": 8,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 26202,
+            "fp": 9999,
+            "fn": 3050,
+            "f1": 80.06355705620827,
+            "precision": 72.3792160437557,
+            "recall": 89.57336250512786
+          },
+          "delta_f1": 47.772569615389514,
+          "candidate_missing_pixel_recall": 0.8812667147769241,
+          "errors": {
+            "proxy_true_yes": 5,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 2,
+            "proxy_false_no": 9,
+            "proxy_positive_total": 14,
+            "proxy_negative_total": 6,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_127",
+      "variant": "V0",
+      "baseline": {
+        "tp": 0,
+        "fp": 575,
+        "fn": 0,
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1848,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1848,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 4,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1848,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 9,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 2412,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 18,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1848,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1848,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 4,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 0,
+            "fp": 1848,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 9,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 0,
+            "fp": 2412,
+            "fn": 0,
+            "f1": 0.0,
+            "precision": 0.0,
+            "recall": 0
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": null,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 18,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1322",
+      "variant": "V0",
+      "baseline": {
+        "tp": 471,
+        "fp": 775,
+        "fn": 22,
+        "f1": 54.16906267970098,
+        "precision": 37.80096308186196,
+        "recall": 95.53752535496957
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 471,
+            "fp": 44339,
+            "fn": 22,
+            "f1": 2.0793324945367857,
+            "precision": 1.0511046641374693,
+            "recall": 95.53752535496957
+          },
+          "delta_f1": -52.08973018516419,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 471,
+            "fp": 44724,
+            "fn": 22,
+            "f1": 2.06181054106111,
+            "precision": 1.0421506803849983,
+            "recall": 95.53752535496957
+          },
+          "delta_f1": -52.107252138639865,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 471,
+            "fp": 44769,
+            "fn": 22,
+            "f1": 2.0597817768351083,
+            "precision": 1.0411140583554377,
+            "recall": 95.53752535496957
+          },
+          "delta_f1": -52.10928090286587,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 8,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 475,
+            "fp": 44843,
+            "fn": 18,
+            "f1": 2.0737377485756694,
+            "precision": 1.0481486385100842,
+            "recall": 96.34888438133875
+          },
+          "delta_f1": -52.09532493112531,
+          "candidate_missing_pixel_recall": 0.18181818181818182,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 18,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 471,
+            "fp": 44339,
+            "fn": 22,
+            "f1": 2.0793324945367857,
+            "precision": 1.0511046641374693,
+            "recall": 95.53752535496957
+          },
+          "delta_f1": -52.08973018516419,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 471,
+            "fp": 44724,
+            "fn": 22,
+            "f1": 2.06181054106111,
+            "precision": 1.0421506803849983,
+            "recall": 95.53752535496957
+          },
+          "delta_f1": -52.107252138639865,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 471,
+            "fp": 44769,
+            "fn": 22,
+            "f1": 2.0597817768351083,
+            "precision": 1.0411140583554377,
+            "recall": 95.53752535496957
+          },
+          "delta_f1": -52.10928090286587,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 8,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 475,
+            "fp": 44843,
+            "fn": 18,
+            "f1": 2.0737377485756694,
+            "precision": 1.0481486385100842,
+            "recall": 96.34888438133875
+          },
+          "delta_f1": -52.09532493112531,
+          "candidate_missing_pixel_recall": 0.18181818181818182,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 18,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "second_disappeared",
+      "stem": "train_1370",
+      "variant": "V0",
+      "baseline": {
+        "tp": 797,
+        "fp": 3950,
+        "fn": 4102,
+        "f1": 16.52498444951275,
+        "precision": 16.78955129555509,
+        "recall": 16.268626250255153
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 797,
+            "fp": 3950,
+            "fn": 4102,
+            "f1": 16.52498444951275,
+            "precision": 16.78955129555509,
+            "recall": 16.268626250255153
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 797,
+            "fp": 3950,
+            "fn": 4102,
+            "f1": 16.52498444951275,
+            "precision": 16.78955129555509,
+            "recall": 16.268626250255153
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 797,
+            "fp": 3950,
+            "fn": 4102,
+            "f1": 16.52498444951275,
+            "precision": 16.78955129555509,
+            "recall": 16.268626250255153
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0280351048269137,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 10,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 832,
+            "fp": 4410,
+            "fn": 4067,
+            "f1": 16.408638201360812,
+            "precision": 15.871804654711942,
+            "recall": 16.983057766891203
+          },
+          "delta_f1": -0.11634624815193817,
+          "candidate_missing_pixel_recall": 0.036567528035104824,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 19,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 797,
+            "fp": 3950,
+            "fn": 4102,
+            "f1": 16.52498444951275,
+            "precision": 16.78955129555509,
+            "recall": 16.268626250255153
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 797,
+            "fp": 3950,
+            "fn": 4102,
+            "f1": 16.52498444951275,
+            "precision": 16.78955129555509,
+            "recall": 16.268626250255153
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 5,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 797,
+            "fp": 3950,
+            "fn": 4102,
+            "f1": 16.52498444951275,
+            "precision": 16.78955129555509,
+            "recall": 16.268626250255153
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0280351048269137,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 10,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 832,
+            "fp": 4410,
+            "fn": 4067,
+            "f1": 16.408638201360812,
+            "precision": 15.871804654711942,
+            "recall": 16.983057766891203
+          },
+          "delta_f1": -0.11634624815193817,
+          "candidate_missing_pixel_recall": 0.036567528035104824,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 19,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_118",
+      "variant": "V2",
+      "baseline": {
+        "tp": 80467,
+        "fp": 18902,
+        "fn": 3746,
+        "f1": 87.66327853493262,
+        "precision": 80.97797099699102,
+        "recall": 95.55175566717728
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 18902,
+            "fn": 3746,
+            "f1": 87.66327853493262,
+            "precision": 80.97797099699102,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": 0.0,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.8928400297215546
+        },
+        "5": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 19525,
+            "fn": 3746,
+            "f1": 87.3667924323444,
+            "precision": 80.47343787503,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": -0.2964861025882186,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 4,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.8891649330026468
+        },
+        "10": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 34845,
+            "fn": 3746,
+            "f1": 80.65856408971307,
+            "precision": 69.78198279450534,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": -7.004714445219548,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 8,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -5.3701951982540095
+        },
+        "20": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 35277,
+            "fn": 3746,
+            "f1": 80.48430412538696,
+            "precision": 69.5215302737075,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": -7.17897440954566,
+          "candidate_missing_pixel_recall": 0.001601708489054992,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 17,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -2.0148757319082193
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 20791,
+            "fn": 3746,
+            "f1": 86.77043850521106,
+            "precision": 79.46730134902921,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": -0.8928400297215546,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 21419,
+            "fn": 3746,
+            "f1": 86.47762749934175,
+            "precision": 78.97748463969535,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": -1.1856510355908654,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 80467,
+            "fp": 22390,
+            "fn": 3746,
+            "f1": 86.02875928796708,
+            "precision": 78.23191421099196,
+            "recall": 95.55175566717728
+          },
+          "delta_f1": -1.6345192469655387,
+          "candidate_missing_pixel_recall": 0.0,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 7,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 80473,
+            "fp": 30402,
+            "fn": 3740,
+            "f1": 82.49917985729518,
+            "precision": 72.57993235625705,
+            "recall": 95.55888045788654
+          },
+          "delta_f1": -5.1640986776374405,
+          "candidate_missing_pixel_recall": 0.001601708489054992,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 14,
+            "proxy_true_no": 6,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_119",
+      "variant": "V2",
+      "baseline": {
+        "tp": 123816,
+        "fp": 28953,
+        "fn": 6098,
+        "f1": 87.60059855031962,
+        "precision": 81.04785656775917,
+        "recall": 95.30612559077544
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 123816,
+            "fp": 31789,
+            "fn": 6098,
+            "f1": 86.73048028327362,
+            "precision": 79.57070788213747,
+            "recall": 95.30612559077544
+          },
+          "delta_f1": -0.8701182670459957,
+          "candidate_missing_pixel_recall": 0.14332568055100034,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 12.616340108939852
+        },
+        "5": {
+          "metrics": {
+            "tp": 123816,
+            "fp": 34074,
+            "fn": 6098,
+            "f1": 86.04188961932427,
+            "precision": 78.41915257457724,
+            "recall": 95.30612559077544
+          },
+          "delta_f1": -1.5587089309953512,
+          "candidate_missing_pixel_recall": 0.14562151525090195,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 12.267819160543539
+        },
+        "10": {
+          "metrics": {
+            "tp": 123816,
+            "fp": 50970,
+            "fn": 6098,
+            "f1": 81.27075812274369,
+            "precision": 70.83862551920635,
+            "recall": 95.30612559077544
+          },
+          "delta_f1": -6.329840427575931,
+          "candidate_missing_pixel_recall": 0.18989832732043294,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 6,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 11.297831782737788
+        },
+        "20": {
+          "metrics": {
+            "tp": 123816,
+            "fp": 60797,
+            "fn": 6098,
+            "f1": 78.73155563751284,
+            "precision": 67.06786629327296,
+            "recall": 95.30612559077544
+          },
+          "delta_f1": -8.869042912806776,
+          "candidate_missing_pixel_recall": 0.18989832732043294,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 6,
+            "proxy_true_no": 14,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 11.474317086921872
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 124690,
+            "fp": 81877,
+            "fn": 5224,
+            "f1": 74.11414017433377,
+            "precision": 60.36298150236969,
+            "recall": 95.97887833489847
+          },
+          "delta_f1": -13.486458375985848,
+          "candidate_missing_pixel_recall": 0.14332568055100034,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 124704,
+            "fp": 83452,
+            "fn": 5210,
+            "f1": 73.77407045878073,
+            "precision": 59.90891446799516,
+            "recall": 95.98965469464414
+          },
+          "delta_f1": -13.82652809153889,
+          "candidate_missing_pixel_recall": 0.14562151525090195,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 124704,
+            "fp": 101817,
+            "fn": 5210,
+            "f1": 69.9729263400059,
+            "precision": 55.05184949739759,
+            "recall": 95.98965469464414
+          },
+          "delta_f1": -17.62767221031372,
+          "candidate_missing_pixel_recall": 0.18989832732043294,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 8,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 10,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 124704,
+            "fp": 116209,
+            "fn": 5210,
+            "f1": 67.25723855059097,
+            "precision": 51.76308459900462,
+            "recall": 95.98965469464414
+          },
+          "delta_f1": -20.343359999728648,
+          "candidate_missing_pixel_recall": 0.18989832732043294,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 14,
+            "proxy_true_no": 6,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 20,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_121",
+      "variant": "V2",
+      "baseline": {
+        "tp": 39247,
+        "fp": 10230,
+        "fn": 1679,
+        "f1": 86.82676459851996,
+        "precision": 79.32372617579885,
+        "recall": 95.89747348873577
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 39247,
+            "fp": 11635,
+            "fn": 1679,
+            "f1": 85.49799581735796,
+            "precision": 77.13336739908023,
+            "recall": 95.89747348873577
+          },
+          "delta_f1": -1.3287687811619975,
+          "candidate_missing_pixel_recall": 0.024419297200714712,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 24.146443992255485
+        },
+        "5": {
+          "metrics": {
+            "tp": 39247,
+            "fp": 14244,
+            "fn": 1679,
+            "f1": 83.13545230202187,
+            "precision": 73.3712213269522,
+            "recall": 95.89747348873577
+          },
+          "delta_f1": -3.691312296498083,
+          "candidate_missing_pixel_recall": 0.024419297200714712,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 23.008734417659596
+        },
+        "10": {
+          "metrics": {
+            "tp": 39247,
+            "fp": 15730,
+            "fn": 1679,
+            "f1": 81.84728319239231,
+            "precision": 71.38803499645306,
+            "recall": 95.89747348873577
+          },
+          "delta_f1": -4.979481406127647,
+          "candidate_missing_pixel_recall": 0.14592019058963668,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 5,
+            "proxy_true_no": 4,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 9,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 32.82026321138637
+        },
+        "20": {
+          "metrics": {
+            "tp": 39247,
+            "fp": 29051,
+            "fn": 1679,
+            "f1": 71.8651578407676,
+            "precision": 57.46434741866526,
+            "recall": 95.89747348873577
+          },
+          "delta_f1": -14.961606757752364,
+          "candidate_missing_pixel_recall": 0.14770696843359143,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 7,
+            "proxy_true_no": 11,
+            "proxy_false_no": 2,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 18,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 31.037544542719296
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 39288,
+            "fp": 47861,
+            "fn": 1638,
+            "f1": 61.351551825102476,
+            "precision": 45.08141229388748,
+            "recall": 95.99765430288814
+          },
+          "delta_f1": -25.475212773417482,
+          "candidate_missing_pixel_recall": 0.024419297200714712,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 39288,
+            "fp": 50470,
+            "fn": 1638,
+            "f1": 60.12671788436228,
+            "precision": 43.7710287662381,
+            "recall": 95.99765430288814
+          },
+          "delta_f1": -26.70004671415768,
+          "candidate_missing_pixel_recall": 0.024419297200714712,
+          "errors": {
+            "proxy_true_yes": 0,
+            "proxy_false_yes": 4,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 0,
+            "proxy_negative_total": 5,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 39492,
+            "fp": 80685,
+            "fn": 1434,
+            "f1": 49.02701998100594,
+            "precision": 32.86152924436456,
+            "recall": 96.49611493915849
+          },
+          "delta_f1": -37.799744617514015,
+          "candidate_missing_pixel_recall": 0.14592019058963668,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 6,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 9,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 39495,
+            "fp": 113051,
+            "fn": 1431,
+            "f1": 40.8276132980483,
+            "precision": 25.89055104689733,
+            "recall": 96.50344524263305
+          },
+          "delta_f1": -45.99915130047166,
+          "candidate_missing_pixel_recall": 0.14770696843359143,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 14,
+            "proxy_true_no": 4,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 18,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_122",
+      "variant": "V2",
+      "baseline": {
+        "tp": 60517,
+        "fp": 23687,
+        "fn": 5460,
+        "f1": 80.59208555010288,
+        "precision": 71.86950738682248,
+        "recall": 91.72438880215833
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 62000,
+            "fp": 24732,
+            "fn": 3977,
+            "f1": 81.2001912133535,
+            "precision": 71.48457316791956,
+            "recall": 93.97214180699335
+          },
+          "delta_f1": 0.6081056632506261,
+          "candidate_missing_pixel_recall": 0.2716117216117216,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 62617,
+            "fp": 26369,
+            "fn": 3360,
+            "f1": 80.81542045520544,
+            "precision": 70.36724878070707,
+            "recall": 94.90731618594359
+          },
+          "delta_f1": 0.22333490510256127,
+          "candidate_missing_pixel_recall": 0.38461538461538464,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 63235,
+            "fp": 27023,
+            "fn": 2742,
+            "f1": 80.94857106282203,
+            "precision": 70.06027166566953,
+            "recall": 95.8440062446004
+          },
+          "delta_f1": 0.3564855127191464,
+          "candidate_missing_pixel_recall": 0.4978021978021978,
+          "errors": {
+            "proxy_true_yes": 4,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 6,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 63239,
+            "fp": 56390,
+            "fn": 2738,
+            "f1": 68.14327123045591,
+            "precision": 52.86260020563576,
+            "recall": 95.85006896342665
+          },
+          "delta_f1": -12.44881431964697,
+          "candidate_missing_pixel_recall": 0.5194139194139195,
+          "errors": {
+            "proxy_true_yes": 5,
+            "proxy_false_yes": 6,
+            "proxy_true_no": 8,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 6,
+            "proxy_negative_total": 14,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": -11.548542977538048
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 62000,
+            "fp": 24732,
+            "fn": 3977,
+            "f1": 81.2001912133535,
+            "precision": 71.48457316791956,
+            "recall": 93.97214180699335
+          },
+          "delta_f1": 0.6081056632506261,
+          "candidate_missing_pixel_recall": 0.2716117216117216,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 62617,
+            "fp": 26369,
+            "fn": 3360,
+            "f1": 80.81542045520544,
+            "precision": 70.36724878070707,
+            "recall": 94.90731618594359
+          },
+          "delta_f1": 0.22333490510256127,
+          "candidate_missing_pixel_recall": 0.38461538461538464,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 2,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 3,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 63235,
+            "fp": 27023,
+            "fn": 2742,
+            "f1": 80.94857106282203,
+            "precision": 70.06027166566953,
+            "recall": 95.8440062446004
+          },
+          "delta_f1": 0.3564855127191464,
+          "candidate_missing_pixel_recall": 0.4978021978021978,
+          "errors": {
+            "proxy_true_yes": 4,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 3,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 4,
+            "proxy_negative_total": 6,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 63353,
+            "fp": 29665,
+            "fn": 2624,
+            "f1": 79.69181420799396,
+            "precision": 68.1083231202563,
+            "recall": 96.022856449975
+          },
+          "delta_f1": -0.9002713421089226,
+          "candidate_missing_pixel_recall": 0.5194139194139195,
+          "errors": {
+            "proxy_true_yes": 6,
+            "proxy_false_yes": 7,
+            "proxy_true_no": 7,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 6,
+            "proxy_negative_total": 14,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    },
+    {
+      "group": "levir_any",
+      "stem": "train_124",
+      "variant": "V2",
+      "baseline": {
+        "tp": 116116,
+        "fp": 24119,
+        "fn": 10612,
+        "f1": 86.99033199357214,
+        "precision": 82.80101258601633,
+        "recall": 91.62615996464869
+      },
+      "selected": {
+        "3": {
+          "metrics": {
+            "tp": 116354,
+            "fp": 24212,
+            "fn": 10374,
+            "f1": 87.06068972741625,
+            "precision": 82.77535108063117,
+            "recall": 91.81396376491384
+          },
+          "delta_f1": 0.07035773384410504,
+          "candidate_missing_pixel_recall": 0.03458349038823973,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.11491001225188313
+        },
+        "5": {
+          "metrics": {
+            "tp": 116354,
+            "fp": 24212,
+            "fn": 10374,
+            "f1": 87.06068972741625,
+            "precision": 82.77535108063117,
+            "recall": 91.81396376491384
+          },
+          "delta_f1": 0.07035773384410504,
+          "candidate_missing_pixel_recall": 0.04212212589521297,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 4,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 4,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.34581630734051316
+        },
+        "10": {
+          "metrics": {
+            "tp": 116354,
+            "fp": 24212,
+            "fn": 10374,
+            "f1": 87.06068972741625,
+            "precision": 82.77535108063117,
+            "recall": 91.81396376491384
+          },
+          "delta_f1": 0.07035773384410504,
+          "candidate_missing_pixel_recall": 0.04607990953637392,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 0,
+            "proxy_true_no": 9,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 9,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 6.641784508687579
+        },
+        "20": {
+          "metrics": {
+            "tp": 116481,
+            "fp": 25751,
+            "fn": 10247,
+            "f1": 86.61585365853658,
+            "precision": 81.89507283874234,
+            "recall": 91.91417839782842
+          },
+          "delta_f1": -0.3744783350355618,
+          "candidate_missing_pixel_recall": 0.09357331323030532,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 15,
+            "proxy_false_no": 1,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 18,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 16.50497802842534
+        }
+      },
+      "v0": {
+        "3": {
+          "metrics": {
+            "tp": 116483,
+            "fp": 24733,
+            "fn": 10245,
+            "f1": 86.94577971516436,
+            "precision": 82.48569567187855,
+            "recall": 91.91575658102393
+          },
+          "delta_f1": -0.04455227840777809,
+          "candidate_missing_pixel_recall": 0.03458349038823973,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 1,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 2,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "5": {
+          "metrics": {
+            "tp": 116563,
+            "fp": 25551,
+            "fn": 10165,
+            "f1": 86.71487342007573,
+            "precision": 82.02077205623654,
+            "recall": 91.97888390884414
+          },
+          "delta_f1": -0.2754585734964081,
+          "candidate_missing_pixel_recall": 0.04212212589521297,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 3,
+            "proxy_true_no": 1,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 4,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "10": {
+          "metrics": {
+            "tp": 116605,
+            "fp": 46661,
+            "fn": 10123,
+            "f1": 80.41890521872867,
+            "precision": 71.4202589638994,
+            "recall": 92.01202575594975
+          },
+          "delta_f1": -6.571426774843474,
+          "candidate_missing_pixel_recall": 0.04607990953637392,
+          "errors": {
+            "proxy_true_yes": 1,
+            "proxy_false_yes": 7,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 1,
+            "proxy_negative_total": 9,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        },
+        "20": {
+          "metrics": {
+            "tp": 117109,
+            "fp": 90231,
+            "fn": 9619,
+            "f1": 70.11087563011124,
+            "precision": 56.481624385068,
+            "recall": 92.4097279212171
+          },
+          "delta_f1": -16.879456363460903,
+          "candidate_missing_pixel_recall": 0.09357331323030532,
+          "errors": {
+            "proxy_true_yes": 2,
+            "proxy_false_yes": 16,
+            "proxy_true_no": 2,
+            "proxy_false_no": 0,
+            "proxy_positive_total": 2,
+            "proxy_negative_total": 18,
+            "unknown": 0,
+            "missing": 0,
+            "truncated": 0
+          },
+          "criterion": "TP>FP is a pixel-benefit proxy, not semantic annotation",
+          "delta_vs_v0": 0.0
+        }
+      }
+    }
+  ],
+  "complete": true,
+  "comparison": "Existing same-image paired scores vs initial and V0; existing bootstrap intervals retained; no new requests",
+  "policy": "Confirmation evaluates frozen task variants; never reselect variant or K; no online claim"
+}
