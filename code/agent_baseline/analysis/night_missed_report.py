@@ -83,6 +83,18 @@ def pooled_baseline(rows):
         precision=100*tp/(tp+fp) if tp+fp else 0,recall=100*tp/(tp+fn) if tp+fn else 0)
 
 
+def recorded_sum(values):
+    return sum(values) if values and all(v is not None for v in values) else None
+
+
+def recorded_recall_mean(rows,values):
+    # Undefined recall on a zero-FN image is excluded, not replaced by zero.
+    eligible=[(r,v) for r,v in zip(rows,values) if r.get('baseline',{}).get('fn')!=0]
+    if any(r.get('baseline',{}).get('fn') is None or v is None for r,v in eligible):
+        return '缺失'
+    return f"{fmt(sum(v for _,v in eligible)/len(eligible))} (n={len(eligible)}/{len(rows)})" if eligible else '无初始FN图 (n=0)'
+
+
 def render(report):
     """Readable primary contrasts; full records remain in the companion JSON."""
     decision=report['selected_verifier'].get('data',{});winner=decision.get('selected_verifier')
@@ -147,6 +159,33 @@ def render(report):
                     x=rankings.get(ranking,{}).get('10',{})
                     rows.append([name,group,split,ranking,x.get('complete',False),scores(x.get('metrics',{})),fmt(x.get('delta_vs_ungated_same_verifier')),interval(x.get('paired_image_bootstrap95')),fmt(x.get('delta_vs_gated_balanced')),interval(x.get('paired_vs_gated_balanced_bootstrap95'))])
     table(lines,['池','组','划分','排序@10','完整','F1/P/R','Δ旧pool','95%CI','Δgated balanced','95%CI'],rows)
+    lines+=['','### 固定池、Top10截断与核验后的像素诊断',
+        '仅读取排名 score_summary.json 的逐图数值。完整候选指选定S5门控后的全来源池、排名截断前；与上方原S5门控保留表合读，不把它称为门控前召回。召回列为有初始FN图的按图算术均值（0–1），括号显示有效图数/记录数，不是汇总像素召回。其余像素列为逐图union计数之和；接受后新增TP/FP为最终答案计数减同图baseline，非逐候选累加。missing/unknown为候选响应计数。字段缺失不补零，部分记录不冒充全量。完整池到Top10反映截断，Top10到接受新增像素反映核验筛选；这些是离线GT解释，不触发新选择。']
+    rows=[]
+    for name,entry in report['rankings'].items():
+        data=entry['scores'].get('data',{});images=data.get('images',[])
+        keys=sorted({(r['group'],r['split']) for r in images})
+        for group,split in keys:
+            selected=[r for r in images if r['group']==group and r['split']==split]
+            baseline_fn=recorded_sum([r.get('baseline',{}).get('fn') for r in selected])
+            full=recorded_recall_mean(selected,[r.get('pre_rank_fn_recall') for r in selected])
+            for ranking in ('evidence','balanced'):
+                values=[r.get('rankings',{}).get(ranking,{}).get('10',{}) for r in selected]
+                top=recorded_recall_mean(selected,[v.get('candidate_fn_recall') for v in values])
+                added=[]
+                for field in ('tp','fp'):
+                    differences=[]
+                    for r,v in zip(selected,values):
+                        final=(v.get('metrics') or {}).get(field);base=r.get('baseline',{}).get(field)
+                        differences.append(final-base if final is not None and base is not None else None)
+                    added.append(fmt(recorded_sum(differences)))
+                complete=data.get('groups',{}).get(group,{}).get(split,{}).get(ranking,{}).get('10',{}).get('complete','缺失')
+                rows.append([name,group,split,ranking,len(selected),complete,fmt(baseline_fn),full,top,
+                    fmt(recorded_sum([v.get('candidate_tp') for v in values])),
+                    fmt(recorded_sum([v.get('candidate_fp') for v in values])),*added,
+                    fmt(recorded_sum([v.get('missing') for v in values])),
+                    fmt(recorded_sum([v.get('unknown') for v in values]))])
+    table(lines,['池','组','划分','排序@10','记录数','完整','baseline FN像素','完整池召回均值','Top10召回均值','Top10 TP像素','Top10 FP像素','接受新增TP','接受新增FP','missing','unknown'],rows)
     lines+=['','## WHU 新官方 GT 独立审计','旧候选不重生成；C1 new/demolished 的 GT、初始答案和来源都使用 canonical ignore 的同一 valid。C0 单独评分。不得与历史旧 GT 增益混称官方结果。'];rows=[]
     for group,data in report['whu_official'].get('data',{}).get('groups',{}).items():
         for source,x in data['sources'].items():rows.append([group,source,data['images'],x['tp'],x['fp'],x['unique_tp'],x['unique_fp'],f"{x['missing_pixels_covered']}/{x['missing_pixels']}",f"{x['components_covered']}/{x['missing_components']}"])
