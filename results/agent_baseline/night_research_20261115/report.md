@@ -36,6 +36,8 @@ patch集合失败集中于 train1538（TP−3616），空目标 train2848/train2
 
 历史 DINO 60例×4K 的240份 TP/FP/FN 已全部精确复现。 额外的remaining GT≥16诊断也没有逆转结论：joint确认17例F1 22.4120→21.6732；patch tune8例12.2191→8.7012。此门槛借自原组件构造，但剩余总量筛选不是原组件定义，原全部任务仍保留。固定Top8纯排序不含主动空集门控；在这些候选池非空的任务上，其N-Acc=0反映该固定策略的能力边界，不能冒充完整Agent拒识测试。核验臂可拒绝全部候选，但本次空目标仍无正确空预测。端点全池结果与 R1 几何池是不同池，不能互相作为同池消融。直接四图与局部双图的输入/问法同时变化，按联合干预解释。详细分组 P/R/F1、候选与组件覆盖、空预测率、逐例结果在机读报告中。
 
+追加机制实验已预声明并执行准备：固定tune30的B0/B2/B3解析，各比较原严格双负端点排除与仅正端点交集，先看全候选union，再用原DINO Top8；保留同类/未知为空的规则。28个缺失预测类别查询已在gpu44完成，外部API0，CPU评分186673运行中，不提前宣称收益。证据见 [预声明](../night_t3_20261114/rounds/semantic_constraints/design.json)与 [缓存清单](../night_t3_20261114/positive_endpoints_tune/initial_inventory.json)。
+
 ## find_missed：视图、候选粒度与排序
 
 原始 S1–S5 均保留。 [完整来源TP/FP与独有召回表](../missed_verifier_20261114/offline_report.md)及[逐源/重叠证据](../missed_verifier_20261114/pilot/full_sources_summary.json)复用已完成分析，不重复运行。 历史 batch99 的 S3/S4 阈值曾用全开发集 GT 选择，包含本轮确认图：SECOND新建0.40/0.35、拆除0.25/0.40、LEVIR 0.45/0.85。来源为 `exp6_staging/batch99_find_missed_pre/artifacts/statistics/<group>/summary.json` 与 `settings.json`。本轮 gate/verifier 的调参/确认选择仍分开，但整个候选池不是未见确认集，结果只能作为已曝光开发池上的配对证据，不能宣称独立泛化。历史来源审计覆盖320个任务方向×图像记录（60张SECOND两方向 + 200张LEVIR），不是320张独立图。新增核验采用30个任务方向×图像记录、20张独立图、526个共同候选；每组5图调参、5图确认。
