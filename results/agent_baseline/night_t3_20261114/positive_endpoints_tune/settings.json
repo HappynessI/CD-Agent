@@ -1,0 +1,18 @@
+{
+  "code": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/positive-endpoints-v1/code/agent_baseline/analysis/night_t3_positive_endpoints.py",
+  "variants": [
+    "B0",
+    "B2",
+    "B3"
+  ],
+  "split": "fixed tune30",
+  "k": 8,
+  "strict": "sourceT1_i AND union(targetT2) AND NOT union(sourceT2) AND NOT union(targetT1), plus symmetric targetT2_j candidates",
+  "positive_only": "sourceT1_i AND union(targetT2), plus targetT2_j AND union(sourceT1)",
+  "selection": "nonempty masks only; unknown/same predicted class empty; source-before-target stable slots; DINO delta score descending then slot order",
+  "primary": "all-candidate union, plus fixed delta Top8; coverage and full/positive/empty target/surface",
+  "missing": "never empty/fill by GT/omit denominator; prepare only missing exact predicted queries; score requires all caches",
+  "cache": "original historical and night caches read-only; new SAM3 masks only in this experiment cache/",
+  "purpose": "New mechanism test prompted by corrected semantic stratification; not confirmation-based selection",
+  "api_calls": 0
+}

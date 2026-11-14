@@ -1,0 +1,28 @@
+{
+  "gates": [
+    "baseline",
+    "overlap_010",
+    "overlap_050",
+    "iou_025",
+    "dilate_1",
+    "dilate_3",
+    "dino_010",
+    "dino_020",
+    "rgb_003",
+    "rgb_006",
+    "dino010_rgb003"
+  ],
+  "scope": "same_pilot_images",
+  "threshold_policy": "bounded one-factor plus one predeclared joint feature gate",
+  "sources": [
+    "S1_02",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+  ],
+  "dino_metric": "1-cosine of mean DINOv2 region features",
+  "rgb_metric": "RMS of RGB mean differences normalized to [0,1]",
+  "dilation": "square Chebyshev radius1/3 native pixels",
+  "split_source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/settings.json"
+}
