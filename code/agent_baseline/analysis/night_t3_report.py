@@ -129,7 +129,7 @@ def readable_stage_results(data):
     direct=data['retrieval'].get('r1_direct4')
     if direct and sum(r['split']=='tune' for r in direct['records'])==30:
         row=choose(direct['summary'],'positive');m=row['methods'];base=m['R1_geometry_dino@8'];new=m['R1_direct4_verified@8']
-        lines.append(f"R1-direct4 tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. Judge positive-target preservation, empty-task behavior and manual response evidence together before any confirmation promotion; no single mechanical F1 cutoff decides it.")
+        lines.append(f"R1-direct4 tune positive F1 {base['f1_c']:.3f} → {new['f1_c']:.3f}; TP {base['tp']} → {new['tp']}, FP {base['fp']} → {new['fp']}. Judge positive-target preservation, empty-task behavior and visual-review evidence together before any confirmation promotion; no single mechanical F1 cutoff decides it.")
     else:lines.append(f"R1-direct4 remains pending/partial ({sum(r['split']=='tune' for r in direct['records']) if direct else 0}/30 tune). Unlike the cancelled text-pool raw arm, it keeps the R1 pool with positive-target coverage.")
     joint=data['retrieval'].get('r1_endpoint')
     if joint and sum(r['split']=='tune' for r in joint['records'])==30:
@@ -149,7 +149,7 @@ def markdown(data):
         'Observed local-verifier negative case: train_1136_5to1 candidates0/1 are rejected because the model says the same rectangular building shape persists. Actual inputs show a blue roof then green vegetation; the fixed spotlight support creates the same bright silhouette on both dates. This is evidence of a possible support-shape/object-shape confusion, not proof of causal attribution. This task has only3 remaining GT pixels, so a beneficial rejection score would not establish correct visual reasoning. Inputs/responses are archived under retrieval/B0/tasks/train_1136_5to1/verification.','',
         'R1-direct4 is a distinct planned tune-first experiment: same fixed R1 Top8 versus no verification, four local raw-RGB Example/Candidate date views, no predicted class pair. R1 eligibility retains candidate overlap with the example; only scoring removes exemplar pixels. No hidden overlap filter is introduced. Old eight-view original-DINO and new two-view text-pool routes are non-paired contextual references.','',
         'Endpoint methods share the original SAM pool with fixed equal weights. Swapping exemplar dates measures ranking sensitivity only; it does not define new GT.','',
-        'T3.3 manual uncertainty: the fixed first tune example train_2130_T33_2to4 is clipped at the source crop bottom; close/wide views nearly coincide. Its post-date tan/gray-green support can resemble bare ground or turbid water. Treat the water-label mismatch as requiring visual/label review, not automatically a pure model error. No labels were changed.','',
+        'T3.3 visual-review uncertainty: the fixed first tune example train_2130_T33_2to4 is clipped at the source crop bottom; close/wide views nearly coincide. Its post-date tan/gray-green support can resemble bare ground or turbid water. Treat the water-label mismatch as requiring visual/label review, not automatically a pure model error. No labels were changed.','',
         '| Stage | Completed/expected | Status |','|---|---:|---|']
     for name,row in data['stages'].items():lines.append(f"| {name} | {row.get('completed','—')}/{row.get('expected','—')} | {row['status']} |")
     actual=data['retrieval'].get('retrieval/B0')
@@ -195,7 +195,7 @@ def markdown(data):
     lines+=['','## Reproduction, manual evidence and accounting','',
         f"Historical DINO reproduction: {reproduction['tasks']} completed tasks, {reproduction['comparisons']} TopK comparisons; all available counts agree: {reproduction['all_available_agree']}; mismatches: {len(reproduction['mismatches'])}. This is not a full60 claim until all60 finish.",
         '',f"New cumulative API cost: CNY {cost['cost_cny']:.7f}, from {cost['request_artifacts']} unique request artifacts. Historical B0 is reused without rebilling; summary totals are not added.",
-        '', 'The complete human review is embedded in report.json and remains in grounding_review.json/md. It distinguishes wrong support localization, uncertain visual states and class-label disagreement. Fixed-pool upper bounds, per-task coverage, counterfactual rank overlap and unparsed diagnostics remain separately recorded; none are actual achieved Agent performance.']
+        '', 'The Main Agent visual review, not independent human truth, is embedded in report.json and remains in grounding_review.json/md. It distinguishes wrong support localization, uncertain visual states and class-label disagreement. Fixed-pool upper bounds, per-task coverage, counterfactual rank overlap and unparsed diagnostics remain separately recorded; none are actual achieved Agent performance.']
     return '\n'.join(lines)+'\n'
 
 
