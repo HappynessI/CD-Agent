@@ -130,7 +130,7 @@ def readable_stage_results(data):
 
 def markdown(data):
     lines=['# T3 night actual evidence','',
-        'Label agreement is not manual semantic or support-grounding accuracy. The existing dev60 was historically inspected; the new image split isolates new method selection, not unseen data. All original tasks remain, including empty remaining GT.','',
+        'Units: pixel F1/precision/recall are percentages; label agreement, coverage and empty-prediction rates are fractions in [0,1]. Label agreement is not manual semantic or support-grounding accuracy. The existing dev60 was historically inspected; the new image split isolates new method selection, not unseen data. All original tasks remain, including empty remaining GT.','',
         'B1/B2 change support rendering and prompts jointly; B2 also adds both dates. B3 uses four aligned RGB/binary-support panels. B3 tune did not improve B0, so confirmation was not promoted.','',
         'B0 R1/R2/R3 were predeclared fixed full60 diagnostics, reported by tune/confirm; confirmation was not triggered by a tuning win. No B1/B2/B3 promotion or confirm-based winner selection is implied.','',
         'R1 geometry-DINO changes the pool relative to unfiltered historical DINO. R2 uses predicted classes, including wrong/unknown predictions; native order is filtered SAM query order with source proposals before target, not confidence ranking or random ranking. R3 local verification is a joint input/prompt change. Unparsed answers follow historical keep policy; drop-unparsed results are sensitivity diagnostics.','',
