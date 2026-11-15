@@ -1,0 +1,25 @@
+{
+  "alpha": 0.0,
+  "residual_area": 1024,
+  "k": 5,
+  "variant": "V0",
+  "semantic_threshold": 0.2,
+  "tune_id": "alpha0.0_res1024_V0_k5",
+  "tune_both_positive": false,
+  "criterion": "maximize mean of pooled and three-group-pooled deltas; prefer jointly positive when available; ties fewer calls then smaller K then fixed enumeration",
+  "tune_metrics": {
+    "pooled": {
+      "tp": 518070,
+      "fp": 119311,
+      "fn": 50163,
+      "f1": 85.94293032429948,
+      "precision": 81.28105481650692,
+      "recall": 91.17210721658194
+    },
+    "macro_f1": 55.204337034468054,
+    "pooled_delta": -1.1449976818510663,
+    "macro_delta": 3.3720489908698212,
+    "group_pooled_mean_f1": 65.02510809607509,
+    "group_macro_mean_f1": 55.20433703446805
+  }
+}
