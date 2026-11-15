@@ -1,0 +1,30 @@
+{
+  "name": "cd-n8-t3-20261115",
+  "partition": "gre",
+  "hook_node": "gpu42",
+  "jobs_glob": "jobs/01-*.sbatch",
+  "metric": [
+    "/usr/bin/python3",
+    "metric.py"
+  ],
+  "stop": {
+    "budget_cny": 50
+  },
+  "agent_bridge": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/exp-loop-agent/bridge.json",
+  "notify": true,
+  "git": {
+    "repo": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent",
+    "branch": "claude/project-thread-2tuaib",
+    "paths": [
+      "results/agent_baseline/n8_t3_20261115",
+      "results/agent_baseline/n8_summary_report.md",
+      "doc/agent_baseline/README_ai.md",
+      "task_plan.md",
+      "findings.md",
+      "progress.md",
+      "code/agent_baseline/analysis/n8_t3_refresh_html.py",
+      "doc/agent_baseline/index.html"
+    ],
+    "state_export": "results/agent_baseline/n8_t3_20261115/state_at_stop.json"
+  }
+}

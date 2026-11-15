@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#9",
+ "mask_path": "masks/mask_9.png",
+ "summary": "Final submission: 2 land-cover changes matching the example transition (water body disappearing/being filled). Component id=2 is the example region (water to vegetated surface), component id=1 is a second water body that changed to bare earth. Both verified by independent verifier as positive land cover changes.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 2,
+ "change_area_px": 4031,
+ "eval": {
+  "tp": 844,
+  "fp": 3187,
+  "fn": 70,
+  "f1": 0.34135490394337714,
+  "iou": 0.20580346257010484
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 1,
+  "missed": 0,
+  "pred_objects": 2,
+  "false_alarms": 1
+ },
+ "initial_objects": null,
+ "precision": 0.20937732572043222,
+ "recall": 0.9234135666385762,
+ "planning_rounds": 28,
+ "api_attempts": 30,
+ "planner_api_attempts": 28,
+ "ask_api_attempts": 2,
+ "tool_calls": 27,
+ "tokens": {
+  "input": 366686,
+  "cached": 176256,
+  "output": 4006
+ },
+ "planner_tokens": {
+  "input": 365050,
+  "cached": 176256,
+  "output": 3890
+ },
+ "ask_tokens": {
+  "input": 1636,
+  "cached": 0,
+  "output": 116
+ },
+ "cost_cny": 0.076542,
+ "planner_cost_cny": 0.076122,
+ "ask_cost_cny": 0.00042,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 73.85993359982967,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 8,
+ "ask_calls": 1,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 844,
+  "fp": 3187,
+  "fn": 70,
+  "f1": 0.34135490394337714,
+  "iou": 0.20580346257010484,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

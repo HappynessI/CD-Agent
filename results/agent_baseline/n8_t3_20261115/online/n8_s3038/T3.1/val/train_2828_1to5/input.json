@@ -1,0 +1,833 @@
+{
+ "session_id": "train_2828_1to5",
+ "source_images": [
+  "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2828.png",
+  "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2828.png"
+ ],
+ "init_mask_path": null,
+ "init_config": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ },
+ "task_meta": {},
+ "init_error": null,
+ "task_id": "T3.1",
+ "instruction": "Find all land-cover changes with the same transition as the marked example. Output a binary mask.",
+ "target": "any change",
+ "change_direction": "any",
+ "python": false,
+ "image_shape": [
+  512,
+  512
+ ],
+ "system_prompt_version": "v4",
+ "system_prompt_path": "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/n7-t3/code/agent_baseline/prompts/system_v4.txt",
+ "system_prompt_template": "You detect changes of one object class between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later). You work by calling tools, then submit one binary change mask.\n\nScope for the class \"{target}\".\nCOUNTS as a change:\n{counts}\nDoes NOT count:\n{not_counts}\n\nConventions\n- Coordinates are full-image pixels: boxes [x0,y0,x1,y1] with x1,y1 exclusive, points [x,y]. View images show coordinate ticks along their top and left borders.\n- Large results live in handles (mask#k, inst#k). Tools never modify a handle; they return a new one.\n- Instance IDs belong to an inst handle. Component IDs belong to one mask handle and change when the mask changes; run inspect or view on the new handle before using its IDs.\n- Calls in the same reply run in order, but they can only use handles that already existed when you sent the reply. A handle created in this reply can be used from your next reply.\n- By default a mask returned by a mask tool becomes your current answer; pass set_current=false for intermediate candidates.\n- Tool scores provide limited evidence: `score` and `sam_quality` rate segmentation quality, and `p_yes` is a verifier's reading of one region. None of them is the probability that an edit improves the result.\n\nVerification\n- An independent verifier looks at one mask component at a time and answers whether it contains a {target} change. It sees only crops of the two images and knows nothing of your reasoning.\n- The first time you call submit, and whenever you submit a mask with components the verifier has not seen, the verifier checks those components and you get a report with its answers. Every run has this step. It does not judge your mask. To finish, call submit again.\n- You can also call ask with no arguments at any time to check the unchecked components of your current answer.\n- The verifier can be wrong in both directions. Its answers are evidence and you decide what stays: keep, remove, look again, or correct the region. Say in your summary where you went against an answer, and why.\n\nHow to work\n- Look at both times before you trust a result, and look again after you change a mask. Zoom into a region when objects are small or dense.\n- Before you add or remove a change region, check two things separately: whether it is the target class, and whether it differs between T1 and T2. Segmenting one time shows what exists at that time, not what changed. A different appearance, more area or more components do not by themselves make a result better.\n- When a verifier answer conflicts with the images or with its own reason, look at that region again before acting on it.\n- A box prompt segments one object: draw it tightly around one {target}. A large box returns one large blob, not the {plural} inside it.\n- When you are given an existing mask, correct it region by region. Do not replace it with a rebuilt mask unless each region you drop has been checked.\n- Keep what is correct. If you have no new evidence, keep the current result and submit it, including an empty result when nothing changed.\n- Know which handle is your complete answer, and submit that handle. Your summary must describe the mask you submit.\n- Independent calls can share one reply, for example the same query on T1 and T2, or views of separate regions. This saves replies.\n- Before each tool call, write one short sentence saying why you make it.\n- When you are satisfied, call submit with the final mask and a short summary of what changed and roughly how many places. You have at most {budget} replies.\n",
+ "system_prompt": "You detect changes of the requested land-cover categories between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later). You work by calling tools, then submit one binary change mask.\n\nScope for the class \"any change\".\nCOUNTS as a change:\n- a change of land-cover category at the same location between T1 and T2, with no category restriction\nDoes NOT count:\n- shadows or illumination differences alone\n- seasonal appearance alone\n- edge differences caused by misregistration\n- replacement that preserves the land-cover category\n\nConventions\n- Coordinates are full-image pixels: boxes [x0,y0,x1,y1] with x1,y1 exclusive, points [x,y]. View images show coordinate ticks along their top and left borders.\n- Large results live in handles (mask#k, inst#k). Tools never modify a handle; they return a new one.\n- Instance IDs belong to an inst handle. Component IDs belong to one mask handle and change when the mask changes; run inspect or view on the new handle before using its IDs.\n- Calls in the same reply run in order, but they can only use handles that already existed when you sent the reply. A handle created in this reply can be used from your next reply.\n- By default a mask returned by a mask tool becomes your current answer; pass set_current=false for intermediate candidates.\n- Tool scores provide limited evidence: `score` and `sam_quality` rate segmentation quality, and `p_yes` is a verifier's reading of one region. None of them is the probability that an edit improves the result.\n\nVerification\n- An independent verifier looks at one mask component at a time and answers whether it contains a any change change. It sees only crops of the two images and knows nothing of your reasoning.\n- The first time you call submit, and whenever you submit a mask with components the verifier has not seen, the verifier checks those components and you get a report with its answers. Every run has this step. It does not judge your mask. To finish, call submit again.\n- You can also call ask with no arguments at any time to check the unchecked components of your current answer.\n- The verifier can be wrong in both directions. Its answers are evidence and you decide what stays: keep, remove, look again, or correct the region. Say in your summary where you went against an answer, and why.\n\nHow to work\n- Look at both times before you trust a result, and look again after you change a mask. Zoom into a region when objects are small or dense.\n- Before you add or remove a change region, check two things separately: whether it is the target class, and whether it differs between T1 and T2. Segmenting one time shows what exists at that time, not what changed. A different appearance, more area or more components do not by themselves make a result better.\n- When a verifier answer conflicts with the images or with its own reason, look at that region again before acting on it.\n- A box prompt segments one object: draw it tightly around one any change. A large box returns one large blob, not the land-cover changes inside it.\n- When you are given an existing mask, correct it region by region. Do not replace it with a rebuilt mask unless each region you drop has been checked.\n- Keep what is correct. If you have no new evidence, keep the current result and submit it, including an empty result when nothing changed.\n- Know which handle is your complete answer, and submit that handle. Your summary must describe the mask you submit.\n- Independent calls can share one reply, for example the same query on T1 and T2, or views of separate regions. This saves replies.\n- Before each tool call, write one short sentence saying why you make it.\n- When you are satisfied, call submit with the final mask and a short summary of what changed and roughly how many places. You have at most 30 replies.\n\nAdditional handles: props#k proposal sets and feat#k patch features. Proposal sets work with select and to_mask. On compared proposals score is 1-cos temporal difference; on matched proposals it is exemplar cosine similarity. Classification probabilities are reported by ID.",
+ "tool_schema_version": "v2",
+ "schemas": [
+  {
+   "type": "function",
+   "function": {
+    "name": "view",
+    "description": "Look at T1 and T2 with full-image coordinate ticks. Optional thin red contours of a mask or inst set; component IDs can be labelled on masks only. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "region": {
+       "type": "array",
+       "items": {
+        "type": "number"
+       },
+       "minItems": 4,
+       "maxItems": 4,
+       "description": "Full-image [x0,y0,x1,y1], exclusive end."
+      },
+      "overlay": {
+       "type": "string",
+       "description": "An existing mask#k or inst#k handle."
+      },
+      "label_components": {
+       "type": "boolean",
+       "default": false
+      },
+      "ids": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "uniqueItems": true
+      }
+     },
+     "required": [],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "inspect",
+    "description": "List the components of a mask (id, area, bbox) or the instances of an inst set (id, area, bbox, score); sorted by decreasing area then ID. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "An existing mask#k or inst#k handle."
+      },
+      "offset": {
+       "type": "integer",
+       "minimum": 0,
+       "default": 0
+      },
+      "limit": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 50,
+       "default": 50
+      }
+     },
+     "required": [
+      "mask"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "segment_text",
+    "description": "Segment a named object class at one time. Returns an instance set and SAM3 score statistics; does not change current answer.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      },
+      "text": {
+       "type": "string"
+      },
+      "tile": {
+       "type": "integer",
+       "enum": [
+        0,
+        512
+       ],
+       "default": 512
+      },
+      "score_thr": {
+       "type": "number",
+       "minimum": 0,
+       "maximum": 1,
+       "default": 0.5
+      }
+     },
+     "required": [
+      "time",
+      "text"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "segment_prompt",
+    "description": "Segment using exactly one of box or points (with point_labels). Returns a mask and sam_quality; does not change current answer.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      },
+      "box": {
+       "type": "array",
+       "items": {
+        "type": "number"
+       },
+       "minItems": 4,
+       "maxItems": 4,
+       "description": "Full-image [x0,y0,x1,y1], exclusive end."
+      },
+      "points": {
+       "type": "array",
+       "minItems": 1,
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2
+       }
+      },
+      "point_labels": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "enum": [
+         0,
+         1
+        ]
+       }
+      }
+     },
+     "required": [
+      "time"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "match_instances",
+    "description": "Directional overlap presence: each instance is present if any single opposite-time instance covers at least overlap_thr of its own area. Returns appeared, disappeared, present_t2 instance handles.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "inst_t1": {
+       "type": "string",
+       "description": "An existing inst#k handle."
+      },
+      "inst_t2": {
+       "type": "string",
+       "description": "An existing inst#k handle."
+      },
+      "overlap_thr": {
+       "type": "number",
+       "minimum": 0,
+       "maximum": 1,
+       "default": 0.25
+      }
+     },
+     "required": [
+      "inst_t1",
+      "inst_t2"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "ask",
+    "description": "Ask the independent verifier about any land-cover change in mask components. With no arguments it checks the components of your current answer that have no answer yet, largest first, up to 64 per call; remaining_unverified says how many are left. For a mask without ids, the same on that mask. With ids it asks about exactly those components, up to 64 in total. Returns answer, type, reason, p_yes (relative yes/no reading, may be null), status. Unparsed is not no.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "regions": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "mask": {
+          "type": "string",
+          "description": "An existing mask#k handle."
+         },
+         "ids": {
+          "type": "array",
+          "items": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "uniqueItems": true
+         }
+        },
+        "required": [
+         "mask"
+        ],
+        "additionalProperties": false
+       }
+      }
+     },
+     "required": [],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "select",
+    "description": "Select instances using intersected conditions. IDs are retained. where allows score/area comparisons, numbers, and/or, parentheses; unavailable fields are errors. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "set": {
+       "type": "string",
+       "description": "An existing inst#k handle."
+      },
+      "ids": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "uniqueItems": true
+      },
+      "where": {
+       "type": "string"
+      },
+      "area_min": {
+       "type": "number",
+       "minimum": 0
+      },
+      "area_max": {
+       "type": "number",
+       "minimum": 0
+      }
+     },
+     "required": [
+      "set"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "to_mask",
+    "description": "Union one or more instance sets into a binary mask. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "sets": {
+       "type": "array",
+       "items": {
+        "type": "string",
+        "description": "An existing inst#k handle."
+       },
+       "minItems": 1
+      },
+      "set_current": {
+       "type": "boolean",
+       "default": true
+      }
+     },
+     "required": [
+      "sets"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "combine",
+    "description": "Combine masks; subtract means a minus b. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "op": {
+       "type": "string",
+       "enum": [
+        "union",
+        "intersect",
+        "subtract"
+       ]
+      },
+      "a": {
+       "type": "string",
+       "description": "An existing mask#k handle."
+      },
+      "b": {
+       "type": "string",
+       "description": "An existing mask#k handle."
+      },
+      "set_current": {
+       "type": "boolean",
+       "default": true
+      }
+     },
+     "required": [
+      "op",
+      "a",
+      "b"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "morph",
+    "description": "Open/close with a disk of positive integer radius in original pixels; fill_holes uses no radius. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "An existing mask#k handle."
+      },
+      "op": {
+       "type": "string",
+       "enum": [
+        "open",
+        "close",
+        "fill_holes"
+       ]
+      },
+      "radius": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "set_current": {
+       "type": "boolean",
+       "default": true
+      }
+     },
+     "required": [
+      "mask",
+      "op"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "remove_region",
+    "description": "Remove full components identified on mask. The remaining components keep their IDs; other edits renumber components. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "An existing mask#k handle."
+      },
+      "ids": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "uniqueItems": true
+      },
+      "set_current": {
+       "type": "boolean",
+       "default": true
+      }
+     },
+     "required": [
+      "mask",
+      "ids"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "add_region",
+    "description": "Add selected regions from other: mask component IDs or inst instance IDs; omitted IDs mean all. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates. Proposal handles props#k use the same operations as inst#k; select by ids or where=\"score >= threshold\", then to_mask(sets=[handle]).",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "An existing mask#k handle."
+      },
+      "other": {
+       "type": "string"
+      },
+      "ids": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "uniqueItems": true
+      },
+      "set_current": {
+       "type": "boolean",
+       "default": true
+      }
+     },
+     "required": [
+      "mask",
+      "other"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "refine_region",
+    "description": "Replace only the target component using SAM at the required time, clipped to the editing ROI. Without a prompt use its box; default ROI expands that box by 10%, at least 4 pixels. An explicit box is the ROI. By default the returned mask becomes your current answer; pass set_current=false for intermediate candidates.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "An existing mask#k handle."
+      },
+      "id": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      },
+      "box": {
+       "type": "array",
+       "items": {
+        "type": "number"
+       },
+       "minItems": 4,
+       "maxItems": 4,
+       "description": "Full-image [x0,y0,x1,y1], exclusive end."
+      },
+      "points": {
+       "type": "array",
+       "minItems": 1,
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2
+       }
+      },
+      "point_labels": {
+       "type": "array",
+       "items": {
+        "type": "integer",
+        "enum": [
+         0,
+         1
+        ]
+       }
+      },
+      "set_current": {
+       "type": "boolean",
+       "default": true
+      }
+     },
+     "required": [
+      "mask",
+      "id",
+      "time"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "submit",
+    "description": "Finish with any existing mask and a short summary. Pass mask=\"empty\" to answer that nothing changed. Subsequent calls in this reply are skipped.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "An existing mask#k handle, or \"empty\"."
+      },
+      "summary": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "mask",
+      "summary"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "segment_everything",
+    "description": "Propose class-agnostic SAM masks at one date. Returns props handle, count and area statistics.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      }
+     },
+     "required": [
+      "time"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "extract_features",
+    "description": "Extract a cached DINOv2 patch feature grid at one date. Returns feat handle and grid size.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      }
+     },
+     "required": [
+      "time"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "compare_features",
+    "description": "Attach score = 1 - cosine of region-mean T1 and T2 DINOv2 features to each proposal. Returns new props handle and score distribution.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "props": {
+       "type": "string",
+       "description": "Existing props#k proposal set; IDs persist through select."
+      },
+      "feat_t1": {
+       "type": "string",
+       "description": "Existing feat#k DINOv2 feature handle."
+      },
+      "feat_t2": {
+       "type": "string",
+       "description": "Existing feat#k DINOv2 feature handle."
+      }
+     },
+     "required": [
+      "props",
+      "feat_t1",
+      "feat_t2"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "classify",
+    "description": "Mean SegEarth-OV class probabilities in each proposal at one date. Softmax vocabulary includes background and the supplied classes. Returns new props handle and per-ID probabilities.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "props": {
+       "type": "string",
+       "description": "Existing props#k proposal set; IDs persist through select."
+      },
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      },
+      "classes": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "minItems": 1,
+       "uniqueItems": true
+      }
+     },
+     "required": [
+      "props",
+      "time",
+      "classes"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "segment_semantic",
+    "description": "Dense SegEarth-OV segmentation for one class at one date, against background. Returns a mask; does not change current answer.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "time": {
+       "type": "string",
+       "enum": [
+        "t1",
+        "t2"
+       ]
+      },
+      "text": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "time",
+      "text"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "match_exemplar",
+    "description": "Rank proposals by cosine similarity to a mask handle or [x,y] point. change uses T2 minus T1 region-mean DINOv2 features; t1/t2 uses appearance. Returns new props handle and per-ID similarities.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "props": {
+       "type": "string",
+       "description": "Existing props#k proposal set; IDs persist through select."
+      },
+      "exemplar": {
+       "type": "object",
+       "properties": {
+        "mask": {
+         "type": "string"
+        },
+        "point": {
+         "type": "array",
+         "items": {
+          "type": "number"
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "additionalProperties": false
+      },
+      "mode": {
+       "type": "string",
+       "enum": [
+        "change",
+        "t1",
+        "t2"
+       ],
+       "default": "change"
+      }
+     },
+     "required": [
+      "props",
+      "exemplar"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "retrieve_example",
+    "description": "Retrieve candidate regions showing the same directed change as the supplied example. Returns a ranked props handle and IDs; does not select the answer or submit. Inspect candidates, independently verify change, and choose/edit the regions you consider justified. An empty proposal set is allowed.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "mask": {
+       "type": "string",
+       "description": "The task-provided visual-example mask handle."
+      }
+     },
+     "required": [
+      "mask"
+     ],
+     "additionalProperties": false
+    }
+   }
+  }
+ ],
+ "model_parameters": {
+  "model": "qwen3.7-flash",
+  "temperature": 0,
+  "enable_thinking": false,
+  "parallel_tool_calls": true,
+  "max_tokens": 1500,
+  "seed": 3046705
+ },
+ "seed": 3046705,
+ "seed_acceptance": "not_reported",
+ "budget": 30,
+ "max_calls_per_reply": 8,
+ "total_attempt_limit": 180,
+ "initial_view": {
+  "ok": true,
+  "view_id": "view#0",
+  "region": [
+   0,
+   0,
+   512,
+   512
+  ],
+  "overlay": "mask#0",
+  "display_size": [
+   768,
+   768
+  ],
+  "image_size": [
+   796,
+   796
+  ],
+  "scale": 1.5,
+  "padding": [
+   28,
+   28
+  ],
+  "labelled_ids": [],
+  "unlabelled_count": 0
+ },
+ "initial_handle": null,
+ "gt_mask_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_2828_1to5_gt.png",
+ "gt_ignore_mask_path": null,
+ "ignored_pixels": 0
+}

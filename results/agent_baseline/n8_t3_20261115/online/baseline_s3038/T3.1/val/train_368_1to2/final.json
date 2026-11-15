@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#5",
+ "mask_path": "masks/mask_5.png",
+ "summary": "Final mask with 2 regions showing vegetation-to-bare-ground transition matching the example: the original example region and one additional cleared area where dark green forest in T1 became bare brown earth in T2. Removed one region that showed opposite transition (construction to vegetation) as it didn't match the example pattern.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 1,
+ "change_area_px": 6870,
+ "eval": {
+  "tp": 2135,
+  "fp": 4735,
+  "fn": 69863,
+  "f1": 0.05414109651569712,
+  "iou": 0.027823752492408742
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 7,
+  "missed": 6,
+  "pred_objects": 1,
+  "false_alarms": 1
+ },
+ "initial_objects": null,
+ "precision": 0.31077147015559287,
+ "recall": 0.02965360148888906,
+ "planning_rounds": 16,
+ "api_attempts": 19,
+ "planner_api_attempts": 16,
+ "ask_api_attempts": 3,
+ "tool_calls": 16,
+ "tokens": {
+  "input": 171030,
+  "cached": 77184,
+  "output": 2614
+ },
+ "planner_tokens": {
+  "input": 168576,
+  "cached": 77184,
+  "output": 2460
+ },
+ "ask_tokens": {
+  "input": 2454,
+  "cached": 0,
+  "output": 154
+ },
+ "cost_cny": 0.03629720000000001,
+ "planner_cost_cny": 0.035683200000000005,
+ "ask_cost_cny": 0.0006140000000000001,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 55.66456499136984,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 6,
+ "ask_calls": 1,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 2135,
+  "fp": 4735,
+  "fn": 69863,
+  "f1": 0.05414109651569712,
+  "iou": 0.027823752492408742,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#4",
+ "mask_path": "masks/mask_4.png",
+ "summary": "Final result: mask#4 contains 3 components (5413 pixels total) representing land-cover changes matching the example's water body transition. Includes the example (mask#0) plus 6 high-similarity candidates from retrieve_example showing similar water body changes (e.g., murky water becoming clearer, bare soil transitioning to water). All 3 components verified as land_cover_change by independent verifier with p_yes > 0.99.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 3,
+ "change_area_px": 5413,
+ "eval": {
+  "tp": 914,
+  "fp": 4499,
+  "fn": 0,
+  "f1": 0.28892049944681525,
+  "iou": 0.16885276186957324
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 1,
+  "missed": 0,
+  "pred_objects": 3,
+  "false_alarms": 2
+ },
+ "initial_objects": null,
+ "precision": 0.16885276186645387,
+ "recall": 0.9999999998905909,
+ "planning_rounds": 20,
+ "api_attempts": 25,
+ "planner_api_attempts": 20,
+ "ask_api_attempts": 5,
+ "tool_calls": 18,
+ "tokens": {
+  "input": 283555,
+  "cached": 120960,
+  "output": 7889
+ },
+ "planner_tokens": {
+  "input": 279465,
+  "cached": 120960,
+  "output": 7588
+ },
+ "ask_tokens": {
+  "input": 4090,
+  "cached": 0,
+  "output": 301
+ },
+ "cost_cny": 0.0630222,
+ "planner_cost_cny": 0.0619634,
+ "ask_cost_cny": 0.0010588000000000001,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 114.13121472485363,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 9,
+ "ask_calls": 2,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 914,
+  "fp": 4499,
+  "fn": 0,
+  "f1": 0.28892049944681525,
+  "iou": 0.16885276186957324,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}
