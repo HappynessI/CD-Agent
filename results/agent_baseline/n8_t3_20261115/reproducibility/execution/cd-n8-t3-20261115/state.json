@@ -1,0 +1,220 @@
+{
+  "name": "cd-n8-t3-20261115",
+  "status": "running",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/01-clean.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/02-route.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/03-system-tune.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/04-system-confirm.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/05-diagnostics.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/90-archive.sbatch",
+  "job_id": "187257",
+  "hook_id": "187258",
+  "rounds": 5,
+  "rounds_submitted": 6,
+  "primary_best": null,
+  "cost_cny": 0.017536,
+  "finalized": false,
+  "finalize_requested": false,
+  "started_at": "2026-11-15 13:40:15",
+  "started_epoch": 1794750015.5554276,
+  "history": [
+    {
+      "job": "01-clean.sbatch",
+      "job_id": "187229",
+      "hook_id": "187230",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "step1",
+        "tasks": 60,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 13:46:53"
+    },
+    {
+      "job": "02-route.sbatch",
+      "job_id": "187240",
+      "hook_id": "187241",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "step2",
+        "summary_exists": true,
+        "tasks": 60,
+        "new_calls": 0,
+        "failed_requests": 0,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 13:48:23"
+    },
+    {
+      "job": "03-system-tune.sbatch",
+      "job_id": "187243",
+      "hook_id": "187244",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.008187,
+      "metric": {
+        "usage_missing_attempts": 0,
+        "stage": "step3/verification/tune",
+        "summary_exists": true,
+        "tasks": 30,
+        "new_calls": 30,
+        "failed_requests": 0,
+        "cost_cny": 0.008187400000000003,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 13:52:24"
+    },
+    {
+      "job": "04-system-confirm.sbatch",
+      "job_id": "187249",
+      "hook_id": "187250",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.009349,
+      "metric": {
+        "diagnostics_exists": false,
+        "archive_exists": false,
+        "usage_missing_attempts": 0,
+        "stage": "step3/verification/confirm",
+        "summary_exists": true,
+        "tasks": 30,
+        "new_calls": 63,
+        "failed_requests": 0,
+        "cost_cny": 0.017536200000000005,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 13:56:25"
+    },
+    {
+      "job": "05-diagnostics.sbatch",
+      "job_id": "187252",
+      "hook_id": "187253",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "diagnostics_exists": true,
+        "archive_exists": false,
+        "usage_missing_attempts": 0,
+        "stage": "step3/verification/confirm",
+        "summary_exists": true,
+        "tasks": 30,
+        "new_calls": 63,
+        "failed_requests": 0,
+        "cost_cny": 0.017536200000000005,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 13:58:58"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": false,
+  "submitted_at": "2026-11-15 14:05:54",
+  "last_advance_at": "2026-11-15 14:05:54",
+  "hook_attempts": 11,
+  "review_count": 5,
+  "review": {
+    "id": "event-0005",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 13:58:58",
+    "job_id": "187252",
+    "hook_id": "187253",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/05-diagnostics.sbatch",
+    "latest": {
+      "job": "05-diagnostics.sbatch",
+      "job_id": "187252",
+      "hook_id": "187253",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "diagnostics_exists": true,
+        "archive_exists": false,
+        "usage_missing_attempts": 0,
+        "stage": "step3/verification/confirm",
+        "summary_exists": true,
+        "tasks": 30,
+        "new_calls": 63,
+        "failed_requests": 0,
+        "cost_cny": 0.017536200000000005,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 13:58:58"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.017536,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-15 13:58:59",
+    "delivery_turn_id": "01a1df69-bd4b-77f0-934e-fe236442e51d",
+    "delivery_via": "hook_http"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "continue",
+      "job": null,
+      "reason": "T3-1 complete60/60 with original baseline reproduced and real clean-pool reranking; proceed required StepT3-2 tune-frozen routing/hybrid regardless earlier gain.",
+      "at": "2026-11-15 13:47:20"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "continue",
+      "job": null,
+      "reason": "T3-2 completed60/60 with tune-frozen instance/routing/hybrid; implement required relative gate and fresh evidence verification on newly rebuilt pool.",
+      "at": "2026-11-15 13:48:43"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/04-system-confirm.sbatch",
+      "reason": "T3-3 tune30 complete,30 fresh qwen3.7-flash evidence requests,known cost .0081874. Freeze relative gate and K then execute original confirm30 with required new verification.",
+      "at": "2026-11-15 13:52:45"
+    },
+    {
+      "event_id": "event-0004",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/05-diagnostics.sbatch",
+      "reason": "All mandated T3 stages completed. Confirm positive F1 falls16.0437 to10.456 despite82.24% emptyFP reduction; no online promotion. Produce ten-case diagnostics and run final7 regression checks.",
+      "at": "2026-11-15 13:56:57"
+    },
+    {
+      "event_id": "event-0005",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n8-t3-20261115/jobs/90-archive.sbatch",
+      "reason": "T3 required experiments and ten-case panels completed;7 checks passed. Run final stage-loss and usage audit, refresh existing diagnostic HTML with shared G3 CSS/link check, archive source and own execution records.",
+      "at": "2026-11-15 14:05:25"
+    }
+  ],
+  "finalize_attempts": 0,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false
+}

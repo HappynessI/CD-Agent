@@ -1,0 +1,172 @@
+{
+  "threshold": 0.2,
+  "grid": [
+    {
+      "threshold": 0.0,
+      "tp_retention": 1.0,
+      "candidate_tp": 23771,
+      "candidate_fp": 478042,
+      "groups": {
+        "levir_any": {
+          "tp": 401157,
+          "fp": 463245,
+          "fn": 25235,
+          "f1": 62.15662607666289,
+          "precision": 46.408615435873585,
+          "recall": 94.08173699318937
+        },
+        "second_appeared": {
+          "tp": 124038,
+          "fp": 59855,
+          "fn": 15469,
+          "f1": 76.708719851577,
+          "precision": 67.45118084973326,
+          "recall": 88.91166751489173
+        },
+        "second_disappeared": {
+          "tp": 2084,
+          "fp": 39522,
+          "fn": 250,
+          "f1": 9.485662266727356,
+          "precision": 5.008892948132481,
+          "recall": 89.28877463581834
+        }
+      },
+      "group_pooled_mean_f1": 49.45033606498908
+    },
+    {
+      "threshold": 0.02,
+      "tp_retention": 0.999789659669345,
+      "candidate_tp": 23766,
+      "candidate_fp": 458204,
+      "groups": {
+        "levir_any": {
+          "tp": 401152,
+          "fp": 444503,
+          "fn": 25240,
+          "f1": 63.07188335022212,
+          "precision": 47.43683890002424,
+          "recall": 94.08056436330888
+        },
+        "second_appeared": {
+          "tp": 124038,
+          "fp": 59855,
+          "fn": 15469,
+          "f1": 76.708719851577,
+          "precision": 67.45118084973326,
+          "recall": 88.91166751489173
+        },
+        "second_disappeared": {
+          "tp": 2084,
+          "fp": 38426,
+          "fn": 250,
+          "f1": 9.728316683783026,
+          "precision": 5.144408787953592,
+          "recall": 89.28877463581834
+        }
+      },
+      "group_pooled_mean_f1": 49.83630662852738
+    },
+    {
+      "threshold": 0.05,
+      "tp_retention": 0.999789659669345,
+      "candidate_tp": 23766,
+      "candidate_fp": 411147,
+      "groups": {
+        "levir_any": {
+          "tp": 401152,
+          "fp": 399004,
+          "fn": 25240,
+          "f1": 65.41154524731196,
+          "precision": 50.13422382635386,
+          "recall": 94.08056436330888
+        },
+        "second_appeared": {
+          "tp": 124038,
+          "fp": 59848,
+          "fn": 15469,
+          "f1": 76.7103802494179,
+          "precision": 67.45374851810361,
+          "recall": 88.91166751489173
+        },
+        "second_disappeared": {
+          "tp": 2084,
+          "fp": 36875,
+          "fn": 250,
+          "f1": 10.09372048531228,
+          "precision": 5.349213275494751,
+          "recall": 89.28877463581834
+        }
+      },
+      "group_pooled_mean_f1": 50.73854866068071
+    },
+    {
+      "threshold": 0.1,
+      "tp_retention": 0.8092633881620462,
+      "candidate_tp": 19237,
+      "candidate_fp": 350986,
+      "groups": {
+        "levir_any": {
+          "tp": 401086,
+          "fp": 355365,
+          "fn": 25306,
+          "f1": 67.81728428878557,
+          "precision": 53.02207281106113,
+          "recall": 94.06508564888647
+        },
+        "second_appeared": {
+          "tp": 119575,
+          "fp": 56099,
+          "fn": 19932,
+          "f1": 75.8770357350221,
+          "precision": 68.06641847968396,
+          "recall": 85.71254489022056
+        },
+        "second_disappeared": {
+          "tp": 2084,
+          "fp": 24102,
+          "fn": 250,
+          "f1": 14.614305750350631,
+          "precision": 7.958451080730161,
+          "recall": 89.28877463581834
+        }
+      },
+      "group_pooled_mean_f1": 52.76954192471944
+    },
+    {
+      "threshold": 0.2,
+      "tp_retention": 0.7576458710193092,
+      "candidate_tp": 18010,
+      "candidate_fp": 158249,
+      "groups": {
+        "levir_any": {
+          "tp": 400568,
+          "fp": 175775,
+          "fn": 25824,
+          "f1": 79.89508693722668,
+          "precision": 69.50166827739731,
+          "recall": 93.94360119326817
+        },
+        "second_appeared": {
+          "tp": 119575,
+          "fp": 51146,
+          "fn": 19932,
+          "f1": 77.08846396843612,
+          "precision": 70.04117829675319,
+          "recall": 85.71254489022056
+        },
+        "second_disappeared": {
+          "tp": 1375,
+          "fp": 15908,
+          "fn": 959,
+          "f1": 14.01845338227048,
+          "precision": 7.955794711566279,
+          "recall": 58.91173950299914
+        }
+      },
+      "group_pooled_mean_f1": 57.000668095977765
+    }
+  ],
+  "criterion": "tune three-group mean add-all F1; ties fewer FP then lower threshold; TP retention reported without eligibility constraint",
+  "exposure": "historically exposed development pool"
+}

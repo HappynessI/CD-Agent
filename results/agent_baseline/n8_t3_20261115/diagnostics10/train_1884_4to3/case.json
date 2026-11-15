@@ -1,0 +1,448 @@
+{
+  "id": "train_1884_4to3",
+  "selection_reason": "largest remaining empty-target FP",
+  "scope": "Post hoc confirmation diagnosis only; no inference/selection updates",
+  "metrics": {
+    "id": "train_1884_4to3",
+    "split": "confirm",
+    "group": "地表类",
+    "remaining_gt_pixels": 0,
+    "methods": {
+      "original_R1_top8": {
+        "counts": [
+          0,
+          7023,
+          0
+        ],
+        "candidate_ids": [
+          15,
+          65,
+          16,
+          81,
+          82,
+          123,
+          9,
+          102
+        ],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 8,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      },
+      "always_empty": {
+        "counts": [
+          0,
+          0,
+          0
+        ],
+        "candidate_ids": [],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 0,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      },
+      "pool_top5": {
+        "counts": [
+          0,
+          29950,
+          0
+        ],
+        "candidate_ids": [
+          3,
+          4,
+          2,
+          15,
+          7
+        ],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 5,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      },
+      "gate_top3": {
+        "counts": [
+          0,
+          23794,
+          0
+        ],
+        "candidate_ids": [
+          3,
+          4,
+          2
+        ],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 3,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      },
+      "verified_top3": {
+        "counts": [
+          0,
+          23778,
+          0
+        ],
+        "candidate_ids": [
+          3,
+          2
+        ],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 2,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      },
+      "N8_gate_unverified": {
+        "counts": [
+          0,
+          23794,
+          0
+        ],
+        "candidate_ids": [
+          3,
+          4,
+          2
+        ],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 3,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      },
+      "N8_verified": {
+        "counts": [
+          0,
+          23778,
+          0
+        ],
+        "candidate_ids": [
+          3,
+          2
+        ],
+        "coverage": {
+          "gt_instances": 0,
+          "aligned_instances": 0,
+          "truth_pixels": 0,
+          "covered_pixels": 0,
+          "proposals": 2,
+          "instance_recall_upper": null,
+          "pixel_coverage_upper": null,
+          "pixel_f1_upper": null
+        }
+      }
+    },
+    "candidates": 19,
+    "new_candidates": 19,
+    "triggered": true,
+    "z": 2.932856178919223,
+    "top1_ptrans": 0.15604904294013977,
+    "verification": {
+      "3": {
+        "answer": "yes",
+        "cost_cny": 0.00026540000000000005,
+        "new_mask_vs_original_R1": true,
+        "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/confirm/tasks/train_1884_4to3/requests/3/answer.json"
+      },
+      "4": {
+        "answer": "no",
+        "cost_cny": 0.00029920000000000006,
+        "new_mask_vs_original_R1": true,
+        "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/confirm/tasks/train_1884_4to3/requests/4/answer.json"
+      },
+      "2": {
+        "answer": "yes",
+        "cost_cny": 0.0002676,
+        "new_mask_vs_original_R1": true,
+        "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/confirm/tasks/train_1884_4to3/requests/2/answer.json"
+      }
+    },
+    "new_calls": 3,
+    "new_mask_calls": 3,
+    "unknown": 0,
+    "cost_cny": 0.0008322000000000002
+  },
+  "observable": {
+    "channels": [
+      "background",
+      "low vegetation",
+      "non-vegetated ground",
+      "tree",
+      "water",
+      "building",
+      "playground"
+    ],
+    "predicted_pair": [
+      2,
+      3
+    ],
+    "example_mean_probabilities": [
+      [
+        0.13950365781784058,
+        0.18661639094352722,
+        0.317870169878006,
+        0.10205385088920593,
+        0.10221138596534729,
+        0.037496719509363174,
+        0.1142469272017479
+      ],
+      [
+        0.04974101483821869,
+        0.3165000081062317,
+        0.20911939442157745,
+        0.3727489113807678,
+        0.0161428302526474,
+        0.010629115626215935,
+        0.025116650387644768
+      ]
+    ],
+    "area": 914,
+    "bbox_fill": 0.5083426028921023,
+    "structural": false
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "candidate_id": 3,
+      "area": 16782,
+      "similarity": 0.4964449405670166,
+      "delta_similarity": 0.3064540922641754,
+      "joint_similarity": 0.4964449405670166,
+      "mean_probabilities": [
+        [
+          0.13523297011852264,
+          0.2574846148490906,
+          0.3411828875541687,
+          0.09006334841251373,
+          0.05150040611624718,
+          0.06452511996030807,
+          0.060010332614183426
+        ],
+        [
+          0.037273768335580826,
+          0.2598050832748413,
+          0.2114887833595276,
+          0.452336847782135,
+          0.008971980772912502,
+          0.010218214243650436,
+          0.01990172266960144
+        ]
+      ],
+      "predicted_pair": [
+        2,
+        3
+      ],
+      "ptrans": 0.15604904294013977,
+      "answer": {
+        "answer": "yes",
+        "cost_cny": 0.00026540000000000005,
+        "new_mask_vs_original_R1": true,
+        "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/confirm/tasks/train_1884_4to3/requests/3/answer.json"
+      },
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "candidate_id": 4,
+      "area": 16,
+      "similarity": 0.4449729919433594,
+      "delta_similarity": 0.277909517288208,
+      "joint_similarity": 0.4449729919433594,
+      "mean_probabilities": [
+        [
+          0.19451904296875,
+          0.1547393798828125,
+          0.20346832275390625,
+          0.0974273681640625,
+          0.06938934326171875,
+          0.1718292236328125,
+          0.1086273193359375
+        ],
+        [
+          0.08083343505859375,
+          0.289306640625,
+          0.19667816162109375,
+          0.341583251953125,
+          0.02022552490234375,
+          0.037201881408691406,
+          0.034155845642089844
+        ]
+      ],
+      "predicted_pair": [
+        2,
+        3
+      ],
+      "ptrans": 0.06946825236082077,
+      "answer": {
+        "answer": "no",
+        "cost_cny": 0.00029920000000000006,
+        "new_mask_vs_original_R1": true,
+        "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/confirm/tasks/train_1884_4to3/requests/4/answer.json"
+      },
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "candidate_id": 2,
+      "area": 6996,
+      "similarity": 0.39406222105026245,
+      "delta_similarity": 0.2103322446346283,
+      "joint_similarity": 0.39406222105026245,
+      "mean_probabilities": [
+        [
+          0.16252198815345764,
+          0.18571190536022186,
+          0.3352775275707245,
+          0.07408550381660461,
+          0.04514627158641815,
+          0.08043980598449707,
+          0.11681660264730453
+        ],
+        [
+          0.034741856157779694,
+          0.24423786997795105,
+          0.23136039078235626,
+          0.45856189727783203,
+          0.007804966531693935,
+          0.006871173158288002,
+          0.01642172783613205
+        ]
+      ],
+      "predicted_pair": [
+        2,
+        3
+      ],
+      "ptrans": 0.15252412855625153,
+      "answer": {
+        "answer": "yes",
+        "cost_cny": 0.0002676,
+        "new_mask_vs_original_R1": true,
+        "source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/confirm/tasks/train_1884_4to3/requests/2/answer.json"
+      },
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "candidate_id": 15,
+      "area": 282,
+      "similarity": 0.3917945623397827,
+      "delta_similarity": 0.32378527522087097,
+      "joint_similarity": 0.3917945623397827,
+      "mean_probabilities": [
+        [
+          0.15386097133159637,
+          0.13571903109550476,
+          0.291593074798584,
+          0.10303989797830582,
+          0.026714352890849113,
+          0.20395979285240173,
+          0.08510725200176239
+        ],
+        [
+          0.02990793064236641,
+          0.22438211739063263,
+          0.3212752044200897,
+          0.390397310256958,
+          0.005337208043783903,
+          0.010686833411455154,
+          0.018024958670139313
+        ]
+      ],
+      "predicted_pair": [
+        2,
+        3
+      ],
+      "ptrans": 0.11373957991600037,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "candidate_id": 7,
+      "area": 5874,
+      "similarity": 0.35820409655570984,
+      "delta_similarity": 0.267411470413208,
+      "joint_similarity": 0.35820409655570984,
+      "mean_probabilities": [
+        [
+          0.1816827654838562,
+          0.1585761159658432,
+          0.2726057767868042,
+          0.11053324490785599,
+          0.05854595825076103,
+          0.14302001893520355,
+          0.07503564655780792
+        ],
+        [
+          0.03596537560224533,
+          0.22266413271427155,
+          0.2411842793226242,
+          0.4675423204898834,
+          0.007576834876090288,
+          0.008078916929662228,
+          0.016988858580589294
+        ]
+      ],
+      "predicted_pair": [
+        2,
+        3
+      ],
+      "ptrans": 0.12718342244625092,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    }
+  ],
+  "legend": "Green TP; magenta FP; cyan FN; yellow example. All panels retain full native image extent; source T1/T2 saved separately."
+}

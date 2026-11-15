@@ -1,0 +1,46 @@
+{
+  "tasks": 10,
+  "cases": [
+    {
+      "id": "train_1496_2to1",
+      "reason": "tiny remaining-GT diagnostic requested after Step1 audit"
+    },
+    {
+      "id": "train_1535_4to1",
+      "reason": "tiny remaining-GT diagnostic requested after Step1 audit"
+    },
+    {
+      "id": "train_23_2to1",
+      "reason": "largest remaining clean-instance gain under tune-frozen instance configuration"
+    },
+    {
+      "id": "train_1370_3to1",
+      "reason": "largest remaining clean-instance gain under tune-frozen instance configuration"
+    },
+    {
+      "id": "train_2383_2to5",
+      "reason": "largest remaining image-F1 harm (or smallest gain if no harm)"
+    },
+    {
+      "id": "train_2043_2to3",
+      "reason": "largest remaining image-F1 harm (or smallest gain if no harm)"
+    },
+    {
+      "id": "train_2255_2to5",
+      "reason": "largest remaining image-F1 harm (or smallest gain if no harm)"
+    },
+    {
+      "id": "train_1129_4to5",
+      "reason": "largest remaining image-F1 gain (or smallest harm if no gain)"
+    },
+    {
+      "id": "train_1884_4to3",
+      "reason": "largest remaining empty-target FP"
+    },
+    {
+      "id": "train_156_2to3",
+      "reason": "largest remaining empty-target FP"
+    }
+  ],
+  "selection": "2 tiny positive GT + 2 clean-instance gains + 3 final harms + 1 final gain + 2 empty-FP cases, all distinct with deterministic fill. Revised after Step1 audit by main-Agent request; post hoc diagnosis, not tuning."
+}

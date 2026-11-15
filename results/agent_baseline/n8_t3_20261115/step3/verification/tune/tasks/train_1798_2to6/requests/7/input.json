@@ -1,0 +1,26 @@
+{
+  "system": "Compare land-cover changes in two separate regions, Example and Candidate. Each has two local original-RGB views, T1 then T2. Thin red contours mark included support; enclosed holes are excluded. The drawn support boundary itself is not an object structure. Infer land cover before and after in each region from RGB evidence. Reply JSON only. Reverse transitions and unchanged regions are not matches. Two numerical evidence lines provide auxiliary model predictions, not ground truth. Check the directed change in RGB; probabilities and similarity alone do not establish a match.",
+  "question": "Does the Candidate show the same directed land-cover transition as the Example? Identify what each region was at T1 and becomes at T2. Reply {\"change\":\"yes\" or \"no\", \"example_t1\":\"class\", \"example_t2\":\"class\", \"candidate_t1\":\"class\", \"candidate_t2\":\"class\", \"reason\":\"short explanation\"}.\nExample evidence: area=4729 native pixels; SegEarth T1 -> T2 dominant probabilities: building(0.2728) -> building(0.4411).\nCandidate evidence: area=1423 native pixels; joint exemplar similarity=0.6033; SegEarth T1 -> T2 dominant probabilities: tree(0.1884) -> building(0.5384); example-directed transition consistency=0.0535.",
+  "images": [
+    {
+      "label": "Example T1 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/tune/tasks/train_1798_2to6/requests/7/00.png"
+    },
+    {
+      "label": "Example T2 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/tune/tasks/train_1798_2to6/requests/7/01.png"
+    },
+    {
+      "label": "Candidate T1 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/tune/tasks/train_1798_2to6/requests/7/02.png"
+    },
+    {
+      "label": "Candidate T2 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n8_t3_20261115/step3/verification/tune/tasks/train_1798_2to6/requests/7/03.png"
+    }
+  ],
+  "model": "qwen3.7-flash",
+  "seed": 1016,
+  "max_tokens": 768,
+  "temperature": 0
+}

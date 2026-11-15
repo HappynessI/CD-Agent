@@ -1,0 +1,246 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>N8 T3 · 十例完整诊断</title><style>
+:root{color-scheme:light;--bg:#f4f5f7;--panel:#fff;--text:#172530;--muted:#596975;--line:#cbd3da;--accent:#185b91;--tint:#edf4fa;--up:#187040;--down:#ad3440;--warn:#855418;--warnbg:#fff4df;--tp:#2cce78;--fp:#ef5050;--fn:#458dff;--backdrop:#0009}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#111920;--panel:#19232c;--text:#e5edf4;--muted:#a8b7c3;--line:#3b4b58;--accent:#8ac4f4;--tint:#243544;--up:#79d79a;--down:#ff9b9f;--warn:#f1c77d;--warnbg:#382f21}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#111920;--panel:#19232c;--text:#e5edf4;--muted:#a8b7c3;--line:#3b4b58;--accent:#8ac4f4;--tint:#243544;--up:#79d79a;--down:#ff9b9f;--warn:#f1c77d;--warnbg:#382f21}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;overflow-wrap:anywhere}
+header,footer{padding:18px 24px;background:var(--panel)}header{border-bottom:1px solid var(--line)}h1{font-size:23px;line-height:1.3;margin:5px 0 10px}h2{font-size:17px;margin:0 0 10px}h3{font-size:15px;margin:0}p{margin:7px 0}.eyebrow,.muted,figcaption{color:var(--muted)}.warning{font-weight:700;color:var(--warn);background:var(--warnbg);padding:8px 12px;border-left:3px solid var(--warn)}
+.headtop{display:flex;justify-content:space-between;gap:12px;align-items:start}.metrics{display:flex;flex-wrap:wrap;gap:8px 25px;margin:12px 0}.metric strong{display:block;font-size:21px;line-height:1.25;font-variant-numeric:tabular-nums}.metric span{font-size:12px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(320px,1.55fr) minmax(240px,1fr);gap:16px;padding:18px 24px;max-width:1800px;margin:auto}.layout>*{min-width:0}.panel,.step{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}.step{margin-bottom:12px;scroll-margin-top:16px}.step.active{border-color:var(--accent);border-left:4px solid var(--accent);padding-left:9px}.stephead{display:flex;align-items:center;justify-content:space-between;gap:10px}.thought{border-left:2px solid var(--line);padding-left:10px;white-space:pre-wrap;margin:12px 0}.call{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.call.error{border-left:3px solid var(--down);padding-left:10px}.errorlabel,.down{color:var(--down)}.up{color:var(--up)}.badge{background:var(--tint);color:var(--accent);padding:2px 6px;border-radius:3px;margin-right:6px}.toolname{font-weight:600}pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;margin:8px 0}details{margin:8px 0}summary{cursor:pointer;color:var(--accent)}
+figure{margin:10px 0;min-width:0}figcaption{font-size:12px;margin-top:4px}img{display:block;width:100%;height:auto;max-width:100%;border-radius:3px}button,select{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 9px;cursor:pointer;max-width:100%}button:hover{border-color:var(--accent)}button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.zoom{display:block;padding:0;border:0;width:100%;cursor:zoom-in}.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.thumb{max-width:180px}.sticky{position:sticky;top:12px}.sticky figure img{max-height:27vh;object-fit:contain;background:var(--bg)}.legend{display:flex;gap:12px;font-size:12px;flex-wrap:wrap}.legend i{display:inline-block;width:9px;height:9px;margin-right:4px}.legend .tp{background:var(--tp)}.legend .fp{background:var(--fp)}.legend .fn{background:var(--fn)}.chart{width:100%;display:block;color:var(--muted)}.chart text{fill:currentColor;font-size:10px}.chart .axis{stroke:var(--line)}.chart .trace{fill:none;stroke:var(--accent);stroke-width:2}.chart .point{fill:var(--panel);stroke:var(--accent);stroke-width:2;cursor:pointer}.chart .point.active{fill:var(--accent);stroke-width:3}.chart .cursor{stroke:var(--muted);stroke-dasharray:3 3}.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.empty{padding:25px 10px;text-align:center;color:var(--muted);border:1px dashed var(--line);margin:12px 0}.js-only{display:none}.has-js .js-only{display:initial}[hidden]{display:none!important}footer{border-top:1px solid var(--line)}footer pre{max-width:1200px}dialog{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text);max-width:95vw;max-height:95vh;padding:14px}dialog::backdrop{background:var(--backdrop)}dialog img{max-width:85vw;max-height:80vh;object-fit:contain;width:auto}dialog .close{float:right;margin-bottom:10px}
+@media(max-width:900px){.layout{grid-template-columns:1fr;padding:16px}.sticky{position:static}.sticky figure img{max-height:none}.inputs .pair{grid-template-columns:1fr 1fr}header,footer{padding:16px}.headtop{flex-wrap:wrap}}
+.inputs.sticky{max-height:calc(100vh - 24px);overflow-y:auto}.inputs .empty{margin:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:8px}.system{margin:18px 24px 0;max-width:1752px}.sysscroll{overflow-x:auto}.sys{display:block;width:100%;min-width:1040px;height:auto;color:var(--text)}.sys text{fill:currentColor;font-size:13px;paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}.sys .title{font-size:16px;font-weight:700}.sys .head{font-size:15px;font-weight:700}.sys .body{font-size:13px}.sys .small{font-size:12.5px}.sys .label{font-size:12px;fill:var(--muted)}.sys .muted{fill:var(--muted)}.sys .strong{font-weight:700;fill:var(--text)}.sys .mono{font:11.5px ui-monospace,SFMono-Regular,Consolas,monospace}.sys rect{fill:var(--panel);stroke:var(--line);stroke-width:1.2}.sys .frame{fill:none;stroke-width:1.5}.sys .plan{stroke:var(--accent);stroke-width:2}.sys .ver{stroke:var(--up);stroke-width:2}.sys .gate{stroke:var(--warn);stroke-width:2}.sys .dashbox{stroke-dasharray:5 4}.sys .chip{fill:var(--tint);stroke:none}.sys .tool{fill:var(--tint);stroke:none}.sys .tool-ver{stroke:var(--up);stroke-width:1.5}.sys .tool-gate{stroke:var(--warn);stroke-width:1.5}.sys .off{opacity:.45}.sys .edge{fill:none;stroke-width:1.6}.sys .edge-main{stroke:var(--text)}.sys .edge-plan{stroke:var(--accent)}.sys .edge-ver{stroke:var(--up)}.sys .edge-gate{stroke:var(--warn)}.sys .edge-mute{stroke:var(--muted)}.sys .dash{stroke-dasharray:6 5}.sys .boundary{stroke:var(--up);stroke-width:1.4;stroke-dasharray:3 4}.sys .head-main{fill:var(--text)}.sys .head-plan{fill:var(--accent)}.sys .head-ver{fill:var(--up)}.sys .head-gate{fill:var(--warn)}.sys .head-mute{fill:var(--muted)}.system figure{margin:0}.system figcaption{font-size:13px;margin-top:8px;color:var(--text)}.tablewrap{overflow-x:auto}.ledger table{border-collapse:collapse;width:100%;font-size:12px}.ledger th,.ledger td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top;white-space:nowrap}.ledger td:last-child{white-space:normal;min-width:320px}.ledger .against{background:var(--warnbg)}.answers{margin:8px 0;padding-left:18px;font-size:13px}.reportbox{white-space:pre-wrap;background:var(--warnbg);border-left:3px solid var(--warn);padding:8px 10px;margin:8px 0;font-size:13px}.hub{max-width:1752px;margin:auto;padding:18px 24px}.hubtable{border-collapse:collapse;width:100%}.hubtable th,.hubtable td{border-bottom:1px solid var(--line);padding:8px;text-align:left}a{color:var(--accent)}
+@media(max-width:900px){.inputs.sticky{max-height:none;overflow:visible}.system{margin:12px 16px 0}.hub{padding:16px}}
+@media(prefers-reduced-motion:no-preference){.step{transition:border-color .15s}}
+
+.flow{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:12px}
+.flowbox{border:1px solid var(--line);padding:12px;border-radius:6px;min-width:0}
+.toolbox{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
+.toolbox>div{border:1px solid var(--line);padding:8px;min-width:0}.toolchip{display:inline-block;padding:2px 5px;margin:3px;background:var(--tint);border-radius:3px}.toolchip.off{color:var(--muted);background:var(--bg);text-decoration:line-through}
+.inputs.sticky,.results.sticky{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto}
+.inputs .pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto}
+.input-extra{min-width:0}.input-extra figure{margin:0}.feedback-image{position:relative}.feedback{font-size:12px;white-space:pre-wrap;margin-top:6px}.feedback-image .feedback{position:absolute;bottom:25px;left:4px;right:4px;max-height:48%;overflow-y:auto;padding:5px;background:var(--panel);color:var(--text);border:1px solid var(--line)}
+@media(max-width:900px){.flow{grid-template-columns:1fr}.inputs.sticky,.results.sticky{position:static;max-height:none;overflow:visible}}
+
+    .hub{max-width:1500px;margin:auto;padding:16px}.n8-card{margin:18px 0;overflow:hidden}
+    .n8-card img{display:block;width:100%;height:auto;max-width:100%;border:1px solid var(--line)}
+    .n8-links{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0}.n8-meta{display:flex;flex-wrap:wrap;gap:8px}
+    .n8-chip{background:var(--tint);padding:5px 9px;border-radius:4px}.n8-candidates{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+    .n8-card table{width:100%}.n8-note{color:var(--muted)}.n8-legend span{margin-right:16px}
+    @media(max-width:700px){.hub{padding:8px}.n8-card{padding:10px}.n8-links{gap:8px}}
+    </style></head><body>
+<header><h1>N8 T3 · 确认集十例诊断</h1><p>沿用 G3 页面视觉样式；本页是离线诊断，不是在线 Agent 回放。图像、示例、预测和 GT 均保留完整原生视野。</p>
+<nav class="n8-links" aria-label="研究证据"><a href="../research_review.md">专项报告</a><a href="../predeclaration.md">预声明</a><a href="../step3/report.md">完整指标</a><a href="../final_audit.json">逐例损失与费用</a><a href="manifest.json">十例选样记录</a></nav>
+<div class="n8-meta"><span class="n8-chip">最终非空 F1 10.456</span><span class="n8-chip">基线 16.044</span><span class="n8-chip">空 FP 23783</span><span class="n8-chip">未晋级在线</span></div>
+<p class="n8-legend"><span style="color:#1cbe55">绿：TP</span><span style="color:#f43fa0">洋红：FP</span><span style="color:#00a9d6">青：FN</span><span style="color:#b29000">黄：示例</span></p>
+<p class="n8-note">含两例 tiny-GT、清理自匹配收益、最终损害/收益及空目标误检；选样和目视只用于解释，不改变 GT、参数或主配置。</p></header><main class="hub">
+<section class="panel n8-card" id="case-1"><h2>01 · train_1496_2to1</h2>
+<p>tiny remaining-GT diagnostic requested after Step1 audit</p><div class="n8-meta"><span class="n8-chip">剩余 GT 4 px</span><span class="n8-chip">E 预测 non-vegetated ground → building</span><span class="n8-chip">gate True · z 3.837 · p 0.248</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>0.008</td><td>4</td><td>103972</td><td>0</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>29049</td><td>4</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>29049</td><td>4</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_1496_2to1/T1.png">原始T1</a>
+<a href="train_1496_2to1/T2.png">原始T2</a>
+<a href="train_1496_2to1/example.png">示例E</a>
+<a href="train_1496_2to1/GT_remaining.png">剩余GT</a>
+<a href="train_1496_2to1/N8_prediction.png">最终掩码</a>
+<a href="train_1496_2to1/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_1496_2to1/panel.png"><img loading="lazy" src="train_1496_2to1/panel.png" alt="train_1496_2to1 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · yes</strong><p>面积 12596 · 相似度 0.726 · ptrans 0.248</p><div class="n8-links"><a href="train_1496_2to1/candidate_1_T1.png">T1</a><a href="train_1496_2to1/candidate_1_T2.png">T2</a><a href="train_1496_2to1/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · yes</strong><p>面积 15294 · 相似度 0.604 · ptrans 0.011</p><div class="n8-links"><a href="train_1496_2to1/candidate_2_T1.png">T1</a><a href="train_1496_2to1/candidate_2_T2.png">T2</a><a href="train_1496_2to1/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · yes</strong><p>面积 13442 · 相似度 0.508 · ptrans 0.002</p><div class="n8-links"><a href="train_1496_2to1/candidate_3_T1.png">T1</a><a href="train_1496_2to1/candidate_3_T2.png">T2</a><a href="train_1496_2to1/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 12412 · 相似度 0.490 · ptrans 0.018</p><div class="n8-links"><a href="train_1496_2to1/candidate_4_T1.png">T1</a><a href="train_1496_2to1/candidate_4_T2.png">T2</a><a href="train_1496_2to1/candidate_4_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-2"><h2>02 · train_1535_4to1</h2>
+<p>tiny remaining-GT diagnostic requested after Step1 audit</p><div class="n8-meta"><span class="n8-chip">剩余 GT 14 px</span><span class="n8-chip">E 预测 water → water</span><span class="n8-chip">gate False · z 0.000 · p 0.000</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>0.090</td><td>14</td><td>31049</td><td>0</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>14</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>14</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_1535_4to1/T1.png">原始T1</a>
+<a href="train_1535_4to1/T2.png">原始T2</a>
+<a href="train_1535_4to1/example.png">示例E</a>
+<a href="train_1535_4to1/GT_remaining.png">剩余GT</a>
+<a href="train_1535_4to1/N8_prediction.png">最终掩码</a>
+<a href="train_1535_4to1/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_1535_4to1/panel.png"><img loading="lazy" src="train_1535_4to1/panel.png" alt="train_1535_4to1 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+</div></details></section>
+<section class="panel n8-card" id="case-3"><h2>03 · train_23_2to1</h2>
+<p>largest remaining clean-instance gain under tune-frozen instance configuration</p><div class="n8-meta"><span class="n8-chip">剩余 GT 3235 px</span><span class="n8-chip">E 预测 non-vegetated ground → non-vegetated ground</span><span class="n8-chip">gate False · z 0.000 · p 0.000</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>45.169</td><td>1973</td><td>3528</td><td>1262</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>3235</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>3235</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_23_2to1/T1.png">原始T1</a>
+<a href="train_23_2to1/T2.png">原始T2</a>
+<a href="train_23_2to1/example.png">示例E</a>
+<a href="train_23_2to1/GT_remaining.png">剩余GT</a>
+<a href="train_23_2to1/N8_prediction.png">最终掩码</a>
+<a href="train_23_2to1/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_23_2to1/panel.png"><img loading="lazy" src="train_23_2to1/panel.png" alt="train_23_2to1 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+</div></details></section>
+<section class="panel n8-card" id="case-4"><h2>04 · train_1370_3to1</h2>
+<p>largest remaining clean-instance gain under tune-frozen instance configuration</p><div class="n8-meta"><span class="n8-chip">剩余 GT 791 px</span><span class="n8-chip">E 预测 building → non-vegetated ground</span><span class="n8-chip">gate False · z 4.477 · p 0.046</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>5.155</td><td>241</td><td>8319</td><td>550</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>791</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>791</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_1370_3to1/T1.png">原始T1</a>
+<a href="train_1370_3to1/T2.png">原始T2</a>
+<a href="train_1370_3to1/example.png">示例E</a>
+<a href="train_1370_3to1/GT_remaining.png">剩余GT</a>
+<a href="train_1370_3to1/N8_prediction.png">最终掩码</a>
+<a href="train_1370_3to1/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_1370_3to1/panel.png"><img loading="lazy" src="train_1370_3to1/panel.png" alt="train_1370_3to1 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · 未送审</strong><p>面积 1651 · 相似度 0.812 · ptrans 0.046</p><div class="n8-links"><a href="train_1370_3to1/candidate_1_T1.png">T1</a><a href="train_1370_3to1/candidate_1_T2.png">T2</a><a href="train_1370_3to1/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · 未送审</strong><p>面积 897 · 相似度 0.641 · ptrans 0.048</p><div class="n8-links"><a href="train_1370_3to1/candidate_2_T1.png">T1</a><a href="train_1370_3to1/candidate_2_T2.png">T2</a><a href="train_1370_3to1/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · 未送审</strong><p>面积 786 · 相似度 0.634 · ptrans 0.045</p><div class="n8-links"><a href="train_1370_3to1/candidate_3_T1.png">T1</a><a href="train_1370_3to1/candidate_3_T2.png">T2</a><a href="train_1370_3to1/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 2512 · 相似度 0.633 · ptrans 0.041</p><div class="n8-links"><a href="train_1370_3to1/candidate_4_T1.png">T1</a><a href="train_1370_3to1/candidate_4_T2.png">T2</a><a href="train_1370_3to1/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 1160 · 相似度 0.631 · ptrans 0.032</p><div class="n8-links"><a href="train_1370_3to1/candidate_5_T1.png">T1</a><a href="train_1370_3to1/candidate_5_T2.png">T2</a><a href="train_1370_3to1/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-5"><h2>05 · train_2383_2to5</h2>
+<p>largest remaining image-F1 harm (or smallest gain if no harm)</p><div class="n8-meta"><span class="n8-chip">剩余 GT 14568 px</span><span class="n8-chip">E 预测 non-vegetated ground → building</span><span class="n8-chip">gate False · z 2.297 · p 0.071</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>64.475</td><td>11776</td><td>10185</td><td>2792</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>14568</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>14568</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_2383_2to5/T1.png">原始T1</a>
+<a href="train_2383_2to5/T2.png">原始T2</a>
+<a href="train_2383_2to5/example.png">示例E</a>
+<a href="train_2383_2to5/GT_remaining.png">剩余GT</a>
+<a href="train_2383_2to5/N8_prediction.png">最终掩码</a>
+<a href="train_2383_2to5/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_2383_2to5/panel.png"><img loading="lazy" src="train_2383_2to5/panel.png" alt="train_2383_2to5 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · 未送审</strong><p>面积 3105 · 相似度 0.724 · ptrans 0.071</p><div class="n8-links"><a href="train_2383_2to5/candidate_1_T1.png">T1</a><a href="train_2383_2to5/candidate_1_T2.png">T2</a><a href="train_2383_2to5/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · 未送审</strong><p>面积 2200 · 相似度 0.686 · ptrans 0.185</p><div class="n8-links"><a href="train_2383_2to5/candidate_2_T1.png">T1</a><a href="train_2383_2to5/candidate_2_T2.png">T2</a><a href="train_2383_2to5/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · 未送审</strong><p>面积 4825 · 相似度 0.680 · ptrans 0.168</p><div class="n8-links"><a href="train_2383_2to5/candidate_3_T1.png">T1</a><a href="train_2383_2to5/candidate_3_T2.png">T2</a><a href="train_2383_2to5/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 2304 · 相似度 0.654 · ptrans 0.135</p><div class="n8-links"><a href="train_2383_2to5/candidate_4_T1.png">T1</a><a href="train_2383_2to5/candidate_4_T2.png">T2</a><a href="train_2383_2to5/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 2491 · 相似度 0.650 · ptrans 0.154</p><div class="n8-links"><a href="train_2383_2to5/candidate_5_T1.png">T1</a><a href="train_2383_2to5/candidate_5_T2.png">T2</a><a href="train_2383_2to5/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-6"><h2>06 · train_2043_2to3</h2>
+<p>largest remaining image-F1 harm (or smallest gain if no harm)</p><div class="n8-meta"><span class="n8-chip">剩余 GT 386 px</span><span class="n8-chip">E 预测 tree → low vegetation</span><span class="n8-chip">gate False · z 3.488 · p 0.047</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>35.399</td><td>337</td><td>1181</td><td>49</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>386</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>386</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_2043_2to3/T1.png">原始T1</a>
+<a href="train_2043_2to3/T2.png">原始T2</a>
+<a href="train_2043_2to3/example.png">示例E</a>
+<a href="train_2043_2to3/GT_remaining.png">剩余GT</a>
+<a href="train_2043_2to3/N8_prediction.png">最终掩码</a>
+<a href="train_2043_2to3/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_2043_2to3/panel.png"><img loading="lazy" src="train_2043_2to3/panel.png" alt="train_2043_2to3 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · 未送审</strong><p>面积 1 · 相似度 0.865 · ptrans 0.047</p><div class="n8-links"><a href="train_2043_2to3/candidate_1_T1.png">T1</a><a href="train_2043_2to3/candidate_1_T2.png">T2</a><a href="train_2043_2to3/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · 未送审</strong><p>面积 22 · 相似度 0.742 · ptrans 0.069</p><div class="n8-links"><a href="train_2043_2to3/candidate_2_T1.png">T1</a><a href="train_2043_2to3/candidate_2_T2.png">T2</a><a href="train_2043_2to3/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · 未送审</strong><p>面积 13 · 相似度 0.670 · ptrans 0.045</p><div class="n8-links"><a href="train_2043_2to3/candidate_3_T1.png">T1</a><a href="train_2043_2to3/candidate_3_T2.png">T2</a><a href="train_2043_2to3/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 98 · 相似度 0.402 · ptrans 0.217</p><div class="n8-links"><a href="train_2043_2to3/candidate_4_T1.png">T1</a><a href="train_2043_2to3/candidate_4_T2.png">T2</a><a href="train_2043_2to3/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 387 · 相似度 0.362 · ptrans 0.164</p><div class="n8-links"><a href="train_2043_2to3/candidate_5_T1.png">T1</a><a href="train_2043_2to3/candidate_5_T2.png">T2</a><a href="train_2043_2to3/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-7"><h2>07 · train_2255_2to5</h2>
+<p>largest remaining image-F1 harm (or smallest gain if no harm)</p><div class="n8-meta"><span class="n8-chip">剩余 GT 3859 px</span><span class="n8-chip">E 预测 non-vegetated ground → building</span><span class="n8-chip">gate False · z 8.313 · p 0.027</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>33.293</td><td>3031</td><td>11318</td><td>828</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>3859</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>3859</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_2255_2to5/T1.png">原始T1</a>
+<a href="train_2255_2to5/T2.png">原始T2</a>
+<a href="train_2255_2to5/example.png">示例E</a>
+<a href="train_2255_2to5/GT_remaining.png">剩余GT</a>
+<a href="train_2255_2to5/N8_prediction.png">最终掩码</a>
+<a href="train_2255_2to5/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_2255_2to5/panel.png"><img loading="lazy" src="train_2255_2to5/panel.png" alt="train_2255_2to5 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · 未送审</strong><p>面积 4366 · 相似度 0.756 · ptrans 0.027</p><div class="n8-links"><a href="train_2255_2to5/candidate_1_T1.png">T1</a><a href="train_2255_2to5/candidate_1_T2.png">T2</a><a href="train_2255_2to5/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · 未送审</strong><p>面积 5330 · 相似度 0.376 · ptrans 0.123</p><div class="n8-links"><a href="train_2255_2to5/candidate_2_T1.png">T1</a><a href="train_2255_2to5/candidate_2_T2.png">T2</a><a href="train_2255_2to5/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · 未送审</strong><p>面积 6738 · 相似度 0.375 · ptrans 0.023</p><div class="n8-links"><a href="train_2255_2to5/candidate_3_T1.png">T1</a><a href="train_2255_2to5/candidate_3_T2.png">T2</a><a href="train_2255_2to5/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 5376 · 相似度 0.372 · ptrans 0.123</p><div class="n8-links"><a href="train_2255_2to5/candidate_4_T1.png">T1</a><a href="train_2255_2to5/candidate_4_T2.png">T2</a><a href="train_2255_2to5/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 11973 · 相似度 0.371 · ptrans 0.030</p><div class="n8-links"><a href="train_2255_2to5/candidate_5_T1.png">T1</a><a href="train_2255_2to5/candidate_5_T2.png">T2</a><a href="train_2255_2to5/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-8"><h2>08 · train_1129_4to5</h2>
+<p>largest remaining image-F1 gain (or smallest harm if no gain)</p><div class="n8-meta"><span class="n8-chip">剩余 GT 0 px</span><span class="n8-chip">E 预测 non-vegetated ground → building</span><span class="n8-chip">gate False · z 2.009 · p 0.091</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>0.000</td><td>0</td><td>8423</td><td>0</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_1129_4to5/T1.png">原始T1</a>
+<a href="train_1129_4to5/T2.png">原始T2</a>
+<a href="train_1129_4to5/example.png">示例E</a>
+<a href="train_1129_4to5/GT_remaining.png">剩余GT</a>
+<a href="train_1129_4to5/N8_prediction.png">最终掩码</a>
+<a href="train_1129_4to5/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_1129_4to5/panel.png"><img loading="lazy" src="train_1129_4to5/panel.png" alt="train_1129_4to5 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · 未送审</strong><p>面积 410 · 相似度 0.606 · ptrans 0.091</p><div class="n8-links"><a href="train_1129_4to5/candidate_1_T1.png">T1</a><a href="train_1129_4to5/candidate_1_T2.png">T2</a><a href="train_1129_4to5/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · 未送审</strong><p>面积 1753 · 相似度 0.568 · ptrans 0.104</p><div class="n8-links"><a href="train_1129_4to5/candidate_2_T1.png">T1</a><a href="train_1129_4to5/candidate_2_T2.png">T2</a><a href="train_1129_4to5/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · 未送审</strong><p>面积 2523 · 相似度 0.555 · ptrans 0.097</p><div class="n8-links"><a href="train_1129_4to5/candidate_3_T1.png">T1</a><a href="train_1129_4to5/candidate_3_T2.png">T2</a><a href="train_1129_4to5/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 4024 · 相似度 0.522 · ptrans 0.084</p><div class="n8-links"><a href="train_1129_4to5/candidate_4_T1.png">T1</a><a href="train_1129_4to5/candidate_4_T2.png">T2</a><a href="train_1129_4to5/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 2786 · 相似度 0.513 · ptrans 0.081</p><div class="n8-links"><a href="train_1129_4to5/candidate_5_T1.png">T1</a><a href="train_1129_4to5/candidate_5_T2.png">T2</a><a href="train_1129_4to5/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-9"><h2>09 · train_1884_4to3</h2>
+<p>largest remaining empty-target FP</p><div class="n8-meta"><span class="n8-chip">剩余 GT 0 px</span><span class="n8-chip">E 预测 non-vegetated ground → tree</span><span class="n8-chip">gate True · z 2.933 · p 0.156</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>0.000</td><td>0</td><td>7023</td><td>0</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>23794</td><td>0</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>23778</td><td>0</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_1884_4to3/T1.png">原始T1</a>
+<a href="train_1884_4to3/T2.png">原始T2</a>
+<a href="train_1884_4to3/example.png">示例E</a>
+<a href="train_1884_4to3/GT_remaining.png">剩余GT</a>
+<a href="train_1884_4to3/N8_prediction.png">最终掩码</a>
+<a href="train_1884_4to3/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_1884_4to3/panel.png"><img loading="lazy" src="train_1884_4to3/panel.png" alt="train_1884_4to3 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · yes</strong><p>面积 16782 · 相似度 0.496 · ptrans 0.156</p><div class="n8-links"><a href="train_1884_4to3/candidate_1_T1.png">T1</a><a href="train_1884_4to3/candidate_1_T2.png">T2</a><a href="train_1884_4to3/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · no</strong><p>面积 16 · 相似度 0.445 · ptrans 0.069</p><div class="n8-links"><a href="train_1884_4to3/candidate_2_T1.png">T1</a><a href="train_1884_4to3/candidate_2_T2.png">T2</a><a href="train_1884_4to3/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · yes</strong><p>面积 6996 · 相似度 0.394 · ptrans 0.153</p><div class="n8-links"><a href="train_1884_4to3/candidate_3_T1.png">T1</a><a href="train_1884_4to3/candidate_3_T2.png">T2</a><a href="train_1884_4to3/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 282 · 相似度 0.392 · ptrans 0.114</p><div class="n8-links"><a href="train_1884_4to3/candidate_4_T1.png">T1</a><a href="train_1884_4to3/candidate_4_T2.png">T2</a><a href="train_1884_4to3/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 5874 · 相似度 0.358 · ptrans 0.127</p><div class="n8-links"><a href="train_1884_4to3/candidate_5_T1.png">T1</a><a href="train_1884_4to3/candidate_5_T2.png">T2</a><a href="train_1884_4to3/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+<section class="panel n8-card" id="case-10"><h2>10 · train_156_2to3</h2>
+<p>largest remaining empty-target FP</p><div class="n8-meta"><span class="n8-chip">剩余 GT 0 px</span><span class="n8-chip">E 预测 non-vegetated ground → tree</span><span class="n8-chip">gate True · z 2.375 · p 0.211</span></div>
+<div class="tablewrap"><table><thead><tr><th>阶段</th><th>F1</th><th>TP</th><th>FP</th><th>FN</th></tr></thead><tbody>
+<tr><td>原 R1 Top8</td><td>0.000</td><td>0</td><td>41300</td><td>0</td></tr>
+<tr><td>冻结 gate/K · 未核验</td><td>0.000</td><td>0</td><td>3</td><td>0</td></tr>
+<tr><td>最终 N8</td><td>0.000</td><td>0</td><td>3</td><td>0</td></tr>
+</tbody></table></div><div class="n8-links">
+<a href="train_156_2to3/T1.png">原始T1</a>
+<a href="train_156_2to3/T2.png">原始T2</a>
+<a href="train_156_2to3/example.png">示例E</a>
+<a href="train_156_2to3/GT_remaining.png">剩余GT</a>
+<a href="train_156_2to3/N8_prediction.png">最终掩码</a>
+<a href="train_156_2to3/case.json">候选/答案/概率JSON</a>
+</div>
+<a href="train_156_2to3/panel.png"><img loading="lazy" src="train_156_2to3/panel.png" alt="train_156_2to3 的原生完整双期、示例、各阶段预测与GT面板"></a>
+<details><summary>前五候选：两期原图覆盖、掩码和实际回答</summary><div class="n8-candidates">
+<div class="flowbox"><strong>候选1 · yes</strong><p>面积 1 · 相似度 0.917 · ptrans 0.211</p><div class="n8-links"><a href="train_156_2to3/candidate_1_T1.png">T1</a><a href="train_156_2to3/candidate_1_T2.png">T2</a><a href="train_156_2to3/candidate_1_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选2 · yes</strong><p>面积 1 · 相似度 0.913 · ptrans 0.227</p><div class="n8-links"><a href="train_156_2to3/candidate_2_T1.png">T1</a><a href="train_156_2to3/candidate_2_T2.png">T2</a><a href="train_156_2to3/candidate_2_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选3 · yes</strong><p>面积 1 · 相似度 0.695 · ptrans 0.122</p><div class="n8-links"><a href="train_156_2to3/candidate_3_T1.png">T1</a><a href="train_156_2to3/candidate_3_T2.png">T2</a><a href="train_156_2to3/candidate_3_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选4 · 未送审</strong><p>面积 1 · 相似度 0.549 · ptrans 0.142</p><div class="n8-links"><a href="train_156_2to3/candidate_4_T1.png">T1</a><a href="train_156_2to3/candidate_4_T2.png">T2</a><a href="train_156_2to3/candidate_4_mask.png">掩码</a></div></div>
+<div class="flowbox"><strong>候选5 · 未送审</strong><p>面积 1 · 相似度 0.251 · ptrans 0.056</p><div class="n8-links"><a href="train_156_2to3/candidate_5_T1.png">T1</a><a href="train_156_2to3/candidate_5_T2.png">T2</a><a href="train_156_2to3/candidate_5_mask.png">掩码</a></div></div>
+</div></details></section>
+</main></body></html>

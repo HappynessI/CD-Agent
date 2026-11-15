@@ -2807,4 +2807,4 @@ Top1事后诊断：确认23/30首候选与示例有重叠；其中16例候选多
 
 ### N8 定稿执行状态（2026-11-15，进行中）
 
-本轮以用户定稿 [N8_EXECUTION_SPEC.md](N8_EXECUTION_SPEC.md) 为专项执行依据；候选池重构、方向语义门控及新候选真实API核验均为必做。两线分别严格按T3-1→3、FM-1→3实施，保留N7全部历史数字。总API授权¥100，使用qwen3.7-flash；tune冻结后confirm，达到指定红线才进入在线对照。结果目录为 `results/agent_baseline/n8_t3_20261115/`、`n8_missed_20261115/`；最终统一报告 `results/agent_baseline/n8_summary_report.md`。当前处于代码/输入准备，尚无N8结果。
+本轮以用户定稿 [N8_EXECUTION_SPEC.md](N8_EXECUTION_SPEC.md) 为专项执行依据；候选池重构、方向语义门控及新候选真实API核验均为必做。两线分别严格按T3-1→3、FM-1→3实施，保留N7全部历史数字。总API授权¥100，使用qwen3.7-flash；tune冻结后confirm，达到指定红线才进入在线对照。结果目录为 `results/agent_baseline/n8_t3_20261115/`、`n8_missed_20261115/`；最终统一报告 `results/agent_baseline/n8_summary_report.md`。T3-1/2已完成各60任务并推送；T3-3完成tune30与confirm30、63次真实qwen3.7-flash请求，usage费用¥0.0175362。确认非空F1由16.0437降至10.4560，空FP由133931降至23783（−82.24%），12/19正例被全拒，未同时通过晋级条件，主门控组合不晋级。十例诊断、7项测试和202条页面链接检查已完成。另一个计算前固定的重构池Top5对照在tune与confirm均超过正例F1/空FP双门槛（confirm 18.21835、58094）；按N8原文自动在线要求，继续原定10任务×2组×3seeds验证该既定对照，不把“仅主配置晋级”的自设限制当作用户要求。该方法选择使用了已曝光confirm，在线10也与dev60重叠，明确为探索性Agent行为对照；不修改主门控失败结论，不重调K/阈值。见 `online_followup_decision.json`。补漏完整来源已核查，20张缺失语义概率正在补算，后续FM1–3仍继续，暂无补漏效果结论。

@@ -1,0 +1,226 @@
+{
+  "observable": {
+    "channels": [
+      "background",
+      "low vegetation",
+      "non-vegetated ground",
+      "tree",
+      "water",
+      "building",
+      "playground"
+    ],
+    "predicted_pair": [
+      2,
+      5
+    ],
+    "example_mean_probabilities": [
+      [
+        0.14801925420761108,
+        0.17406009137630463,
+        0.40550497174263,
+        0.05325846001505852,
+        0.05940840393304825,
+        0.1038888469338417,
+        0.055857107043266296
+      ],
+      [
+        0.18053805828094482,
+        0.11236368864774704,
+        0.15701496601104736,
+        0.09991633892059326,
+        0.0504487007856369,
+        0.3155365586280823,
+        0.08418115973472595
+      ]
+    ],
+    "area": 46247,
+    "bbox_fill": 0.31146955818965516,
+    "structural": true
+  },
+  "rank": "joint",
+  "system_method": "route",
+  "relative": {
+    "z": 3.836884613105665,
+    "background_mean": 0.5341629783312479,
+    "background_std": 0.049878423762595034,
+    "background_n": 3
+  },
+  "candidates": [
+    {
+      "candidate_id": 0,
+      "area": 12596,
+      "similarity": 0.7255445718765259,
+      "delta_similarity": 0.6759476065635681,
+      "joint_similarity": 0.7255445718765259,
+      "mean_probabilities": [
+        [
+          0.08158746361732483,
+          0.19457821547985077,
+          0.528674840927124,
+          0.06443618983030319,
+          0.022501332685351372,
+          0.0609268955886364,
+          0.04729359969496727
+        ],
+        [
+          0.14763179421424866,
+          0.07576356083154678,
+          0.10454415529966354,
+          0.06791460514068604,
+          0.05128473788499832,
+          0.4691988527774811,
+          0.0836639329791069
+        ]
+      ],
+      "predicted_pair": [
+        2,
+        5
+      ],
+      "ptrans": 0.24797706305980682
+    },
+    {
+      "candidate_id": 1,
+      "area": 13442,
+      "similarity": 0.5080456733703613,
+      "delta_similarity": 0.40108466148376465,
+      "joint_similarity": 0.5080456733703613,
+      "mean_probabilities": [
+        [
+          0.1162196472287178,
+          0.0768255814909935,
+          0.04208924248814583,
+          0.043539248406887054,
+          0.6681053042411804,
+          0.03410498425364494,
+          0.019117889925837517
+        ],
+        [
+          0.14705199003219604,
+          0.1917717307806015,
+          0.15190432965755463,
+          0.10339538753032684,
+          0.3490374982357025,
+          0.029843179509043694,
+          0.026996854692697525
+        ]
+      ],
+      "predicted_pair": [
+        4,
+        4
+      ],
+      "ptrans": 0.0016567411366850138
+    },
+    {
+      "candidate_id": 2,
+      "area": 12412,
+      "similarity": 0.4904748201370239,
+      "delta_similarity": 0.2775087356567383,
+      "joint_similarity": 0.4904748201370239,
+      "mean_probabilities": [
+        [
+          0.14819586277008057,
+          0.1394004076719284,
+          0.12784262001514435,
+          0.09730517119169235,
+          0.08215733617544174,
+          0.3029867112636566,
+          0.10211078077554703
+        ],
+        [
+          0.15442976355552673,
+          0.18430162966251373,
+          0.19401879608631134,
+          0.14614184200763702,
+          0.03817259520292282,
+          0.20641125738620758,
+          0.07652225345373154
+        ]
+      ],
+      "predicted_pair": [
+        5,
+        5
+      ],
+      "ptrans": 0.017978472635149956
+    },
+    {
+      "candidate_id": 3,
+      "area": 15294,
+      "similarity": 0.6039684414863586,
+      "delta_similarity": 0.5351037383079529,
+      "joint_similarity": 0.6039684414863586,
+      "mean_probabilities": [
+        [
+          0.11533468216657639,
+          0.09407374262809753,
+          0.11173977702856064,
+          0.043096400797367096,
+          0.5770427584648132,
+          0.03549430891871452,
+          0.023220635950565338
+        ],
+        [
+          0.14744515717029572,
+          0.19172221422195435,
+          0.17452237010002136,
+          0.10070787370204926,
+          0.30694830417633057,
+          0.044883787631988525,
+          0.033772390335798264
+        ]
+      ],
+      "predicted_pair": [
+        4,
+        4
+      ],
+      "ptrans": 0.010627171024680138
+    }
+  ],
+  "sources": [
+    [
+      {
+        "branch": "clean_instance",
+        "clean_id": 0
+      }
+    ],
+    [
+      {
+        "branch": "clean_instance",
+        "clean_id": 1
+      }
+    ],
+    [
+      {
+        "branch": "clean_instance",
+        "clean_id": 2
+      }
+    ],
+    [
+      {
+        "branch": "clean_instance",
+        "clean_id": 3
+      }
+    ]
+  ],
+  "order": [
+    0,
+    3,
+    1,
+    2
+  ],
+  "new_mask_vs_original_R1": [
+    false,
+    false,
+    false,
+    true
+  ],
+  "new_candidates": 1,
+  "candidate_count": 4,
+  "construction": "Full clean instance pool for structural route; all 8-connected dense components for nonstructural route; hybrid union adds high-confidence dense components, intersection transforms each clean instance. Empty/exact duplicates only removed; all component sizes retained.",
+  "whitelist": [
+    "T1",
+    "T2",
+    "E",
+    "DINO features",
+    "predicted SegEarth probabilities"
+  ]
+}

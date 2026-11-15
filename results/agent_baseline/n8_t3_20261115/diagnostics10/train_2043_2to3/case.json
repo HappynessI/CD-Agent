@@ -1,0 +1,400 @@
+{
+  "id": "train_2043_2to3",
+  "selection_reason": "largest remaining image-F1 harm (or smallest gain if no harm)",
+  "scope": "Post hoc confirmation diagnosis only; no inference/selection updates",
+  "metrics": {
+    "id": "train_2043_2to3",
+    "split": "confirm",
+    "group": "地表类",
+    "remaining_gt_pixels": 386,
+    "methods": {
+      "original_R1_top8": {
+        "counts": [
+          337,
+          1181,
+          49
+        ],
+        "candidate_ids": [
+          46,
+          41,
+          30,
+          68,
+          14,
+          29,
+          45,
+          53
+        ],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 1,
+          "truth_pixels": 386,
+          "covered_pixels": 337,
+          "proposals": 8,
+          "instance_recall_upper": 1.0,
+          "pixel_coverage_upper": 0.8730569948186528,
+          "pixel_f1_upper": 93.22268326417704
+        }
+      },
+      "always_empty": {
+        "counts": [
+          0,
+          0,
+          386
+        ],
+        "candidate_ids": [],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 0,
+          "truth_pixels": 386,
+          "covered_pixels": 0,
+          "proposals": 0,
+          "instance_recall_upper": 0.0,
+          "pixel_coverage_upper": 0.0,
+          "pixel_f1_upper": 0.0
+        }
+      },
+      "pool_top5": {
+        "counts": [
+          0,
+          521,
+          386
+        ],
+        "candidate_ids": [
+          13,
+          12,
+          14,
+          0,
+          10
+        ],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 0,
+          "truth_pixels": 386,
+          "covered_pixels": 0,
+          "proposals": 5,
+          "instance_recall_upper": 0.0,
+          "pixel_coverage_upper": 0.0,
+          "pixel_f1_upper": 0.0
+        }
+      },
+      "gate_top3": {
+        "counts": [
+          0,
+          0,
+          386
+        ],
+        "candidate_ids": [],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 0,
+          "truth_pixels": 386,
+          "covered_pixels": 0,
+          "proposals": 0,
+          "instance_recall_upper": 0.0,
+          "pixel_coverage_upper": 0.0,
+          "pixel_f1_upper": 0.0
+        }
+      },
+      "verified_top3": {
+        "counts": [
+          0,
+          0,
+          386
+        ],
+        "candidate_ids": [],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 0,
+          "truth_pixels": 386,
+          "covered_pixels": 0,
+          "proposals": 0,
+          "instance_recall_upper": 0.0,
+          "pixel_coverage_upper": 0.0,
+          "pixel_f1_upper": 0.0
+        }
+      },
+      "N8_gate_unverified": {
+        "counts": [
+          0,
+          0,
+          386
+        ],
+        "candidate_ids": [],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 0,
+          "truth_pixels": 386,
+          "covered_pixels": 0,
+          "proposals": 0,
+          "instance_recall_upper": 0.0,
+          "pixel_coverage_upper": 0.0,
+          "pixel_f1_upper": 0.0
+        }
+      },
+      "N8_verified": {
+        "counts": [
+          0,
+          0,
+          386
+        ],
+        "candidate_ids": [],
+        "coverage": {
+          "gt_instances": 1,
+          "aligned_instances": 0,
+          "truth_pixels": 386,
+          "covered_pixels": 0,
+          "proposals": 0,
+          "instance_recall_upper": 0.0,
+          "pixel_coverage_upper": 0.0,
+          "pixel_f1_upper": 0.0
+        }
+      }
+    },
+    "candidates": 15,
+    "new_candidates": 15,
+    "triggered": false,
+    "z": 3.4882711528554418,
+    "top1_ptrans": 0.04749166965484619,
+    "verification": {},
+    "new_calls": 0,
+    "new_mask_calls": 0,
+    "unknown": 0,
+    "cost_cny": 0
+  },
+  "observable": {
+    "channels": [
+      "background",
+      "low vegetation",
+      "non-vegetated ground",
+      "tree",
+      "water",
+      "building",
+      "playground"
+    ],
+    "predicted_pair": [
+      3,
+      1
+    ],
+    "example_mean_probabilities": [
+      [
+        0.20775236189365387,
+        0.13391339778900146,
+        0.14462393522262573,
+        0.23014020919799805,
+        0.03961539641022682,
+        0.1825493723154068,
+        0.06141210347414017
+      ],
+      [
+        0.16067391633987427,
+        0.19808092713356018,
+        0.1532389372587204,
+        0.18588915467262268,
+        0.07613909989595413,
+        0.13876794278621674,
+        0.08721019327640533
+      ]
+    ],
+    "area": 162,
+    "bbox_fill": 0.675,
+    "structural": false
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "candidate_id": 13,
+      "area": 1,
+      "similarity": 0.8646076321601868,
+      "delta_similarity": 0.7860497832298279,
+      "joint_similarity": 0.8646076321601868,
+      "mean_probabilities": [
+        [
+          0.2015380859375,
+          0.140625,
+          0.146240234375,
+          0.2626953125,
+          0.0361328125,
+          0.154541015625,
+          0.05816650390625
+        ],
+        [
+          0.179443359375,
+          0.1807861328125,
+          0.1571044921875,
+          0.1397705078125,
+          0.0789794921875,
+          0.167236328125,
+          0.0968017578125
+        ]
+      ],
+      "predicted_pair": [
+        3,
+        1
+      ],
+      "ptrans": 0.04749166965484619,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "candidate_id": 12,
+      "area": 22,
+      "similarity": 0.7419058680534363,
+      "delta_similarity": 0.636696457862854,
+      "joint_similarity": 0.7419058680534363,
+      "mean_probabilities": [
+        [
+          0.16999955475330353,
+          0.14399303495883942,
+          0.13615833222866058,
+          0.375732421875,
+          0.028644215315580368,
+          0.10187599807977676,
+          0.04358326271176338
+        ],
+        [
+          0.17959317564964294,
+          0.18494762480258942,
+          0.17027144134044647,
+          0.14146839082241058,
+          0.0828857421875,
+          0.1490478515625,
+          0.09178023040294647
+        ]
+      ],
+      "predicted_pair": [
+        3,
+        1
+      ],
+      "ptrans": 0.06949911266565323,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "candidate_id": 14,
+      "area": 13,
+      "similarity": 0.6696047186851501,
+      "delta_similarity": 0.49731430411338806,
+      "joint_similarity": 0.6696047186851501,
+      "mean_probabilities": [
+        [
+          0.2093881517648697,
+          0.14883187413215637,
+          0.15823128819465637,
+          0.23337027430534363,
+          0.04465660825371742,
+          0.1521841138601303,
+          0.053300123661756516
+        ],
+        [
+          0.17790339887142181,
+          0.19292743504047394,
+          0.17672964930534363,
+          0.1796875,
+          0.07192289084196091,
+          0.12586857378482819,
+          0.07492769509553909
+        ]
+      ],
+      "predicted_pair": [
+        3,
+        1
+      ],
+      "ptrans": 0.04500547796487808,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "candidate_id": 0,
+      "area": 98,
+      "similarity": 0.401991069316864,
+      "delta_similarity": 0.06308066099882126,
+      "joint_similarity": 0.401991069316864,
+      "mean_probabilities": [
+        [
+          0.04594779387116432,
+          0.10053300112485886,
+          0.09593574702739716,
+          0.7069839239120483,
+          0.008649125695228577,
+          0.02320525050163269,
+          0.0187356136739254
+        ],
+        [
+          0.12553560733795166,
+          0.3017079830169678,
+          0.2871542274951935,
+          0.1403764933347702,
+          0.03323037177324295,
+          0.05310743674635887,
+          0.05888522416353226
+        ]
+      ],
+      "predicted_pair": [
+        3,
+        1
+      ],
+      "ptrans": 0.21740302443504333,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "candidate_id": 10,
+      "area": 387,
+      "similarity": 0.3620142638683319,
+      "delta_similarity": 0.040308110415935516,
+      "joint_similarity": 0.3620142638683319,
+      "mean_probabilities": [
+        [
+          0.06865780800580978,
+          0.17575916647911072,
+          0.21870654821395874,
+          0.4630742073059082,
+          0.014609423466026783,
+          0.027039598673582077,
+          0.0321430042386055
+        ],
+        [
+          0.08941318839788437,
+          0.3552476465702057,
+          0.2616591453552246,
+          0.17614178359508514,
+          0.032742876559495926,
+          0.030991192907094955,
+          0.053808797150850296
+        ]
+      ],
+      "predicted_pair": [
+        3,
+        1
+      ],
+      "ptrans": 0.16385851800441742,
+      "answer": null,
+      "sources": [
+        {
+          "branch": "dense_component"
+        }
+      ]
+    }
+  ],
+  "legend": "Green TP; magenta FP; cyan FN; yellow example. All panels retain full native image extent; source T1/T2 saved separately."
+}
