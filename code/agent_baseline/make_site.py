@@ -27,7 +27,7 @@ from agent_baseline.make_g3_pages import audit_html
 from agent_baseline.site_svg import agent_figure, route_figure, rule_figure
 
 ASSETS = Path(__file__).resolve().parent / 'site_assets'
-CSS = (ASSETS / 'hub.css').read_text(encoding='utf-8') + (ASSETS / 'site.css').read_text(encoding='utf-8')
+CSS = ''.join((ASSETS / name).read_text(encoding='utf-8') for name in ('hub.css', 'site.css', 'replay_catalog.css'))
 SWITCH_TOOLS = {'segment_everything', 'segment_semantic', 'extract_features', 'compare_features', 'classify', 'match_exemplar'}
 CATEGORIES = {
     'view': '查看', 'inspect': '查看', 'segment_text': '分割', 'segment_prompt': '分割', 'segment_everything': '分割',
@@ -55,6 +55,7 @@ HARNESS_NOTES = {
     'G2': 'G2：补上答案到不了规划器的漏洞；预算用完时补报告。',
     'G3': 'G3：框提示的框超过整图 10% 时报错；报告区域外像素和方向错误；反馈任务只验证相关组件。',
     'G4': 'G4：最后 3 步提醒当前答案；提交时与 region#0 求交；虚线框工具附用途说明。',
+    'G5': 'G5：保留 G4 提交裁剪；文字分割和整图提议接受区域参数。',
 }
 OFF_NOTE = '不启用：plan、python、skill、L2 仔细验证。'
 
@@ -70,7 +71,7 @@ ROUTES = {
                 inputs=['T1 较早影像', 'T2 较晚影像'], steps=IMC_STEPS + [('合并', ['to_mask'], ['出现 ∪ 消失。'])],
                 rule=ASK_RULE,
                 scores=['LEVIR 验证 64 张：固定路线 83.15，固定规则 86.35，Agent G3 85.76（第 10.5、10.10 节）。',
-                        'WHU 128 张：固定路线 56.59，固定规则 62.75，Agent G3 64.27（第 10.11 节）。']),
+                        'WHU 128 张，历史 GT：固定路线 56.59，固定规则 62.75，Agent G3 64.27（第 10.11 节）。']),
     't51': dict(label='T5.1', title='T5.1：给定掩码就是固定路线掩码',
                 inputs=['T1 较早影像', 'T2 较晚影像', '给定掩码 mask#0'],
                 steps=[('原样提交', ['submit'], ['给定掩码来自 I-M-C(SAM3)。', '固定路线不修改给定掩码。'])],
@@ -79,7 +80,7 @@ ROUTES = {
                       inputs=['T1 较早影像', 'T2 较晚影像'], steps=IMC_STEPS + [('取一个方向', ['to_mask'], ['新建：只取出现。', '拆除：只取消失。'])],
                       rule=dict(ASK_RULE, question='问法带方向：原址重建不算新建。'),
                       scores=['SECOND 新建 128 张：固定路线 57.04，固定规则 63.74，Agent G3 71.31（第 10.6、10.10 节）。',
-                              'WHU 新建 128 张：固定路线 62.25，固定规则 70.26，Agent G3 72.86（第 10.11 节）。']),
+                              'WHU 新建 128 张，历史 GT：固定路线 62.25，固定规则 70.26，Agent G3 72.86（第 10.11 节）。']),
     'region': dict(label='T1.1 × C2 / C4 区域', title='固定路线：SECOND 的 T1.1 × C2、C4（限定区域）',
                    inputs=['T1 较早影像', 'T2 较晚影像', '区域 region#0'],
                    steps=IMC_STEPS + [('合并或取方向', ['to_mask'], ['C2：出现 ∪ 消失。', 'C4：只取出现。']),
@@ -137,12 +138,12 @@ ROUTES = {
                 steps=[('分割新影像建筑', ['segment_text(T2)'], ['SAM3，与 I-M-C 相同的门限。']),
                        ('与旧地图比较', [], ['与旧地图逐像素异或。', '不删除小组件。'])],
                 rule=dict(ASK_RULE, question='验证器对 82% 的组件答 no。'),
-                scores=['WHU 128 张：固定路线 59.40，固定规则 30.97（第 10.11 节）。Agent 没有全量运行。']),
+                scores=['WHU 128 张：固定路线 59.40，旧问法固定规则 30.97（第 10.11 节）。新问法固定规则 68.86，Agent G3 69.87（第 10.13 节）。']),
     't41': dict(label='T4.1 面积', title='固定路线：T4.1 只要大建筑的变化',
                 inputs=['T1 较早影像', 'T2 较晚影像', '指令中的面积门限'],
                 steps=IMC_STEPS + [('合并', ['to_mask'], ['出现 ∪ 消失。']), ('面积筛选', ['select'], ['保留 > 260 m² 的组件', '（> 1040 像素）。'])],
                 rule=dict(ASK_RULE, decide=['答 no：删除这个组件。', '答 yes：保留这个组件。', '再按同样的面积筛选。']),
-                scores=['LEVIR 验证 64 张：固定 + 面积 77.13，固定规则 + 面积 78.48（第 10.11 节）。Agent 全量在运行。']),
+                scores=['LEVIR 验证 64 张：固定 + 面积 77.13，固定规则 + 面积 78.48，Agent G3 74.45（第 10.11、10.13 节）。']),
 }
 
 
@@ -153,7 +154,7 @@ CONTROLS = [
     ('T1.1 × C0', 'LEVIR 验证 64 张', IMC_TEXT,
      '固定路线的组件 → flash 验证器（L1：4 张裁剪图、跨时相对应问法）→ 删除答 no', 'M-C-I 固定路线（参照）',
      '像素门限 0.85 在验证集 64 张上选（第 10.3 节：有选择偏差）；L2 验证器在 dev2 上比较，没有上线', '83.15 / 86.35', '10.5'),
-    ('T1.1 × C0', 'SECOND 128 张', IMC_TEXT + '（不分方向）', '没有（C0 只做了固定路线）', '—',
+    ('T1.1 × C0', 'SECOND 128 张', IMC_TEXT + '（不分方向）', '没有（本表仅列 C0 固定路线的正式汇总）', '—',
      '沿用 LEVIR 的设置，零样本，不调', '51.83 / — ', '10.6'),
     ('T1.1 × C0', 'WHU 128 张', IMC_TEXT, '同 LEVIR 的验证器和问法，删除答 no', '对官方变化标签另报一行：固定 64.93、规则 76.35',
      '沿用 LEVIR 的设置，零样本；WHU 开发 60 张没有用来调参', '56.59 / 62.75', '10.11'),
@@ -246,12 +247,14 @@ def harness_of(info):
 
 
 def harness_notes(version):
-    order = ['G2', 'G3', 'G4']
+    version = version.split(' / ')[0]
+    order = ['G2', 'G3', 'G4', 'G5']
     notes = [HARNESS_NOTES[v] for v in order[:order.index(version) + 1]] if version in order else []
     return notes + [OFF_NOTE]
 
 
 def gate_caption(version, stops=None):
+    version = version.split(' / ')[0]
     rules = ['规划器第一次调用 submit 时，提交门暂停提交，并返回报告。这个暂停不表示拒绝。',
              '规划器再次调用 submit 时，只有掩码含未验证组件，提交门才暂停提交。',
              '每次暂停时，验证器验证两类组件：掩码中的未验证组件；已从给定掩码删除且没有答案的组件。',
@@ -265,9 +268,11 @@ def gate_caption(version, stops=None):
         'G4': ['最后 3 步，当前答案不是最新掩码时，状态行提醒规划器。harness 不替换掩码。',
                '有 region#0 时，提交的掩码与区域求交。求交前后的掩码都写入轨迹。',
                '虚线框工具的说明附一句用途。'],
+        'G5': ['segment_text 和 segment_everything 可接收区域句柄，先在整图上运行，再将结果裁到区域内。'],
     }
-    order = ['G2', 'G3', 'G4']
-    rows = ''.join(f'<li><strong>{v}</strong>：{esc(c)}</li>' for v in order[:order.index(version) + 1] if version in order for c in changes[v])
+    order = ['G2', 'G3', 'G4', 'G5']
+    versions = order[:order.index(version) + 1] if version in order else []
+    rows = ''.join(f'<li><strong>{v}</strong>：{esc(c)}</li>' for v in versions for c in changes[v])
     after = '这些情况下，验证器在会话结束后验证还没有答案的组件。答案只写入验证记录。'
     if stops is not None:
         after += f'这个会话的结束后验证次数：{stops}。工具名后的 ×N 是这个会话的调用次数。灰色工具在这个会话中没有调用。'
@@ -283,7 +288,7 @@ TERMS = [
     ('当前掩码', '会话中最新的候选结果。'), ('最终掩码', '会话结束时提交的掩码。'), ('组件', '掩码中的一个 8 连通区域。'),
     ('给定掩码', 'T5 任务的输入掩码。这个掩码来自固定路线。'), ('区域 region#0', 'C2、C4 任务给定的框。答案只能在框内。'),
     ('示例掩码', 'T3.1 给定的一处变化。Agent 找同类的变化。'), ('规划器', '决定调用哪些工具、保留哪些组件、何时提交的模型。'),
-    ('验证器', '判断一个组件是否是真实变化的模型。它独立于规划器。'), ('harness', '运行规划器和工具的程序。G1–G4 是它的版本。'),
+    ('验证器', '判断一个组件是否是真实变化的模型。它独立于规划器。'), ('harness', '运行规划器和工具的程序。G1–G5 是它的版本。'),
     ('提交门 Gate', 'harness 中的一个结构。规划器调用 submit 时，提交门判断是否暂停提交。'),
     ('固定路线', '程序按固定顺序和固定参数调用工具。不用规划器，不用验证器。'),
     ('固定规则', '在固定路线的组件上运行验证器，删除答 no 的组件。不用规划器。'),
@@ -369,18 +374,23 @@ def comparison_panel(record, c):
 
 # ---------------------------------------------------------------- replay page
 
-def input_cell(directory, info, key, sources, encode):
+def exemplar_path(directory, info):
+    handle = (info.get('initial_view') or {}).get('overlay') or info.get('initial_handle')
+    return mask_path(directory, handle) if handle else None
+
+
+def input_cell(directory, info, family, sources, encode):
     """The fourth cell of the input grid."""
     initial = info.get('initial_handle')
     t2 = sources[1].copy()
-    if key in ('second_c2', 'second_c4'):
+    if family == 'region':
         region = directory / 'masks' / 'region_0.png'
         if region.exists():
             yy, xx = np.nonzero(read_mask(region))
             if len(xx):
                 ImageDraw.Draw(t2).rectangle((int(xx.min()), int(yy.min()), int(xx.max()), int(yy.max())), outline='#ffd400', width=max(3, t2.width // 120))
             return [encode(t2), 'region', None]
-    if key in ('levir_t52', 'levir_t53'):
+    if family in ('t52', 't53'):
         from agent_baseline.feedback import cell_mask
         canvas = t2
         if initial and mask_path(directory, initial).exists():
@@ -397,21 +407,22 @@ def input_cell(directory, info, key, sources, encode):
                 if len(xx):
                     draw.rectangle((int(xx.min()), int(yy.min()), int(xx.max()), int(yy.max())), outline='#ffd400', width=max(3, canvas.width // 150))
         return [encode(canvas), 'feedback', None]
-    if key == 'second_t31':
-        handle = (info.get('initial_view') or {}).get('overlay') or initial
-        if handle and mask_path(directory, handle).exists():
-            return [encode(open_image(mask_path(directory, handle))), 'exemplar', handle]
+    if family == 't31':
+        path = exemplar_path(directory, info)
+        if path and path.is_file():
+            handle = (info.get('initial_view') or {}).get('overlay') or initial
+            return [encode(open_image(path)), 'exemplar', handle]
     if initial and mask_path(directory, initial).exists():
         return [encode(open_image(mask_path(directory, initial))), 'given', initial]
     return [None, 'none', None]
 
 
-def input_figure(key, cell):
+def input_figure(family, description, cell):
     uri, kind, handle = cell
     if uri is None:
-        return f'<figure><div class="empty">没有给定掩码</div><figcaption>{esc(TASKS[key][1])}</figcaption></figure>'
+        return f'<figure><div class="empty">没有给定掩码</div><figcaption>{esc(description)}</figcaption></figure>'
     caption = {'region': 'T2 和区域 region#0（黄框）', 'exemplar': f'示例掩码 {handle}', 'given': f'给定掩码 {handle}',
-               'feedback': 'T2、给定掩码（红线）和反馈' + ('点' if key == 'levir_t52' else '方位格') + '（黄色）'}[kind]
+               'feedback': 'T2、给定掩码（红线）和反馈' + ('点' if family == 't52' else '方位格') + '（黄色）'}[kind]
     return figure(uri, caption)
 
 
@@ -456,19 +467,31 @@ def ledger_html(entries):
 def render_replay(root, record, store, quality=62):
     from functools import lru_cache
     key = record['page']
-    code, text, dataset, chip4, arrow_label, _ = TASKS[key]
-    directory = Path(root or '.') / record['run'] / record['task'] / 'val' / record['image']  # only read in the data step
+    catalog = 'session' in record
+    if catalog:
+        from agent_baseline.replay_catalog import task_constraint
+        task, constraint = task_constraint(record['task'])
+        code, text, dataset, family = f'{task} × {constraint}', record['description'], record['dataset'], record['family']
+        chip4 = {'region': '区域 region#0', 't31': '图内示例', 't51': '给定掩码'}.get(family)
+        arrow_label = '任务输入'
+        directory = Path(record['session'])
+    else:
+        code, text, dataset, chip4, arrow_label, family = TASKS[key]
+        directory = Path(root or '.') / record['run'] / record['task'] / 'val' / record['image']  # data step only
+    official = record.get('official')
     S = store.get
     info = S('info', lambda: read_json(directory / 'input.json'))
     final = S('final', lambda: read_json(directory / 'final.json'))
     rows = S('rows', lambda: read_steps(directory))
     entries = S('verification', lambda: read_json(directory / 'verification.json') if (directory / 'verification.json').exists() else None)
-    version = harness_of(info)
+    version = record['version'] if catalog else harness_of(info)
     encode = lambda im, limit=512: jpeg(im, min(limit, 512), quality)
     name = record['image']
 
     @lru_cache(None)
     def gt():
+        if catalog:
+            return read_mask(resolve_asset(directory, record['gt_path']))
         return read_mask(resolve_asset(directory, info['gt_mask_path'])) if info.get('gt_mask_path') else read_mask(
             Path(info['source_images'][0]).parent.parent / 'label' / (name + '.png'))
 
@@ -481,6 +504,16 @@ def render_replay(root, record, store, quality=62):
         im = sources()[1].copy(); im.thumbnail((512, 512), Image.Resampling.LANCZOS)
         return im
 
+    @lru_cache(None)
+    def ignore():
+        if official and official.get('ignore_path'):
+            return read_mask(official['ignore_path'])
+        if catalog and family == 't31':
+            path = exemplar_path(directory, info)
+            if path and path.is_file():
+                return read_mask(path)
+        return None
+
     panels = {}
 
     def mask_images(handle):
@@ -492,11 +525,20 @@ def render_replay(root, record, store, quality=62):
         overlay = np.array(t2()); overlay[edge] = [239, 80, 80]
         compare = (np.array(t2()).astype(float) * .22).astype('uint8')
         compare[pred & gt_small] = [44, 206, 120]; compare[pred & ~gt_small] = [239, 80, 80]; compare[~pred & gt_small] = [69, 141, 255]
+        if ignore() is not None:
+            ignored = np.asarray(Image.fromarray(ignore()).resize(t2().size, Image.Resampling.NEAREST))
+            compare[ignored] = [175, 175, 175]
         return [encode(Image.fromarray(mask.astype('uint8') * 255)), encode(Image.fromarray(overlay)), encode(Image.fromarray(compare))]
 
     def mask_assets(handle):
-        thumb, overlay, compare = S(f'mask:{handle}', lambda: mask_images(handle))
+        files = S(f'mask:{handle}', lambda: mask_images(handle) if mask_path(directory, handle).is_file() or not catalog else None)
+        if files is None:
+            panels[handle] = '<div class="empty">这个中间掩码未随轨迹归档。</div>'
+            return None
+        thumb, overlay, compare = files
         panels[handle] = (figure(overlay, 'T2 和当前掩码（红色轮廓）') + figure(compare, '与真值对比（模型在运行时看不到）'))
+        if catalog:
+            panels[handle] += figure(thumb, '当前预测二值掩码')
         return thumb
 
     final_metric = final.get('eval') or {}
@@ -512,16 +554,43 @@ def render_replay(root, record, store, quality=62):
     title = f'{code} · {text}'
     head = (f'<header><div class="headtop"><div><div class="eyebrow"><a href="index.html">回放列表</a> · {esc(dataset)} 验证集 · {esc(name)}</div><h1>{esc(title)}</h1></div>'
             '<label class="js-only">外观 <select id="theme"><option value="auto">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label></div>')
-    head += '<div class="warning">这个会话的最终 F1 接近这个任务全部会话的中位数。它不是挑选出的最好结果。</div>'
+    if catalog:
+        from agent_baseline.replay_catalog import replay_switcher
+        if record.get('siblings'):
+            head += replay_switcher(record, record['siblings'])
+        head += (f'<p>{esc(record["selection"])} · 会话来源 <code>{esc(record["source"])}</code></p>')
+    else:
+        head += '<div class="warning">这个会话的最终 F1 接近这个任务全部会话的中位数。它不是挑选出的最好结果。</div>'
     head += '<div class="metrics">' + ''.join(f'<div class="metric"><strong>{esc(v)}</strong><span>{k}</span></div>' for k, v in stats) + '</div>'
-    if code.startswith('T5'):
+    if official:
+        corrected = official['corrected']
+        head += (f'<p class="warning">页头与时间线使用原轨迹的历史评分。WHU 官方 GT v3 离线重评分 '
+                 f'F1 {pct(corrected["f1"])} · P {pct(corrected["precision"])} · R {pct(corrected["recall"])} '
+                 f'· 方向不明的忽略像素 {official["ignored_pixels"]}。'
+                 '<a href="../whu_gt_final_20261114/repair_report.md">查看标签口径与重评分来源</a>。</p>')
+    excluded = None
+    if catalog and family == 't31':
+        def excluded_score():
+            example = ignore()
+            if example is None:
+                return None
+            prediction = read_mask(resolve_asset(directory, final['mask_path']))
+            return measures(prediction & ~example, gt() & ~example)['f1']
+        excluded = S('exemplar_excluded_f1', excluded_score)
+        if excluded is not None and excluded != record['selection_score']:
+            raise ValueError(f'{record["page"]} does not reproduce the exemplar-excluded selection score')
+        if excluded is not None:
+            head += (f'<p>原轨迹含示例 F1 {pct(final_f1)} · 扣除预测与真值中的示例像素后 F1 {pct(excluded)}。'
+                     '图中灰色标出示例，时间线保留原记录。</p>')
+    if family in ('t51', 't52', 't53'):
         head += f'<p>给定掩码 F1 {pct(metric_f1(final.get("initial_eval")))} → 最终 F1 {pct(final_f1)}。</p>'
     head += f'<details open><summary>指令原文</summary><pre>{esc(info.get("instruction", "没有记录"))}</pre></details></header>'
 
     counts = Counter(c['tool'] for c in calls)
     enabled = {s['function']['name'] for s in info.get('schemas', [])}
     switch = sorted(enabled & SWITCH_TOOLS)
-    chips = ['T1 较早影像', 'T2 较晚影像', INSTRUCTION_CHIP.get(key, '指令（一句话任务）')] + ([chip4] if chip4 else []) + ['系统提示和工具定义']
+    first_input = 'T1 旧二值地图' if family == 't54' else 'T1 较早影像'
+    chips = [first_input, 'T2 较晚影像', INSTRUCTION_CHIP.get(key, '指令（一句话任务）')] + ([chip4] if chip4 else []) + ['系统提示和工具定义']
     answers = sum(len(e.get('records', [])) for e in entries) if entries else 0
     svg = agent_figure(version, chips, arrow_label, counts, answers, sum(c.get('status') == 'report' for c in calls),
                        final.get('termination_reason', '没有记录'), switch, harness_notes(version))
@@ -529,14 +598,30 @@ def render_replay(root, record, store, quality=62):
               + gate_caption(version, S('stops', lambda: after_stop_count(directory))) + '</figure>' + terms_block(False) + '</section>')
 
     final_handle = final.get('final_handle')
-    c = S('compare', lambda: comparison_data(record, load_baselines(root, record, directory),
-                                             read_mask(resolve_asset(directory, final['mask_path'])), gt(), t2(), encode))
-    compare, scores_ = comparison_panel(record, c), c['scores']
+    if official:
+        def validate_official():
+            prediction = read_mask(resolve_asset(directory, final['mask_path']))
+            truth = gt()
+            if ignore() is not None:
+                prediction, truth = prediction & ~ignore(), truth & ~ignore()
+            counts = {'tp': int((prediction & truth).sum()), 'fp': int((prediction & ~truth).sum()),
+                      'fn': int((~prediction & truth).sum())}
+            if any(value != official['corrected'][name] for name, value in counts.items()):
+                raise ValueError(f'{record["page"]} does not reproduce the archived WHU counts')
+            return counts
+        S('official_counts', validate_official)
+    if catalog:
+        compare, scores_ = '', {}
+    else:
+        c = S('compare', lambda: comparison_data(record, load_baselines(root, record, directory),
+                                                 read_mask(resolve_asset(directory, final['mask_path'])), gt(), t2(), encode))
+        compare, scores_ = comparison_panel(record, c), c['scores']
 
     left = '<aside><section class="inputs panel sticky"><h2>输入和真值</h2><div class="pair">'
-    left += ''.join(figure(S(f'source:{k}', lambda k=k: encode(sources()[k])), label) for k, label in enumerate(['T1 · 较早影像', 'T2 · 较晚影像']))
-    left += figure(S('gt', lambda: encode(Image.fromarray(gt().astype('uint8') * 255))), '真值（模型在运行时看不到）')
-    left += input_figure(key, S('input4', lambda: input_cell(directory, info, key, sources(), encode)))
+    left += ''.join(figure(S(f'source:{k}', lambda k=k: encode(sources()[k])), label) for k, label in enumerate([first_input, 'T2 · 较晚影像']))
+    gt_label = 'WHU 官方 GT v3（离线）' if official else '真值（模型在运行时看不到）'
+    left += figure(S('gt', lambda: encode(Image.fromarray(gt().astype('uint8') * 255))), gt_label)
+    left += input_figure(family, text, S('input4', lambda: input_cell(directory, info, family, sources(), encode)))
     left += '</div><p class="muted">页面图像是缩小版。点击图像可以放大。真值和 F1 只用于事后评分。</p></section></aside>'
 
     timeline = ['<section aria-label="步骤时间线"><h2>Agent 做了什么</h2><p class="muted">页面按记录顺序回放。点击步骤卡片可以切换步骤。按 ← 或 → 键也可以切换。第 0 步是初始化。</p>'
@@ -583,8 +668,15 @@ def render_replay(root, record, store, quality=62):
                     body += answers_html(call)
                 body += '<div class="muted">返回内容</div>' + result_block(call.get('result_text', '没有记录'))
             if call.get('result_images'):
-                body += '<div class="pair">' + ''.join(figure(S(f'image:{p}', lambda p=p: encode(open_image(resolve_asset(directory, p)))), f'规划器收到的 T{j + 1}（缩小版）')
-                                                       for j, p in enumerate(call['result_images'][:2])) + '</div>'
+                images = []
+                for j, path in enumerate(call['result_images'][:2]):
+                    def call_image(path=path):
+                        asset = resolve_asset(directory, path)
+                        return encode(open_image(asset)) if asset.is_file() or not catalog else None
+                    uri = S(f'image:{path}', call_image)
+                    images.append(figure(uri, f'规划器收到的图像 {j + 1}（缩小版）') if uri else
+                                  '<p class="muted">这个调用的图像未随轨迹归档。</p>')
+                body += '<div class="pair">' + ''.join(images) + '</div>'
             provenance = call.get('provenance') or {}
             if provenance.get('pre_region_handle'):
                 body += f'<div class="reportbox">提交时与区域求交（G4）：删除区域外 {esc(provenance.get("region_clipped_px", "没有记录"))} 像素。</div>'
@@ -600,7 +692,9 @@ def render_replay(root, record, store, quality=62):
                     change = '<span class="muted">这是第一个当前掩码，没有前值可以比较</span>' if delta is None else \
                         f'<span class="{"up" if delta > 0 else "down" if delta < 0 else "muted"}">ΔF1 {delta * 100:+.2f} 个百分点</span>'
                     body += f'<p>当前掩码：{esc(before or "无")} → {esc(after)} · F1 {pct(metric_f1(call.get("eval")))}<br>{change}</p>'
-                    body += figure(mask_assets(after), '这次更新后的当前掩码', 'thumb')
+                    uri = mask_assets(after)
+                    if uri:
+                        body += figure(uri, '这次更新后的当前掩码', 'thumb')
                 else:
                     body += '<p class="muted">当前掩码被清空。</p>'
             body += '</div>'
@@ -625,8 +719,8 @@ def render_replay(root, record, store, quality=62):
              '<div data-mask-panel="none"' + (' hidden' if final_handle else '') + '><div class="empty">没有当前掩码</div></div>')
     for handle, panel in panels.items():
         right += f'<div data-mask-panel="{esc(handle)}"' + ('' if handle == final_handle else ' hidden') + '>' + panel + '</div>'
-    right += ('<div class="legend"><span><i class="tp"></i>TP 命中</span><span><i class="fp"></i>FP 误检</span><span><i class="fn"></i>FN 漏检</span></div>'
-              + curve + '<p class="muted">曲线只显示已记录的当前掩码 F1。曲线中断的位置没有 F1 记录，不表示 0 分。指标按原分辨率计算，不使用缩小图。</p></div></aside>')
+    right += ('<div class="legend"><span><i class="tp"></i>TP 命中</span><span><i class="fp"></i>FP 误检</span><span><i class="fn"></i>FN 漏检</span>'
+              + ('<span>灰色为忽略区</span>' if (official and official['ignored_pixels']) or excluded is not None else '') + '</div>' + curve + '<p class="muted">曲线只显示已记录的当前掩码 F1。曲线中断的位置没有 F1 记录，不表示 0 分。指标按原分辨率计算，不使用缩小图。</p></div></aside>')
     errors = Counter(c['tool'] for c in calls if not c.get('ok', False))
     footer = ('<footer><h2>最终提交</h2>'
               f'<p>提交来源：{esc(final.get("submitted_by", "没有记录"))} · 结束原因：{esc(final.get("termination_reason", "没有记录"))}</p>'
@@ -642,7 +736,10 @@ def render_replay(root, record, store, quality=62):
     body = (head + system + compare + '<main class="layout">' + left + ''.join(timeline) + right + '</main>' + footer +
             '<dialog id="zoom-dialog" aria-label="放大图像"><button id="close-zoom" class="close" type="button">关闭（Esc）</button><img id="zoom-image" alt=""><p id="zoom-caption"></p></dialog>')
     script = f'<script id="states" type="application/json">{state_json}</script><script>{JS}</script>'
-    return page(f'{title} · {name}', body, script), dict(version=version, scores=scores_)
+    metadata = dict(version=version, scores=scores_)
+    if excluded is not None:
+        metadata['exemplar_excluded_f1'] = excluded
+    return page(f'{title} · {name}', body, script), metadata
 
 
 # ---------------------------------------------------------------- entry page
@@ -814,7 +911,8 @@ def render_baselines(root, records, example, example_file, store):
             '<h3>固定规则</h3><div class="pairs">' + comp_html +
             f'<details><summary>验证器答案（{len(c["answers"])} 个组件，点击展开）</summary><div class="tablewrap"><table><thead><tr><th>组件</th><th>面积（像素）</th><th>答案</th><th>理由</th></tr></thead><tbody>{rows}</tbody></table></div></details></div></section>')
     head = ('<header><div class="eyebrow"><a href="index.html">回放列表</a></div><h1>3 种做法：固定路线、固定规则、Agent</h1>'
-            '<p>这个页面说明 3 种做法的结构，并在一张图上比较它们的结果。</p></header>')
+            '<p>这个页面说明 3 种做法的结构，并在一张图上比较它们的结果。WHU C0/C1 的历史结果沿用原标签。官方 GT v3 的离线重评分见'
+            '<a href="../whu_gt_final_20261114/repair_report.md">标签修复报告</a>。</p></header>')
     limits = ('<section class="panel example"><h2>读分数时的限制</h2><ul>'
               '<li>固定路线和固定规则的参数也在验证集上看过。这些分数有选择偏差（第 10.3、10.5、10.6 节）。</li>'
               '<li>一张图的分数不代表整个任务。全部图上的分数写在每条路线的结构图下方。</li>'
@@ -984,11 +1082,18 @@ def main():
     parser.add_argument('--cache', type=Path, required=True, help='Directory of the cached page data.')
     parser.add_argument('--stage', choices=['all', 'data', 'page'], default='all',
                         help='data: compute node, reads the traces. page: HTML from the cache only; seconds, no server data.')
+    parser.add_argument('--catalog', action='store_true', help='Build the current catalog alongside the original nine replay pages.')
+    parser.add_argument('--source-repo', type=Path, default=Path(__file__).resolve().parents[2],
+                        help='Repository containing historical results for the catalog.')
     parser.add_argument('--selections', type=Path, help='Saved pick_demo --typical output; without it, the selection is recomputed.')
     args = parser.parse_args()
     if args.stage != 'page' and args.run_root is None:
         parser.error('--run-root is required for the data step')
-    build(args.run_root, args.out_dir, args.selections, args.cache, args.stage)
+    if args.catalog:
+        from agent_baseline.replay_catalog import build_catalog
+        build_catalog(args.run_root, args.out_dir, args.selections, args.cache, args.stage, args.source_repo)
+    else:
+        build(args.run_root, args.out_dir, args.selections, args.cache, args.stage)
 
 
 if __name__ == '__main__':

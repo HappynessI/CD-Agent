@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/make_site.py", line 1086, in <module>
+    main()
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/make_site.py", line 1080, in main
+    build_catalog(args.run_root, args.out_dir, args.selections, args.cache, args.stage, args.source_repo)
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/replay_catalog.py", line 416, in build_catalog
+    _, info = render_replay(root, record, store)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/make_site.py", line 585, in render_replay
+    + gate_caption(version, S('stops', lambda: after_stop_count(directory))) + '</figure>' + terms_block(False) + '</section>')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/make_site.py", line 270, in gate_caption
+    rows = ''.join(f'<li><strong>{v}</strong>：{esc(c)}</li>' for v in order[:order.index(version) + 1] if version in order for c in changes[v])
+                                                                              ^^^^^^^^^^^^^^^^^^^^
+ValueError: 'G5' is not in list

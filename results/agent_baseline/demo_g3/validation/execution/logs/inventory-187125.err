@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/replay_catalog.py", line 152, in <module>
+    main()
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/replay_catalog.py", line 145, in main
+    output = inventory(args.run_root.resolve(), Path(__file__).resolve().parents[2])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/replay_catalog.py", line 62, in inventory
+    official_folder, rescored = official_scores(repo)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/code/agent_baseline/replay_catalog.py", line 51, in official_scores
+    with (folder / 'rescored_predictions.jsonl').open() as source:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/demo-g3-review/results/agent_baseline/whu_gt_final_20261114/rescored_predictions.jsonl'

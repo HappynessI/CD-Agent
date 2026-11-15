@@ -1,0 +1,35 @@
+
+/* Replay catalog uses the same paper palette and typography as the replay pages. */
+.catalog {max-width: 1280px; margin: auto; padding: 24px clamp(16px, 4vw, 44px) 44px}
+.catalog > * + * {margin-top: 18px}
+.catalog-head {padding: 28px clamp(16px, 4vw, 44px)}
+.catalog-head > * {max-width: 1192px; margin-left: auto; margin-right: auto}
+.catalog-head h1 {font-size: clamp(28px, 4vw, 42px); letter-spacing: -.02em}
+.catalog-links {display: flex; flex-wrap: wrap; gap: 8px 22px}
+.catalog .panel {padding: 18px clamp(14px, 3vw, 24px)}
+.catalog .tablewrap {overflow-x: auto}
+.catalog table {width: 100%; min-width: 850px; border-collapse: collapse}
+.catalog .coverage table {min-width: 760px}
+.catalog th, .catalog td {padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left}
+.catalog thead th {min-width: 72px; color: var(--muted); font-size: 12px}
+.catalog tbody tr:last-child > * {border-bottom: 0}
+.catalog tbody th {font-weight: 500; min-width: 144px}
+.catalog .coverage th:not(:first-child) {min-width: 100px}
+.catalog .coverage tbody tr.family-start > * {border-top: 2px solid var(--line)}
+.catalog .case-name {display: block; color: var(--muted); font-size: .9em}
+.catalog .case-score, .catalog .case-tag {white-space: nowrap}
+.catalog .case-score {font-variant-numeric: tabular-nums}
+.catalog [hidden] {display: none}
+.catalog-filters.js-only {display: none}
+.has-js .catalog-filters.js-only {display: grid; grid-template-columns: repeat(auto-fit, minmax(138px, 1fr)); gap: 8px 14px; align-items: end; margin: 12px 0}
+.catalog-filters label {display: grid; gap: 3px}
+.catalog-filters select {width: 100%}
+.catalog-filters button {width: max-content}
+.catalog-filter-status {margin: 4px 0 10px}
+.replay-switcher {display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin: 8px 0 12px}
+.replay-switcher a, .replay-switcher strong {border: 1px solid var(--line); border-radius: 2px; padding: 3px 7px}
+.replay-switcher strong {background: var(--tint); color: var(--accent)}
+.review-gallery {display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px}
+.review-case {border-top: 1px solid var(--line); padding-top: 8px; margin-bottom: 12px}
+.review-case h3 {overflow-wrap: anywhere}
+.review-case .pair {grid-template-columns: repeat(2, minmax(0, 1fr))}

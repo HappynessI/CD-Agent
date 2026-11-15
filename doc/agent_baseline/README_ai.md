@@ -2705,3 +2705,34 @@ S5解包优化真实验证186495：train106四组结果与历史完全一致、�
 2026-11-15 几何路由完成tune/confirm（186548/186562，API0）：新建K10调参相对原冻结任务策略+0.114269F1、+262TP/+6FP；固定规则确认却−0.394808F1、+16TP/+1077FP（CI−1.65686至.03732），K20亦−.40713、+98TP/+1296FP。该探索分支不推广，不继续扫几何阈值；调参中孔洞/碎片语义不等于确认中的真修补。其他任务、主V0/evidence@10排序与所有旧结果保持原样，确认历史曝光明确披露。
 
 2026-11-15 R1自匹配审计186539完成30/30、2项回归、API0：原Top8共228候选，48个与示例重叠且残余非空（接受44），180个不重叠（接受68），空残余0。已接受重叠候选按任务union覆盖TP210/FP73889，约占最终FP127005的58.2%，但可能与其他候选重复，不能解释为独占/可保证消除的FP或因果证明。train1808单例含30388此类FP，须避免单例主导结论。下一最小配对仅对48个重叠候选改显示C\E，180个无重叠回答精确复用；原候选/排序/Example/问法/seed与官方扣示例评分均不改。
+
+## 多任务回放与数据审核（2026-11-15）
+
+入口为 [demo_g3/index.html](../../results/agent_baseline/demo_g3/index.html)。现入口按修订后的 16 个核心任务与 C0–C4 五个附加约束导航。原九个逐步回放保留在原路径，旧 T1.3 列入历史归档。原首页与九例选样的副本分别在 `original_index.html` 与 `original_selection.json`。`selection.json` 保留供旧生成命令使用的九例列表。
+
+| 项目 | 原入口 | 当前入口 |
+| --- | --- | --- |
+| 真实会话 | 9 例，各用一个近中位数会话 | 37 例，其中 28 例新增、旧 T1.3 单列 |
+| 任务与约束 | 以案例为入口 | 80 个组合中 12 个可回放、2 个待审核、66 个未运行 |
+| 查找案例 | 从表格进入对应页面 | 组合筛选任务、约束、数据集和 Harness。新增回放提供同任务约束的案例切换，手机上可横向滚动案例表和覆盖矩阵 |
+| 数据审核 | 由各实验产物入口查找 | 在 G3 入口查看候选样本和标签口径，并可跳到完整来源 |
+
+- [覆盖清单](../../results/agent_baseline/demo_g3/coverage.json)逐项记录可回放、待审核或未运行，以及各新增配置发现的会话数和实际选样。新增来源包括 SECOND G2 C0、T1.2、C1 转换与拆除、G5 C2／C4、G4 T3.1、T5.1 × C1 新建及拆除、LEVIR T4.1、WHU C0／C1 与 T5.4，以及已有 P0v2／P1v2／P2v2 档案。较高和较低的 F1 是指定配置内的展示选样，优先选有正像素的真值；较高例优先由模型提交。单图选样不改变整组指标。
+- T3.1 原 `second_t31` 的 10.55% 来自 `final.eval`，含示例像素。原横向比较中的 0.00% 从预测与真值都扣除示例。新增 T3.1 案例也分别列出含示例与扣示例的分数，新增案例按扣除示例后的分数选样。
+- WHU C0／C1 新增页保留历史会话及时间线评分，图像比对使用 2026-11-14 官方 GT v3；重评分取已归档的逐图表，并用原预测、官方 GT 和 ignore 掩码复核像素计数。C1 图中的灰色是评分忽略区。T5.4 沿用独立地图更新目标及原评分。
+- [任务数据审核](../../results/agent_baseline/demo_g3/data_review.html)复用 T4.3／T4.4 候选数据预览，并通往 T5.2／T5.3 的 19 例既有审核、C2 case-07 和 WHU 标签修复。T4 与更新后的 T5 候选保持待人工审核。T3.2–T3.4 固定路线结果只作已有对照，未列为 Agent 回放。
+
+在 Slurm CPU 计算节点执行以下命令。`RUN_ROOT` 指向历史运行目录 `/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run`，`SOURCE_REPO` 指向含历史产物的 CD-Agent 工作树，`RUNTIME` 为共享临时目录，例如 `.runtime/demo-g3-review`。页面阶段复用缓存，无需读取模型或历史运行目录。
+
+```bash
+export PYTHONPATH=code
+python -B -m agent_baseline.replay_catalog --run-root "$RUN_ROOT" \
+    --source-repo "$SOURCE_REPO" --inventory "$RUNTIME/inventory.json"
+python -B -m agent_baseline.make_site --catalog --run-root "$RUN_ROOT" \
+    --source-repo "$SOURCE_REPO" --cache "$RUNTIME/cache" \
+    --out-dir results/agent_baseline/demo_g3 --selections "$RUNTIME/inventory.json"
+python -B -m unittest agent_baseline.tests.test_demo_g3 \
+    agent_baseline.tests.test_site_store agent_baseline.tests.test_site_svg
+```
+
+`--stage page` 只从缓存装配页面。静态检查输出为 `$RUNTIME/cache/page_audit.json`，核对嵌图、相对链接、锚点，并逐字节比对原九个 HTML 回放和原选择清单。最终 Slurm 回归通过 17 项，无跳过。有 Playwright 与 Chromium 时，用 `node tools/agent_baseline/check_demo_g3_browser.cjs results/agent_baseline/demo_g3 "$RUNTIME/cache/browser_audit.json"` 检查离线交互。最终静态审计、浏览器审计与四张截图在回放目录的 `validation/` 下。生成与检查均复用已有会话、掩码和候选数据。
