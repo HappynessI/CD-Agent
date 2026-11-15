@@ -10,10 +10,14 @@ def cluster_id(row):
     return row['group'].split('_')[0] + '/' + row['stem']
 
 def estimate(rows):
-    return dict(macro_delta=float(np.mean([r['delta_f1'] for r in rows])),
+    result=dict(macro_delta=float(np.mean([r['delta_f1'] for r in rows])),
         macro_vs_fixed=float(np.mean([r['delta_vs_fixed'] for r in rows])),
         pooled_delta=pooled([r['metrics'] for r in rows])['f1']-pooled([r['baseline'] for r in rows])['f1'],
         pooled_vs_fixed=pooled([r['metrics'] for r in rows])['f1']-pooled([r['fixed'] for r in rows])['f1'])
+    if all('coverage_metrics' in r for r in rows):
+        result['macro_vs_coverage']=float(np.mean([r['delta_vs_coverage'] for r in rows]))
+        result['pooled_vs_coverage']=pooled([r['metrics'] for r in rows])['f1']-pooled([r['coverage_metrics'] for r in rows])['f1']
+    return result
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);a=p.parse_args()
