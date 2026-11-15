@@ -1,5 +1,15 @@
 # task_plan.md — Change Detection Agent 研究与实验迭代计划
 
+## 2026-11-15 核心 G3 回放整理（最新执行范围）
+
+- [x] 专用 gpt-6.1-sol / medium Subagent 在独立工作区扩展原 demo_g3，主 Agent 复核集成。
+- [x] 9 条历史回放保留，新增 28 条真实会话；当前导航 36 条，T1.3 历史归档 1 条。
+- [x] T1–T5 × C0–C4 共 80 个组合展示：12 有回放、2 待审核、66 未运行；缺口不以生成数据或新推理补齐。
+- [x] 任务/约束/数据集/Harness 筛选、版本对比、案例切换、原系统回放与数据审核入口统一。
+- [x] 42 页静态检查、17 项回归及真实 Chromium 离线交互验证完成；移动表格改为横向滚动。
+- 后续由用户审查统一入口；本轮不恢复夜间研究、不改 Harness、GT、正式指标或轨迹。
+
+
 > 最后更新：2026-11-15（夜间T3/find_missed研究与失败恢复；最新执行计划在最上方）。以 `claude/project-thread-2tuaib` 的已验证记录为研究依据；开发中的实际 HEAD 与运行档案以服务器核查为准。**用户最新决策取代此前“立即收敛论文主表、暂停 T3/补漏工具”的建议。**
 >
 > 长期目标及协作边界：[研究协作与最新决定（README_ai §0.2）](doc/agent_baseline/README_ai.md)；技术历史：[README_ai](doc/agent_baseline/README_ai.md)；任务定义：[task_system.html](doc/agent_baseline/task_system.html)。本文件只维护计划；`findings.md` 记可追溯证据，`progress.md` 记实际操作。
