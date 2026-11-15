@@ -1,0 +1,175 @@
+{
+  "arm": "n8",
+  "rank": "joint",
+  "k": 5,
+  "system_method": "route",
+  "raw_candidates": 135,
+  "geometry_candidates": 10,
+  "clean_candidates": 9,
+  "candidate_pool_size": 0,
+  "selected_pool_ids": [],
+  "similarities": [],
+  "observable": {
+    "channels": [
+      "background",
+      "low vegetation",
+      "non-vegetated ground",
+      "tree",
+      "water",
+      "building",
+      "playground"
+    ],
+    "predicted_pair": [
+      2,
+      2
+    ],
+    "example_mean_probabilities": [
+      [
+        0.14289969205856323,
+        0.20045523345470428,
+        0.45819947123527527,
+        0.08484837412834167,
+        0.0486382320523262,
+        0.03426981717348099,
+        0.03068927302956581
+      ],
+      [
+        0.14178825914859772,
+        0.1937231570482254,
+        0.43404069542884827,
+        0.05701863765716553,
+        0.09010095149278641,
+        0.044572435319423676,
+        0.03875703364610672
+      ]
+    ],
+    "area": 8377,
+    "bbox_fill": 0.8775403310287031,
+    "structural": false
+  },
+  "clean_original_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+  ],
+  "cleaning": [
+    {
+      "original_id": 0,
+      "raw_area": 4660,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 4660,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 1,
+      "raw_area": 12864,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 12864,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 2,
+      "raw_area": 7377,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 7377,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 3,
+      "raw_area": 20444,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 20444,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 4,
+      "raw_area": 2108,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 2108,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 5,
+      "raw_area": 7847,
+      "intersection": 7796,
+      "overlap": 0.9935007009048044,
+      "iou": 0.9250118652112007,
+      "net_area": 51,
+      "removed": "overlap_or_iou",
+      "modified": true
+    },
+    {
+      "original_id": 6,
+      "raw_area": 2112,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 2112,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 7,
+      "raw_area": 2239,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 2239,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 8,
+      "raw_area": 13040,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 13040,
+      "removed": null,
+      "modified": false
+    },
+    {
+      "original_id": 9,
+      "raw_area": 3925,
+      "intersection": 0,
+      "overlap": 0.0,
+      "iou": 0.0,
+      "net_area": 3925,
+      "removed": null,
+      "modified": false
+    }
+  ],
+  "selected_sources": [],
+  "global_gate": false,
+  "internal_verifier": false,
+  "whitelist": [
+    "RGB T1/T2",
+    "example E",
+    "DINO features",
+    "SAM proposals",
+    "predicted SegEarth probabilities"
+  ],
+  "example_handle": "mask#0",
+  "policy": "Provider only returns proposals. No current-answer mutation, GT access, offline mask replay or inherited verifier answer."
+}

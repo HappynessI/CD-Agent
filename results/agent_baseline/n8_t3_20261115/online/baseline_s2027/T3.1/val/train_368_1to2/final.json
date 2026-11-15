@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#4",
+ "mask_path": "masks/mask_4.png",
+ "summary": "Final mask with 1 component (id=2, area=5449 pixels) showing vegetation being cleared to bare earth/construction, matching the example transition. Removed components 1, 3, and 4 which had opposite transition directions (constructed->vegetation or bare ground->vegetation) rather than the example's vegetation->bare ground transition. All remaining components verified by independent verifier as land_cover_change.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 1,
+ "change_area_px": 5449,
+ "eval": {
+  "tp": 714,
+  "fp": 4735,
+  "fn": 71284,
+  "f1": 0.018438415948971554,
+  "iou": 0.009304992636805547
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 7,
+  "missed": 6,
+  "pred_objects": 1,
+  "false_alarms": 1
+ },
+ "initial_objects": null,
+ "precision": 0.13103321710165108,
+ "recall": 0.009916942137267817,
+ "planning_rounds": 17,
+ "api_attempts": 24,
+ "planner_api_attempts": 17,
+ "ask_api_attempts": 7,
+ "tool_calls": 17,
+ "tokens": {
+  "input": 222288,
+  "cached": 118656,
+  "output": 3863
+ },
+ "planner_tokens": {
+  "input": 216562,
+  "cached": 118656,
+  "output": 3489
+ },
+ "ask_tokens": {
+  "input": 5726,
+  "cached": 0,
+  "output": 374
+ },
+ "cost_cny": 0.047548,
+ "planner_cost_cny": 0.0461036,
+ "ask_cost_cny": 0.0014444000000000002,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 72.72357268445194,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 7,
+ "ask_calls": 2,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 714,
+  "fp": 4735,
+  "fn": 71284,
+  "f1": 0.018438415948971554,
+  "iou": 0.009304992636805547,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

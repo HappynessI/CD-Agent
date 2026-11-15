@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#0",
+ "mask_path": "masks/mask_0.png",
+ "summary": "Final submission: Only the example region (mask#0, component ID 1, 8377 pixels) shows the specified transition from dry/brown vegetation to green crops. The verifier confirmed this as a valid change (yes). No other regions with the same transition were found via retrieve_example (returned 0 results) or visual inspection. Other visible changes represent different transition types (construction, vegetation loss).",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 1,
+ "change_area_px": 8377,
+ "eval": {
+  "tp": 8377,
+  "fp": 0,
+  "fn": 0,
+  "f1": 1.0,
+  "iou": 1.0
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 1,
+  "missed": 0,
+  "pred_objects": 1,
+  "false_alarms": 0
+ },
+ "initial_objects": null,
+ "precision": 0.9999999999880624,
+ "recall": 0.9999999999880624,
+ "planning_rounds": 13,
+ "api_attempts": 14,
+ "planner_api_attempts": 13,
+ "ask_api_attempts": 1,
+ "tool_calls": 12,
+ "tokens": {
+  "input": 128611,
+  "cached": 56448,
+  "output": 3781
+ },
+ "planner_tokens": {
+  "input": 127793,
+  "cached": 56448,
+  "output": 3715
+ },
+ "ask_tokens": {
+  "input": 818,
+  "cached": 0,
+  "output": 66
+ },
+ "cost_cny": 0.028746999999999998,
+ "planner_cost_cny": 0.0285306,
+ "ask_cost_cny": 0.00021640000000000003,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 45.418816247954965,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 4,
+ "ask_calls": 0,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 8377,
+  "fp": 0,
+  "fn": 0,
+  "f1": 1.0,
+  "iou": 1.0,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

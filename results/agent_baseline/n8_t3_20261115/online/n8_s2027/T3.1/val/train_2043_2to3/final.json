@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#3",
+ "mask_path": "masks/mask_3.png",
+ "summary": "Final answer: 3 land-cover change regions with the same transition as the example (mask#0). Removed 2 components (IDs 3 and 5) that the verifier correctly identified as no-change (bare ground/dirt with no category change). Kept 3 valid changes (IDs 1, 2, 4) including the example region itself. Total area: 486 pixels across 3 components.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 3,
+ "change_area_px": 486,
+ "eval": {
+  "tp": 0,
+  "fp": 486,
+  "fn": 548,
+  "f1": 0.0,
+  "iou": 0.0
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 2,
+  "missed": 2,
+  "pred_objects": 3,
+  "false_alarms": 3
+ },
+ "initial_objects": null,
+ "precision": 0.0,
+ "recall": 0.0,
+ "planning_rounds": 17,
+ "api_attempts": 22,
+ "planner_api_attempts": 17,
+ "ask_api_attempts": 5,
+ "tool_calls": 15,
+ "tokens": {
+  "input": 197514,
+  "cached": 95616,
+  "output": 2407
+ },
+ "planner_tokens": {
+  "input": 193424,
+  "cached": 95616,
+  "output": 2131
+ },
+ "ask_tokens": {
+  "input": 4090,
+  "cached": 0,
+  "output": 276
+ },
+ "cost_cny": 0.041428400000000004,
+ "planner_cost_cny": 0.040389600000000005,
+ "ask_cost_cny": 0.0010388,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 46.116503830999136,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 7,
+ "ask_calls": 0,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 0,
+  "fp": 486,
+  "fn": 548,
+  "f1": 0.0,
+  "iou": 0.0,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

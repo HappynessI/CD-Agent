@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#3",
+ "mask_path": "masks/mask_3.png",
+ "summary": "Final answer: 3 components (1, 3, 4) representing building/impervious surface changing to construction/storage area with materials, matching the example transition. Removed component 2 which showed a different transition (dark patch to vegetation) that doesn't match the example's building-to-construction pattern. All 3 remaining components verified as land cover changes by independent verifier.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 3,
+ "change_area_px": 4419,
+ "eval": {
+  "tp": 0,
+  "fp": 4419,
+  "fn": 1112,
+  "f1": 0.0,
+  "iou": 0.0
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 1,
+  "missed": 1,
+  "pred_objects": 3,
+  "false_alarms": 3
+ },
+ "initial_objects": null,
+ "precision": 0.0,
+ "recall": 0.0,
+ "planning_rounds": 19,
+ "api_attempts": 23,
+ "planner_api_attempts": 19,
+ "ask_api_attempts": 4,
+ "tool_calls": 19,
+ "tokens": {
+  "input": 220772,
+  "cached": 93312,
+  "output": 3790
+ },
+ "planner_tokens": {
+  "input": 217500,
+  "cached": 93312,
+  "output": 3548
+ },
+ "ask_tokens": {
+  "input": 3272,
+  "cached": 0,
+  "output": 242
+ },
+ "cost_cny": 0.047186399999999996,
+ "planner_cost_cny": 0.046338399999999995,
+ "ask_cost_cny": 0.000848,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 62.36490097269416,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 7,
+ "ask_calls": 1,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 0,
+  "fp": 4419,
+  "fn": 1112,
+  "f1": 0.0,
+  "iou": 0.0,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

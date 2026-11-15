@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#2",
+ "mask_path": "masks/mask_2.png",
+ "summary": "Final submission of mask#2 containing 6 components (3720 pixels total) representing land-cover changes matching the example transition. All 6 components were verified as \"yes\" by the independent verifier, showing transitions from built structures or bare ground in T1 to vegetation/trees in T2. This includes the example region plus 5 additional similar change locations identified via exemplar-based retrieval using DINOv2 feature similarity.",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 6,
+ "change_area_px": 3720,
+ "eval": {
+  "tp": 11,
+  "fp": 3709,
+  "fn": 1089,
+  "f1": 0.004564315352697096,
+  "iou": 0.0022873778332293615
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 4,
+  "missed": 4,
+  "pred_objects": 6,
+  "false_alarms": 6
+ },
+ "initial_objects": null,
+ "precision": 0.002956989247232339,
+ "recall": 0.009999999999090908,
+ "planning_rounds": 14,
+ "api_attempts": 20,
+ "planner_api_attempts": 14,
+ "ask_api_attempts": 6,
+ "tool_calls": 14,
+ "tokens": {
+  "input": 170120,
+  "cached": 64512,
+  "output": 2328
+ },
+ "planner_tokens": {
+  "input": 165212,
+  "cached": 64512,
+  "output": 1995
+ },
+ "ask_tokens": {
+  "input": 4908,
+  "cached": 0,
+  "output": 333
+ },
+ "cost_cny": 0.035886400000000006,
+ "planner_cost_cny": 0.03463840000000001,
+ "ask_cost_cny": 0.0012480000000000002,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 45.91944885067642,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 6,
+ "ask_calls": 1,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 11,
+  "fp": 3709,
+  "fn": 1089,
+  "f1": 0.004564315352697096,
+  "iou": 0.0022873778332293615,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

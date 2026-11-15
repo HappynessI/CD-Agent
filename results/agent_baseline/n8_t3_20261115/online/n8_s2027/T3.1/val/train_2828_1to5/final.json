@@ -1,0 +1,88 @@
+{
+ "task_id": "T3.1",
+ "final_handle": "mask#4",
+ "mask_path": "masks/mask_4.png",
+ "summary": "系统兜底：no_submit；使用当前掩码。",
+ "summary_source": "system",
+ "submitted_by": "no_submit",
+ "termination_reason": "no_submit",
+ "fallback_kind": "current",
+ "change_component_count": 5,
+ "change_area_px": 3814,
+ "eval": {
+  "tp": 1720,
+  "fp": 2094,
+  "fn": 42793,
+  "f1": 0.07118174105572454,
+  "iou": 0.036904327676100156
+ },
+ "initial_eval": null,
+ "objects": {
+  "gt_objects": 12,
+  "missed": 9,
+  "pred_objects": 5,
+  "false_alarms": 2
+ },
+ "initial_objects": null,
+ "precision": 0.45097011010878424,
+ "recall": 0.03864039718725172,
+ "planning_rounds": 26,
+ "api_attempts": 31,
+ "planner_api_attempts": 26,
+ "ask_api_attempts": 5,
+ "tool_calls": 22,
+ "tokens": {
+  "input": 389804,
+  "cached": 186624,
+  "output": 13607
+ },
+ "planner_tokens": {
+  "input": 385714,
+  "cached": 186624,
+  "output": 13335
+ },
+ "ask_tokens": {
+  "input": 4090,
+  "cached": 0,
+  "output": 272
+ },
+ "cost_cny": 0.0888464,
+ "planner_cost_cny": 0.08781080000000001,
+ "ask_cost_cny": 0.0010356000000000002,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 208.84475527144969,
+ "identical_to_init": null,
+ "added_px": null,
+ "removed_px": null,
+ "view_calls": 11,
+ "ask_calls": 1,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 1720,
+  "fp": 2094,
+  "fn": 42793,
+  "f1": 0.07118174105572454,
+  "iou": 0.036904327676100156,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}
