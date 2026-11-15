@@ -1,0 +1,128 @@
+{
+  "name": "cd-night-missed-report-20261115",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115/jobs/01-report.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115/jobs/03-aggregate-report.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115/jobs/03-aggregate-report.sbatch",
+  "job_id": "186750",
+  "hook_id": "186751",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-15 00:58:19",
+  "started_epoch": 1794675499.4954548,
+  "history": [
+    {
+      "job": "01-report.sbatch",
+      "job_id": "186530",
+      "hook_id": "186531",
+      "state": "CANCELLED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_report",
+        "cost_cny": 0,
+        "report_exists": true,
+        "views_status": "available",
+        "rankings": [
+          "rank_V0"
+        ]
+      },
+      "metric_error": null,
+      "at": "2026-11-15 06:05:40"
+    },
+    {
+      "job": "03-aggregate-report.sbatch",
+      "job_id": "186750",
+      "hook_id": "186751",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_report",
+        "cost_cny": 0,
+        "report_exists": true,
+        "views_status": "available",
+        "rankings": [
+          "rank_V0"
+        ]
+      },
+      "metric_error": null,
+      "at": "2026-11-15 06:12:41"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 06:07:27",
+  "last_advance_at": "2026-11-15 06:07:27",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 06:12:41",
+    "job_id": "186750",
+    "hook_id": "186751",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115/jobs/03-aggregate-report.sbatch",
+    "latest": {
+      "job": "03-aggregate-report.sbatch",
+      "job_id": "186750",
+      "hook_id": "186751",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_report",
+        "cost_cny": 0,
+        "report_exists": true,
+        "views_status": "available",
+        "rankings": [
+          "rank_V0"
+        ]
+      },
+      "metric_error": null,
+      "at": "2026-11-15 06:12:41"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-15 05:46:12",
+    "delivery_turn_id": "01a1ddbd-e18a-7ed3-a283-5bafd52f2f41",
+    "delivery_via": "cron_local"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115/jobs/03-aggregate-report.sbatch",
+      "reason": "Replace own cancelled redundant pixel rescore with exact recorded-score aggregation; compare all original metrics and intervals, add gated-balanced CI, include twelve same-time controls; no new inference",
+      "at": "2026-11-15 06:07:26"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "JSON-only report and 72-cell regression completed; cancelled redundant pending rescore recorded; final fixed evidence and same-time results archived for user review.",
+      "at": "2026-11-15 10:07:34"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "stop_reason": "JSON-only report and 72-cell regression completed; cancelled redundant pending rescore recorded; final fixed evidence and same-time results archived for user review.",
+  "finished_at": "2026-11-15 10:07:34",
+  "elapsed_seconds": 61755.3
+}
