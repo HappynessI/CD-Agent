@@ -93,8 +93,11 @@ def prepare(a):
         probs=[];features=[]
         for t in ('t1','t2'):
             with np.load(item['semantic'][t],allow_pickle=False) as z:
-                assert z['data'].shape==(7,*base.shape)
-                probs.append(z['data'][5].astype(np.float32))
+                probability=z['data']
+                assert probability.shape==(7,*base.shape), 'Require background plus six aligned channels'
+                assert np.isfinite(probability).all() and probability.min()>=0 and probability.max()<=1, 'Require probability values, not logits'
+                assert np.allclose(probability.sum(axis=0,dtype=np.float32),1.,atol=.002), 'Require channel-normalized probabilities'
+                probs.append(probability[5].astype(np.float32))
             with np.load(item['features'][t],allow_pickle=False) as z:features.append(Features(z['data'],base.shape,t))
         candidates,stages,audit=reconstruct(sources,base,item['direction'],probs,features)
         masks=[r.pop('mask') for r in candidates];npz=path.with_suffix('.npz')
