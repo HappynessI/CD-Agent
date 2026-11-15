@@ -52,7 +52,7 @@ def diagnostics(a,rows):
         submitted=union([masks[i] for i in row['submitted_indexes']],base.shape)
         panels=''.join(figure(jpeg(image,limit=512,quality=75),caption) for image,caption in
             ((t1,'T1 原图'),(t2,'T2 原图'),(overlay(base),'初始答案：绿TP / 红FP / 蓝FN'),(overlay(pred),'N8答案：绿TP / 红FP / 蓝FN'),
-             (overlay(base|sem),'FM1全部门控后候选并入（诊断上界池，不是输出）'),(overlay(base|submitted),'Top-K送审候选并入（核验前诊断）')))
+             (overlay(base|sem),'FM1候选并集诊断，非最终答案'),(overlay(base|submitted),'Top-K送审候选并入（核验前诊断）')))
         title=row['group']+' / '+row['stem'];filename=row['group']+'__'+row['stem']+'.html'
         detail=f"{row['selection_reason']}；F1 {row['baseline']['f1']:.4f} → {row['metrics']['f1']:.4f}；Δ {row['delta_f1']:+.4f}；新增TP/FP {row['added_tp']}/{row['added_fp']}；残差面积/块数 {row['residual_area']}/{row['residual_components']}；核验触发 {row['trigger']}；送审/接受 {len(row['submitted_indexes'])}/{len(row['accepted_indexes'])}。"
         cards=[]
