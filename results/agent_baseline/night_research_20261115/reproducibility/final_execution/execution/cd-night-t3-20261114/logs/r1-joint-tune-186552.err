@@ -1,0 +1,31 @@
+EE
+======================================================================
+ERROR: test_night_t3_endpoint (unittest.loader._FailedTest.test_night_t3_endpoint)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_night_t3_endpoint
+Traceback (most recent call last):
+  File "/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'agent_baseline.tests.test_night_t3_endpoint'
+
+
+======================================================================
+ERROR: test_night_t3_r1_joint (unittest.loader._FailedTest.test_night_t3_r1_joint)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_night_t3_r1_joint
+Traceback (most recent call last):
+  File "/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/r1-joint-v1/code/agent_baseline/tests/test_night_t3_r1_joint.py", line 3, in <module>
+    from agent_baseline.analysis.night_t3_r1_joint import joint_order
+  File "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/night-20261114/r1-joint-v1/code/agent_baseline/analysis/night_t3_r1_joint.py", line 12, in <module>
+    from .night_t3_endpoint import representations
+ModuleNotFoundError: No module named 'agent_baseline.analysis.night_t3_endpoint'
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (errors=2)

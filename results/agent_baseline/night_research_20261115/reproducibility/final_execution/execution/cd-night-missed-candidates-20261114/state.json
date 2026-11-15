@@ -1,0 +1,121 @@
+{
+  "name": "cd-night-missed-candidates-20261114",
+  "status": "done",
+  "queue": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/03-whu-resume.sbatch"
+  ],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/01-candidates.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/02-resume-candidates.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/02-resume-candidates.sbatch",
+  "job_id": "186610",
+  "hook_id": "186611",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": true,
+  "finalize_requested": false,
+  "started_at": "2026-11-14 23:06:24",
+  "started_epoch": 1794668784.3941,
+  "history": [
+    {
+      "job": "01-candidates.sbatch",
+      "job_id": "186417",
+      "hook_id": "186418",
+      "state": "TIMEOUT",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "stage": "candidate_gates",
+        "result_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot"
+      },
+      "metric_error": null,
+      "at": "2026-11-15 02:06:46"
+    },
+    {
+      "job": "02-resume-candidates.sbatch",
+      "job_id": "186610",
+      "hook_id": "186611",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "stage": "candidate_gates",
+        "result_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot",
+        "score_summary.json": "complete"
+      },
+      "metric_error": null,
+      "at": "2026-11-15 03:23:36"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 02:07:17",
+  "last_advance_at": "2026-11-15 02:07:17",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 03:23:36",
+    "job_id": "186610",
+    "hook_id": "186611",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/02-resume-candidates.sbatch",
+    "latest": {
+      "job": "02-resume-candidates.sbatch",
+      "job_id": "186610",
+      "hook_id": "186611",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "stage": "candidate_gates",
+        "result_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot",
+        "score_summary.json": "complete"
+      },
+      "metric_error": null,
+      "at": "2026-11-15 03:23:36"
+    },
+    "queued_jobs": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/03-whu-resume.sbatch"
+    ],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-candidates-20261114/jobs/02-resume-candidates.sbatch",
+      "reason": "186417 TIMEOUT at3h,29/30 prepared intact,no finalgate score or WHU. Resume original frozen extraction skipping completed29;4h for remaining item+evaluate. Separate WHU into next job so ranking depends only gate completion; no API, no historical changes.",
+      "at": "2026-11-15 02:07:14"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "S5 30/30 complete and WHU180 official audit independently completed in summary job186665; queued WHU superseded, do not rerun",
+      "at": "2026-11-15 04:07:28"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": true,
+  "git_pushed": true,
+  "notified": true,
+  "stop_reason": "S5 30/30 complete and WHU180 official audit independently completed in summary job186665; queued WHU superseded, do not rerun",
+  "finished_at": "2026-11-15 04:07:28",
+  "elapsed_seconds": 18064.5,
+  "finalized_at": "2026-11-14 20:09:05"
+}

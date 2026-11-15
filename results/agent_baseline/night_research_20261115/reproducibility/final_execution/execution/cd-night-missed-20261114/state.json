@@ -1,0 +1,131 @@
+{
+  "name": "cd-night-missed-20261114",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-20261114/jobs/01-views-smoke.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-20261114/jobs/02-views-full.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-20261114/jobs/02-views-full.sbatch",
+  "job_id": "186425",
+  "hook_id": "186426",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.502373,
+  "finalized": true,
+  "finalize_requested": false,
+  "started_at": "2026-11-14 22:58:36",
+  "started_epoch": 1794668316.304446,
+  "history": [
+    {
+      "job": "01-views-smoke.sbatch",
+      "job_id": "186398",
+      "hook_id": "186399",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.046117,
+      "metric": {
+        "stage": "complete_V4_tune_smoke",
+        "cost_cny": 0.0461168,
+        "cumulative": true,
+        "requests": 192,
+        "result_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114"
+      },
+      "metric_error": null,
+      "at": "2026-11-14 23:09:50"
+    },
+    {
+      "job": "02-views-full.sbatch",
+      "job_id": "186425",
+      "hook_id": "186426",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.456256,
+      "metric": {
+        "stage": "views",
+        "cost_cny": 0.5023728000000001,
+        "cumulative": true,
+        "requests": 2104,
+        "failed_attempts": 0,
+        "missing_cost_records": 0,
+        "completed_scores": [
+          "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/score_summary.json"
+        ]
+      },
+      "metric_error": null,
+      "at": "2026-11-15 00:58:00"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-14 23:14:03",
+  "last_advance_at": "2026-11-14 23:14:03",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 00:58:00",
+    "job_id": "186425",
+    "hook_id": "186426",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-20261114/jobs/02-views-full.sbatch",
+    "latest": {
+      "job": "02-views-full.sbatch",
+      "job_id": "186425",
+      "hook_id": "186426",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.456256,
+      "metric": {
+        "stage": "views",
+        "cost_cny": 0.5023728000000001,
+        "cumulative": true,
+        "requests": 2104,
+        "failed_attempts": 0,
+        "missing_cost_records": 0,
+        "completed_scores": [
+          "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/score_summary.json"
+        ]
+      },
+      "metric_error": null,
+      "at": "2026-11-15 00:58:00"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.502373,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-20261114/jobs/02-views-full.sbatch",
+      "reason": "Smoke186398 completed192 requests cost.0461168. V1 reduces LEVIR harm but V2 hurts SECOND; no winner from single images. Complete all tuning arms, freeze equal-group mean V0-relative F1 choice at K10, then complete all confirmation arms without changing selection. OriginalV0 and smoke inputs reused; independent of T3.",
+      "at": "2026-11-14 23:14:02"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "All2104newrequests and full30group-image scores completed;V0 reused;6fixedcontacts reviewed. Frozen policies show heterogeneous/concentrated SECOND gain and LEVIRnetloss; no confirmbasedselection. This completed viewsstage archives now while independentcandidate/ranking research continues.",
+      "at": "2026-11-15 01:03:50"
+    }
+  ],
+  "finalize_attempts": 2,
+  "git_committed": true,
+  "git_pushed": true,
+  "notified": true,
+  "stop_reason": "All2104newrequests and full30group-image scores completed;V0 reused;6fixedcontacts reviewed. Frozen policies show heterogeneous/concentrated SECOND gain and LEVIRnetloss; no confirmbasedselection. This completed viewsstage archives now while independentcandidate/ranking research continues.",
+  "finished_at": "2026-11-15 01:03:50",
+  "elapsed_seconds": 7513.9,
+  "finalize_retry_at": 1794676230.309919,
+  "finalize_blocked": false,
+  "finalized_at": "2026-11-14 17:19:47"
+}

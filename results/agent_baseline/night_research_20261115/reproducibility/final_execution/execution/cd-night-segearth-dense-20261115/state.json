@@ -1,0 +1,130 @@
+{
+  "name": "cd-night-segearth-dense-20261115",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-segearth-dense-20261115/jobs/01-dense.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-segearth-dense-20261115/jobs/02-confirm.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-segearth-dense-20261115/jobs/02-confirm.sbatch",
+  "job_id": "186709",
+  "hook_id": "186710",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": true,
+  "finalize_requested": false,
+  "started_at": "2026-11-15 03:46:20",
+  "started_epoch": 1794685580.416,
+  "history": [
+    {
+      "job": "01-dense.sbatch",
+      "job_id": "186704",
+      "hook_id": "186705",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "cached_SegEarth_B2_B3",
+        "cost_cny": 0,
+        "status": "complete",
+        "tasks": 30,
+        "reproduction": {
+          "routeA": 30,
+          "B0": 30
+        }
+      },
+      "metric_error": null,
+      "at": "2026-11-15 03:56:48"
+    },
+    {
+      "job": "02-confirm.sbatch",
+      "job_id": "186709",
+      "hook_id": "186710",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "cached_SegEarth_B2_confirmation",
+        "cost_cny": 0,
+        "status": "complete",
+        "tasks": 30,
+        "reproduction": {
+          "routeA": 30,
+          "B0": 30
+        }
+      },
+      "metric_error": null,
+      "at": "2026-11-15 04:13:20"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 04:06:13",
+  "last_advance_at": "2026-11-15 04:06:13",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 04:13:20",
+    "job_id": "186709",
+    "hook_id": "186710",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-segearth-dense-20261115/jobs/02-confirm.sbatch",
+    "latest": {
+      "job": "02-confirm.sbatch",
+      "job_id": "186709",
+      "hook_id": "186710",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "cached_SegEarth_B2_confirmation",
+        "cost_cny": 0,
+        "status": "complete",
+        "tasks": 30,
+        "reproduction": {
+          "routeA": 30,
+          "B0": 30
+        }
+      },
+      "metric_error": null,
+      "at": "2026-11-15 04:13:20"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "<urlopen error [Errno 111] Connection refused>"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-segearth-dense-20261115/jobs/02-confirm.sbatch",
+      "reason": "Fixed B2 dense mechanism confirmation; cached probabilities; no new model calls",
+      "at": "2026-11-15 04:06:11"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "Tune and fixed B2 confirmation complete30 each; historical routeA/B0 reproduce60 each; no online promotion",
+      "at": "2026-11-15 04:13:55"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": true,
+  "git_pushed": true,
+  "notified": true,
+  "stop_reason": "Tune and fixed B2 confirmation complete30 each; historical routeA/B0 reproduce60 each; no online promotion",
+  "finished_at": "2026-11-15 04:13:55",
+  "elapsed_seconds": 1655.2,
+  "finalized_at": "2026-11-14 20:14:55"
+}
