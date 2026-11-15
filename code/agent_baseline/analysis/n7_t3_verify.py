@@ -101,6 +101,14 @@ def main():
         model=MODEL,policy='Accept explicit yes only. Same fixed threshold and candidate pool/order as unverified comparator. Calls shared by identical candidates across rank arms.',
         limitation='Historical deterministic-setting responses and fresh requests have different time-of-request; reuse eliminates new cost but not historical model-version uncertainty.')
     write_json(out/'summary.json',result)
+    if a.split=='confirm' and exists(a.out/'verification/tune/summary.json'):
+        tune=json.loads(read_text(a.out/'verification/tune/summary.json'))
+        combined=tune['records']+records
+        write_json(a.out/'verification/all_summary.json',dict(tasks=len(combined),records=combined,
+            summary=summarize(combined),frozen=frozen,model=MODEL,
+            new_calls=tune['new_calls']+result['new_calls'],
+            reused_calls=tune['reused_calls']+result['reused_calls'],
+            cost_cny=tune['cost_cny']+result['cost_cny'],policy=result['policy'],limitation=result['limitation']))
     lines=['# N7 frozen-threshold local verification','',result['policy'],result['limitation'],
         f"New calls {result['new_calls']}; exact reuse {result['reused_calls']}; new usage cost CNY {result['cost_cny']}.",'',
         '| Split | Support | Group | N | Method | F1 | P | R | TP | FP | FN | Empty | Positive fully rejected | TP loss vs Top8 |',
