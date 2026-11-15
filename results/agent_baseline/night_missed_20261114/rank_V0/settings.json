@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "variant": "V0",
+  "s5_selection": {
+    "levir_any": {
+      "gate": "dino_010",
+      "rule": "tune TP retention >=80%, then smallest FP; ties predeclared order",
+      "tune": {
+        "images": 5,
+        "expected": 5,
+        "complete": true,
+        "tp": 9215,
+        "fp": 788629,
+        "matching_cache_mismatch_images": 0,
+        "tp_retention": 0.9217765329598879,
+        "fp_retention": 0.689126084638978,
+        "add_all": {
+          "tp": 408821,
+          "fp": 859896,
+          "fn": 17571,
+          "f1": 48.235364215516526,
+          "precision": 32.22318294781263,
+          "recall": 95.87914407399764
+        },
+        "unverified_addall_delta_vs_s5": 8.306272927130387,
+        "paired_image_bootstrap95": [
+          2.5588869875624596,
+          12.796424652441345
+        ]
+      },
+      "confirmation": {
+        "images": 5,
+        "expected": 5,
+        "complete": true,
+        "tp": 6926,
+        "fp": 919494,
+        "matching_cache_mismatch_images": 0,
+        "tp_retention": 1.0,
+        "fp_retention": 0.9644873341375151,
+        "add_all": {
+          "tp": 427089,
+          "fp": 1025385,
+          "fn": 20669,
+          "f1": 44.951248058131846,
+          "precision": 29.404244069084886,
+          "recall": 95.38389040508488
+        },
+        "unverified_addall_delta_vs_s5": 0.7868667063009056,
+        "paired_image_bootstrap95": [
+          0.0,
+          2.1233701826471005
+        ]
+      }
+    },
+    "second_appeared": {
+      "gate": "dino_020",
+      "rule": "tune TP retention >=80%, then smallest FP; ties predeclared order",
+      "tune": {
+        "images": 5,
+        "expected": 5,
+        "complete": true,
+        "tp": 2878,
+        "fp": 514,
+        "matching_cache_mismatch_images": 0,
+        "tp_retention": 0.9979195561719834,
+        "fp_retention": 0.07939450108124807,
+        "add_all": {
+          "tp": 106302,
+          "fp": 7354,
+          "fn": 33205,
+          "f1": 83.9790964714433,
+          "precision": 93.52959808545083,
+          "recall": 76.19832696567197
+        },
+        "unverified_addall_delta_vs_s5": 1.928843508633264,
+        "paired_image_bootstrap95": [
+          -0.00837836788524271,
+          6.742439129986408
+        ]
+      },
+      "confirmation": {
+        "images": 5,
+        "expected": 5,
+        "complete": true,
+        "tp": 4432,
+        "fp": 5375,
+        "matching_cache_mismatch_images": 0,
+        "tp_retention": 0.6553304746414313,
+        "fp_retention": 0.2505360305770486,
+        "add_all": {
+          "tp": 35155,
+          "fp": 16803,
+          "fn": 55675,
+          "f1": 49.24083256296047,
+          "precision": 67.66041802994727,
+          "recall": 38.70417263018826
+        },
+        "unverified_addall_delta_vs_s5": 2.731570661448046,
+        "paired_image_bootstrap95": [
+          -3.4226921786417677,
+          12.769929381756704
+        ]
+      }
+    },
+    "second_disappeared": {
+      "gate": "dino_020",
+      "rule": "tune TP retention >=80%, then smallest FP; ties predeclared order",
+      "tune": {
+        "images": 5,
+        "expected": 5,
+        "complete": true,
+        "tp": 821,
+        "fp": 2045,
+        "matching_cache_mismatch_images": 0,
+        "tp_retention": 1.0,
+        "fp_retention": 0.06545675692977403,
+        "add_all": {
+          "tp": 1299,
+          "fp": 8518,
+          "fn": 1035,
+          "f1": 21.38095629989301,
+          "precision": 13.232148314148926,
+          "recall": 55.65552699228792
+        },
+        "unverified_addall_delta_vs_s5": 15.097701970783985,
+        "paired_image_bootstrap95": [
+          0.0,
+          22.050055948050847
+        ]
+      },
+      "confirmation": {
+        "images": 5,
+        "expected": 5,
+        "complete": true,
+        "tp": 6679,
+        "fp": 949,
+        "matching_cache_mismatch_images": 0,
+        "tp_retention": 0.9997006436162251,
+        "fp_retention": 0.04442052050177869,
+        "add_all": {
+          "tp": 13642,
+          "fp": 6575,
+          "fn": 25903,
+          "f1": 45.654429235969346,
+          "precision": 67.47786516298164,
+          "recall": 34.497408016184096
+        },
+        "unverified_addall_delta_vs_s5": 11.620579973693687,
+        "paired_image_bootstrap95": [
+          0.0,
+          17.583638668702317
+        ]
+      }
+    }
+  },
+  "rankings": [
+    "balanced",
+    "area",
+    "evidence"
+  ],
+  "k": [
+    3,
+    5,
+    10,
+    20
+  ],
+  "sources": [
+    "S1_02",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+  ],
+  "evidence_score": "DINO(1-cos) * RGBmeanRMS * (1-base_dilation3_fraction) * (1+other_source_support/4)",
+  "gt_role": "selection inherited tune only; no labels read in candidate preparation",
+  "gate_source": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114/candidate_gates_pilot",
+  "views": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/night_missed_20261114"
+}

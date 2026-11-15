@@ -1,0 +1,9 @@
+{
+  "old_job_id": "186530",
+  "action": "Cancel pending redundant pixel rescore; replace with records-only aggregation after original scores complete",
+  "reason": "Original rank score writes all per-image TP/FP/FN. Extra gated-balanced CI only requires those saved JSON counts; no need to reload masks and repeat pixel scoring.",
+  "original_rank_job": "186463",
+  "original_rank_unchanged": true,
+  "replacement_status": "prepared JSON-only aggregation and regression, frozen final-report-v6",
+  "replacement_script": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-missed-report-20261115/jobs/03-aggregate-report.sbatch"
+}

@@ -1,0 +1,117 @@
+{
+  "name": "cd-night-task-policy-20261115",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-task-policy-20261115/jobs/01-freeze.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-task-policy-20261115/jobs/02-confirm.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-task-policy-20261115/jobs/02-confirm.sbatch",
+  "job_id": "186475",
+  "hook_id": "186476",
+  "rounds": 2,
+  "rounds_submitted": 2,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-15 00:06:35",
+  "started_epoch": 1794672395.8399394,
+  "history": [
+    {
+      "job": "01-freeze.sbatch",
+      "job_id": "186470",
+      "hook_id": "186471",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "task_policy",
+        "cost_cny": 0,
+        "frozen": true,
+        "scored": false
+      },
+      "metric_error": null,
+      "at": "2026-11-15 00:06:47"
+    },
+    {
+      "job": "02-confirm.sbatch",
+      "job_id": "186475",
+      "hook_id": "186476",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "task_policy",
+        "cost_cny": 0,
+        "frozen": true,
+        "scored": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 00:57:43"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 00:07:32",
+  "last_advance_at": "2026-11-15 00:07:32",
+  "hook_attempts": 3,
+  "review_count": 2,
+  "review": {
+    "id": "event-0002",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 00:57:43",
+    "job_id": "186475",
+    "hook_id": "186476",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-task-policy-20261115/jobs/02-confirm.sbatch",
+    "latest": {
+      "job": "02-confirm.sbatch",
+      "job_id": "186475",
+      "hook_id": "186476",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "task_policy",
+        "cost_cny": 0,
+        "frozen": true,
+        "scored": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 00:57:43"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "pending",
+    "delivery_error": "thread/resume: {'code': -32600, 'message': 'thread 01a1d014-9f29-76a1-8fce-cdbd93601af4 already has an active writer'}"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-night-task-policy-20261115/jobs/02-confirm.sbatch",
+      "reason": "186470 passed2 tests and froze task-conditioned variants from tuning K10 only, before reviewing confirmation. Evaluate same frozen choices at all K after186425 completes, no API and no changes to globalV0 ranking.",
+      "at": "2026-11-15 00:07:31"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "finish",
+      "reason": "Frozen taskpolicy confirmation complete, noAPI. Appeared+14.2182/disappeared+15.0106 with wideCI and concentrated gain;LEVIR−3.6243 vsinitial. Diagnostic only, no automaticpromotion.",
+      "at": "2026-11-15 01:03:50"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "stop_reason": "Frozen taskpolicy confirmation complete, noAPI. Appeared+14.2182/disappeared+15.0106 with wideCI and concentrated gain;LEVIR−3.6243 vsinitial. Diagnostic only, no automaticpromotion.",
+  "finished_at": "2026-11-15 01:03:50",
+  "elapsed_seconds": 3434.6
+}
