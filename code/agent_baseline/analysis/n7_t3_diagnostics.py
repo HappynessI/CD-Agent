@@ -52,7 +52,18 @@ def main():
                     before=pooled([r['methods'][rank+'_top8']])['f1_c'];after=pooled([r['methods'][name]])['f1_c']
                     wins+=after>before;losses+=after<before;ties+=after==before
                 passed=bool(retention is not None and retention>=.95 and m['f1_c']>=b['f1_c'] and empty_after['fp']<empty_before['fp'])
+                threshold=pooled([r['methods'][rank+'_threshold'] for r in positive])
+                threshold_empty=pooled([r['methods'][rank+'_threshold'] for r in empty])
+                verifier_effect=None
+                if suffix=='threshold_verified':
+                    verifier_effect=dict(positive_before=threshold,positive_after=m,
+                        tp_retention=m['tp']/threshold['tp'] if threshold['tp'] else None,
+                        tp_lost=threshold['tp']-m['tp'],positive_fp_removed=threshold['fp']-m['fp'],
+                        empty_fp_before=threshold_empty['fp'],empty_fp_after=empty_after['fp'],
+                        positive_tp_losses={r['id']:r['methods'][rank+'_threshold']['counts'][0]-r['methods'][name]['counts'][0]
+                            for r in positive if r['methods'][rank+'_threshold']['counts'][0]>r['methods'][name]['counts'][0]})
                 paired.append(dict(split=split,method=name,positive_baseline=b,positive_method=m,tp_retention=retention,
+                    verifier_effect_relative_to_threshold=verifier_effect,
                     empty_fp_before=empty_before['fp'],empty_fp_after=empty_after['fp'],
                     image_f1_wins=wins,image_f1_losses=losses,image_f1_ties=ties,
                     positive_entirely_rejected=[r['id'] for r in positive if sum(r['methods'][name]['counts'][:2])==0],
@@ -67,6 +78,13 @@ def main():
         '|---|---|---:|---:|---:|---:|---:|---|---|']
     for r in paired:
         lines.append('| '+' | '.join(map(str,[r['split'],r['method'],r['tp_retention'],r['positive_baseline']['f1_c'],r['positive_method']['f1_c'],r['empty_fp_before'],r['empty_fp_after'],f"{r['image_f1_wins']}/{r['image_f1_losses']}/{r['image_f1_ties']}",r['promotion']]))+' |')
+    lines+=['','## Verification effect relative to the same frozen threshold','',
+        '| Split | Method | Positive TP retention | Positive TP lost | Positive F1 before | Positive F1 after | Empty FP before | Empty FP after |',
+        '|---|---|---:|---:|---:|---:|---:|---:|']
+    for r in paired:
+        v=r['verifier_effect_relative_to_threshold']
+        if v is not None:
+            lines.append('| '+' | '.join(map(str,[r['split'],r['method'],v['tp_retention'],v['tp_lost'],v['positive_before']['f1_c'],v['positive_after']['f1_c'],v['empty_fp_before'],v['empty_fp_after']]))+' |')
     lines+=['','## Per-task losses and bottlenecks','', '| Split | Task | Rank | Pool covered | Top8 TP/FP/FN | Threshold TP/FP/FN | Verified TP/FP/FN | Count-based causes |','|---|---|---|---:|---|---|---|---|']
     for r in details:lines.append('| '+' | '.join(map(str,[r['split'],r['id'],r['rank'],r['pool_covered_pixels'],r['top8'],r['threshold'],r['verified'],', '.join(r['causes'])]))+' |')
     write_text(a.out/'diagnostics.md','\n'.join(lines)+'\n')
