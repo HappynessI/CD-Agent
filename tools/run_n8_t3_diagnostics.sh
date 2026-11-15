@@ -16,4 +16,5 @@ started=$SECONDS
 finish() { status=$?;trap - EXIT; QQ_SUB="N8 T3 diagnostics $SLURM_JOB_ID" QQ_BODY="status=$status; elapsed=$((SECONDS-started))s; output=$OUT/diagnostics10" "$ROOT/.local/bin/wangyihan-send-qq" >/dev/null 2>&1 || true; exit "$status"; }
 trap finish EXIT
 "$PY" -B -m unittest agent_baseline.tests.test_n8_t3_clean agent_baseline.tests.test_n8_t3_route agent_baseline.tests.test_n8_t3_system agent_baseline.tests.test_n8_t3_cost
+"$PY" -B -m agent_baseline.analysis.n8_t3_audit --out "$OUT"
 "$PY" -B -m agent_baseline.analysis.n8_t3_visualize --run "$ROOT/wyh/exp6_staging/agent_baseline_run" --night "$ROOT/wyh/CD-Agent/results/agent_baseline/night_t3_20261114" --out "$OUT"
