@@ -1,5 +1,9 @@
 # findings.md — Change Detection Agent 研究事实与证据账本
 
+## 2026-11-15 N8 执行证据（进行中）
+
+专项依据为 `doc/agent_baseline/N8_EXECUTION_SPEC.md`。FM资产核查187227完成：固定30任务、40张独立时相影像，全部原始S1–S5/base输入齐全，DINO缓存40/40，SegEarth概率20/40，缺20张正在单GPU补齐。缺缓存通过真实模型补算解决，不退回旧TopK候选表。T3复用完整R1几何池、DINO和七通道SegEarth原概率，读取E内预测属性，不读取GT-text oracle。当前尚无N8效果结论；N7所有指标保持不变。
+
 ## 2026-11-15 G3 统一回放证据
 
 入口 `results/agent_baseline/demo_g3/index.html`；覆盖清单 `coverage.json`。原 9 例增至 37 例，其中当前核心 36、旧 T1.3 历史 1。80 个任务×约束组合中 12 有回放、2 待审核、66 未运行。新增案例来自 21 个实际配置；同任务允许多个高/低分案例，不能将展示样本解释为总体性能。

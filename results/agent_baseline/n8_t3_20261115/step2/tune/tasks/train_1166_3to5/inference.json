@@ -1,0 +1,71 @@
+{
+  "observable": {
+    "channels": [
+      "background",
+      "low vegetation",
+      "non-vegetated ground",
+      "tree",
+      "water",
+      "building",
+      "playground"
+    ],
+    "predicted_pair": [
+      2,
+      2
+    ],
+    "example_mean_probabilities": [
+      [
+        0.13553771376609802,
+        0.2552047669887543,
+        0.2985069751739502,
+        0.12770691514015198,
+        0.0766652524471283,
+        0.04797835648059845,
+        0.05839807912707329
+      ],
+      [
+        0.15274900197982788,
+        0.160679891705513,
+        0.37061309814453125,
+        0.08207903802394867,
+        0.08565717935562134,
+        0.10785597562789917,
+        0.04036649689078331
+      ]
+    ],
+    "area": 1360,
+    "bbox_fill": 0.78205865439908,
+    "structural": false
+  },
+  "instance_config": {
+    "rank": "joint",
+    "k": 5,
+    "method": "clean_joint_top5",
+    "metrics": {
+      "f1_c": 7.221048588438641,
+      "precision": 4.304912198682384,
+      "recall": 22.383728140890486,
+      "tp": 9024,
+      "fp": 200597,
+      "fn": 31291
+    }
+  },
+  "instance_candidate_ids": [
+    40,
+    27,
+    34,
+    32,
+    36
+  ],
+  "route": "dense",
+  "methods": [
+    "branch_inst",
+    "branch_dense",
+    "route",
+    "hybrid_intersection_0.7",
+    "hybrid_union_0.7",
+    "hybrid_intersection_0.85",
+    "hybrid_union_0.85"
+  ],
+  "high_confidence_rule": "Both example-predicted endpoint probabilities at each pixel >= tau; intersect with rebuilt routeA mask."
+}

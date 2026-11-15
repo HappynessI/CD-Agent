@@ -1,0 +1,88 @@
+{
+  "instance": {
+    "rank": "joint",
+    "k": 5,
+    "method": "clean_joint_top5",
+    "metrics": {
+      "f1_c": 7.221048588438641,
+      "precision": 4.304912198682384,
+      "recall": 22.383728140890486,
+      "tp": 9024,
+      "fp": 200597,
+      "fn": 31291
+    }
+  },
+  "hybrid_method": "hybrid_union_0.7",
+  "system_method": "route",
+  "candidates": [
+    {
+      "method": "route",
+      "metrics": {
+        "f1_c": 7.761057214880452,
+        "precision": 5.389348610227032,
+        "recall": 13.860845839017735,
+        "tp": 5588,
+        "fp": 98098,
+        "fn": 34727
+      }
+    },
+    {
+      "method": "hybrid_intersection_0.7",
+      "metrics": {
+        "f1_c": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tp": 0,
+        "fp": 5347,
+        "fn": 40315
+      }
+    },
+    {
+      "method": "hybrid_union_0.7",
+      "metrics": {
+        "f1_c": 7.761057214880452,
+        "precision": 5.389348610227032,
+        "recall": 13.860845839017735,
+        "tp": 5588,
+        "fp": 98098,
+        "fn": 34727
+      }
+    },
+    {
+      "method": "hybrid_intersection_0.85",
+      "metrics": {
+        "f1_c": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tp": 0,
+        "fp": 5347,
+        "fn": 40315
+      }
+    },
+    {
+      "method": "hybrid_union_0.85",
+      "metrics": {
+        "f1_c": 7.761057214880452,
+        "precision": 5.389348610227032,
+        "recall": 13.860845839017735,
+        "tp": 5588,
+        "fp": 98098,
+        "fn": 34727
+      }
+    }
+  ],
+  "objective": "tune all-task pooled F1; ties preserve declared route-first/config order; no confirm selection",
+  "high_confidence_thresholds": [
+    0.7,
+    0.85
+  ],
+  "channels": [
+    "background",
+    "low vegetation",
+    "non-vegetated ground",
+    "tree",
+    "water",
+    "building",
+    "playground"
+  ]
+}

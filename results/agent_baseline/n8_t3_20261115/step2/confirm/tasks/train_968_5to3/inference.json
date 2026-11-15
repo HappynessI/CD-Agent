@@ -1,0 +1,68 @@
+{
+  "observable": {
+    "channels": [
+      "background",
+      "low vegetation",
+      "non-vegetated ground",
+      "tree",
+      "water",
+      "building",
+      "playground"
+    ],
+    "predicted_pair": [
+      2,
+      3
+    ],
+    "example_mean_probabilities": [
+      [
+        0.21088053286075592,
+        0.14433051645755768,
+        0.2236328125,
+        0.08851046860218048,
+        0.07063531130552292,
+        0.1983371376991272,
+        0.06366237998008728
+      ],
+      [
+        0.1102345809340477,
+        0.06919793039560318,
+        0.09454074501991272,
+        0.4105868935585022,
+        0.022479671984910965,
+        0.2590935528278351,
+        0.03388180211186409
+      ]
+    ],
+    "area": 45,
+    "bbox_fill": 0.3515625,
+    "structural": false
+  },
+  "instance_config": {
+    "rank": "joint",
+    "k": 5,
+    "method": "clean_joint_top5",
+    "metrics": {
+      "f1_c": 7.221048588438641,
+      "precision": 4.304912198682384,
+      "recall": 22.383728140890486,
+      "tp": 9024,
+      "fp": 200597,
+      "fn": 31291
+    }
+  },
+  "instance_candidate_ids": [
+    5,
+    4,
+    2,
+    6,
+    1
+  ],
+  "route": "dense",
+  "methods": [
+    "branch_inst",
+    "branch_dense",
+    "route",
+    "hybrid_union_0.7"
+  ],
+  "high_confidence_rule": "Both example-predicted endpoint probabilities at each pixel >= tau; intersect with rebuilt routeA mask."
+}

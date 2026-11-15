@@ -1,0 +1,22 @@
+{
+  "overlap_threshold": 0.15,
+  "iou_threshold": 0.15,
+  "min_net_area": 16,
+  "K": [
+    1,
+    3,
+    5,
+    8
+  ],
+  "feature_policy": "Recompute delta/joint on every retained net mask C minus E before sorting; original pool identities retained in mapping only.",
+  "whitelist": [
+    "T1 RGB",
+    "T2 RGB",
+    "E",
+    "cached DINOv2",
+    "cached seven-channel SegEarth probabilities"
+  ],
+  "semantic_source": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch98_t3_routes/results/route_a/semantic",
+  "forbidden": "No GT/class-pair/task-ID inference; GT only scoring. No text oracle cache read.",
+  "api_calls": 0
+}
