@@ -1,0 +1,32 @@
+{
+  "thresholds": {
+    "delta": 0.6,
+    "joint": 0.8
+  },
+  "tune_selection": {
+    "delta": {
+      "threshold": 0.6,
+      "f1_c": 8.740076914934905,
+      "precision": 6.107495069033531,
+      "recall": 15.361527967257844,
+      "tp": 6193,
+      "fp": 95207,
+      "fn": 34122,
+      "tp_retention": 0.6302666395277834,
+      "eligible": false
+    },
+    "joint": {
+      "threshold": 0.8,
+      "f1_c": 12.428584338256705,
+      "precision": 10.440635648976011,
+      "recall": 15.351606101947166,
+      "tp": 6189,
+      "fp": 53089,
+      "fn": 34126,
+      "tp_retention": 0.627751293234608,
+      "eligible": false
+    }
+  },
+  "rule": "maximum tune pooled all-task F1 from the already computed six thresholds; tie lower threshold; no TP constraint",
+  "scope": "Post-primary exploratory tradeoff, prior confirm Top8 outcomes already exposed. Original >=95% TP primary rule unchanged. No online promotion."
+}

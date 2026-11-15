@@ -1,0 +1,172 @@
+{
+  "name": "cd-n7-t3-rejection-20261115",
+  "status": "running",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/01-offline.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/02-confirm-and-reuse.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/03-verify-tune.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/04-tradeoff-diagnostics.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/05-archive.sbatch",
+  "job_id": "187201",
+  "hook_id": "187202",
+  "rounds": 4,
+  "rounds_submitted": 5,
+  "primary_best": null,
+  "cost_cny": 0.009024,
+  "finalized": false,
+  "finalize_requested": false,
+  "started_at": "2026-11-15 11:54:21",
+  "started_epoch": 1794743661.1585844,
+  "history": [
+    {
+      "job": "01-offline.sbatch",
+      "job_id": "187168",
+      "hook_id": "187169",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "status": "tune",
+        "tasks": 30
+      },
+      "metric_error": null,
+      "at": "2026-11-15 11:56:24"
+    },
+    {
+      "job": "02-confirm-and-reuse.sbatch",
+      "job_id": "187177",
+      "hook_id": "187178",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "stage": "all",
+        "tasks": 60
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:02:25"
+    },
+    {
+      "job": "03-verify-tune.sbatch",
+      "job_id": "187186",
+      "hook_id": "187187",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.009024,
+      "metric": {
+        "cost_cny": 0.009024000000000003,
+        "artifact_exists": true,
+        "tasks": 30,
+        "new_calls": 36,
+        "reused_calls": 227
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:05:51"
+    },
+    {
+      "job": "04-tradeoff-diagnostics.sbatch",
+      "job_id": "187197",
+      "hook_id": "187198",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "tasks": 60,
+        "new_calls": 0,
+        "reused_calls": 0
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:11:33"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": false,
+  "submitted_at": "2026-11-15 12:13:38",
+  "last_advance_at": "2026-11-15 12:13:38",
+  "hook_attempts": 9,
+  "review_count": 4,
+  "review": {
+    "id": "event-0004",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 12:11:33",
+    "job_id": "187197",
+    "hook_id": "187198",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/04-tradeoff-diagnostics.sbatch",
+    "latest": {
+      "job": "04-tradeoff-diagnostics.sbatch",
+      "job_id": "187197",
+      "hook_id": "187198",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "tasks": 60,
+        "new_calls": 0,
+        "reused_calls": 0
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:11:33"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.009024,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-15 12:12:16",
+    "delivery_turn_id": "01a1df09-7b85-7712-8f9c-b1a5ccdda7e1",
+    "delivery_via": "cron_local"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/02-confirm-and-reuse.sbatch",
+      "reason": "Tune frozen delta=0 and joint=.2 preserve TP but not empty accuracy; evaluate unchanged confirm and audit exact local-verifier cache reuse.",
+      "at": "2026-11-15 11:58:03"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/03-verify-tune.sbatch",
+      "reason": "Fixed rejection completed60; finish predeclared same-pool local verifier tune comparison by reusing pixel-identical answers and requesting only missing qwen3.7-flash slots.",
+      "at": "2026-11-15 12:03:36"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/04-tradeoff-diagnostics.sbatch",
+      "reason": "Primary high-recall gate and local verifier fail. One separately declared tune-optimal precision/recall diagnostic delta=.6 joint=.8, no confirm sweep or online promotion; preserve primary results.",
+      "at": "2026-11-15 12:10:22"
+    },
+    {
+      "event_id": "event-0004",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-t3-rejection-20261115/jobs/05-archive.sbatch",
+      "reason": "N7 B finished: primary gate, local verifier and separately frozen tradeoff fail confirmation/recall; archive all negative results and exact input reuse, no route or online expansion.",
+      "at": "2026-11-15 12:13:37"
+    }
+  ],
+  "finalize_attempts": 0,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false
+}

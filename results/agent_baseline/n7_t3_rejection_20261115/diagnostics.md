@@ -5,74 +5,83 @@ Failure attribution is count-based. Segmentation errors vs semantic errors requi
 | Split | Method | Positive TP retention | Positive F1 before | Positive F1 after | Empty FP before | Empty FP after | Image wins/losses/ties | Criteria |
 |---|---|---:|---:|---:|---:|---:|---|---|
 | tune | delta_threshold | 1.0 | 11.276883880000918 | 11.276883880000918 | 191988 | 174022 | 0/0/30 | not promoted |
+| tune | delta_threshold_verified | 0.5658457154488092 | 11.276883880000918 | 10.81470099102341 | 191988 | 70057 | 1/3/26 | not promoted |
 | tune | joint_threshold | 1.0 | 12.12042979026825 | 12.339560061328577 | 193639 | 193639 | 0/0/30 | not promoted |
+| tune | joint_threshold_verified | 0.5672989146972309 | 12.12042979026825 | 11.532791026156527 | 193639 | 75661 | 1/3/26 | not promoted |
 | confirm | delta_threshold | 1.0 | 16.04369540444158 | 16.04369540444158 | 133931 | 133931 | 0/0/30 | not promoted |
 | confirm | joint_threshold | 1.0 | 15.352517674529219 | 15.352517674529219 | 146672 | 146672 | 0/0/30 | not promoted |
+
+## Verification effect relative to the same frozen threshold
+
+| Split | Method | Positive TP retention | Positive TP lost | Positive F1 before | Positive F1 after | Empty FP before | Empty FP after |
+|---|---|---:|---:|---:|---:|---:|---:|
+| tune | delta_threshold_verified | 0.5658457154488092 | 4266 | 11.276883880000918 | 10.81470099102341 | 174022 | 70057 |
+| tune | joint_threshold_verified | 0.5672989146972309 | 4266 | 12.339560061328577 | 11.532791026156527 | 193639 | 75661 |
 
 ## Per-task losses and bottlenecks
 
 | Split | Task | Rank | Pool covered | Top8 TP/FP/FN | Threshold TP/FP/FN | Verified TP/FP/FN | Count-based causes |
 |---|---|---|---:|---|---|---|---|
-| tune | train_1065_2to5 | delta | 0 | [0, 5427, 0] | [0, 5427, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1065_2to5 | joint | 0 | [0, 3532, 0] | [0, 3532, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1136_5to1 | delta | 0 | [0, 5445, 3] | [0, 5445, 3] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_1136_5to1 | joint | 0 | [0, 5043, 3] | [0, 5043, 3] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_1166_3to5 | delta | 0 | [0, 10722, 0] | [0, 10722, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1166_3to5 | joint | 0 | [0, 14310, 0] | [0, 14310, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_119_6to2 | delta | 0 | [0, 40930, 0] | [0, 40930, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_119_6to2 | joint | 0 | [0, 37409, 0] | [0, 37409, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_127_3to2 | delta | 0 | [0, 2024, 0] | [0, 2024, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_127_3to2 | joint | 0 | [0, 2248, 0] | [0, 2248, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1322_2to4 | delta | 0 | [0, 14871, 0] | [0, 14871, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1322_2to4 | joint | 0 | [0, 10300, 0] | [0, 10300, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1377_5to3 | delta | 0 | [0, 4574, 0] | [0, 4574, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1377_5to3 | joint | 0 | [0, 6748, 0] | [0, 6748, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_145_1to2 | delta | 0 | [0, 2567, 0] | [0, 2567, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_145_1to2 | joint | 0 | [0, 2567, 0] | [0, 2567, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_147_1to5 | delta | 0 | [0, 5757, 0] | [0, 5757, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_147_1to5 | joint | 0 | [0, 6459, 0] | [0, 6459, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1538_1to3 | delta | 5121 | [5121, 4863, 122] | [5121, 4863, 122] | None |  |
-| tune | train_1538_1to3 | joint | 5121 | [5121, 4863, 122] | [5121, 4863, 122] | None |  |
-| tune | train_1659_1to2 | delta | 3514 | [1927, 1755, 5793] | [1927, 1755, 5793] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_1659_1to2 | joint | 3514 | [1960, 1352, 5760] | [1960, 1352, 5760] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_1745_5to2 | delta | 1474 | [678, 1066, 11773] | [678, 1066, 11773] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_1745_5to2 | joint | 1474 | [678, 785, 11773] | [678, 785, 11773] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_1754_5to1 | delta | 311 | [0, 771, 6067] | [0, 771, 6067] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_1754_5to1 | joint | 311 | [0, 734, 6067] | [0, 734, 6067] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_1798_2to6 | delta | 0 | [0, 15025, 0] | [0, 15025, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1798_2to6 | joint | 0 | [0, 15030, 0] | [0, 15030, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_1808_2to1 | delta | 2100 | [2100, 64283, 5541] | [2100, 64283, 5541] | None |  |
-| tune | train_1808_2to1 | joint | 2100 | [2100, 64283, 5541] | [2100, 64283, 5541] | None |  |
-| tune | train_2571_4to5 | delta | 0 | [0, 5094, 6] | [0, 5094, 6] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_2571_4to5 | joint | 0 | [0, 4966, 6] | [0, 4966, 6] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_2677_2to1 | delta | 0 | [0, 23340, 0] | [0, 23340, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2677_2to1 | joint | 0 | [0, 23340, 0] | [0, 23340, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2822_1to2 | delta | 0 | [0, 8461, 0] | [0, 8461, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2822_1to2 | joint | 0 | [0, 8461, 0] | [0, 8461, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2848_1to4 | delta | 0 | [0, 24510, 0] | [0, 6544, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2848_1to4 | joint | 0 | [0, 24514, 0] | [0, 24514, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2890_5to1 | delta | 0 | [0, 13985, 492] | [0, 13985, 492] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_2890_5to1 | joint | 0 | [0, 13985, 492] | [0, 13985, 492] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_2912_5to2 | delta | 402 | [0, 13845, 429] | [0, 13845, 429] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_2912_5to2 | joint | 402 | [0, 8110, 429] | [0, 8110, 429] | None | Top8_truncation_loses_pool_coverage |
-| tune | train_2928_3to1 | delta | 0 | [0, 10138, 0] | [0, 10138, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_2928_3to1 | joint | 0 | [0, 13529, 0] | [0, 13529, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_385_5to6 | delta | 0 | [0, 2942, 0] | [0, 2942, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_385_5to6 | joint | 0 | [0, 3738, 0] | [0, 3738, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_443_3to2 | delta | 0 | [0, 2855, 0] | [0, 2855, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_443_3to2 | joint | 0 | [0, 2868, 0] | [0, 2868, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_555_4to2 | delta | 0 | [0, 5259, 0] | [0, 5259, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_555_4to2 | joint | 0 | [0, 6071, 0] | [0, 6071, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_7_1to2 | delta | 0 | [0, 10131, 262] | [0, 10131, 262] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_7_1to2 | joint | 0 | [0, 5500, 262] | [0, 5500, 262] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_786_3to5 | delta | 0 | [0, 1605, 0] | [0, 1605, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_786_3to5 | joint | 0 | [0, 1647, 0] | [0, 1647, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_908_4to1 | delta | 0 | [0, 1307, 0] | [0, 1307, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_908_4to1 | joint | 0 | [0, 1194, 0] | [0, 1194, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_915_3to4 | delta | 0 | [0, 2889, 1] | [0, 2889, 1] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_915_3to4 | joint | 0 | [0, 2889, 1] | [0, 0, 1] | None | original_geometry_pool_zero_GT_coverage |
-| tune | train_987_3to5 | delta | 0 | [0, 9674, 0] | [0, 9674, 0] | None | similarity_gate_retains_empty_target_FP |
-| tune | train_987_3to5 | joint | 0 | [0, 9674, 0] | [0, 9674, 0] | None | similarity_gate_retains_empty_target_FP |
+| tune | train_1065_2to5 | delta | 0 | [0, 5427, 0] | [0, 5427, 0] | [0, 4932, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1065_2to5 | joint | 0 | [0, 3532, 0] | [0, 3532, 0] | [0, 3026, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1136_5to1 | delta | 0 | [0, 5445, 3] | [0, 5445, 3] | [0, 3192, 3] | original_geometry_pool_zero_GT_coverage |
+| tune | train_1136_5to1 | joint | 0 | [0, 5043, 3] | [0, 5043, 3] | [0, 3192, 3] | original_geometry_pool_zero_GT_coverage |
+| tune | train_1166_3to5 | delta | 0 | [0, 10722, 0] | [0, 10722, 0] | [0, 1467, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1166_3to5 | joint | 0 | [0, 14310, 0] | [0, 14310, 0] | [0, 1467, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_119_6to2 | delta | 0 | [0, 40930, 0] | [0, 40930, 0] | [0, 6189, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_119_6to2 | joint | 0 | [0, 37409, 0] | [0, 37409, 0] | [0, 6234, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_127_3to2 | delta | 0 | [0, 2024, 0] | [0, 2024, 0] | [0, 352, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_127_3to2 | joint | 0 | [0, 2248, 0] | [0, 2248, 0] | [0, 0, 0] | similarity_gate_retains_empty_target_FP |
+| tune | train_1322_2to4 | delta | 0 | [0, 14871, 0] | [0, 14871, 0] | [0, 386, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1322_2to4 | joint | 0 | [0, 10300, 0] | [0, 10300, 0] | [0, 386, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1377_5to3 | delta | 0 | [0, 4574, 0] | [0, 4574, 0] | [0, 3463, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1377_5to3 | joint | 0 | [0, 6748, 0] | [0, 6748, 0] | [0, 6202, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_145_1to2 | delta | 0 | [0, 2567, 0] | [0, 2567, 0] | [0, 2567, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_145_1to2 | joint | 0 | [0, 2567, 0] | [0, 2567, 0] | [0, 2567, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_147_1to5 | delta | 0 | [0, 5757, 0] | [0, 5757, 0] | [0, 5259, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_147_1to5 | joint | 0 | [0, 6459, 0] | [0, 6459, 0] | [0, 5961, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1538_1to3 | delta | 5121 | [5121, 4863, 122] | [5121, 4863, 122] | [3005, 4125, 2238] | local_verifier_loses_TP |
+| tune | train_1538_1to3 | joint | 5121 | [5121, 4863, 122] | [5121, 4863, 122] | [3005, 4125, 2238] | local_verifier_loses_TP |
+| tune | train_1659_1to2 | delta | 3514 | [1927, 1755, 5793] | [1927, 1755, 5793] | [1827, 456, 5893] | Top8_truncation_loses_pool_coverage, local_verifier_loses_TP |
+| tune | train_1659_1to2 | joint | 3514 | [1960, 1352, 5760] | [1960, 1352, 5760] | [1860, 456, 5860] | Top8_truncation_loses_pool_coverage, local_verifier_loses_TP |
+| tune | train_1745_5to2 | delta | 1474 | [678, 1066, 11773] | [678, 1066, 11773] | [518, 589, 11933] | Top8_truncation_loses_pool_coverage, local_verifier_loses_TP |
+| tune | train_1745_5to2 | joint | 1474 | [678, 785, 11773] | [678, 785, 11773] | [518, 589, 11933] | Top8_truncation_loses_pool_coverage, local_verifier_loses_TP |
+| tune | train_1754_5to1 | delta | 311 | [0, 771, 6067] | [0, 771, 6067] | [0, 160, 6067] | Top8_truncation_loses_pool_coverage |
+| tune | train_1754_5to1 | joint | 311 | [0, 734, 6067] | [0, 734, 6067] | [0, 160, 6067] | Top8_truncation_loses_pool_coverage |
+| tune | train_1798_2to6 | delta | 0 | [0, 15025, 0] | [0, 15025, 0] | [0, 15025, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1798_2to6 | joint | 0 | [0, 15030, 0] | [0, 15030, 0] | [0, 15025, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_1808_2to1 | delta | 2100 | [2100, 64283, 5541] | [2100, 64283, 5541] | [210, 30388, 7431] | local_verifier_loses_TP |
+| tune | train_1808_2to1 | joint | 2100 | [2100, 64283, 5541] | [2100, 64283, 5541] | [210, 30388, 7431] | local_verifier_loses_TP |
+| tune | train_2571_4to5 | delta | 0 | [0, 5094, 6] | [0, 5094, 6] | [0, 4685, 6] | original_geometry_pool_zero_GT_coverage |
+| tune | train_2571_4to5 | joint | 0 | [0, 4966, 6] | [0, 4966, 6] | [0, 4557, 6] | original_geometry_pool_zero_GT_coverage |
+| tune | train_2677_2to1 | delta | 0 | [0, 23340, 0] | [0, 23340, 0] | [0, 12577, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2677_2to1 | joint | 0 | [0, 23340, 0] | [0, 23340, 0] | [0, 12577, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2822_1to2 | delta | 0 | [0, 8461, 0] | [0, 8461, 0] | [0, 6830, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2822_1to2 | joint | 0 | [0, 8461, 0] | [0, 8461, 0] | [0, 6830, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2848_1to4 | delta | 0 | [0, 24510, 0] | [0, 6544, 0] | [0, 51, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2848_1to4 | joint | 0 | [0, 24514, 0] | [0, 24514, 0] | [0, 51, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2890_5to1 | delta | 0 | [0, 13985, 492] | [0, 13985, 492] | [0, 1210, 492] | original_geometry_pool_zero_GT_coverage |
+| tune | train_2890_5to1 | joint | 0 | [0, 13985, 492] | [0, 13985, 492] | [0, 1210, 492] | original_geometry_pool_zero_GT_coverage |
+| tune | train_2912_5to2 | delta | 402 | [0, 13845, 429] | [0, 13845, 429] | [0, 11114, 429] | Top8_truncation_loses_pool_coverage |
+| tune | train_2912_5to2 | joint | 402 | [0, 8110, 429] | [0, 8110, 429] | [0, 5379, 429] | Top8_truncation_loses_pool_coverage |
+| tune | train_2928_3to1 | delta | 0 | [0, 10138, 0] | [0, 10138, 0] | [0, 3157, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_2928_3to1 | joint | 0 | [0, 13529, 0] | [0, 13529, 0] | [0, 6724, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_385_5to6 | delta | 0 | [0, 2942, 0] | [0, 2942, 0] | [0, 2004, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_385_5to6 | joint | 0 | [0, 3738, 0] | [0, 3738, 0] | [0, 2522, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_443_3to2 | delta | 0 | [0, 2855, 0] | [0, 2855, 0] | [0, 732, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_443_3to2 | joint | 0 | [0, 2868, 0] | [0, 2868, 0] | [0, 57, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_555_4to2 | delta | 0 | [0, 5259, 0] | [0, 5259, 0] | [0, 1873, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_555_4to2 | joint | 0 | [0, 6071, 0] | [0, 6071, 0] | [0, 2911, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_7_1to2 | delta | 0 | [0, 10131, 262] | [0, 10131, 262] | [0, 1029, 262] | original_geometry_pool_zero_GT_coverage |
+| tune | train_7_1to2 | joint | 0 | [0, 5500, 262] | [0, 5500, 262] | [0, 1029, 262] | original_geometry_pool_zero_GT_coverage |
+| tune | train_786_3to5 | delta | 0 | [0, 1605, 0] | [0, 1605, 0] | [0, 465, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_786_3to5 | joint | 0 | [0, 1647, 0] | [0, 1647, 0] | [0, 465, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_908_4to1 | delta | 0 | [0, 1307, 0] | [0, 1307, 0] | [0, 975, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_908_4to1 | joint | 0 | [0, 1194, 0] | [0, 1194, 0] | [0, 903, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_915_3to4 | delta | 0 | [0, 2889, 1] | [0, 2889, 1] | [0, 0, 1] | original_geometry_pool_zero_GT_coverage |
+| tune | train_915_3to4 | joint | 0 | [0, 2889, 1] | [0, 0, 1] | [0, 0, 1] | original_geometry_pool_zero_GT_coverage |
+| tune | train_987_3to5 | delta | 0 | [0, 9674, 0] | [0, 9674, 0] | [0, 1753, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
+| tune | train_987_3to5 | joint | 0 | [0, 9674, 0] | [0, 9674, 0] | [0, 1753, 0] | similarity_gate_retains_empty_target_FP, local_verifier_retains_empty_target_FP |
 | confirm | train_1129_4to5 | delta | 0 | [0, 8423, 0] | [0, 8423, 0] | None | similarity_gate_retains_empty_target_FP |
 | confirm | train_1129_4to5 | joint | 0 | [0, 10434, 0] | [0, 10434, 0] | None | similarity_gate_retains_empty_target_FP |
 | confirm | train_1177_2to3 | delta | 235 | [0, 19815, 1686] | [0, 19815, 1686] | None | Top8_truncation_loses_pool_coverage |

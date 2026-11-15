@@ -101,6 +101,14 @@ def main():
         model=MODEL,policy='Accept explicit yes only. Same fixed threshold and candidate pool/order as unverified comparator. Calls shared by identical candidates across rank arms.',
         limitation='Historical deterministic-setting responses and fresh requests have different time-of-request; reuse eliminates new cost but not historical model-version uncertainty.')
     write_json(out/'summary.json',result)
+    previous_status=out/'status.json'
+    if exists(previous_status):
+        previous=json.loads(read_text(previous_status))
+        if previous.get('status')=='missing_answers' and not exists(out/'reuse_only_status.json'):
+            write_json(out/'reuse_only_status.json',previous)
+    write_json(previous_status,dict(status='complete',completed=len(records),expected=30,
+        new_calls=result['new_calls'],reused_calls=result['reused_calls'],cost_cny=result['cost_cny'],
+        summary_source=str(out/'summary.json')))
     if a.split=='confirm' and exists(a.out/'verification/tune/summary.json'):
         tune=json.loads(read_text(a.out/'verification/tune/summary.json'))
         combined=tune['records']+records

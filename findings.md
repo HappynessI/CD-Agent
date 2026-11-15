@@ -417,3 +417,7 @@ T3六臂同30配对：B2/B3 positive-only均仅train1808产生3479TP；相对str
 ## 2026-11-15 N7 补漏首轮实际结果（后续分析进行中）
 
 187166完成，2项门控/计数测试通过。原30任务、tune15/confirm15，balanced V0@10主端点不变；tune三阈值中选初始预测面积占比≤5%才触发。确认15任务 pooled F1：不补漏79.0126、固定补漏69.2173、门控74.2730；门控10/15调用，macro Δ−0.5289，新增33005TP/129825FP，未满足在线晋级。LEViR train_121一次调用新增245TP/70455FP；SECOND拆除train_1322新增0TP/43994FP、F1−52.1093，新建train_127/1370及拆除train_119贡献正收益。不能仅凭较固定全开改善就宣称有效。原来源阈值已曝光确认图，且同SECOND图双方向相关；原任务行bootstrap保留，追加按原图聚类敏感性后再形成结论。证据：`results/agent_baseline/n7_missed_trigger_20261115/`，API新增0。
+
+N7补漏唯一追加规则（187182）：空答案或最大组件占比≥0.5时触发，tune形态诊断后固定，不扫阈值。confirm主balanced端点 pooled F1 77.4587/P72.3273/R83.3737；相对不补漏−1.5539 F1、macro−0.2175；9/15调用，2胜3负10平，新增24162TP/61474FP。图像聚类CI pooled[−9.6073,4.8627]，macro[−10.1784,8.4833]。阻止LEVIR有害调用，却跳过SECOND新建train_127（组件占比.4103）有效补漏，保留新建train_1177及拆除train_1322错误。信号为当前答案几何，无法保证未覆盖区域的语义质量；本轮不证明Agent决策优于规则，更不据规则失败宣称Agent必要。完整结论与复现见 `n7_missed_trigger_20261115/conclusion.md`。
+
+N7 T3最终诊断187197：原95%TP主阈值在confirm不改变Top8，局部核验tune损失约43% TP而正F1下降；独立最大tune F1折中delta .6/joint .8确认全F1降至9.4599/8.5349，TP仅留53.77%/46.84%，未复现tune收益。joint虽空FP146672→48603，但仅2/11正确空集，3/19正例全部拒绝。Top1确认23/30有示例重叠、16/30多数重叠，这16例Top1扣示例TP0，而原delta Top8有36628TP；只说明相关，非移除重叠可恢复召回的因果证明。所有范围/分组/逐例与原95%及补充折中口径见 `n7_t3_rejection_20261115/research_review.md`、`diagnostics.json`、`tradeoff_diagnostic/summary.json`、`top1_overlap_audit.json`。不晋级在线或动态双路。新增36次flash，费用¥0.009024。

@@ -1,0 +1,26 @@
+{
+  "system": "Compare land-cover changes in two separate regions, Example and Candidate. Each has two local original-RGB views, T1 then T2. Thin red contours mark included support; enclosed holes are excluded. The drawn support boundary itself is not an object structure. Infer land cover before and after in each region from RGB evidence. Reply JSON only. Reverse transitions and unchanged regions are not matches.",
+  "question": "Does the Candidate show the same directed land-cover transition as the Example? Identify what each region was at T1 and becomes at T2. Reply {\"change\":\"yes\" or \"no\", \"example_t1\":\"class\", \"example_t2\":\"class\", \"candidate_t1\":\"class\", \"candidate_t2\":\"class\", \"reason\":\"short explanation\"}.",
+  "images": [
+    {
+      "label": "Example T1 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n7_t3_rejection_20261115/verification/tune/tasks/train_119_6to2/requests/11/00.png"
+    },
+    {
+      "label": "Example T2 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n7_t3_rejection_20261115/verification/tune/tasks/train_119_6to2/requests/11/01.png"
+    },
+    {
+      "label": "Candidate T1 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n7_t3_rejection_20261115/verification/tune/tasks/train_119_6to2/requests/11/02.png"
+    },
+    {
+      "label": "Candidate T2 local raw RGB with thin support contour",
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n7_t3_rejection_20261115/verification/tune/tasks/train_119_6to2/requests/11/03.png"
+    }
+  ],
+  "model": "qwen3.7-flash",
+  "seed": 1016,
+  "max_tokens": 768,
+  "temperature": 0
+}
