@@ -1,0 +1,166 @@
+{
+  "name": "cd-n7-missed-trigger-20261115",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/01-offline.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/02-audit.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/03-concentration.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/04-archive.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/04-archive.sbatch",
+  "job_id": "187189",
+  "hook_id": "187190",
+  "rounds": 4,
+  "rounds_submitted": 4,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-15 11:54:21",
+  "started_epoch": 1794743661.0114167,
+  "history": [
+    {
+      "job": "01-offline.sbatch",
+      "job_id": "187166",
+      "hook_id": "187167",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "status": "complete",
+        "tasks": null
+      },
+      "metric_error": null,
+      "at": "2026-11-15 11:54:55"
+    },
+    {
+      "job": "02-audit.sbatch",
+      "job_id": "187174",
+      "hook_id": "187175",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "status": "complete",
+        "tasks": null
+      },
+      "metric_error": null,
+      "at": "2026-11-15 11:57:13"
+    },
+    {
+      "job": "03-concentration.sbatch",
+      "job_id": "187182",
+      "hook_id": "187183",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "artifact_exists": true,
+        "status": "complete"
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:00:38"
+    },
+    {
+      "job": "04-archive.sbatch",
+      "job_id": "187189",
+      "hook_id": "187190",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "archive_complete": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:04:15"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-15 12:04:04",
+  "last_advance_at": "2026-11-15 12:04:04",
+  "hook_attempts": 7,
+  "review_count": 4,
+  "review": {
+    "id": "event-0004",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-15 12:04:15",
+    "job_id": "187189",
+    "hook_id": "187190",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/04-archive.sbatch",
+    "latest": {
+      "job": "04-archive.sbatch",
+      "job_id": "187189",
+      "hook_id": "187190",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "cost_cny": 0,
+        "archive_complete": true
+      },
+      "metric_error": null,
+      "at": "2026-11-15 12:04:15"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-15 12:05:11",
+    "delivery_turn_id": "01a1df09-7b85-7712-8f9c-b1a5ccdda7e1",
+    "delivery_via": "cron_local"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/02-audit.sbatch",
+      "reason": "Coverage gate loses to never-call; audit tune-only observable shape and image-cluster sensitivity before one justified follow-up.",
+      "at": "2026-11-15 11:57:03"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/03-concentration.sbatch",
+      "reason": "Tune morphology supports one majority-component rule; test frozen .5 threshold with original fixed endpoints and image-cluster uncertainty, no sweep.",
+      "at": "2026-11-15 12:00:22"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n7-missed-trigger-20261115/jobs/04-archive.sbatch",
+      "reason": "Two predeclared trigger rules both fail reliable net gain; archive completed negative findings and reproducibility, no online or source routing expansion.",
+      "at": "2026-11-15 12:04:03"
+    },
+    {
+      "event_id": "event-0004",
+      "action": "finish",
+      "reason": "N7 A completed: two observable trigger rules fail reliable net gain. Confirm F1 never79.0126,always69.2173,coverage74.2730,concentration77.4587; no online promotion. Source and execution archived; API0.",
+      "at": "2026-11-15 12:05:24"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "stop_reason": "N7 A completed: two observable trigger rules fail reliable net gain. Confirm F1 never79.0126,always69.2173,coverage74.2730,concentration77.4587; no online promotion. Source and execution archived; API0.",
+  "finished_at": "2026-11-15 12:05:24",
+  "elapsed_seconds": 663.0
+}
