@@ -1,0 +1,148 @@
+{
+  "delta": {
+    "threshold": 0.0,
+    "baseline_tp": 9826,
+    "candidates": [
+      {
+        "threshold": -1.0,
+        "f1_c": 5.365645887029837,
+        "precision": 3.0146560267042193,
+        "recall": 24.373062135681508,
+        "tp": 9826,
+        "fp": 316115,
+        "fn": 30489,
+        "tp_retention": 1.0,
+        "eligible": true
+      },
+      {
+        "threshold": 0.0,
+        "f1_c": 5.64242441643458,
+        "precision": 3.190518710934329,
+        "recall": 24.373062135681508,
+        "tp": 9826,
+        "fp": 298149,
+        "fn": 30489,
+        "tp_retention": 1.0,
+        "eligible": true
+      },
+      {
+        "threshold": 0.2,
+        "f1_c": 4.882580581652178,
+        "precision": 2.7869180605354003,
+        "recall": 19.68498077638596,
+        "tp": 7936,
+        "fp": 276823,
+        "fn": 32379,
+        "tp_retention": 0.8076531650722573,
+        "eligible": false
+      },
+      {
+        "threshold": 0.4,
+        "f1_c": 7.215398183421677,
+        "precision": 4.417257137132011,
+        "recall": 19.68498077638596,
+        "tp": 7936,
+        "fp": 171723,
+        "fn": 32379,
+        "tp_retention": 0.8076531650722573,
+        "eligible": false
+      },
+      {
+        "threshold": 0.6,
+        "f1_c": 8.740076914934905,
+        "precision": 6.107495069033531,
+        "recall": 15.361527967257844,
+        "tp": 6193,
+        "fp": 95207,
+        "fn": 34122,
+        "tp_retention": 0.6302666395277834,
+        "eligible": false
+      },
+      {
+        "threshold": 0.8,
+        "f1_c": 5.755246208186162,
+        "precision": 5.3822405492346554,
+        "recall": 6.183802554880318,
+        "tp": 2493,
+        "fp": 43826,
+        "fn": 37822,
+        "tp_retention": 0.25371463464278443,
+        "eligible": false
+      }
+    ],
+    "rule": "maximize tune all-task micro F1 subject to >=95% baseline Top8 TP; tie lower threshold"
+  },
+  "joint": {
+    "threshold": 0.2,
+    "baseline_tp": 9859,
+    "candidates": [
+      {
+        "threshold": -1.0,
+        "f1_c": 5.53374326103002,
+        "precision": 3.119857725120883,
+        "recall": 24.454917524494604,
+        "tp": 9859,
+        "fp": 306149,
+        "fn": 30456,
+        "tp_retention": 1.0,
+        "eligible": true
+      },
+      {
+        "threshold": 0.0,
+        "f1_c": 5.53374326103002,
+        "precision": 3.119857725120883,
+        "recall": 24.454917524494604,
+        "tp": 9859,
+        "fp": 306149,
+        "fn": 30456,
+        "tp_retention": 1.0,
+        "eligible": true
+      },
+      {
+        "threshold": 0.2,
+        "f1_c": 5.578976555736007,
+        "precision": 3.148643167613591,
+        "recall": 24.454917524494604,
+        "tp": 9859,
+        "fp": 303260,
+        "fn": 30456,
+        "tp_retention": 1.0,
+        "eligible": true
+      },
+      {
+        "threshold": 0.4,
+        "f1_c": 5.4439009727839105,
+        "precision": 3.1566271741670726,
+        "recall": 19.766836165199056,
+        "tp": 7969,
+        "fp": 244484,
+        "fn": 32346,
+        "tp_retention": 0.8082969875240896,
+        "eligible": false
+      },
+      {
+        "threshold": 0.6,
+        "f1_c": 8.326195941393447,
+        "precision": 5.407991455210319,
+        "recall": 18.085079995039067,
+        "tp": 7291,
+        "fp": 127528,
+        "fn": 33024,
+        "tp_retention": 0.7395273354295567,
+        "eligible": false
+      },
+      {
+        "threshold": 0.8,
+        "f1_c": 12.428584338256705,
+        "precision": 10.440635648976011,
+        "recall": 15.351606101947166,
+        "tp": 6189,
+        "fp": 53089,
+        "fn": 34126,
+        "tp_retention": 0.627751293234608,
+        "eligible": false
+      }
+    ],
+    "rule": "maximize tune all-task micro F1 subject to >=95% baseline Top8 TP; tie lower threshold"
+  }
+}

@@ -1,0 +1,11 @@
+# One bounded concentration follow-up
+
+Registered after first coverage results and tune morphology audit, before evaluating this policy on confirm. Original confirm is already exposed development; this is not a new blinded holdout. Original records remain unchanged.
+
+Mechanism: current-mask area alone cannot distinguish an already-complete sparse scene from a partial localized answer. In tune, the three positive old-balanced supplementation tasks have largest-component area fractions 0.7237, 0.9992, 1.0. Two negative SECOND tasks are 0.2624 and 0.2772; five negative LEVIR tasks are <0.09. The <=16px fragment-area fractions are nearly zero throughout, so a tiny-fragment rule lacks evidence. This supports one limited spatial-concentration hypothesis, not a proven causal law.
+
+Freeze one rule: call if current answer is empty OR one connected component covers at least half of its area. Half is the interpretable majority threshold; no threshold scan, dataset/direction/GT/ID features or conjunction with the previous fitted coverage gate. Empty answers remain eligible to avoid treating absent predictions as complete. Compute from existing 8-connected components; no additional candidate/model invocation. Majority concentration may remain a source proxy, even though tune separates positive/negative outcomes within SECOND too.
+
+Reuse exact V0@10 old-balanced primary and S5-gated evidence secondary endpoints, masks, verifier answers and 15/15 split. Compare to never, always, and previous frozen coverage<=5% rule. Report all image cases, all group macro and pooled F1/P/R, added TP/FP, empty-GT FP, call rate and usage-based counterfactual verifier cost (new API spending zero). Image-cluster bootstrap and leave-one-image-out keep both SECOND directions together. This is the only second rule; if it does not robustly improve primary confirm versus never and always, with no group harm and no single-image dependence, do not promote online or expand A3/A4.
+
+Execution: run_n7_missed_concentration.sbatch, gre/gpu42, one CPU, 2GB, ten minutes, exp5-env. Main agent submits through exp-loop. Code consumes only the existing JSON states and cached outcomes; it does not read GT masks or regenerate candidates.

@@ -2772,3 +2772,11 @@ python -B -m unittest agent_baseline.tests.test_demo_g3 \
 用户确认 `review_v2_19` 中 WHU 已完成人工审核，不再列入待审；历史静态页面中的 pending 文案保留为生成时快照，不代表当前决定。当前待审 T4.3 128、T4.4 128（原 SQLite 均 pending_review，自动 QC 均 pass）；T5.2 52、T5.3 52（候选清单 pending_review，尚未导入审核数据库，各有 3 个既有静态样例，不能在样例页保存审核决定）。本轮仅启动环境，不修改任务数据或自动批准。
 
 服务位于 choud-mgt-09 的 127.0.0.1:8876，统一入口 `/review-home`，完整 T4 审核入口 `/?mode=task-data&taskTab=construct`。复用原 FastAPI 与数据库，临时启动器 `.runtime/task-review-20261115/serve.py` 额外挂载已有结果到 `/review-pages/`，日志及启动前 SQLite 备份同目录。页面、API、T4 双期/GT/参照图和六个 T5 样例均实际 GET 200。原 `tools/serve_task_review.sh` 启动仅带原后端；需恢复本次附加静态入口时使用 wellbeing Python 执行上述临时启动器。客户端转发：`ssh -N -L 8876:127.0.0.1:8876 guisongxia@choud-mgt-09`（须可 SSH 到该管理节点；否则使用用户已有跳板配置），打开 `http://localhost:8876/review-home`。
+
+### N7 服务器执行记录（2026-11-15，首阶段，尚未最终收尾）
+
+两个 astra-low Subagent 独立工作区，主 Agent 统一审核与 exp-loop 提交。只用原已曝光开发缓存，未使用测试集或未审核任务。首轮均无新增 API 请求。
+
+补漏主基线固定旧 balanced V0@10，S5-gated evidence@10 只作敏感性端点。187166完成30任务（tune15/confirm15）及2项单测：初始答案覆盖率从预声明1%/5%/10%在tune选5%。确认 pooled F1：不补漏79.0126、全补漏69.2173、覆盖率门控74.2730；门控调用10/15，新增33005TP/129825FP，macro Δ−0.5289。LEVIR train_121为245TP/70455FP，SECOND拆除train_1322为0TP/43994FP。187174按原影像聚类审计确认15任务仅10影像；门控macro差CI[−12.5022,9.7143]，去掉train_121后pooled仍低0.5743分。未晋级在线。进一步仅预注册一次组件多数（最大组件占比≥0.5或空答案）规则；不扫阈值、不以数据集名称触发。原始证据在 `results/agent_baseline/n7_missed_trigger_20261115/`。
+
+T3 187168完成原tune30及3项单测，同原R1池复现delta/joint Top8。按保留≥95% tune TP约束冻结delta阈值0、joint阈值0.2。纯Top1两路仅210TP（Top8为9826/9859），不能以减少空FP称成功。阈值gate tune空正确率仍0/19。后续固定confirm与双时相局部核验缓存检查已提交，最终结果另记；不投入文本桥接、动态双路线或在线Agent。原始证据在 `results/agent_baseline/n7_t3_rejection_20261115/`。所有GT只用于离线选择/评价，不输入触发函数；图像历史曝光不因新增gate而消除。

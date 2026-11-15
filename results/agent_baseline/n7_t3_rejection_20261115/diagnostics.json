@@ -1,0 +1,4024 @@
+{
+  "tasks": 60,
+  "paired": [
+    {
+      "split": "tune",
+      "method": "delta_threshold",
+      "positive_baseline": {
+        "f1_c": 11.276883880000918,
+        "precision": 7.335408688121953,
+        "recall": 24.373062135681508,
+        "tp": 9826,
+        "fp": 124127,
+        "fn": 30489
+      },
+      "positive_method": {
+        "f1_c": 11.276883880000918,
+        "precision": 7.335408688121953,
+        "recall": 24.373062135681508,
+        "tp": 9826,
+        "fp": 124127,
+        "fn": 30489
+      },
+      "tp_retention": 1.0,
+      "empty_fp_before": 191988,
+      "empty_fp_after": 174022,
+      "image_f1_wins": 0,
+      "image_f1_losses": 0,
+      "image_f1_ties": 30,
+      "positive_entirely_rejected": [],
+      "positive_tp_losses": {},
+      "passes_preregistered_aggregate_criteria": true,
+      "promotion": "not promoted"
+    },
+    {
+      "split": "tune",
+      "method": "joint_threshold",
+      "positive_baseline": {
+        "f1_c": 12.12042979026825,
+        "precision": 8.056779086206474,
+        "recall": 24.454917524494604,
+        "tp": 9859,
+        "fp": 112510,
+        "fn": 30456
+      },
+      "positive_method": {
+        "f1_c": 12.339560061328577,
+        "precision": 8.251590224305323,
+        "recall": 24.454917524494604,
+        "tp": 9859,
+        "fp": 109621,
+        "fn": 30456
+      },
+      "tp_retention": 1.0,
+      "empty_fp_before": 193639,
+      "empty_fp_after": 193639,
+      "image_f1_wins": 0,
+      "image_f1_losses": 0,
+      "image_f1_ties": 30,
+      "positive_entirely_rejected": [
+        "train_915_3to4"
+      ],
+      "positive_tp_losses": {},
+      "passes_preregistered_aggregate_criteria": false,
+      "promotion": "not promoted"
+    },
+    {
+      "split": "confirm",
+      "method": "delta_threshold",
+      "positive_baseline": {
+        "f1_c": 16.04369540444158,
+        "precision": 13.977105484333883,
+        "recall": 18.82743209705647,
+        "tp": 38083,
+        "fp": 234384,
+        "fn": 164191
+      },
+      "positive_method": {
+        "f1_c": 16.04369540444158,
+        "precision": 13.977105484333883,
+        "recall": 18.82743209705647,
+        "tp": 38083,
+        "fp": 234384,
+        "fn": 164191
+      },
+      "tp_retention": 1.0,
+      "empty_fp_before": 133931,
+      "empty_fp_after": 133931,
+      "image_f1_wins": 0,
+      "image_f1_losses": 0,
+      "image_f1_ties": 30,
+      "positive_entirely_rejected": [],
+      "positive_tp_losses": {},
+      "passes_preregistered_aggregate_criteria": false,
+      "promotion": "not promoted"
+    },
+    {
+      "split": "confirm",
+      "method": "joint_threshold",
+      "positive_baseline": {
+        "f1_c": 15.352517674529219,
+        "precision": 13.64233677609738,
+        "recall": 17.552923262505313,
+        "tp": 35505,
+        "fp": 224751,
+        "fn": 166769
+      },
+      "positive_method": {
+        "f1_c": 15.352517674529219,
+        "precision": 13.64233677609738,
+        "recall": 17.552923262505313,
+        "tp": 35505,
+        "fp": 224751,
+        "fn": 166769
+      },
+      "tp_retention": 1.0,
+      "empty_fp_before": 146672,
+      "empty_fp_after": 146672,
+      "image_f1_wins": 0,
+      "image_f1_losses": 0,
+      "image_f1_ties": 30,
+      "positive_entirely_rejected": [],
+      "positive_tp_losses": {},
+      "passes_preregistered_aggregate_criteria": false,
+      "promotion": "not promoted"
+    }
+  ],
+  "per_task": [
+    {
+      "id": "train_1065_2to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5427,
+        0
+      ],
+      "threshold": [
+        0,
+        5427,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        625,
+        474,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1065_2to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        3532,
+        0
+      ],
+      "threshold": [
+        0,
+        3532,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        625,
+        474,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1136_5to1",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 3,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5445,
+        3
+      ],
+      "threshold": [
+        0,
+        5445,
+        3
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        334,
+        145,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1136_5to1",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 3,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5043,
+        3
+      ],
+      "threshold": [
+        0,
+        5043,
+        3
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        334,
+        145,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1166_3to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10722,
+        0
+      ],
+      "threshold": [
+        0,
+        10722,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1168,
+        47,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1166_3to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        14310,
+        0
+      ],
+      "threshold": [
+        0,
+        14310,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1168,
+        47,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_119_6to2",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        40930,
+        0
+      ],
+      "threshold": [
+        0,
+        40930,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        6847,
+        7072,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_119_6to2",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        37409,
+        0
+      ],
+      "threshold": [
+        0,
+        37409,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        6847,
+        7072,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_127_3to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2024,
+        0
+      ],
+      "threshold": [
+        0,
+        2024,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_127_3to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2248,
+        0
+      ],
+      "threshold": [
+        0,
+        2248,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1322_2to4",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        14871,
+        0
+      ],
+      "threshold": [
+        0,
+        14871,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1892,
+        1898,
+        729,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1322_2to4",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10300,
+        0
+      ],
+      "threshold": [
+        0,
+        10300,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1892,
+        1898,
+        729,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1377_5to3",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        4574,
+        0
+      ],
+      "threshold": [
+        0,
+        4574,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        439,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1377_5to3",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        6748,
+        0
+      ],
+      "threshold": [
+        0,
+        6748,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        439,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_145_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2567,
+        0
+      ],
+      "threshold": [
+        0,
+        2567,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        445,
+        0,
+        0,
+        50,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_145_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2567,
+        0
+      ],
+      "threshold": [
+        0,
+        2567,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        445,
+        0,
+        0,
+        50,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_147_1to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5757,
+        0
+      ],
+      "threshold": [
+        0,
+        5757,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1585,
+        1613,
+        1653,
+        345,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_147_1to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        6459,
+        0
+      ],
+      "threshold": [
+        0,
+        6459,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1585,
+        1613,
+        1653,
+        345,
+        5,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1538_1to3",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 5243,
+      "pool_covered_pixels": 5121,
+      "top8": [
+        5121,
+        4863,
+        122
+      ],
+      "threshold": [
+        5121,
+        4863,
+        122
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        1389,
+        1380,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1538_1to3",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 5243,
+      "pool_covered_pixels": 5121,
+      "top8": [
+        5121,
+        4863,
+        122
+      ],
+      "threshold": [
+        5121,
+        4863,
+        122
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        1389,
+        1380,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1659_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 7720,
+      "pool_covered_pixels": 3514,
+      "top8": [
+        1927,
+        1755,
+        5793
+      ],
+      "threshold": [
+        1927,
+        1755,
+        5793
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        330,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1659_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 7720,
+      "pool_covered_pixels": 3514,
+      "top8": [
+        1960,
+        1352,
+        5760
+      ],
+      "threshold": [
+        1960,
+        1352,
+        5760
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        330,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1745_5to2",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 12451,
+      "pool_covered_pixels": 1474,
+      "top8": [
+        678,
+        1066,
+        11773
+      ],
+      "threshold": [
+        678,
+        1066,
+        11773
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        92,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1745_5to2",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 12451,
+      "pool_covered_pixels": 1474,
+      "top8": [
+        678,
+        785,
+        11773
+      ],
+      "threshold": [
+        678,
+        785,
+        11773
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        92,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1754_5to1",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 6067,
+      "pool_covered_pixels": 311,
+      "top8": [
+        0,
+        771,
+        6067
+      ],
+      "threshold": [
+        0,
+        771,
+        6067
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        43,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1754_5to1",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 6067,
+      "pool_covered_pixels": 311,
+      "top8": [
+        0,
+        734,
+        6067
+      ],
+      "threshold": [
+        0,
+        734,
+        6067
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        43,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1798_2to6",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        15025,
+        0
+      ],
+      "threshold": [
+        0,
+        15025,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        4532,
+        247,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1798_2to6",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        15030,
+        0
+      ],
+      "threshold": [
+        0,
+        15030,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        4532,
+        247,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1808_2to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 7641,
+      "pool_covered_pixels": 2100,
+      "top8": [
+        2100,
+        64283,
+        5541
+      ],
+      "threshold": [
+        2100,
+        64283,
+        5541
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        10918,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1808_2to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 7641,
+      "pool_covered_pixels": 2100,
+      "top8": [
+        2100,
+        64283,
+        5541
+      ],
+      "threshold": [
+        2100,
+        64283,
+        5541
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        10918,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2571_4to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 6,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5094,
+        6
+      ],
+      "threshold": [
+        0,
+        5094,
+        6
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2571_4to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 6,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        4966,
+        6
+      ],
+      "threshold": [
+        0,
+        4966,
+        6
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2677_2to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        23340,
+        0
+      ],
+      "threshold": [
+        0,
+        23340,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        106,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2677_2to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        23340,
+        0
+      ],
+      "threshold": [
+        0,
+        23340,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        106,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2822_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        8461,
+        0
+      ],
+      "threshold": [
+        0,
+        8461,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        33,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2822_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        8461,
+        0
+      ],
+      "threshold": [
+        0,
+        8461,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        33,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2848_1to4",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        24510,
+        0
+      ],
+      "threshold": [
+        0,
+        6544,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        7796,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2848_1to4",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        24514,
+        0
+      ],
+      "threshold": [
+        0,
+        24514,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        7796,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2890_5to1",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 492,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        13985,
+        492
+      ],
+      "threshold": [
+        0,
+        13985,
+        492
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        2247,
+        2520,
+        1106,
+        2,
+        0,
+        0,
+        0,
+        125
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2890_5to1",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 492,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        13985,
+        492
+      ],
+      "threshold": [
+        0,
+        13985,
+        492
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        2247,
+        2520,
+        1106,
+        2,
+        0,
+        125,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2912_5to2",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 429,
+      "pool_covered_pixels": 402,
+      "top8": [
+        0,
+        13845,
+        429
+      ],
+      "threshold": [
+        0,
+        13845,
+        429
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        1252,
+        1251,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2912_5to2",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 429,
+      "pool_covered_pixels": 402,
+      "top8": [
+        0,
+        8110,
+        429
+      ],
+      "threshold": [
+        0,
+        8110,
+        429
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        1252,
+        1251,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2928_3to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10138,
+        0
+      ],
+      "threshold": [
+        0,
+        10138,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        211,
+        639,
+        0,
+        0,
+        0,
+        0,
+        0,
+        119
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2928_3to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        13529,
+        0
+      ],
+      "threshold": [
+        0,
+        13529,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        211,
+        639,
+        0,
+        0,
+        0,
+        119,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_385_5to6",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2942,
+        0
+      ],
+      "threshold": [
+        0,
+        2942,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        610,
+        708,
+        311,
+        740,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_385_5to6",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        3738,
+        0
+      ],
+      "threshold": [
+        0,
+        3738,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        610,
+        708,
+        311,
+        740,
+        0,
+        0,
+        0,
+        100
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_443_3to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2855,
+        0
+      ],
+      "threshold": [
+        0,
+        2855,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        99,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_443_3to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2868,
+        0
+      ],
+      "threshold": [
+        0,
+        2868,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        99,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_555_4to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5259,
+        0
+      ],
+      "threshold": [
+        0,
+        5259,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_555_4to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        6071,
+        0
+      ],
+      "threshold": [
+        0,
+        6071,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_7_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 262,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10131,
+        262
+      ],
+      "threshold": [
+        0,
+        10131,
+        262
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_7_1to2",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 262,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5500,
+        262
+      ],
+      "threshold": [
+        0,
+        5500,
+        262
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_786_3to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        1605,
+        0
+      ],
+      "threshold": [
+        0,
+        1605,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_786_3to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        1647,
+        0
+      ],
+      "threshold": [
+        0,
+        1647,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_908_4to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        1307,
+        0
+      ],
+      "threshold": [
+        0,
+        1307,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_908_4to1",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        1194,
+        0
+      ],
+      "threshold": [
+        0,
+        1194,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_915_3to4",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 1,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2889,
+        1
+      ],
+      "threshold": [
+        0,
+        2889,
+        1
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_915_3to4",
+      "split": "tune",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 1,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2889,
+        1
+      ],
+      "threshold": [
+        0,
+        0,
+        1
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_987_3to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        9674,
+        0
+      ],
+      "threshold": [
+        0,
+        9674,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1339,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_987_3to5",
+      "split": "tune",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        9674,
+        0
+      ],
+      "threshold": [
+        0,
+        9674,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1339,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1129_4to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        8423,
+        0
+      ],
+      "threshold": [
+        0,
+        8423,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1275,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1129_4to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10434,
+        0
+      ],
+      "threshold": [
+        0,
+        10434,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1275,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1177_2to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 1686,
+      "pool_covered_pixels": 235,
+      "top8": [
+        0,
+        19815,
+        1686
+      ],
+      "threshold": [
+        0,
+        19815,
+        1686
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1177_2to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 1686,
+      "pool_covered_pixels": 235,
+      "top8": [
+        0,
+        8300,
+        1686
+      ],
+      "threshold": [
+        0,
+        8300,
+        1686
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1344_2to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 16056,
+      "pool_covered_pixels": 337,
+      "top8": [
+        176,
+        2860,
+        15880
+      ],
+      "threshold": [
+        176,
+        2860,
+        15880
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        365,
+        369,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1344_2to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 16056,
+      "pool_covered_pixels": 337,
+      "top8": [
+        176,
+        2860,
+        15880
+      ],
+      "threshold": [
+        176,
+        2860,
+        15880
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        365,
+        369,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1370_3to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 791,
+      "pool_covered_pixels": 499,
+      "top8": [
+        241,
+        8319,
+        550
+      ],
+      "threshold": [
+        241,
+        8319,
+        550
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        2331,
+        482,
+        19,
+        531,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1370_3to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 791,
+      "pool_covered_pixels": 499,
+      "top8": [
+        499,
+        6960,
+        292
+      ],
+      "threshold": [
+        499,
+        6960,
+        292
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        2331,
+        482,
+        19,
+        531,
+        0,
+        0,
+        2,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1496_2to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 4,
+      "pool_covered_pixels": 4,
+      "top8": [
+        4,
+        103972,
+        0
+      ],
+      "threshold": [
+        4,
+        103972,
+        0
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        46237,
+        46234,
+        0,
+        721,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1496_2to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 4,
+      "pool_covered_pixels": 4,
+      "top8": [
+        4,
+        103972,
+        0
+      ],
+      "threshold": [
+        4,
+        103972,
+        0
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        46237,
+        46234,
+        0,
+        721,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1527_5to2",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        11422,
+        0
+      ],
+      "threshold": [
+        0,
+        11422,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1567,
+        0,
+        0,
+        0,
+        145,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1527_5to2",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10063,
+        0
+      ],
+      "threshold": [
+        0,
+        10063,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        1567,
+        0,
+        145,
+        0,
+        0,
+        0,
+        564,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1535_4to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 14,
+      "pool_covered_pixels": 14,
+      "top8": [
+        14,
+        31049,
+        0
+      ],
+      "threshold": [
+        14,
+        31049,
+        0
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        10807,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1535_4to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 14,
+      "pool_covered_pixels": 14,
+      "top8": [
+        14,
+        31049,
+        0
+      ],
+      "threshold": [
+        14,
+        31049,
+        0
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        10807,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_156_2to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        41300,
+        0
+      ],
+      "threshold": [
+        0,
+        41300,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        13230,
+        13264,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_156_2to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        43641,
+        0
+      ],
+      "threshold": [
+        0,
+        43641,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        13230,
+        13264,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1884_4to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        7023,
+        0
+      ],
+      "threshold": [
+        0,
+        7023,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        15,
+        8,
+        19,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_1884_4to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        7023,
+        0
+      ],
+      "threshold": [
+        0,
+        7023,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        15,
+        8,
+        19,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2043_2to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 386,
+      "pool_covered_pixels": 369,
+      "top8": [
+        337,
+        1181,
+        49
+      ],
+      "threshold": [
+        337,
+        1181,
+        49
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        155,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2043_2to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 386,
+      "pool_covered_pixels": 369,
+      "top8": [
+        337,
+        1222,
+        49
+      ],
+      "threshold": [
+        337,
+        1222,
+        49
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        155,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_206_3to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        3030,
+        0
+      ],
+      "threshold": [
+        0,
+        3030,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        21,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_206_3to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        3371,
+        0
+      ],
+      "threshold": [
+        0,
+        3371,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        21,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2075_4to2",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        10748,
+        0
+      ],
+      "threshold": [
+        0,
+        10748,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2075_4to2",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        14847,
+        0
+      ],
+      "threshold": [
+        0,
+        14847,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2130_2to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5682,
+        0
+      ],
+      "threshold": [
+        0,
+        5682,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        712,
+        720,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2130_2to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        5706,
+        0
+      ],
+      "threshold": [
+        0,
+        5706,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        712,
+        720,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2192_1to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 25417,
+      "pool_covered_pixels": 22527,
+      "top8": [
+        17170,
+        4515,
+        8247
+      ],
+      "threshold": [
+        17170,
+        4515,
+        8247
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        6993,
+        7170,
+        0,
+        1146,
+        1,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2192_1to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 25417,
+      "pool_covered_pixels": 22527,
+      "top8": [
+        21111,
+        12604,
+        4306
+      ],
+      "threshold": [
+        21111,
+        12604,
+        4306
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        6993,
+        7170,
+        0,
+        1146,
+        1,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2227_3to2",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 816,
+      "pool_covered_pixels": 206,
+      "top8": [
+        92,
+        2511,
+        724
+      ],
+      "threshold": [
+        92,
+        2511,
+        724
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        218,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2227_3to2",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 816,
+      "pool_covered_pixels": 206,
+      "top8": [
+        92,
+        2843,
+        724
+      ],
+      "threshold": [
+        92,
+        2843,
+        724
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        218,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2255_2to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 3859,
+      "pool_covered_pixels": 3031,
+      "top8": [
+        3031,
+        11318,
+        828
+      ],
+      "threshold": [
+        3031,
+        11318,
+        828
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        15127,
+        10388,
+        10368,
+        15426,
+        15467,
+        4169,
+        4099,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2255_2to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 3859,
+      "pool_covered_pixels": 3031,
+      "top8": [
+        3031,
+        11318,
+        828
+      ],
+      "threshold": [
+        3031,
+        11318,
+        828
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        15127,
+        10388,
+        10368,
+        15426,
+        15467,
+        4169,
+        4099,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_23_2to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 3235,
+      "pool_covered_pixels": 2870,
+      "top8": [
+        1973,
+        3528,
+        1262
+      ],
+      "threshold": [
+        1973,
+        3528,
+        1262
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        682,
+        568,
+        702,
+        607,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_23_2to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 3235,
+      "pool_covered_pixels": 2870,
+      "top8": [
+        1973,
+        3602,
+        1262
+      ],
+      "threshold": [
+        1973,
+        3602,
+        1262
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        682,
+        568,
+        702,
+        607,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2383_2to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 14568,
+      "pool_covered_pixels": 14230,
+      "top8": [
+        11776,
+        10185,
+        2792
+      ],
+      "threshold": [
+        11776,
+        10185,
+        2792
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        1318,
+        2075,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2383_2to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 14568,
+      "pool_covered_pixels": 14230,
+      "top8": [
+        5447,
+        5024,
+        9121
+      ],
+      "threshold": [
+        5447,
+        5024,
+        9121
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        1318,
+        2075,
+        0,
+        0,
+        0,
+        23,
+        0,
+        44
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2437_1to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        33664,
+        0
+      ],
+      "threshold": [
+        0,
+        33664,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        13447,
+        12486,
+        12470,
+        13744,
+        13889,
+        19,
+        107,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2437_1to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        33664,
+        0
+      ],
+      "threshold": [
+        0,
+        33664,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        13447,
+        12486,
+        12470,
+        13744,
+        13889,
+        107,
+        19,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2438_5to1",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 13025,
+      "pool_covered_pixels": 1573,
+      "top8": [
+        1284,
+        2930,
+        11741
+      ],
+      "threshold": [
+        1284,
+        2930,
+        11741
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2438_5to1",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 13025,
+      "pool_covered_pixels": 1573,
+      "top8": [
+        731,
+        3866,
+        12294
+      ],
+      "threshold": [
+        731,
+        3866,
+        12294
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2461_5to3",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 887,
+      "pool_covered_pixels": 410,
+      "top8": [
+        11,
+        3709,
+        876
+      ],
+      "threshold": [
+        11,
+        3709,
+        876
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        194,
+        0,
+        12,
+        0,
+        0,
+        0,
+        8,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2461_5to3",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 887,
+      "pool_covered_pixels": 410,
+      "top8": [
+        11,
+        2673,
+        876
+      ],
+      "threshold": [
+        11,
+        2673,
+        876
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        194,
+        0,
+        12,
+        8,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2590_3to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 1014,
+      "pool_covered_pixels": 671,
+      "top8": [
+        124,
+        2169,
+        890
+      ],
+      "threshold": [
+        124,
+        2169,
+        890
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        319,
+        288,
+        54,
+        60,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2590_3to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 1014,
+      "pool_covered_pixels": 671,
+      "top8": [
+        229,
+        2789,
+        785
+      ],
+      "threshold": [
+        229,
+        2789,
+        785
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        319,
+        288,
+        54,
+        60,
+        12,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2792_1to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 5613,
+      "pool_covered_pixels": 4481,
+      "top8": [
+        0,
+        13705,
+        5613
+      ],
+      "threshold": [
+        0,
+        13705,
+        5613
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2792_1to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 5613,
+      "pool_covered_pixels": 4481,
+      "top8": [
+        0,
+        13428,
+        5613
+      ],
+      "threshold": [
+        0,
+        13428,
+        5613
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2828_1to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 43900,
+      "pool_covered_pixels": 1119,
+      "top8": [
+        1107,
+        3055,
+        42793
+      ],
+      "threshold": [
+        1107,
+        3055,
+        42793
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        128,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_2828_1to5",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 43900,
+      "pool_covered_pixels": 1119,
+      "top8": [
+        1107,
+        2678,
+        42793
+      ],
+      "threshold": [
+        1107,
+        2678,
+        42793
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        128,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_368_1to2",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 70577,
+      "pool_covered_pixels": 6106,
+      "top8": [
+        714,
+        7057,
+        69863
+      ],
+      "threshold": [
+        714,
+        7057,
+        69863
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        229,
+        1417,
+        294,
+        0,
+        0,
+        0,
+        181,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_368_1to2",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 70577,
+      "pool_covered_pixels": 6106,
+      "top8": [
+        714,
+        7057,
+        69863
+      ],
+      "threshold": [
+        714,
+        7057,
+        69863
+      ],
+      "verified": null,
+      "causes": [
+        "Top8_truncation_loses_pool_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        229,
+        1417,
+        0,
+        294,
+        0,
+        0,
+        181,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_37_4to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        9451,
+        0
+      ],
+      "threshold": [
+        0,
+        9451,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        970,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_37_4to3",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        14404,
+        0
+      ],
+      "threshold": [
+        0,
+        14404,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        970,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_378_1to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2456,
+        0
+      ],
+      "threshold": [
+        0,
+        2456,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        324,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_378_1to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        2932,
+        0
+      ],
+      "threshold": [
+        0,
+        2932,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        324,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_427_3to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 364,
+      "pool_covered_pixels": 29,
+      "top8": [
+        29,
+        1364,
+        335
+      ],
+      "threshold": [
+        29,
+        1364,
+        335
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_427_3to1",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 364,
+      "pool_covered_pixels": 29,
+      "top8": [
+        29,
+        1286,
+        335
+      ],
+      "threshold": [
+        29,
+        1286,
+        335
+      ],
+      "verified": null,
+      "causes": [],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_615_3to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "delta",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        732,
+        0
+      ],
+      "threshold": [
+        0,
+        732,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_615_3to4",
+      "split": "confirm",
+      "group": "地表类",
+      "rank": "joint",
+      "remaining_gt_pixels": 0,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        587,
+        0
+      ],
+      "threshold": [
+        0,
+        587,
+        0
+      ],
+      "verified": null,
+      "causes": [
+        "similarity_gate_retains_empty_target_FP"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_968_5to3",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "delta",
+      "remaining_gt_pixels": 62,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        1142,
+        62
+      ],
+      "threshold": [
+        0,
+        1142,
+        62
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    },
+    {
+      "id": "train_968_5to3",
+      "split": "confirm",
+      "group": "目标类",
+      "rank": "joint",
+      "remaining_gt_pixels": 62,
+      "pool_covered_pixels": 0,
+      "top8": [
+        0,
+        1220,
+        62
+      ],
+      "threshold": [
+        0,
+        1220,
+        62
+      ],
+      "verified": null,
+      "causes": [
+        "original_geometry_pool_zero_GT_coverage"
+      ],
+      "exemplar_overlap_top8": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "overlap_interpretation": "support-overlap diagnostic only; not causal proof and not a gate"
+    }
+  ],
+  "limitation": "Failure attribution is count-based. Segmentation errors vs semantic errors require visual evidence; overlap is not causal evidence. Empty-task pixel F1 is zero under the unchanged historical convention, so use empty accuracy/FP separately."
+}
