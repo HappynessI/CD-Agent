@@ -33,3 +33,17 @@ Ten-case diagnostic selection is fixed before final results: within confirm choo
 Usage accounting refinement before Step3 requests: each archived attempt with returned usage is priced once, including malformed/failed responses. Do not additionally sum answer.json or failure invocation summaries for the same folder when attempts exist. If an older artifact has no attempt records, fall back to separate failed invocation summaries plus final answer. Missing-usage connection failures are reported unknown and excluded from known spend, never asserted free. Failure exits persist api_cost_status.json; resumed budget checks include all earlier failed usage. A synthetic accounting test verifies failure inclusion and no double count.
 
 Diagnostic sampling revision after Step1, before final prediction: main audit requested explicit coverage of the two confirm tiny-GT cases and self-match-cleaning gains. Final ten distinct cases will therefore be: two nonempty remaining-GT<16 cases, two largest clean-instance gains under the tune-frozen rank/K, three final harms, one final gain, two empty-FP cases, with deterministic fill. This alters offline diagnosis only, not candidate pools, threshold selection or online advancement.
+
+Final JSON-only audit entry `n8_t3_audit --out <root>` aggregates candidate removals/modifications, reconstructed/new masks, predicted branch counts, gate triggers, requested slots/new-mask slots, and returned-usage costs. It decomposes per-task losses into rebuilt-pool coverage, TopK truncation, task gate and verifier effects. This is reporting only; no active inference modules change. The final diagnostic shell runs this audit before image rendering.
+
+Final page presentation refresh: `n8_t3_refresh_html --out <root>` reuses `make_demo.CSS` and `CURRENT_CSS`, adds responsive G3-style case cards, and checks this page's relative links. It writes only HTML/JSON, retains the previous plain index, and neither opens nor regenerates PNG assets. Run after final_audit is available; this is presentation maintenance, not new scientific computation or a new website.
+
+## 在线补充：预声明 ungated pool Top5（2026-11-15）
+
+原用户 N8 规范的在线自动门槛并未限制为最终 gate/K3 主组合。主组合失败仍保留；预声明、tune 前固定的 ungated rebuilt pool Top5 在 tune（正 F1 14.09332，空 FP 62758）及 confirm（正 F1 18.21835，空 FP 58094）均满足相对原 Top8 的双数值门槛，因此授权探索在线验证该固定对照。此决定是在 confirm 曝光后识别已固定方法的资格，不新增参数、不重选 K，不将该对照称为原 tune 最优主配置。原 dev10 中 7 confirm、3 tune，在线也不是独立验证。
+
+在线固定 10×2×3，种子偏移 1016/2027/3038，两臂同 v4/G3 prompt 与工具 schema。共同新增 opt-in retrieve_example：baseline 原 R1 几何池 delta Top8；N8 净化后、示例预测类别 route 重构、joint Top5，无全图 gate、无内部 VLM。只返回候选 props，Agent 自主核验、编辑、提交；原 match_exemplar 默认不改，允许 Agent 自主使用其他工具，报告 retrieve_example 使用率。推理白名单 RGB、示例 E、原中性 instruction/target、模型概率/特征；meta.transition 不进入 planner 或 provider。GT 路径仅由原 recorder 离线评分。每臂首真实任务工程正常结束后继续剩余任务（正常no_submit、空答案、低F1均计入结果，不据此阻断或重试），保留失败/中断和已知 usage。所有 API 均 qwen3.7-flash，在线共享预算 49.9824638 元，另计已有离线 0.0175362 元。
+
+复现入口：`tools/run_n8_t3_online_check.sh`（Slurm CPU）；随后 `tools/run_n8_t3_online.sh 1016`（gpu46，GET workspace /models 200 后同作业开始真实 Agent）；首 seed 成功后相同入口 2027、3038。所有提交由主 Agent 的 exp-loop 管理，不直接运行脚本。在线输出 `online/`；评分/请求成本 `online_summary.json` 与 `metric.json`。实际响应 usage 是费用估计，未返回 usage 的连接失败不假定为已知免费。
+
+在线报告补充：`n8_t3_online_report`只读取在线评分/轨迹并汇总，不参与推理。输出每seed/两组/四种support的预期与已评分任务数、GT支持像素、P/R/F1、空FP/正确率、正目标全空数、no-model-submit与状态分解、retrieve尝试/成功返回任务率和费用。新增候选尝试与成功返回分开统计；合并seed不视为更多独立图像。`tools/run_n8_t3_online_report.sh`在完整会话阶段结束后运行最小测试、刷新metrics并生成online_report.json/md；不得与正在写入的会话并发归档。结论填写模板见online_conclusion_template.md。
