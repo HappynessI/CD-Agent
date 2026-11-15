@@ -2736,3 +2736,9 @@ python -B -m unittest agent_baseline.tests.test_demo_g3 \
 ```
 
 `--stage page` 只从缓存装配页面。静态检查输出为 `$RUNTIME/cache/page_audit.json`，核对嵌图、相对链接、锚点，并逐字节比对原九个 HTML 回放和原选择清单。最终 Slurm 回归通过 17 项，无跳过。有 Playwright 与 Chromium 时，用 `node tools/agent_baseline/check_demo_g3_browser.cjs results/agent_baseline/demo_g3 "$RUNTIME/cache/browser_audit.json"` 检查离线交互。最终静态审计、浏览器审计与四张截图在回放目录的 `validation/` 下。生成与检查均复用已有会话、掩码和候选数据。
+
+### 2026-11-15 审核环境当前状态
+
+用户确认 `review_v2_19` 中 WHU 已完成人工审核，不再列入待审；历史静态页面中的 pending 文案保留为生成时快照，不代表当前决定。当前待审 T4.3 128、T4.4 128（原 SQLite 均 pending_review，自动 QC 均 pass）；T5.2 52、T5.3 52（候选清单 pending_review，尚未导入审核数据库，各有 3 个既有静态样例，不能在样例页保存审核决定）。本轮仅启动环境，不修改任务数据或自动批准。
+
+服务位于 choud-mgt-09 的 127.0.0.1:8876，统一入口 `/review-home`，完整 T4 审核入口 `/?mode=task-data&taskTab=construct`。复用原 FastAPI 与数据库，临时启动器 `.runtime/task-review-20261115/serve.py` 额外挂载已有结果到 `/review-pages/`，日志及启动前 SQLite 备份同目录。页面、API、T4 双期/GT/参照图和六个 T5 样例均实际 GET 200。原 `tools/serve_task_review.sh` 启动仅带原后端；需恢复本次附加静态入口时使用 wellbeing Python 执行上述临时启动器。客户端转发：`ssh -N -L 8876:127.0.0.1:8876 guisongxia@choud-mgt-09`（须可 SSH 到该管理节点；否则使用用户已有跳板配置），打开 `http://localhost:8876/review-home`。
