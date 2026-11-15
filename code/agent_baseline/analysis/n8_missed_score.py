@@ -24,10 +24,13 @@ def summary(rows):
         wins=sum(r['delta_f1']>1e-9 for r in rows),losses=sum(r['delta_f1']< -1e-9 for r in rows),
         vlm_trigger_tasks=sum(r['trigger'] for r in rows),vlm_trigger_rate=sum(r['trigger'] for r in rows)/len(rows),
         find_missed_generation_rate=1.,verifier_candidate_calls=sum(r['verifier_calls'] for r in rows),
+        net_candidate_count=sum(r['net_candidates'] for r in rows),
+        topk_candidate_tp=sum(r['topk_candidate_tp'] for r in rows),topk_candidate_fp=sum(r['topk_candidate_fp'] for r in rows),
         counterfactual_answer_cost_cny=sum(r['answer_cost_cny'] for r in rows))
     result['ties']=len(rows)-result['wins']-result['losses'];result['harm_rate']=result['losses']/len(rows)
     result['pooled_delta']=result['pooled']['f1']-result['baseline']['f1']
     result['macro_delta']=result['macro_f1']-result['baseline_macro_f1']
+    result['topk_candidate_fn_recall']=result['topk_candidate_tp']/result['baseline']['fn'] if result['baseline']['fn'] else None
     empty=[r for r in rows if r['baseline']['tp']+r['baseline']['fn']==0]
     result.update(empty_gt_tasks=len(empty),empty_gt_fp=sum(r['metrics']['fp'] for r in empty),empty_gt_added_fp=sum(r['added_fp'] for r in empty))
     return result
@@ -79,6 +82,8 @@ def score(a):
         tau=read(a.out/'frozen_semantic.json')['threshold']
         m=union([mask for mask,candidate in zip(masks,item['candidates']) if candidate['semantic_delta']>=tau],base.shape)
         stage['semantic']=dict(tp=int((m&gt&~base).sum()),fp=int((m&~gt&~base).sum()))
+        residual=union([mask for mask,candidate in zip(masks,item['candidates']) if candidate['semantic_delta']>=tau and candidate['dino']>=.20],base.shape)
+        stage['residual_evidence']=dict(tp=int((residual&gt&~base).sum()),fp=int((residual&~gt&~base).sum()))
         diagnostics.append(dict(group=item['group'],stem=item['stem'],remaining_fn=int((gt&~base).sum()),stages=stage))
     reports={key:dict(config=next(r['config'] for r in rows),**all_groups(rows)) for key,rows in cases.items()}
     write(a.out/f'scores_{a.split}.json',dict(cases=cases,summaries=reports));write(a.out/f'candidate_diagnostics_{a.split}.json',diagnostics)
