@@ -15,4 +15,7 @@ export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
 args=(--run "$ROOT/wyh/exp6_staging/agent_baseline_run" --night "$ROOT/wyh/CD-Agent/results/agent_baseline/night_t3_20261114" --output "$OUT" --review "$ROOT/wyh/CD-Agent/results/agent_baseline/n9_t3_data_review")
 phase=${1:?clean, old or review}
 shift
+started=$SECONDS
+finish(){ status=$?; trap - EXIT; QQ_SUB="N9 T3 data $phase $SLURM_JOB_ID" QQ_BODY="status=$status elapsed=$((SECONDS-started))s output=$OUT; checkpointed pending-review construction" "$ROOT/.local/bin/wangyihan-send-qq" >/dev/null 2>&1 || true; exit "$status"; }
+trap finish EXIT
 "$PY" -B -m agent_baseline.analysis.n9_t3_data_resume "${args[@]}" --phase "$phase" "$@"
