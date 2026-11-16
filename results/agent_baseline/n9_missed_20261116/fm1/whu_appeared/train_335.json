@@ -1,0 +1,69 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_335",
+  "split": "tune",
+  "profile": "build",
+  "direction": "appeared",
+  "scope": "building_rebuild_excluded",
+  "instruction": "Find the buildings that were newly built between T1 and T2.",
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_335.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_335.png",
+  "base": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/base/whu_appeared/train_335.npz",
+  "sources": {
+    "S1_02": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_appeared/S1_02/train_335.npz",
+    "S2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_appeared/S2/train_335.npz",
+    "S3": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_appeared/S3/train_335.npz",
+    "S4": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_appeared/S4/train_335.npz",
+    "S5": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_appeared/S5/train_335.npz"
+  },
+  "semantic": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/semantic/whu/train_335_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/semantic/whu/train_335_t2.npz"
+  },
+  "features": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/whu/train_335/extract_features_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/whu/train_335/extract_features_t2.npz"
+  },
+  "shape": [
+    512,
+    512
+  ],
+  "candidates": [
+    {
+      "index": 0,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 3270,
+      "bbox": [
+        450,
+        366,
+        512,
+        453
+      ],
+      "semantic_delta": -0.07432051002979279,
+      "p1": 0.5639871954917908,
+      "p2": 0.4896666407585144,
+      "dino": 0.06590026617050171
+    }
+  ],
+  "masks": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/fm1/whu_appeared/train_335.npz",
+  "audit": {
+    "enabled_sources": [
+      "S1_02",
+      "S2",
+      "S3",
+      "S4",
+      "S5"
+    ],
+    "s5_before": 0,
+    "s5_after_dino020": 0,
+    "source_components_after_dilation25": {
+      "S1_02": 1,
+      "S2": 0,
+      "S3": 0,
+      "S4": 0,
+      "S5": 0
+    }
+  }
+}

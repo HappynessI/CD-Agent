@@ -1,0 +1,172 @@
+{
+  "status": "complete",
+  "identity": {
+    "dataset": "second",
+    "stem": "train_2043",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2043.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2043.png",
+    "policy": {
+      "example_area": [
+        200,
+        5000
+      ],
+      "max_original_hole_ratio": 0.05,
+      "min_rotated_rectangle_fill": 0.45,
+      "single_date_dino_cosine": 0.75,
+      "rgb_mean_euclidean_normalized_max": 0.15,
+      "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+      "minimum_other_matching_instances": 2,
+      "min_full_remaining_pixels": 400,
+      "preferred_cluster_area_fraction": 0.85,
+      "connectivity": 8,
+      "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+      "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+      "labels_role": "offline construction/review only",
+      "review_status": "pending_review"
+    }
+  },
+  "candidates": [
+    {
+      "example_id": 2,
+      "example_area": 775,
+      "bbox": [
+        270,
+        248,
+        303,
+        283
+      ],
+      "hole_ratio": 0.0,
+      "compactness": 0.670995670995671,
+      "cluster_area_fraction": 1.0,
+      "full_pixels": 6804,
+      "remaining_pixels": 6029,
+      "remaining_instances": 2,
+      "matching_other_instances": 2,
+      "matching_other_pixels": 6029,
+      "instances": [
+        {
+          "id": 1,
+          "raw_area": 5074,
+          "area": 5074,
+          "bbox": [
+            267,
+            184,
+            377,
+            234
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.948352049953778,
+          "min_rectangle_area": 5350.333771353479,
+          "rgb_mean": [
+            165.977729601892,
+            161.1348048876626,
+            156.04000788332675
+          ],
+          "cosine": 0.7984908819198608,
+          "rgb_distance": 0.09733001401841464,
+          "is_example": false,
+          "is_match": true,
+          "intact_geometry": true
+        },
+        {
+          "id": 2,
+          "raw_area": 775,
+          "area": 775,
+          "bbox": [
+            270,
+            248,
+            303,
+            283
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.670995670995671,
+          "min_rectangle_area": 1155.0,
+          "rgb_mean": [
+            132.03354838709677,
+            138.4774193548387,
+            169.5458064516129
+          ],
+          "cosine": 1.0,
+          "rgb_distance": 0.0,
+          "is_example": true,
+          "is_match": true,
+          "intact_geometry": true
+        },
+        {
+          "id": 3,
+          "raw_area": 955,
+          "area": 955,
+          "bbox": [
+            293,
+            282,
+            364,
+            297
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.9118086123538741,
+          "min_rectangle_area": 1047.3689182805867,
+          "rgb_mean": [
+            124.06282722513089,
+            127.8041884816754,
+            161.89005235602093
+          ],
+          "cosine": 0.928134560585022,
+          "rgb_distance": 0.034786533363156735,
+          "is_example": false,
+          "is_match": true,
+          "intact_geometry": true
+        }
+      ],
+      "sample_instance_ids": [
+        1,
+        3
+      ],
+      "dataset": "second",
+      "stem": "train_2043",
+      "category": "building",
+      "direction": "demolish",
+      "example_time": "t1"
+    }
+  ],
+  "groups": {
+    "second/building/build": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    },
+    "second/building/demolish": {
+      "images": 1,
+      "original_instances": 3,
+      "eligible_examples": 2,
+      "eligible_images": 1,
+      "failures": {
+        "example_area": 1
+      }
+    },
+    "second/playground/build": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    }
+  }
+}

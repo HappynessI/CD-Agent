@@ -1,0 +1,167 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_2928",
+  "split": "tune",
+  "profile": "demolish",
+  "direction": "disappeared",
+  "scope": "building_rebuild_excluded",
+  "instruction": "Find the buildings that were demolished between T1 and T2.",
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2928.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2928.png",
+  "base": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/base/second_disappeared/train_2928.npz",
+  "sources": {
+    "S1_02": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/second_disappeared/S1_02/train_2928.npz",
+    "S2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/second_disappeared/S2/train_2928.npz",
+    "S3": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/second_disappeared/S3/train_2928.npz",
+    "S4": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/second_disappeared/S4/train_2928.npz",
+    "S5": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/second_disappeared/S5/train_2928.npz"
+  },
+  "semantic": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch98_t3_routes/results/route_a/semantic/train_2928_3to1_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch98_t3_routes/results/route_a/semantic/train_2928_3to1_t2.npz"
+  },
+  "features": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/second/train_2928/extract_features_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/second/train_2928/extract_features_t2.npz"
+  },
+  "shape": [
+    512,
+    512
+  ],
+  "candidates": [
+    {
+      "index": 0,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 432,
+      "bbox": [
+        137,
+        0,
+        160,
+        36
+      ],
+      "semantic_delta": 0.05485562980175018,
+      "p1": 0.4261542558670044,
+      "p2": 0.371298611164093,
+      "dino": 0.12104308605194092
+    },
+    {
+      "index": 1,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 6754,
+      "bbox": [
+        186,
+        0,
+        314,
+        85
+      ],
+      "semantic_delta": 0.15245769917964935,
+      "p1": 0.17799225449562073,
+      "p2": 0.025534551590681076,
+      "dino": 0.20826643705368042
+    },
+    {
+      "index": 2,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 2548,
+      "bbox": [
+        56,
+        356,
+        164,
+        424
+      ],
+      "semantic_delta": -0.10653485357761383,
+      "p1": 0.32809922099113464,
+      "p2": 0.43463408946990967,
+      "dino": 0.1758875846862793
+    },
+    {
+      "index": 3,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 178,
+      "bbox": [
+        0,
+        392,
+        9,
+        420
+      ],
+      "semantic_delta": -0.010066686198115349,
+      "p1": 0.33003902435302734,
+      "p2": 0.34010571241378784,
+      "dino": 0.16616356372833252
+    },
+    {
+      "index": 4,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 2422,
+      "bbox": [
+        463,
+        416,
+        512,
+        512
+      ],
+      "semantic_delta": 0.4501025676727295,
+      "p1": 0.5522046685218811,
+      "p2": 0.10210205614566803,
+      "dino": 0.23353606462478638
+    },
+    {
+      "index": 5,
+      "sources": [
+        "S2"
+      ],
+      "area": 2436,
+      "bbox": [
+        463,
+        416,
+        512,
+        512
+      ],
+      "semantic_delta": 0.4496670365333557,
+      "p1": 0.550499439239502,
+      "p2": 0.10083238780498505,
+      "dino": 0.24049639701843262
+    },
+    {
+      "index": 6,
+      "sources": [
+        "S5"
+      ],
+      "area": 2489,
+      "bbox": [
+        463,
+        415,
+        512,
+        512
+      ],
+      "semantic_delta": 0.4505675435066223,
+      "p1": 0.5520823001861572,
+      "p2": 0.10151473432779312,
+      "dino": 0.2361721396446228
+    }
+  ],
+  "masks": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/fm1/second_disappeared/train_2928.npz",
+  "audit": {
+    "enabled_sources": [
+      "S1_02",
+      "S2",
+      "S5"
+    ],
+    "s5_before": 39,
+    "s5_after_dino020": 29,
+    "source_components_after_dilation25": {
+      "S1_02": 5,
+      "S2": 1,
+      "S5": 1
+    }
+  }
+}

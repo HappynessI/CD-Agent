@@ -1,0 +1,702 @@
+{
+  "status": "complete_pending_review",
+  "policy": {
+    "example_area": [
+      200,
+      5000
+    ],
+    "max_original_hole_ratio": 0.05,
+    "min_rotated_rectangle_fill": 0.45,
+    "single_date_dino_cosine": 0.75,
+    "rgb_mean_euclidean_normalized_max": 0.15,
+    "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+    "minimum_other_matching_instances": 2,
+    "min_full_remaining_pixels": 400,
+    "preferred_cluster_area_fraction": 0.85,
+    "connectivity": 8,
+    "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+    "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+    "labels_role": "offline construction/review only",
+    "review_status": "pending_review"
+  },
+  "images_scanned": 120,
+  "groups": {
+    "whu/building/build": {
+      "images": 60,
+      "original_instances": 169,
+      "eligible_examples": 46,
+      "eligible_images": 10,
+      "failures": {
+        "empty_direction": 26,
+        "example_area": 83,
+        "remaining_pixels": 13,
+        "fewer_than_two_other_matches": 30,
+        "example_compactness": 4,
+        "example_holes": 1
+      }
+    },
+    "whu/building/demolish": {
+      "images": 60,
+      "original_instances": 24,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 48,
+        "remaining_pixels": 9,
+        "example_area": 9,
+        "example_compactness": 2,
+        "fewer_than_two_other_matches": 6
+      }
+    },
+    "second/building/build": {
+      "images": 60,
+      "original_instances": 501,
+      "eligible_examples": 143,
+      "eligible_images": 29,
+      "failures": {
+        "fewer_than_two_other_matches": 100,
+        "example_area": 237,
+        "example_compactness": 18,
+        "remaining_pixels": 12,
+        "example_holes": 4,
+        "empty_direction": 6
+      }
+    },
+    "second/building/demolish": {
+      "images": 60,
+      "original_instances": 185,
+      "eligible_examples": 51,
+      "eligible_images": 13,
+      "failures": {
+        "empty_direction": 19,
+        "fewer_than_two_other_matches": 52,
+        "example_area": 66,
+        "remaining_pixels": 19,
+        "example_compactness": 10,
+        "example_holes": 4
+      }
+    },
+    "second/playground/build": {
+      "images": 60,
+      "original_instances": 4,
+      "eligible_examples": 3,
+      "eligible_images": 1,
+      "failures": {
+        "empty_direction": 58,
+        "example_area": 1,
+        "remaining_pixels": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 60,
+      "original_instances": 1,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 59,
+        "example_area": 1,
+        "remaining_pixels": 1
+      }
+    }
+  },
+  "eligible_image_direction_candidates": 53,
+  "eligible_physical_images": 49,
+  "candidates_at_least_85_percent": 19,
+  "selected": 3,
+  "selection": "Prefer >=85% area homogeneity; cover WHU/SECOND if available; distinct images; then larger homogeneous remaining support and compactness",
+  "candidate_summaries": [
+    {
+      "dataset": "whu",
+      "stem": "train_1045",
+      "category": "building",
+      "direction": "build",
+      "example_id": 8,
+      "example_area": 2540,
+      "cluster_area_fraction": 0.5470423330577012,
+      "matching_other_instances": 3,
+      "remaining_pixels": 47043
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_194",
+      "category": "building",
+      "direction": "build",
+      "example_id": 7,
+      "example_area": 3697,
+      "cluster_area_fraction": 0.4359501603387922,
+      "matching_other_instances": 3,
+      "remaining_pixels": 37154
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_31",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 3071,
+      "cluster_area_fraction": 0.4059468199784405,
+      "matching_other_instances": 2,
+      "remaining_pixels": 30325
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_356",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 986,
+      "cluster_area_fraction": 0.980714635340186,
+      "matching_other_instances": 3,
+      "remaining_pixels": 9229
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_615",
+      "category": "building",
+      "direction": "build",
+      "example_id": 2,
+      "example_area": 2154,
+      "cluster_area_fraction": 0.42061494201204713,
+      "matching_other_instances": 2,
+      "remaining_pixels": 20092
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_707",
+      "category": "building",
+      "direction": "build",
+      "example_id": 12,
+      "example_area": 3756,
+      "cluster_area_fraction": 0.982254635644266,
+      "matching_other_instances": 18,
+      "remaining_pixels": 63980
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_784",
+      "category": "building",
+      "direction": "build",
+      "example_id": 1,
+      "example_area": 3834,
+      "cluster_area_fraction": 0.7942461887883272,
+      "matching_other_instances": 8,
+      "remaining_pixels": 54284
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_785",
+      "category": "building",
+      "direction": "build",
+      "example_id": 12,
+      "example_area": 4100,
+      "cluster_area_fraction": 0.43301611383123,
+      "matching_other_instances": 6,
+      "remaining_pixels": 82906
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_835",
+      "category": "building",
+      "direction": "build",
+      "example_id": 5,
+      "example_area": 4740,
+      "cluster_area_fraction": 0.7310513739545997,
+      "matching_other_instances": 10,
+      "remaining_pixels": 78960
+    },
+    {
+      "dataset": "whu",
+      "stem": "train_916",
+      "category": "building",
+      "direction": "build",
+      "example_id": 3,
+      "example_area": 4306,
+      "cluster_area_fraction": 0.567572717980701,
+      "matching_other_instances": 5,
+      "remaining_pixels": 53417
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1129",
+      "category": "building",
+      "direction": "build",
+      "example_id": 5,
+      "example_area": 3257,
+      "cluster_area_fraction": 0.7829312725883701,
+      "matching_other_instances": 10,
+      "remaining_pixels": 64809
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1136",
+      "category": "building",
+      "direction": "build",
+      "example_id": 1,
+      "example_area": 4748,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 4,
+      "remaining_pixels": 24737
+    },
+    {
+      "dataset": "second",
+      "stem": "train_119",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 3,
+      "example_area": 3480,
+      "cluster_area_fraction": 0.5012990564747709,
+      "matching_other_instances": 6,
+      "remaining_pixels": 25772
+    },
+    {
+      "dataset": "second",
+      "stem": "train_127",
+      "category": "building",
+      "direction": "build",
+      "example_id": 12,
+      "example_area": 2085,
+      "cluster_area_fraction": 0.8848180470936934,
+      "matching_other_instances": 8,
+      "remaining_pixels": 34353
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1370",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 4,
+      "example_area": 1131,
+      "cluster_area_fraction": 0.6415595019391712,
+      "matching_other_instances": 5,
+      "remaining_pixels": 3768
+    },
+    {
+      "dataset": "second",
+      "stem": "train_145",
+      "category": "building",
+      "direction": "build",
+      "example_id": 16,
+      "example_area": 229,
+      "cluster_area_fraction": 0.23075228895950664,
+      "matching_other_instances": 2,
+      "remaining_pixels": 31554
+    },
+    {
+      "dataset": "second",
+      "stem": "train_147",
+      "category": "building",
+      "direction": "build",
+      "example_id": 13,
+      "example_area": 3747,
+      "cluster_area_fraction": 0.9577892499240814,
+      "matching_other_instances": 12,
+      "remaining_pixels": 16011
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1496",
+      "category": "building",
+      "direction": "build",
+      "example_id": 3,
+      "example_area": 1526,
+      "cluster_area_fraction": 0.9307910718510923,
+      "matching_other_instances": 22,
+      "remaining_pixels": 49190
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1535",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 1185,
+      "cluster_area_fraction": 0.08161451659570951,
+      "matching_other_instances": 4,
+      "remaining_pixels": 47201
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1538",
+      "category": "building",
+      "direction": "build",
+      "example_id": 1,
+      "example_area": 1690,
+      "cluster_area_fraction": 0.7144413179631479,
+      "matching_other_instances": 9,
+      "remaining_pixels": 20344
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1538",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 9,
+      "example_area": 617,
+      "cluster_area_fraction": 0.5493867010974822,
+      "matching_other_instances": 2,
+      "remaining_pixels": 932
+    },
+    {
+      "dataset": "second",
+      "stem": "train_156",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 4,
+      "example_area": 879,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 6,
+      "remaining_pixels": 3704
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1745",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 10,
+      "example_area": 421,
+      "cluster_area_fraction": 0.8803113334921769,
+      "matching_other_instances": 5,
+      "remaining_pixels": 12170
+    },
+    {
+      "dataset": "second",
+      "stem": "train_1808",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 733,
+      "cluster_area_fraction": 0.11808813504952083,
+      "matching_other_instances": 2,
+      "remaining_pixels": 24206
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2043",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 2,
+      "example_area": 775,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 2,
+      "remaining_pixels": 6029
+    },
+    {
+      "dataset": "second",
+      "stem": "train_206",
+      "category": "building",
+      "direction": "build",
+      "example_id": 1,
+      "example_area": 317,
+      "cluster_area_fraction": 0.6605908233815211,
+      "matching_other_instances": 3,
+      "remaining_pixels": 1274
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2075",
+      "category": "building",
+      "direction": "build",
+      "example_id": 1,
+      "example_area": 1314,
+      "cluster_area_fraction": 0.5555238977135124,
+      "matching_other_instances": 5,
+      "remaining_pixels": 12725
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2130",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 1954,
+      "cluster_area_fraction": 0.667977923907938,
+      "matching_other_instances": 3,
+      "remaining_pixels": 32110
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2192",
+      "category": "building",
+      "direction": "build",
+      "example_id": 6,
+      "example_area": 833,
+      "cluster_area_fraction": 0.13696982055464926,
+      "matching_other_instances": 3,
+      "remaining_pixels": 48207
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2227",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 7,
+      "example_area": 254,
+      "cluster_area_fraction": 0.16609669415945819,
+      "matching_other_instances": 3,
+      "remaining_pixels": 29572
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2255",
+      "category": "building",
+      "direction": "build",
+      "example_id": 3,
+      "example_area": 1737,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 2,
+      "remaining_pixels": 17589
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2383",
+      "category": "building",
+      "direction": "build",
+      "example_id": 5,
+      "example_area": 770,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 4,
+      "remaining_pixels": 16021
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2437",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 4864,
+      "cluster_area_fraction": 0.6395318444515435,
+      "matching_other_instances": 2,
+      "remaining_pixels": 29569
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2438",
+      "category": "building",
+      "direction": "build",
+      "example_id": 3,
+      "example_area": 774,
+      "cluster_area_fraction": 0.7002164502164502,
+      "matching_other_instances": 2,
+      "remaining_pixels": 1998
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2438",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 8,
+      "example_area": 406,
+      "cluster_area_fraction": 0.9997607273887382,
+      "matching_other_instances": 7,
+      "remaining_pixels": 24670
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2461",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 3,
+      "example_area": 1051,
+      "cluster_area_fraction": 0.844401357246728,
+      "matching_other_instances": 4,
+      "remaining_pixels": 5138
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2571",
+      "category": "building",
+      "direction": "build",
+      "example_id": 5,
+      "example_area": 745,
+      "cluster_area_fraction": 0.8368605466012614,
+      "matching_other_instances": 12,
+      "remaining_pixels": 34930
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2571",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 3,
+      "example_area": 523,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 2,
+      "remaining_pixels": 1154
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2590",
+      "category": "building",
+      "direction": "build",
+      "example_id": 12,
+      "example_area": 340,
+      "cluster_area_fraction": 0.24310915104740904,
+      "matching_other_instances": 3,
+      "remaining_pixels": 1474
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2677",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 1225,
+      "cluster_area_fraction": 0.20529150282099504,
+      "matching_other_instances": 2,
+      "remaining_pixels": 45567
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2792",
+      "category": "building",
+      "direction": "build",
+      "example_id": 11,
+      "example_area": 4586,
+      "cluster_area_fraction": 0.6939431838484903,
+      "matching_other_instances": 7,
+      "remaining_pixels": 17802
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2822",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 5,
+      "example_area": 489,
+      "cluster_area_fraction": 0.8781144781144781,
+      "matching_other_instances": 3,
+      "remaining_pixels": 3966
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2828",
+      "category": "building",
+      "direction": "build",
+      "example_id": 10,
+      "example_area": 1602,
+      "cluster_area_fraction": 0.2122975310583425,
+      "matching_other_instances": 3,
+      "remaining_pixels": 42911
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2890",
+      "category": "building",
+      "direction": "build",
+      "example_id": 2,
+      "example_area": 2587,
+      "cluster_area_fraction": 0.9336627954863685,
+      "matching_other_instances": 3,
+      "remaining_pixels": 58118
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2912",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 489,
+      "cluster_area_fraction": 0.6710579243765085,
+      "matching_other_instances": 5,
+      "remaining_pixels": 9455
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2928",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 5,
+      "example_area": 2634,
+      "cluster_area_fraction": 0.6175039071221254,
+      "matching_other_instances": 2,
+      "remaining_pixels": 19761
+    },
+    {
+      "dataset": "second",
+      "stem": "train_385",
+      "category": "playground",
+      "direction": "build",
+      "example_id": 1,
+      "example_area": 844,
+      "cluster_area_fraction": 1.0,
+      "matching_other_instances": 2,
+      "remaining_pixels": 3416
+    },
+    {
+      "dataset": "second",
+      "stem": "train_443",
+      "category": "building",
+      "direction": "build",
+      "example_id": 12,
+      "example_area": 418,
+      "cluster_area_fraction": 0.7249423697556477,
+      "matching_other_instances": 4,
+      "remaining_pixels": 10427
+    },
+    {
+      "dataset": "second",
+      "stem": "train_443",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 2,
+      "example_area": 282,
+      "cluster_area_fraction": 0.5115693012600229,
+      "matching_other_instances": 3,
+      "remaining_pixels": 4083
+    },
+    {
+      "dataset": "second",
+      "stem": "train_555",
+      "category": "building",
+      "direction": "build",
+      "example_id": 9,
+      "example_area": 1300,
+      "cluster_area_fraction": 0.9571231882709733,
+      "matching_other_instances": 2,
+      "remaining_pixels": 106194
+    },
+    {
+      "dataset": "second",
+      "stem": "train_615",
+      "category": "building",
+      "direction": "build",
+      "example_id": 4,
+      "example_area": 1705,
+      "cluster_area_fraction": 0.23361937605261046,
+      "matching_other_instances": 2,
+      "remaining_pixels": 10764
+    },
+    {
+      "dataset": "second",
+      "stem": "train_786",
+      "category": "building",
+      "direction": "build",
+      "example_id": 9,
+      "example_area": 2815,
+      "cluster_area_fraction": 0.9717004995889458,
+      "matching_other_instances": 7,
+      "remaining_pixels": 28811
+    },
+    {
+      "dataset": "second",
+      "stem": "train_908",
+      "category": "building",
+      "direction": "build",
+      "example_id": 6,
+      "example_area": 3482,
+      "cluster_area_fraction": 0.9998316498316498,
+      "matching_other_instances": 6,
+      "remaining_pixels": 26218
+    }
+  ],
+  "shortage_reason": null,
+  "api_cost_cny": 0,
+  "elapsed_seconds": 27.3920652680099,
+  "checkpoint_counts": {
+    "images_computed_this_attempt": 120,
+    "images_processed": 120
+  },
+  "slurm_job": "187664",
+  "review_status": "pending_review",
+  "note": "No new Agent run or formal evaluation. GT full/rem retain every same-category same-direction filled component, not only matched cluster. Non-selected masks are not written."
+}

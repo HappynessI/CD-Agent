@@ -1,0 +1,1732 @@
+[
+  {
+    "id": "T44_second_train_145_road_0",
+    "dataset": "second",
+    "image_id": "train_145",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_145.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_145.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      2,
+      4
+    ],
+    "distractor_instance_ids": [
+      0,
+      1,
+      3,
+      5,
+      6,
+      7
+    ],
+    "target_instances": 2,
+    "distractor_instances": 6,
+    "target_pixels": 16258,
+    "distractor_pixels": 17115,
+    "anchor_pixels": 18009,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_145.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_145.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_145_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_145_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 7103,
+        "bbox": [
+          0,
+          0,
+          45,
+          186
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 8404,
+        "bbox": [
+          57,
+          2,
+          180,
+          86
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 2,
+        "area": 289,
+        "bbox": [
+          437,
+          235,
+          465,
+          258
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 3,
+        "area": 442,
+        "bbox": [
+          491,
+          267,
+          512,
+          302
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 4,
+        "area": 15969,
+        "bbox": [
+          196,
+          276,
+          305,
+          512
+        ],
+        "touches_border": true,
+        "is_target": true
+      },
+      {
+        "id": 5,
+        "area": 357,
+        "bbox": [
+          0,
+          328,
+          15,
+          361
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 6,
+        "area": 580,
+        "bbox": [
+          194,
+          399,
+          206,
+          455
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 7,
+        "area": 229,
+        "bbox": [
+          34,
+          463,
+          48,
+          487
+        ],
+        "touches_border": false,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": true,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": false,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_145_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_145_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_145_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_145_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_145.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_145.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_second_train_1535_road_2",
+    "dataset": "second",
+    "image_id": "train_1535",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1535.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1535.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 2,
+    "target_instance_ids": [
+      3
+    ],
+    "distractor_instance_ids": [
+      0,
+      1,
+      2,
+      4,
+      5
+    ],
+    "target_instances": 1,
+    "distractor_instances": 5,
+    "target_pixels": 1185,
+    "distractor_pixels": 47201,
+    "anchor_pixels": 38892,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_1535.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_1535.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_1535_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_1535_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 2211,
+        "bbox": [
+          1,
+          0,
+          59,
+          71
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 44437,
+        "bbox": [
+          104,
+          3,
+          421,
+          155
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 2,
+        "area": 170,
+        "bbox": [
+          84,
+          72,
+          95,
+          89
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 3,
+        "area": 1185,
+        "bbox": [
+          48,
+          88,
+          74,
+          160
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 4,
+        "area": 182,
+        "bbox": [
+          85,
+          92,
+          96,
+          109
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 5,
+        "area": 201,
+        "bbox": [
+          85,
+          116,
+          97,
+          134
+        ],
+        "touches_border": false,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": false,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": true,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_1535_road_2/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_1535_road_2/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_1535_road_2/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_1535_road_2/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1535.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1535.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_second_train_206_road_0",
+    "dataset": "second",
+    "image_id": "train_206",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_206.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_206.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      0,
+      1,
+      3
+    ],
+    "distractor_instance_ids": [
+      2,
+      4
+    ],
+    "target_instances": 3,
+    "distractor_instances": 2,
+    "target_pixels": 1050,
+    "distractor_pixels": 540,
+    "anchor_pixels": 16525,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_206.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_206.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_206_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_206_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 317,
+        "bbox": [
+          259,
+          414,
+          291,
+          432
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 1,
+        "area": 153,
+        "bbox": [
+          265,
+          437,
+          290,
+          449
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 2,
+        "area": 353,
+        "bbox": [
+          103,
+          442,
+          139,
+          468
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 3,
+        "area": 580,
+        "bbox": [
+          289,
+          486,
+          339,
+          512
+        ],
+        "touches_border": true,
+        "is_target": true
+      },
+      {
+        "id": 4,
+        "area": 187,
+        "bbox": [
+          0,
+          506,
+          39,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": true,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": false,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_206_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_206_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_206_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_206_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_206.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_206.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_second_train_2192_road_0",
+    "dataset": "second",
+    "image_id": "train_2192",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2192.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2192.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      8,
+      10,
+      13
+    ],
+    "distractor_instance_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "target_instances": 3,
+    "distractor_instances": 16,
+    "target_pixels": 8361,
+    "distractor_pixels": 43685,
+    "anchor_pixels": 16249,
+    "filled_pixels": 818,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_2192.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_2192.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_2192_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_2192_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 5174,
+        "bbox": [
+          72,
+          0,
+          227,
+          51
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 880,
+        "bbox": [
+          386,
+          0,
+          415,
+          43
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 2,
+        "area": 722,
+        "bbox": [
+          231,
+          3,
+          255,
+          65
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 3,
+        "area": 4725,
+        "bbox": [
+          282,
+          34,
+          404,
+          96
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 4,
+        "area": 7208,
+        "bbox": [
+          62,
+          40,
+          215,
+          111
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 5,
+        "area": 878,
+        "bbox": [
+          397,
+          89,
+          463,
+          113
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 6,
+        "area": 833,
+        "bbox": [
+          461,
+          89,
+          505,
+          121
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 7,
+        "area": 7287,
+        "bbox": [
+          49,
+          105,
+          203,
+          179
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 8,
+        "area": 5439,
+        "bbox": [
+          260,
+          106,
+          396,
+          180
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 9,
+        "area": 1902,
+        "bbox": [
+          386,
+          154,
+          464,
+          193
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 10,
+        "area": 1062,
+        "bbox": [
+          373,
+          205,
+          427,
+          252
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 11,
+        "area": 4275,
+        "bbox": [
+          0,
+          250,
+          148,
+          337
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 12,
+        "area": 4590,
+        "bbox": [
+          43,
+          301,
+          200,
+          403
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 13,
+        "area": 1860,
+        "bbox": [
+          386,
+          312,
+          426,
+          374
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 14,
+        "area": 1660,
+        "bbox": [
+          0,
+          356,
+          23,
+          491
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 15,
+        "area": 340,
+        "bbox": [
+          255,
+          373,
+          280,
+          393
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 16,
+        "area": 2142,
+        "bbox": [
+          227,
+          434,
+          362,
+          479
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 17,
+        "area": 380,
+        "bbox": [
+          374,
+          477,
+          418,
+          494
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 18,
+        "area": 689,
+        "bbox": [
+          431,
+          489,
+          503,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": false,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": true,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2192_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2192_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2192_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2192_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2192.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2192.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_second_train_2571_road_0",
+    "dataset": "second",
+    "image_id": "train_2571",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2571.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2571.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      17,
+      19,
+      22
+    ],
+    "distractor_instance_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      18,
+      20,
+      21
+    ],
+    "target_instances": 3,
+    "distractor_instances": 20,
+    "target_pixels": 2063,
+    "distractor_pixels": 35143,
+    "anchor_pixels": 23693,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_2571.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_2571.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_2571_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_2571_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 1611,
+        "bbox": [
+          0,
+          0,
+          69,
+          65
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 2989,
+        "bbox": [
+          13,
+          37,
+          107,
+          119
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 2,
+        "area": 220,
+        "bbox": [
+          162,
+          47,
+          182,
+          69
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 3,
+        "area": 1462,
+        "bbox": [
+          306,
+          106,
+          375,
+          161
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 4,
+        "area": 745,
+        "bbox": [
+          71,
+          108,
+          137,
+          159
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 5,
+        "area": 2267,
+        "bbox": [
+          77,
+          134,
+          150,
+          200
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 6,
+        "area": 1037,
+        "bbox": [
+          0,
+          158,
+          56,
+          199
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 7,
+        "area": 1881,
+        "bbox": [
+          23,
+          181,
+          86,
+          241
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 8,
+        "area": 3861,
+        "bbox": [
+          104,
+          190,
+          204,
+          276
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 9,
+        "area": 1956,
+        "bbox": [
+          48,
+          217,
+          111,
+          277
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 10,
+        "area": 960,
+        "bbox": [
+          0,
+          219,
+          31,
+          274
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 11,
+        "area": 1719,
+        "bbox": [
+          76,
+          254,
+          136,
+          311
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 12,
+        "area": 2082,
+        "bbox": [
+          0,
+          256,
+          56,
+          328
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 13,
+        "area": 2573,
+        "bbox": [
+          1,
+          293,
+          81,
+          367
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 14,
+        "area": 1008,
+        "bbox": [
+          425,
+          303,
+          464,
+          357
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 15,
+        "area": 6794,
+        "bbox": [
+          8,
+          308,
+          177,
+          448
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 16,
+        "area": 523,
+        "bbox": [
+          453,
+          356,
+          496,
+          388
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 17,
+        "area": 821,
+        "bbox": [
+          280,
+          360,
+          322,
+          399
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 18,
+        "area": 374,
+        "bbox": [
+          306,
+          377,
+          338,
+          411
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 19,
+        "area": 909,
+        "bbox": [
+          232,
+          410,
+          279,
+          449
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 20,
+        "area": 818,
+        "bbox": [
+          359,
+          439,
+          401,
+          479
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 21,
+        "area": 263,
+        "bbox": [
+          419,
+          475,
+          440,
+          496
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 22,
+        "area": 333,
+        "bbox": [
+          206,
+          477,
+          237,
+          503
+        ],
+        "touches_border": false,
+        "is_target": true
+      }
+    ],
+    "target_touches_border": false,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": true,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2571_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2571_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2571_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_2571_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2571.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2571.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_second_train_786_road_1",
+    "dataset": "second",
+    "image_id": "train_786",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_786.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_786.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 1,
+    "target_instance_ids": [
+      1,
+      2,
+      4,
+      5
+    ],
+    "distractor_instance_ids": [
+      0,
+      3,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "target_instances": 4,
+    "distractor_instances": 9,
+    "target_pixels": 16522,
+    "distractor_pixels": 16572,
+    "anchor_pixels": 20653,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_786.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_786.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_786_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_786_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 3067,
+        "bbox": [
+          335,
+          138,
+          434,
+          191
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 325,
+        "bbox": [
+          315,
+          169,
+          337,
+          193
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 2,
+        "area": 154,
+        "bbox": [
+          305,
+          172,
+          318,
+          191
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 3,
+        "area": 416,
+        "bbox": [
+          475,
+          213,
+          512,
+          236
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 4,
+        "area": 685,
+        "bbox": [
+          296,
+          225,
+          340,
+          258
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 5,
+        "area": 15358,
+        "bbox": [
+          226,
+          260,
+          374,
+          512
+        ],
+        "touches_border": true,
+        "is_target": true
+      },
+      {
+        "id": 6,
+        "area": 1129,
+        "bbox": [
+          423,
+          266,
+          505,
+          301
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 7,
+        "area": 3241,
+        "bbox": [
+          384,
+          290,
+          468,
+          354
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 8,
+        "area": 783,
+        "bbox": [
+          472,
+          313,
+          504,
+          360
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 9,
+        "area": 3229,
+        "bbox": [
+          363,
+          357,
+          448,
+          417
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 10,
+        "area": 2815,
+        "bbox": [
+          343,
+          426,
+          422,
+          482
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 11,
+        "area": 1380,
+        "bbox": [
+          428,
+          468,
+          475,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 12,
+        "area": 512,
+        "bbox": [
+          326,
+          495,
+          381,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": true,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": false,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_786_road_1/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_786_road_1/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_786_road_1/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_second_train_786_road_1/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_786.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_786.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_whu_train_194_road_0",
+    "dataset": "whu",
+    "image_id": "train_194",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_194.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_194.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      9
+    ],
+    "distractor_instance_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      11
+    ],
+    "target_instances": 1,
+    "distractor_instances": 11,
+    "target_pixels": 3553,
+    "distractor_pixels": 52555,
+    "anchor_pixels": 18020,
+    "filled_pixels": 71,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_194.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_194.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/demolished/train_194.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/whu/train_194_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/whu/train_194_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 14249,
+        "bbox": [
+          324,
+          60,
+          512,
+          155
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 1290,
+        "bbox": [
+          480,
+          237,
+          512,
+          279
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 2,
+        "area": 3697,
+        "bbox": [
+          391,
+          242,
+          472,
+          295
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 3,
+        "area": 5945,
+        "bbox": [
+          78,
+          279,
+          181,
+          338
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 4,
+        "area": 4364,
+        "bbox": [
+          402,
+          295,
+          512,
+          341
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 5,
+        "area": 4418,
+        "bbox": [
+          399,
+          337,
+          512,
+          383
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 6,
+        "area": 3365,
+        "bbox": [
+          151,
+          338,
+          229,
+          389
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 7,
+        "area": 2462,
+        "bbox": [
+          87,
+          341,
+          144,
+          394
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 8,
+        "area": 6879,
+        "bbox": [
+          369,
+          383,
+          511,
+          458
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 9,
+        "area": 3553,
+        "bbox": [
+          146,
+          413,
+          227,
+          495
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 10,
+        "area": 3307,
+        "bbox": [
+          215,
+          452,
+          298,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 11,
+        "area": 2579,
+        "bbox": [
+          361,
+          465,
+          455,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": false,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": true,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_194_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_194_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_194_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_194_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_194.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_194.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_whu_train_30_road_0",
+    "dataset": "whu",
+    "image_id": "train_30",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_30.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_30.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      1,
+      2
+    ],
+    "distractor_instance_ids": [
+      0
+    ],
+    "target_instances": 2,
+    "distractor_instances": 1,
+    "target_pixels": 2485,
+    "distractor_pixels": 3687,
+    "anchor_pixels": 61670,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_30.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_30.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/demolished/train_30.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/whu/train_30_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/whu/train_30_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 3687,
+        "bbox": [
+          278,
+          35,
+          329,
+          115
+        ],
+        "touches_border": false,
+        "is_target": false
+      },
+      {
+        "id": 1,
+        "area": 1271,
+        "bbox": [
+          347,
+          366,
+          371,
+          429
+        ],
+        "touches_border": false,
+        "is_target": true
+      },
+      {
+        "id": 2,
+        "area": 1214,
+        "bbox": [
+          242,
+          367,
+          303,
+          389
+        ],
+        "touches_border": false,
+        "is_target": true
+      }
+    ],
+    "target_touches_border": false,
+    "all_gt_touches_border": false,
+    "eligible_interior_target": true,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_30_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_30_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_30_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_30_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_30.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_30.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  },
+  {
+    "id": "T44_whu_train_548_road_0",
+    "dataset": "whu",
+    "image_id": "train_548",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_548.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_548.png",
+    "anchor_class": "road",
+    "anchor_class_cn": "道路",
+    "anchor_index": 0,
+    "target_instance_ids": [
+      0
+    ],
+    "distractor_instance_ids": [
+      1,
+      2
+    ],
+    "target_instances": 1,
+    "distractor_instances": 2,
+    "target_pixels": 1567,
+    "distractor_pixels": 59118,
+    "anchor_pixels": 48322,
+    "filled_pixels": 0,
+    "source_gt": [
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_548.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_548.png",
+      "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/demolished/train_548.png"
+    ],
+    "source_semantic": {
+      "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/whu/train_548_t1.npz",
+      "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/whu/train_548_t2.npz"
+    },
+    "rule": {
+      "buffer_pixels": 32,
+      "minimum_overlap_fraction": 0.1,
+      "instance_min_pixels": 150,
+      "target_min_pixels": 400,
+      "anchor_min_pixels": 400,
+      "semantic_probability": 0.55,
+      "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+      "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+    },
+    "instruction": "找出紧邻道路周边的建筑变化。",
+    "status": "pending_review",
+    "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+    "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically",
+    "instances": [
+      {
+        "id": 0,
+        "area": 1567,
+        "bbox": [
+          25,
+          0,
+          97,
+          40
+        ],
+        "touches_border": true,
+        "is_target": true
+      },
+      {
+        "id": 1,
+        "area": 58269,
+        "bbox": [
+          0,
+          240,
+          338,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      },
+      {
+        "id": 2,
+        "area": 849,
+        "bbox": [
+          252,
+          481,
+          301,
+          512
+        ],
+        "touches_border": true,
+        "is_target": false
+      }
+    ],
+    "target_touches_border": true,
+    "all_gt_touches_border": true,
+    "eligible_interior_target": false,
+    "physical_instance_review": "pending: connected component may contain multiple adjoining buildings",
+    "evaluation": {
+      "target_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_548_road_0/target_mask.png",
+      "distractor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_548_road_0/distractor_mask.png",
+      "anchor_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_548_road_0/anchor_mask.png",
+      "buffer_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/revision_interior_targets/masks/T44_whu_train_548_road_0/buffer_mask.png"
+    },
+    "inference_input": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_548.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_548.png",
+      "instruction": "找出紧邻道路周边的建筑变化。"
+    }
+  }
+]

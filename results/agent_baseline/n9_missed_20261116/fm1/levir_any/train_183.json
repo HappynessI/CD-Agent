@@ -1,0 +1,86 @@
+{
+  "group": "levir_any",
+  "stem": "train_183",
+  "split": "tune",
+  "profile": "any",
+  "direction": "any",
+  "scope": "building",
+  "instruction": "Find all changed buildings.",
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_183.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_183.png",
+  "base": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/base/levir_any/train_183.npz",
+  "sources": {
+    "S1_02": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/levir_any/S1_02/train_183.npz",
+    "S2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/levir_any/S2/train_183.npz",
+    "S3": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/levir_any/S3/train_183.npz",
+    "S4": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/levir_any/S4/train_183.npz",
+    "S5": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/levir_any/S5/train_183.npz"
+  },
+  "semantic": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/semantic/levir/train_183_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/semantic/levir/train_183_t2.npz"
+  },
+  "features": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/levir/train_183/extract_features_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/levir/train_183/extract_features_t2.npz"
+  },
+  "shape": [
+    1024,
+    1024
+  ],
+  "candidates": [
+    {
+      "index": 0,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 483,
+      "bbox": [
+        43,
+        1002,
+        76,
+        1024
+      ],
+      "semantic_delta": 0.0934155061841011,
+      "p1": 0.265399307012558,
+      "p2": 0.18348975479602814,
+      "dino": 0.16456902027130127
+    },
+    {
+      "index": 1,
+      "sources": [
+        "S2"
+      ],
+      "area": 462,
+      "bbox": [
+        43,
+        1003,
+        76,
+        1024
+      ],
+      "semantic_delta": 0.09308785945177078,
+      "p1": 0.2668227255344391,
+      "p2": 0.1847301721572876,
+      "dino": 0.16554969549179077
+    }
+  ],
+  "masks": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/fm1/levir_any/train_183.npz",
+  "audit": {
+    "enabled_sources": [
+      "S1_02",
+      "S2",
+      "S3",
+      "S4",
+      "S5"
+    ],
+    "s5_before": 0,
+    "s5_after_dino020": 0,
+    "source_components_after_dilation25": {
+      "S1_02": 1,
+      "S2": 1,
+      "S3": 0,
+      "S4": 0,
+      "S5": 0
+    }
+  }
+}

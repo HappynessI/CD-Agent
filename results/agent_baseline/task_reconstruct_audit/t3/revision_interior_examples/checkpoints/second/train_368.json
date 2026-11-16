@@ -1,0 +1,1052 @@
+{
+  "identity": {
+    "dataset": "second",
+    "stem": "train_368",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_368.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_368.png",
+    "policy": {
+      "example_area": [
+        200,
+        5000
+      ],
+      "max_original_hole_ratio": 0.05,
+      "min_rotated_rectangle_fill": 0.45,
+      "single_date_dino_cosine": 0.75,
+      "rgb_mean_euclidean_normalized_max": 0.15,
+      "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+      "minimum_other_matching_instances": 2,
+      "min_full_remaining_pixels": 400,
+      "preferred_cluster_area_fraction": 0.85,
+      "connectivity": 8,
+      "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+      "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+      "labels_role": "offline construction/review only",
+      "review_status": "pending_review",
+      "revision": "whole_gt_interior_v1",
+      "border_rule": "Reject image/category/direction task if ANY full-GT instance touches an image boundary; retain all instances in audit/full GT",
+      "fallback": "none; fewer than three distinct strict images reported without relaxation"
+    }
+  },
+  "candidates": [],
+  "groups": {
+    "second/building/build": {
+      "images": 1,
+      "original_instances": 43,
+      "border_instances": 2,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "whole_gt_has_border_instances": 1,
+        "border_instances": 2
+      }
+    },
+    "second/building/demolish": {
+      "images": 1,
+      "original_instances": 3,
+      "border_instances": 0,
+      "whole_gt_interior_images": 1,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "fewer_than_two_other_matches": 3
+      }
+    },
+    "second/playground/build": {
+      "images": 1,
+      "original_instances": 0,
+      "border_instances": 0,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 1,
+      "original_instances": 0,
+      "border_instances": 0,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    }
+  },
+  "instance_audit": {
+    "second/building/build": [
+      {
+        "id": 1,
+        "raw_area": 71993,
+        "area": 72181,
+        "bbox": [
+          0,
+          0,
+          512,
+          316
+        ],
+        "hole_ratio": 0.002604563527798174,
+        "filled_pixels": 188,
+        "compactness": 0.45064901423308484,
+        "min_rectangle_area": 160171.21467099563,
+        "rgb_mean": [
+          188.48022332746845,
+          191.98701874454497,
+          188.5572242002743
+        ],
+        "touches_border": true
+      },
+      {
+        "id": 2,
+        "raw_area": 5054,
+        "area": 5054,
+        "bbox": [
+          193,
+          214,
+          350,
+          341
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8415590989622883,
+        "min_rectangle_area": 6005.519999999998,
+        "rgb_mean": [
+          195.2119113573407,
+          192.6559161060546,
+          186.41709537000395
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 3,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          53,
+          312,
+          54,
+          313
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          145.0,
+          153.0,
+          141.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 4,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          56,
+          316,
+          58,
+          318
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.500000000000002,
+        "min_rectangle_area": 3.999999999999984,
+        "rgb_mean": [
+          152.0,
+          145.5,
+          135.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 5,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          60,
+          321,
+          61,
+          322
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          159.0,
+          159.0,
+          154.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 6,
+        "raw_area": 297,
+        "area": 297,
+        "bbox": [
+          133,
+          321,
+          160,
+          345
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8048780487804883,
+        "min_rectangle_area": 368.9999999999998,
+        "rgb_mean": [
+          122.92929292929293,
+          130.30639730639732,
+          166.64983164983164
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 7,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          63,
+          325,
+          64,
+          326
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          160.0,
+          158.0,
+          149.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 8,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          66,
+          329,
+          67,
+          330
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          152.0,
+          156.0,
+          145.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 9,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          73,
+          338,
+          74,
+          339
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          152.0,
+          154.0,
+          145.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 10,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          80,
+          347,
+          81,
+          348
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          198.0,
+          191.0,
+          183.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 11,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          83,
+          351,
+          84,
+          352
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          182.0,
+          182.0,
+          168.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 12,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          118,
+          354,
+          119,
+          355
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          200.0,
+          189.0,
+          182.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 13,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          121,
+          358,
+          122,
+          359
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          162.0,
+          153.0,
+          147.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 14,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          125,
+          363,
+          126,
+          364
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          163.0,
+          158.0,
+          150.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 15,
+        "raw_area": 5,
+        "area": 5,
+        "bbox": [
+          127,
+          366,
+          130,
+          370
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.47619047619047394,
+        "min_rectangle_area": 10.50000000000005,
+        "rgb_mean": [
+          133.8,
+          134.2,
+          131.8
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 16,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          110,
+          386,
+          111,
+          387
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          185.0,
+          182.0,
+          166.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 17,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          114,
+          391,
+          115,
+          392
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          172.0,
+          163.0,
+          155.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 18,
+        "raw_area": 47,
+        "area": 47,
+        "bbox": [
+          117,
+          395,
+          144,
+          429
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.4165189649060583,
+        "min_rectangle_area": 112.84000000000093,
+        "rgb_mean": [
+          152.89361702127658,
+          150.0212765957447,
+          141.4255319148936
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 19,
+        "raw_area": 3,
+        "area": 3,
+        "bbox": [
+          144,
+          430,
+          147,
+          433
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5000000000000087,
+        "min_rectangle_area": 5.999999999999896,
+        "rgb_mean": [
+          162.33333333333334,
+          165.0,
+          152.66666666666666
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 20,
+        "raw_area": 3,
+        "area": 3,
+        "bbox": [
+          147,
+          434,
+          150,
+          437
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.500000000000002,
+        "min_rectangle_area": 5.999999999999976,
+        "rgb_mean": [
+          166.66666666666666,
+          163.66666666666666,
+          149.66666666666666
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 21,
+        "raw_area": 3,
+        "area": 3,
+        "bbox": [
+          150,
+          438,
+          153,
+          441
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.4999999999999986,
+        "min_rectangle_area": 6.000000000000017,
+        "rgb_mean": [
+          164.33333333333334,
+          159.33333333333334,
+          144.33333333333334
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 22,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          154,
+          443,
+          156,
+          445
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.500000000000002,
+        "min_rectangle_area": 3.999999999999984,
+        "rgb_mean": [
+          159.0,
+          150.5,
+          139.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 23,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          157,
+          447,
+          159,
+          449
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5,
+        "min_rectangle_area": 4.0,
+        "rgb_mean": [
+          177.5,
+          173.5,
+          164.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 24,
+        "raw_area": 455,
+        "area": 455,
+        "bbox": [
+          465,
+          454,
+          496,
+          481
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8240119313944806,
+        "min_rectangle_area": 552.176470588236,
+        "rgb_mean": [
+          179.1032967032967,
+          177.189010989011,
+          171.06373626373627
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 25,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          205,
+          466,
+          206,
+          467
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          178.0,
+          186.0,
+          176.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 26,
+        "raw_area": 3,
+        "area": 3,
+        "bbox": [
+          207,
+          469,
+          210,
+          472
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5000000000000087,
+        "min_rectangle_area": 5.999999999999896,
+        "rgb_mean": [
+          179.0,
+          181.0,
+          172.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 27,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          211,
+          474,
+          213,
+          476
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5,
+        "min_rectangle_area": 4.0,
+        "rgb_mean": [
+          170.0,
+          171.0,
+          166.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 28,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          194,
+          478,
+          195,
+          479
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          131.0,
+          125.0,
+          115.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 29,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          215,
+          479,
+          217,
+          481
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5,
+        "min_rectangle_area": 4.0,
+        "rgb_mean": [
+          182.0,
+          182.0,
+          173.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 30,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          189,
+          480,
+          190,
+          481
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          124.0,
+          126.0,
+          115.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 31,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          186,
+          481,
+          187,
+          482
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          158.0,
+          151.0,
+          141.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 32,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          184,
+          482,
+          185,
+          483
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          222.0,
+          209.0,
+          200.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 33,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          219,
+          484,
+          220,
+          485
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          184.0,
+          183.0,
+          177.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 34,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          223,
+          489,
+          224,
+          490
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          155.0,
+          154.0,
+          152.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 35,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          224,
+          496,
+          225,
+          497
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          129.0,
+          130.0,
+          126.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 36,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          220,
+          497,
+          221,
+          498
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          138.0,
+          145.0,
+          138.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 37,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          209,
+          500,
+          210,
+          501
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          120.0,
+          129.0,
+          124.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 38,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          205,
+          501,
+          207,
+          503
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5,
+        "min_rectangle_area": 4.0,
+        "rgb_mean": [
+          137.0,
+          134.5,
+          126.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 39,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          205,
+          504,
+          206,
+          505
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          138.0,
+          135.0,
+          129.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 40,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          206,
+          507,
+          207,
+          508
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          105.0,
+          102.0,
+          94.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 41,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          237,
+          507,
+          238,
+          508
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          145.0,
+          145.0,
+          145.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 42,
+        "raw_area": 2,
+        "area": 2,
+        "bbox": [
+          207,
+          509,
+          208,
+          511
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 2.0,
+        "rgb_mean": [
+          141.5,
+          131.5,
+          120.5
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 43,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          240,
+          511,
+          241,
+          512
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          154.0,
+          155.0,
+          148.0
+        ],
+        "touches_border": true
+      }
+    ],
+    "second/building/demolish": [
+      {
+        "id": 1,
+        "raw_area": 610,
+        "area": 610,
+        "bbox": [
+          138,
+          61,
+          182,
+          100
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8240623013350282,
+        "min_rectangle_area": 740.2352941176474,
+        "rgb_mean": [
+          125.40163934426229,
+          134.19672131147541,
+          141.54590163934427
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 2,
+        "raw_area": 337,
+        "area": 337,
+        "bbox": [
+          22,
+          281,
+          51,
+          316
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8276592140921399,
+        "min_rectangle_area": 407.17241379310394,
+        "rgb_mean": [
+          202.23145400593472,
+          200.30860534124628,
+          189.04451038575667
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 3,
+        "raw_area": 2001,
+        "area": 2002,
+        "bbox": [
+          62,
+          307,
+          127,
+          395
+        ],
+        "hole_ratio": 0.0004995004995004995,
+        "filled_pixels": 1,
+        "compactness": 0.8136419098354776,
+        "min_rectangle_area": 2460.541886792452,
+        "rgb_mean": [
+          105.54495504495505,
+          110.10789210789211,
+          106.04545454545455
+        ],
+        "touches_border": false
+      }
+    ],
+    "second/playground/build": [],
+    "second/playground/demolish": []
+  }
+}

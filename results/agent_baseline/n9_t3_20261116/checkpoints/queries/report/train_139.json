@@ -1,0 +1,3565 @@
+{
+  "manifests": {
+    "T3.1": {
+      "tune": [],
+      "confirm": [],
+      "report": [
+        {
+          "id": "n9_T31_train_139_1to5_e2",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_1to5_e2/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_1to5",
+            "transition": "1->5",
+            "transition_cn": "低矮植被→建筑",
+            "example_provenance": [
+              {
+                "component": 2,
+                "geometry": {
+                  "area": 121,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    54,
+                    159,
+                    72,
+                    168
+                  ],
+                  "bbox_fill": 0.7469135802469136,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 169,
+                  "components": 1,
+                  "largest_component": 169
+                },
+                "name": "train_139.png",
+                "source": 1,
+                "target": 5
+              }
+            ],
+            "geometry": {
+              "area": 121,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                54,
+                159,
+                72,
+                168
+              ],
+              "bbox_fill": 0.7469135802469136,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 169,
+              "components": 1,
+              "largest_component": 169
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_1to5_e2/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_1to5_e2/example.png"
+        },
+        {
+          "id": "n9_T31_train_139_2to1_e1",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to1_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_2to1",
+            "transition": "2->1",
+            "transition_cn": "非植被地表→低矮植被",
+            "example_provenance": [
+              {
+                "component": 1,
+                "geometry": {
+                  "area": 612,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    427,
+                    6,
+                    469,
+                    23
+                  ],
+                  "bbox_fill": 0.8571428571428571,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 1060,
+                  "components": 1,
+                  "largest_component": 1060
+                },
+                "name": "train_139.png",
+                "source": 2,
+                "target": 1
+              }
+            ],
+            "geometry": {
+              "area": 612,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                427,
+                6,
+                469,
+                23
+              ],
+              "bbox_fill": 0.8571428571428571,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1060,
+              "components": 1,
+              "largest_component": 1060
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to1_e1/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to1_e1/example.png"
+        },
+        {
+          "id": "n9_T31_train_139_2to3_e5",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to3_e5/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_2to3",
+            "transition": "2->3",
+            "transition_cn": "非植被地表→树木",
+            "example_provenance": [
+              {
+                "component": 5,
+                "geometry": {
+                  "area": 115,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    150,
+                    302,
+                    159,
+                    317
+                  ],
+                  "bbox_fill": 0.8518518518518519,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 12575,
+                  "components": 14,
+                  "largest_component": 4917
+                },
+                "name": "train_139.png",
+                "source": 2,
+                "target": 3
+              }
+            ],
+            "geometry": {
+              "area": 115,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                150,
+                302,
+                159,
+                317
+              ],
+              "bbox_fill": 0.8518518518518519,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 12575,
+              "components": 14,
+              "largest_component": 4917
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to3_e5/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to3_e5/example.png"
+        },
+        {
+          "id": "n9_T31_train_139_2to5_e1",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to5_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_2to5",
+            "transition": "2->5",
+            "transition_cn": "非植被地表→建筑",
+            "example_provenance": [
+              {
+                "component": 1,
+                "geometry": {
+                  "area": 426,
+                  "hole_pixels": 12,
+                  "hole_ratio": 0.0273972602739726,
+                  "bbox": [
+                    72,
+                    183,
+                    89,
+                    220
+                  ],
+                  "bbox_fill": 0.6772655007949125,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 2488,
+                  "components": 6,
+                  "largest_component": 941
+                },
+                "name": "train_139.png",
+                "source": 2,
+                "target": 5
+              }
+            ],
+            "geometry": {
+              "area": 426,
+              "hole_pixels": 12,
+              "hole_ratio": 0.0273972602739726,
+              "bbox": [
+                72,
+                183,
+                89,
+                220
+              ],
+              "bbox_fill": 0.6772655007949125,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 2488,
+              "components": 6,
+              "largest_component": 941
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to5_e1/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_2to5_e1/example.png"
+        },
+        {
+          "id": "n9_T31_train_139_3to5_e1",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_3to5_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_3to5",
+            "transition": "3->5",
+            "transition_cn": "树木→建筑",
+            "example_provenance": [
+              {
+                "component": 1,
+                "geometry": {
+                  "area": 315,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    480,
+                    263,
+                    496,
+                    298
+                  ],
+                  "bbox_fill": 0.5625,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 999,
+                  "components": 6,
+                  "largest_component": 436
+                },
+                "name": "train_139.png",
+                "source": 3,
+                "target": 5
+              }
+            ],
+            "geometry": {
+              "area": 315,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                480,
+                263,
+                496,
+                298
+              ],
+              "bbox_fill": 0.5625,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 999,
+              "components": 6,
+              "largest_component": 436
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_3to5_e1/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_3to5_e1/example.png"
+        },
+        {
+          "id": "n9_T31_train_139_5to2_e2",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_5to2_e2/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_5to2",
+            "transition": "5->2",
+            "transition_cn": "建筑→非植被地表",
+            "example_provenance": [
+              {
+                "component": 2,
+                "geometry": {
+                  "area": 1035,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    309,
+                    170,
+                    339,
+                    259
+                  ],
+                  "bbox_fill": 0.38764044943820225,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 1246,
+                  "components": 5,
+                  "largest_component": 405
+                },
+                "name": "train_139.png",
+                "source": 5,
+                "target": 2
+              }
+            ],
+            "geometry": {
+              "area": 1035,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                309,
+                170,
+                339,
+                259
+              ],
+              "bbox_fill": 0.38764044943820225,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1246,
+              "components": 5,
+              "largest_component": 405
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_5to2_e2/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_5to2_e2/example.png"
+        },
+        {
+          "id": "n9_T31_train_139_5to3_e1",
+          "task_type": "T3.1",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_5to3_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_5to3",
+            "transition": "5->3",
+            "transition_cn": "建筑→树木",
+            "example_provenance": [
+              {
+                "component": 1,
+                "geometry": {
+                  "area": 218,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    392,
+                    331,
+                    404,
+                    378
+                  ],
+                  "bbox_fill": 0.38652482269503546,
+                  "components": 1
+                },
+                "query_support": {
+                  "pixels": 1610,
+                  "components": 2,
+                  "largest_component": 1468
+                },
+                "name": "train_139.png",
+                "source": 5,
+                "target": 3
+              }
+            ],
+            "geometry": {
+              "area": 218,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                392,
+                331,
+                404,
+                378
+              ],
+              "bbox_fill": 0.38652482269503546,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1610,
+              "components": 2,
+              "largest_component": 1468
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "exemplar_mask"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring",
+            "remaining_gt_review_only": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_5to3_e1/remaining_gt_review_only.png"
+          },
+          "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/report/n9_T31_train_139_5to3_e1/example.png"
+        }
+      ]
+    },
+    "T3.3": {
+      "tune": [],
+      "confirm": [],
+      "report": [
+        {
+          "id": "n9_T33_train_139_1to2_e1",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_1to2_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_1to2",
+            "transition": "1->2",
+            "transition_cn": "低矮植被→非植被地表",
+            "example_provenance": [
+              {
+                "name": "train_1548.png",
+                "source": 1,
+                "target": 2,
+                "component": 1,
+                "geometry": {
+                  "area": 1197,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    74,
+                    408,
+                    92,
+                    512
+                  ],
+                  "bbox_fill": 0.6394230769230769,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 1197,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                74,
+                408,
+                92,
+                512
+              ],
+              "bbox_fill": 0.6394230769230769,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1446,
+              "components": 2,
+              "largest_component": 1443
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1548.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1548.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_1to2_e1/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_1to3_e2",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_1to3_e2/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_1to3",
+            "transition": "1->3",
+            "transition_cn": "低矮植被→树木",
+            "example_provenance": [
+              {
+                "name": "train_798.png",
+                "source": 1,
+                "target": 3,
+                "component": 2,
+                "geometry": {
+                  "area": 875,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    21,
+                    243,
+                    70,
+                    281
+                  ],
+                  "bbox_fill": 0.4699248120300752,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 875,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                21,
+                243,
+                70,
+                281
+              ],
+              "bbox_fill": 0.4699248120300752,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1389,
+              "components": 1,
+              "largest_component": 1389
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_798.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_798.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_1to3_e2/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_1to5_e6",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_1to5_e6/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_1to5",
+            "transition": "1->5",
+            "transition_cn": "低矮植被→建筑",
+            "example_provenance": [
+              {
+                "name": "train_2211.png",
+                "source": 1,
+                "target": 5,
+                "component": 6,
+                "geometry": {
+                  "area": 1191,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    77,
+                    74,
+                    126,
+                    113
+                  ],
+                  "bbox_fill": 0.6232339089481946,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 1191,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                77,
+                74,
+                126,
+                113
+              ],
+              "bbox_fill": 0.6232339089481946,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 290,
+              "components": 2,
+              "largest_component": 169
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2211.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2211.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_1to5_e6/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_2to1_e11",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_2to1_e11/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_2to1",
+            "transition": "2->1",
+            "transition_cn": "非植被地表→低矮植被",
+            "example_provenance": [
+              {
+                "name": "train_2211.png",
+                "source": 2,
+                "target": 1,
+                "component": 11,
+                "geometry": {
+                  "area": 307,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    118,
+                    454,
+                    142,
+                    488
+                  ],
+                  "bbox_fill": 0.3762254901960784,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 307,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                118,
+                454,
+                142,
+                488
+              ],
+              "bbox_fill": 0.3762254901960784,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1672,
+              "components": 2,
+              "largest_component": 1060
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2211.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2211.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_2to1_e11/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_2to3_e1",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_2to3_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_2to3",
+            "transition": "2->3",
+            "transition_cn": "非植被地表→树木",
+            "example_provenance": [
+              {
+                "name": "train_2469.png",
+                "source": 2,
+                "target": 3,
+                "component": 1,
+                "geometry": {
+                  "area": 569,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    392,
+                    446,
+                    426,
+                    472
+                  ],
+                  "bbox_fill": 0.6436651583710408,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 569,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                392,
+                446,
+                426,
+                472
+              ],
+              "bbox_fill": 0.6436651583710408,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 12690,
+              "components": 15,
+              "largest_component": 4917
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2469.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2469.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_2to3_e1/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_2to5_e19",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_2to5_e19/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_2to5",
+            "transition": "2->5",
+            "transition_cn": "非植被地表→建筑",
+            "example_provenance": [
+              {
+                "name": "train_319.png",
+                "source": 2,
+                "target": 5,
+                "component": 19,
+                "geometry": {
+                  "area": 2984,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    116,
+                    423,
+                    181,
+                    505
+                  ],
+                  "bbox_fill": 0.5598499061913697,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 2984,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                116,
+                423,
+                181,
+                505
+              ],
+              "bbox_fill": 0.5598499061913697,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 2914,
+              "components": 7,
+              "largest_component": 941
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_319.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_319.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_2to5_e19/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_3to2_e4",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_3to2_e4/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_3to2",
+            "transition": "3->2",
+            "transition_cn": "树木→非植被地表",
+            "example_provenance": [
+              {
+                "name": "train_2469.png",
+                "source": 3,
+                "target": 2,
+                "component": 4,
+                "geometry": {
+                  "area": 882,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    37,
+                    377,
+                    54,
+                    489
+                  ],
+                  "bbox_fill": 0.4632352941176471,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 882,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                37,
+                377,
+                54,
+                489
+              ],
+              "bbox_fill": 0.4632352941176471,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 369,
+              "components": 1,
+              "largest_component": 369
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2469.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2469.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_3to2_e4/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_3to5_e1",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_3to5_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_3to5",
+            "transition": "3->5",
+            "transition_cn": "树木→建筑",
+            "example_provenance": [
+              {
+                "name": "train_373.png",
+                "source": 3,
+                "target": 5,
+                "component": 1,
+                "geometry": {
+                  "area": 872,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    0,
+                    0,
+                    50,
+                    22
+                  ],
+                  "bbox_fill": 0.7927272727272727,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 872,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                0,
+                0,
+                50,
+                22
+              ],
+              "bbox_fill": 0.7927272727272727,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1314,
+              "components": 7,
+              "largest_component": 436
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_373.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_373.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_3to5_e1/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_5to1_e1",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_5to1_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_5to1",
+            "transition": "5->1",
+            "transition_cn": "建筑→低矮植被",
+            "example_provenance": [
+              {
+                "name": "train_798.png",
+                "source": 5,
+                "target": 1,
+                "component": 1,
+                "geometry": {
+                  "area": 1553,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    0,
+                    360,
+                    43,
+                    437
+                  ],
+                  "bbox_fill": 0.4690425853216551,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 1553,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                0,
+                360,
+                43,
+                437
+              ],
+              "bbox_fill": 0.4690425853216551,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 2311,
+              "components": 1,
+              "largest_component": 2311
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_798.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_798.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_5to1_e1/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_5to2_e1",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_5to2_e1/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_5to2",
+            "transition": "5->2",
+            "transition_cn": "建筑→非植被地表",
+            "example_provenance": [
+              {
+                "name": "train_657.png",
+                "source": 5,
+                "target": 2,
+                "component": 1,
+                "geometry": {
+                  "area": 738,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    155,
+                    95,
+                    217,
+                    113
+                  ],
+                  "bbox_fill": 0.6612903225806451,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 738,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                155,
+                95,
+                217,
+                113
+              ],
+              "bbox_fill": 0.6612903225806451,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 2281,
+              "components": 6,
+              "largest_component": 1035
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_657.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_657.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_5to2_e1/example.png"
+            }
+          ]
+        },
+        {
+          "id": "n9_T33_train_139_5to3_e3",
+          "task_type": "T3.3",
+          "target": "any change",
+          "change_direction": "any",
+          "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+          "constraint": null,
+          "init_mask": null,
+          "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_139.png",
+          "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_139.png",
+          "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_5to3_e3/gt.png",
+          "review_status": "pending_review",
+          "meta": {
+            "review_status": "pending_review",
+            "data_version": "N9-clean-candidate",
+            "split": "report",
+            "old_id": "train_139_T33_5to3",
+            "transition": "5->3",
+            "transition_cn": "建筑→树木",
+            "example_provenance": [
+              {
+                "name": "train_623.png",
+                "source": 5,
+                "target": 3,
+                "component": 3,
+                "geometry": {
+                  "area": 372,
+                  "hole_pixels": 0,
+                  "hole_ratio": 0.0,
+                  "bbox": [
+                    0,
+                    357,
+                    52,
+                    377
+                  ],
+                  "bbox_fill": 0.3576923076923077,
+                  "components": 1
+                }
+              }
+            ],
+            "geometry": {
+              "area": 372,
+              "hole_pixels": 0,
+              "hole_ratio": 0.0,
+              "bbox": [
+                0,
+                357,
+                52,
+                377
+              ],
+              "bbox_fill": 0.3576923076923077,
+              "components": 1
+            },
+            "query_support": {
+              "pixels": 1828,
+              "components": 3,
+              "largest_component": 1468
+            },
+            "inference_whitelist": [
+              "image_t1",
+              "image_t2",
+              "instruction",
+              "examples"
+            ],
+            "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+          },
+          "examples": [
+            {
+              "role": "positive",
+              "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_623.png",
+              "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_623.png",
+              "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/report/n9_T33_train_139_5to3_e3/example.png"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "audit": [
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        2
+      ],
+      "old_id": "train_139_1to2",
+      "full_gt": {
+        "pixels": 1446,
+        "components": 2,
+        "largest_component": 1443
+      },
+      "candidate_examples": 0,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 1443,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              41,
+              158,
+              72,
+              226
+            ],
+            "bbox_fill": 0.6845351043643264,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 3,
+            "components": 1,
+            "largest_component": 3
+          },
+          "reasons": [
+            "query_pixels_below64",
+            "query_no_component32"
+          ]
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 3,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              62,
+              159,
+              65,
+              160
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1443,
+            "components": 1,
+            "largest_component": 1443
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        }
+      ],
+      "reasons": [
+        "no_eligible_same_image_example"
+      ],
+      "decision": "excluded"
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        2
+      ],
+      "old_id": "train_139_T33_1to2",
+      "full_gt": {
+        "pixels": 1446,
+        "components": 2,
+        "largest_component": 1443
+      },
+      "candidate_examples": 58,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_1to2_e1",
+      "selected_example": {
+        "name": "train_1548.png",
+        "source": 1,
+        "target": 2,
+        "component": 1,
+        "geometry": {
+          "area": 1197,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            74,
+            408,
+            92,
+            512
+          ],
+          "bbox_fill": 0.6394230769230769,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        3
+      ],
+      "old_id": "train_139_1to3",
+      "full_gt": {
+        "pixels": 1389,
+        "components": 1,
+        "largest_component": 1389
+      },
+      "candidate_examples": 0,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 1389,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              473,
+              29,
+              512,
+              76
+            ],
+            "bbox_fill": 0.7577741407528642,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 0,
+            "components": 0,
+            "largest_component": 0
+          },
+          "reasons": [
+            "query_pixels_below64",
+            "query_no_component32"
+          ]
+        }
+      ],
+      "reasons": [
+        "no_eligible_same_image_example"
+      ],
+      "decision": "excluded"
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        3
+      ],
+      "old_id": "train_139_T33_1to3",
+      "full_gt": {
+        "pixels": 1389,
+        "components": 1,
+        "largest_component": 1389
+      },
+      "candidate_examples": 32,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_1to3_e2",
+      "selected_example": {
+        "name": "train_798.png",
+        "source": 1,
+        "target": 3,
+        "component": 2,
+        "geometry": {
+          "area": 875,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            21,
+            243,
+            70,
+            281
+          ],
+          "bbox_fill": 0.4699248120300752,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        5
+      ],
+      "old_id": "train_139_1to5",
+      "full_gt": {
+        "pixels": 290,
+        "components": 2,
+        "largest_component": 169
+      },
+      "candidate_examples": 2,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 169,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              388,
+              25,
+              406,
+              36
+            ],
+            "bbox_fill": 0.8535353535353535,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 121,
+            "components": 1,
+            "largest_component": 121
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 121,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              54,
+              159,
+              72,
+              168
+            ],
+            "bbox_fill": 0.7469135802469136,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 169,
+            "components": 1,
+            "largest_component": 169
+          },
+          "reasons": []
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_1to5_e2",
+      "selected_example": {
+        "component": 2,
+        "geometry": {
+          "area": 121,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            54,
+            159,
+            72,
+            168
+          ],
+          "bbox_fill": 0.7469135802469136,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 169,
+          "components": 1,
+          "largest_component": 169
+        },
+        "name": "train_139.png",
+        "source": 1,
+        "target": 5
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        5
+      ],
+      "old_id": "train_139_T33_1to5",
+      "full_gt": {
+        "pixels": 290,
+        "components": 2,
+        "largest_component": 169
+      },
+      "candidate_examples": 57,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_1to5_e6",
+      "selected_example": {
+        "name": "train_2211.png",
+        "source": 1,
+        "target": 5,
+        "component": 6,
+        "geometry": {
+          "area": 1191,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            77,
+            74,
+            126,
+            113
+          ],
+          "bbox_fill": 0.6232339089481946,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        1
+      ],
+      "old_id": "train_139_2to1",
+      "full_gt": {
+        "pixels": 1672,
+        "components": 2,
+        "largest_component": 1060
+      },
+      "candidate_examples": 1,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 612,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              427,
+              6,
+              469,
+              23
+            ],
+            "bbox_fill": 0.8571428571428571,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1060,
+            "components": 1,
+            "largest_component": 1060
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 1060,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              355,
+              48,
+              512,
+              203
+            ],
+            "bbox_fill": 0.04355866036572838,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 612,
+            "components": 1,
+            "largest_component": 612
+          },
+          "reasons": [
+            "example_bbox_fill_below0.25"
+          ]
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_2to1_e1",
+      "selected_example": {
+        "component": 1,
+        "geometry": {
+          "area": 612,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            427,
+            6,
+            469,
+            23
+          ],
+          "bbox_fill": 0.8571428571428571,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 1060,
+          "components": 1,
+          "largest_component": 1060
+        },
+        "name": "train_139.png",
+        "source": 2,
+        "target": 1
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        1
+      ],
+      "old_id": "train_139_T33_2to1",
+      "full_gt": {
+        "pixels": 1672,
+        "components": 2,
+        "largest_component": 1060
+      },
+      "candidate_examples": 92,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_2to1_e11",
+      "selected_example": {
+        "name": "train_2211.png",
+        "source": 2,
+        "target": 1,
+        "component": 11,
+        "geometry": {
+          "area": 307,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            118,
+            454,
+            142,
+            488
+          ],
+          "bbox_fill": 0.3762254901960784,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        3
+      ],
+      "old_id": "train_139_2to3",
+      "full_gt": {
+        "pixels": 12690,
+        "components": 15,
+        "largest_component": 4917
+      },
+      "candidate_examples": 7,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 524,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              0,
+              0,
+              15,
+              113
+            ],
+            "bbox_fill": 0.30914454277286135,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12166,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 369,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              29,
+              0,
+              42,
+              81
+            ],
+            "bbox_fill": 0.3504273504273504,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12321,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 3,
+          "geometry": {
+            "area": 202,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              21,
+              100,
+              31,
+              141
+            ],
+            "bbox_fill": 0.4926829268292683,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12488,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 4,
+          "geometry": {
+            "area": 318,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              12,
+              164,
+              23,
+              223
+            ],
+            "bbox_fill": 0.4899845916795069,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12372,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 5,
+          "geometry": {
+            "area": 115,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              150,
+              302,
+              159,
+              317
+            ],
+            "bbox_fill": 0.8518518518518519,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12575,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 6,
+          "geometry": {
+            "area": 90,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              148,
+              324,
+              158,
+              341
+            ],
+            "bbox_fill": 0.5294117647058824,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12600,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 7,
+          "geometry": {
+            "area": 2456,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              191,
+              420,
+              300,
+              484
+            ],
+            "bbox_fill": 0.35206422018348627,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 10234,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": []
+        },
+        {
+          "component": 8,
+          "geometry": {
+            "area": 3675,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              148,
+              425,
+              366,
+              512
+            ],
+            "bbox_fill": 0.19376779500158178,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 9015,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_bbox_fill_below0.25"
+          ]
+        },
+        {
+          "component": 9,
+          "geometry": {
+            "area": 2,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              60,
+              464,
+              62,
+              465
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12688,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 10,
+          "geometry": {
+            "area": 1,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              66,
+              465,
+              67,
+              466
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12689,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 11,
+          "geometry": {
+            "area": 1,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              320,
+              468,
+              321,
+              469
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12689,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 12,
+          "geometry": {
+            "area": 1,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              317,
+              469,
+              318,
+              470
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12689,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 13,
+          "geometry": {
+            "area": 3,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              75,
+              471,
+              76,
+              474
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12687,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 14,
+          "geometry": {
+            "area": 4917,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              0,
+              473,
+              181,
+              512
+            ],
+            "bbox_fill": 0.6965575860603485,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 7773,
+            "components": 14,
+            "largest_component": 3675
+          },
+          "reasons": [
+            "example_area_above4096"
+          ]
+        },
+        {
+          "component": 15,
+          "geometry": {
+            "area": 16,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              286,
+              473,
+              288,
+              484
+            ],
+            "bbox_fill": 0.7272727272727273,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 12674,
+            "components": 14,
+            "largest_component": 4917
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_2to3_e5",
+      "selected_example": {
+        "component": 5,
+        "geometry": {
+          "area": 115,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            150,
+            302,
+            159,
+            317
+          ],
+          "bbox_fill": 0.8518518518518519,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 12575,
+          "components": 14,
+          "largest_component": 4917
+        },
+        "name": "train_139.png",
+        "source": 2,
+        "target": 3
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        3
+      ],
+      "old_id": "train_139_T33_2to3",
+      "full_gt": {
+        "pixels": 12690,
+        "components": 15,
+        "largest_component": 4917
+      },
+      "candidate_examples": 28,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_2to3_e1",
+      "selected_example": {
+        "name": "train_2469.png",
+        "source": 2,
+        "target": 3,
+        "component": 1,
+        "geometry": {
+          "area": 569,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            392,
+            446,
+            426,
+            472
+          ],
+          "bbox_fill": 0.6436651583710408,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        5
+      ],
+      "old_id": "train_139_2to5",
+      "full_gt": {
+        "pixels": 2914,
+        "components": 7,
+        "largest_component": 941
+      },
+      "candidate_examples": 5,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 426,
+            "hole_pixels": 12,
+            "hole_ratio": 0.0273972602739726,
+            "bbox": [
+              72,
+              183,
+              89,
+              220
+            ],
+            "bbox_fill": 0.6772655007949125,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2488,
+            "components": 6,
+            "largest_component": 941
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 2,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              71,
+              212,
+              72,
+              214
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2912,
+            "components": 6,
+            "largest_component": 941
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 3,
+          "geometry": {
+            "area": 671,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              412,
+              337,
+              451,
+              360
+            ],
+            "bbox_fill": 0.7480490523968785,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2243,
+            "components": 6,
+            "largest_component": 941
+          },
+          "reasons": []
+        },
+        {
+          "component": 4,
+          "geometry": {
+            "area": 941,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              288,
+              448,
+              323,
+              484
+            ],
+            "bbox_fill": 0.7468253968253968,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1973,
+            "components": 6,
+            "largest_component": 671
+          },
+          "reasons": []
+        },
+        {
+          "component": 5,
+          "geometry": {
+            "area": 446,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              422,
+              455,
+              451,
+              487
+            ],
+            "bbox_fill": 0.48060344827586204,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2468,
+            "components": 6,
+            "largest_component": 941
+          },
+          "reasons": []
+        },
+        {
+          "component": 6,
+          "geometry": {
+            "area": 422,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              0,
+              469,
+              43,
+              491
+            ],
+            "bbox_fill": 0.44608879492600423,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2492,
+            "components": 6,
+            "largest_component": 941
+          },
+          "reasons": []
+        },
+        {
+          "component": 7,
+          "geometry": {
+            "area": 6,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              0,
+              485,
+              5,
+              487
+            ],
+            "bbox_fill": 0.6,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2908,
+            "components": 6,
+            "largest_component": 941
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_2to5_e1",
+      "selected_example": {
+        "component": 1,
+        "geometry": {
+          "area": 426,
+          "hole_pixels": 12,
+          "hole_ratio": 0.0273972602739726,
+          "bbox": [
+            72,
+            183,
+            89,
+            220
+          ],
+          "bbox_fill": 0.6772655007949125,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 2488,
+          "components": 6,
+          "largest_component": 941
+        },
+        "name": "train_139.png",
+        "source": 2,
+        "target": 5
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        5
+      ],
+      "old_id": "train_139_T33_2to5",
+      "full_gt": {
+        "pixels": 2914,
+        "components": 7,
+        "largest_component": 941
+      },
+      "candidate_examples": 152,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_2to5_e19",
+      "selected_example": {
+        "name": "train_319.png",
+        "source": 2,
+        "target": 5,
+        "component": 19,
+        "geometry": {
+          "area": 2984,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            116,
+            423,
+            181,
+            505
+          ],
+          "bbox_fill": 0.5598499061913697,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        2
+      ],
+      "old_id": "train_139_3to2",
+      "full_gt": {
+        "pixels": 369,
+        "components": 1,
+        "largest_component": 369
+      },
+      "candidate_examples": 0,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 369,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              314,
+              455,
+              342,
+              481
+            ],
+            "bbox_fill": 0.5068681318681318,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 0,
+            "components": 0,
+            "largest_component": 0
+          },
+          "reasons": [
+            "query_pixels_below64",
+            "query_no_component32"
+          ]
+        }
+      ],
+      "reasons": [
+        "no_eligible_same_image_example"
+      ],
+      "decision": "excluded"
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        2
+      ],
+      "old_id": "train_139_T33_3to2",
+      "full_gt": {
+        "pixels": 369,
+        "components": 1,
+        "largest_component": 369
+      },
+      "candidate_examples": 38,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_3to2_e4",
+      "selected_example": {
+        "name": "train_2469.png",
+        "source": 3,
+        "target": 2,
+        "component": 4,
+        "geometry": {
+          "area": 882,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            37,
+            377,
+            54,
+            489
+          ],
+          "bbox_fill": 0.4632352941176471,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        5
+      ],
+      "old_id": "train_139_3to5",
+      "full_gt": {
+        "pixels": 1314,
+        "components": 7,
+        "largest_component": 436
+      },
+      "candidate_examples": 4,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 315,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              480,
+              263,
+              496,
+              298
+            ],
+            "bbox_fill": 0.5625,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 999,
+            "components": 6,
+            "largest_component": 436
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 436,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              375,
+              436,
+              409,
+              455
+            ],
+            "bbox_fill": 0.6749226006191951,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 878,
+            "components": 6,
+            "largest_component": 315
+          },
+          "reasons": []
+        },
+        {
+          "component": 3,
+          "geometry": {
+            "area": 257,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              410,
+              445,
+              429,
+              461
+            ],
+            "bbox_fill": 0.8453947368421053,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1057,
+            "components": 6,
+            "largest_component": 436
+          },
+          "reasons": []
+        },
+        {
+          "component": 4,
+          "geometry": {
+            "area": 10,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              323,
+              460,
+              325,
+              468
+            ],
+            "bbox_fill": 0.625,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1304,
+            "components": 6,
+            "largest_component": 436
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 5,
+          "geometry": {
+            "area": 294,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              0,
+              473,
+              25,
+              489
+            ],
+            "bbox_fill": 0.735,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1020,
+            "components": 6,
+            "largest_component": 436
+          },
+          "reasons": []
+        },
+        {
+          "component": 6,
+          "geometry": {
+            "area": 1,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              315,
+              475,
+              316,
+              476
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1313,
+            "components": 6,
+            "largest_component": 436
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        },
+        {
+          "component": 7,
+          "geometry": {
+            "area": 1,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              314,
+              478,
+              315,
+              479
+            ],
+            "bbox_fill": 1.0,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1313,
+            "components": 6,
+            "largest_component": 436
+          },
+          "reasons": [
+            "example_area_below64"
+          ]
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_3to5_e1",
+      "selected_example": {
+        "component": 1,
+        "geometry": {
+          "area": 315,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            480,
+            263,
+            496,
+            298
+          ],
+          "bbox_fill": 0.5625,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 999,
+          "components": 6,
+          "largest_component": 436
+        },
+        "name": "train_139.png",
+        "source": 3,
+        "target": 5
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        5
+      ],
+      "old_id": "train_139_T33_3to5",
+      "full_gt": {
+        "pixels": 1314,
+        "components": 7,
+        "largest_component": 436
+      },
+      "candidate_examples": 18,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_3to5_e1",
+      "selected_example": {
+        "name": "train_373.png",
+        "source": 3,
+        "target": 5,
+        "component": 1,
+        "geometry": {
+          "area": 872,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            0,
+            0,
+            50,
+            22
+          ],
+          "bbox_fill": 0.7927272727272727,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        1
+      ],
+      "old_id": "train_139_5to1",
+      "full_gt": {
+        "pixels": 2311,
+        "components": 1,
+        "largest_component": 2311
+      },
+      "candidate_examples": 0,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 2311,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              206,
+              0,
+              280,
+              39
+            ],
+            "bbox_fill": 0.8007623007623008,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 0,
+            "components": 0,
+            "largest_component": 0
+          },
+          "reasons": [
+            "query_pixels_below64",
+            "query_no_component32"
+          ]
+        }
+      ],
+      "reasons": [
+        "no_eligible_same_image_example"
+      ],
+      "decision": "excluded"
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        1
+      ],
+      "old_id": "train_139_T33_5to1",
+      "full_gt": {
+        "pixels": 2311,
+        "components": 1,
+        "largest_component": 2311
+      },
+      "candidate_examples": 21,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_5to1_e1",
+      "selected_example": {
+        "name": "train_798.png",
+        "source": 5,
+        "target": 1,
+        "component": 1,
+        "geometry": {
+          "area": 1553,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            0,
+            360,
+            43,
+            437
+          ],
+          "bbox_fill": 0.4690425853216551,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        2
+      ],
+      "old_id": "train_139_5to2",
+      "full_gt": {
+        "pixels": 2281,
+        "components": 6,
+        "largest_component": 1035
+      },
+      "candidate_examples": 6,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 405,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              106,
+              59,
+              122,
+              91
+            ],
+            "bbox_fill": 0.791015625,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1876,
+            "components": 5,
+            "largest_component": 1035
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 1035,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              309,
+              170,
+              339,
+              259
+            ],
+            "bbox_fill": 0.38764044943820225,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1246,
+            "components": 5,
+            "largest_component": 405
+          },
+          "reasons": []
+        },
+        {
+          "component": 3,
+          "geometry": {
+            "area": 222,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              38,
+              227,
+              65,
+              238
+            ],
+            "bbox_fill": 0.7474747474747475,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2059,
+            "components": 5,
+            "largest_component": 1035
+          },
+          "reasons": []
+        },
+        {
+          "component": 4,
+          "geometry": {
+            "area": 206,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              415,
+              256,
+              427,
+              285
+            ],
+            "bbox_fill": 0.5919540229885057,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2075,
+            "components": 5,
+            "largest_component": 1035
+          },
+          "reasons": []
+        },
+        {
+          "component": 5,
+          "geometry": {
+            "area": 226,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              428,
+              257,
+              441,
+              289
+            ],
+            "bbox_fill": 0.5432692307692307,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2055,
+            "components": 5,
+            "largest_component": 1035
+          },
+          "reasons": []
+        },
+        {
+          "component": 6,
+          "geometry": {
+            "area": 187,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              20,
+              303,
+              31,
+              324
+            ],
+            "bbox_fill": 0.8095238095238095,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 2094,
+            "components": 5,
+            "largest_component": 1035
+          },
+          "reasons": []
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_5to2_e2",
+      "selected_example": {
+        "component": 2,
+        "geometry": {
+          "area": 1035,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            309,
+            170,
+            339,
+            259
+          ],
+          "bbox_fill": 0.38764044943820225,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 1246,
+          "components": 5,
+          "largest_component": 405
+        },
+        "name": "train_139.png",
+        "source": 5,
+        "target": 2
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        2
+      ],
+      "old_id": "train_139_T33_5to2",
+      "full_gt": {
+        "pixels": 2281,
+        "components": 6,
+        "largest_component": 1035
+      },
+      "candidate_examples": 74,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_5to2_e1",
+      "selected_example": {
+        "name": "train_657.png",
+        "source": 5,
+        "target": 2,
+        "component": 1,
+        "geometry": {
+          "area": 738,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            155,
+            95,
+            217,
+            113
+          ],
+          "bbox_fill": 0.6612903225806451,
+          "components": 1
+        }
+      }
+    },
+    {
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        3
+      ],
+      "old_id": "train_139_5to3",
+      "full_gt": {
+        "pixels": 1828,
+        "components": 3,
+        "largest_component": 1468
+      },
+      "candidate_examples": 3,
+      "component_audit": [
+        {
+          "component": 1,
+          "geometry": {
+            "area": 218,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              392,
+              331,
+              404,
+              378
+            ],
+            "bbox_fill": 0.38652482269503546,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1610,
+            "components": 2,
+            "largest_component": 1468
+          },
+          "reasons": []
+        },
+        {
+          "component": 2,
+          "geometry": {
+            "area": 142,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              484,
+              339,
+              495,
+              356
+            ],
+            "bbox_fill": 0.7593582887700535,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 1686,
+            "components": 2,
+            "largest_component": 1468
+          },
+          "reasons": []
+        },
+        {
+          "component": 3,
+          "geometry": {
+            "area": 1468,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              207,
+              416,
+              285,
+              441
+            ],
+            "bbox_fill": 0.7528205128205128,
+            "components": 1
+          },
+          "query_support": {
+            "pixels": 360,
+            "components": 2,
+            "largest_component": 218
+          },
+          "reasons": []
+        }
+      ],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T31_train_139_5to3_e1",
+      "selected_example": {
+        "component": 1,
+        "geometry": {
+          "area": 218,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            392,
+            331,
+            404,
+            378
+          ],
+          "bbox_fill": 0.38652482269503546,
+          "components": 1
+        },
+        "query_support": {
+          "pixels": 1610,
+          "components": 2,
+          "largest_component": 1468
+        },
+        "name": "train_139.png",
+        "source": 5,
+        "target": 3
+      }
+    },
+    {
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        3
+      ],
+      "old_id": "train_139_T33_5to3",
+      "full_gt": {
+        "pixels": 1828,
+        "components": 3,
+        "largest_component": 1468
+      },
+      "candidate_examples": 13,
+      "component_audit": [],
+      "reasons": [],
+      "decision": "pending_review",
+      "new_id": "n9_T33_train_139_5to3_e3",
+      "selected_example": {
+        "name": "train_623.png",
+        "source": 5,
+        "target": 3,
+        "component": 3,
+        "geometry": {
+          "area": 372,
+          "hole_pixels": 0,
+          "hole_ratio": 0.0,
+          "bbox": [
+            0,
+            357,
+            52,
+            377
+          ],
+          "bbox_fill": 0.3576923076923077,
+          "components": 1
+        }
+      }
+    }
+  ],
+  "mapping": [
+    {
+      "old_id": "train_139_1to2",
+      "new_id": null,
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        2
+      ],
+      "status": "excluded",
+      "reasons": [
+        "no_eligible_same_image_example"
+      ]
+    },
+    {
+      "old_id": "train_139_T33_1to2",
+      "new_id": "n9_T33_train_139_1to2_e1",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        2
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_1to3",
+      "new_id": null,
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        3
+      ],
+      "status": "excluded",
+      "reasons": [
+        "no_eligible_same_image_example"
+      ]
+    },
+    {
+      "old_id": "train_139_T33_1to3",
+      "new_id": "n9_T33_train_139_1to3_e2",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        3
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_1to5",
+      "new_id": "n9_T31_train_139_1to5_e2",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        5
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_1to5",
+      "new_id": "n9_T33_train_139_1to5_e6",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        1,
+        5
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_2to1",
+      "new_id": "n9_T31_train_139_2to1_e1",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        1
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_2to1",
+      "new_id": "n9_T33_train_139_2to1_e11",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        1
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_2to3",
+      "new_id": "n9_T31_train_139_2to3_e5",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        3
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_2to3",
+      "new_id": "n9_T33_train_139_2to3_e1",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        3
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_2to5",
+      "new_id": "n9_T31_train_139_2to5_e1",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        5
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_2to5",
+      "new_id": "n9_T33_train_139_2to5_e19",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        2,
+        5
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_3to2",
+      "new_id": null,
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        2
+      ],
+      "status": "excluded",
+      "reasons": [
+        "no_eligible_same_image_example"
+      ]
+    },
+    {
+      "old_id": "train_139_T33_3to2",
+      "new_id": "n9_T33_train_139_3to2_e4",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        2
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_3to5",
+      "new_id": "n9_T31_train_139_3to5_e1",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        5
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_3to5",
+      "new_id": "n9_T33_train_139_3to5_e1",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        3,
+        5
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_5to1",
+      "new_id": null,
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        1
+      ],
+      "status": "excluded",
+      "reasons": [
+        "no_eligible_same_image_example"
+      ]
+    },
+    {
+      "old_id": "train_139_T33_5to1",
+      "new_id": "n9_T33_train_139_5to1_e1",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        1
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_5to2",
+      "new_id": "n9_T31_train_139_5to2_e2",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        2
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_5to2",
+      "new_id": "n9_T33_train_139_5to2_e1",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        2
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_5to3",
+      "new_id": "n9_T31_train_139_5to3_e1",
+      "task_type": "T3.1",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        3
+      ],
+      "status": "pending_review",
+      "reasons": []
+    },
+    {
+      "old_id": "train_139_T33_5to3",
+      "new_id": "n9_T33_train_139_5to3_e3",
+      "task_type": "T3.3",
+      "split": "report",
+      "query_image": "train_139.png",
+      "transition": [
+        5,
+        3
+      ],
+      "status": "pending_review",
+      "reasons": []
+    }
+  ]
+}

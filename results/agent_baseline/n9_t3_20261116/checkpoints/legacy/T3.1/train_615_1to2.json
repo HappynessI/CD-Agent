@@ -1,0 +1,45 @@
+{
+  "id": "train_615_1to2",
+  "task_type": "T3.1",
+  "split": "confirm",
+  "query_image": "train_615.png",
+  "geometry": {
+    "area": 7770,
+    "hole_pixels": 153,
+    "hole_ratio": 0.019310867095797046,
+    "bbox": [
+      193,
+      89,
+      440,
+      512
+    ],
+    "bbox_fill": 0.07436758836534872,
+    "components": 1
+  },
+  "query_support": {
+    "pixels": 1926,
+    "components": 7,
+    "largest_component": 1602
+  },
+  "reasons": [
+    "example_area_above4096",
+    "example_bbox_fill_below0.25"
+  ],
+  "automatic_geometry_pass": false,
+  "original_task": {
+    "id": "train_615_1to2",
+    "task_type": "T3.1",
+    "target": "any change",
+    "change_direction": "any",
+    "instruction": "Find all land-cover changes with the same transition as the marked example. Output a binary mask.",
+    "constraint": null,
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_615.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_615.png",
+    "init_mask": null,
+    "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_615_1to2_exemplar.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_615_1to2_gt.png",
+    "meta": {
+      "transition": "low vegetation -> non-vegetated ground"
+    }
+  }
+}

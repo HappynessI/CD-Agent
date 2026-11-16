@@ -1,0 +1,57 @@
+{
+  "candidates": [
+    {
+      "id": "T44_second_train_1535_road_2",
+      "dataset": "second",
+      "image_id": "train_1535",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1535.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1535.png",
+      "anchor_class": "road",
+      "anchor_class_cn": "道路",
+      "anchor_index": 2,
+      "target_instance_ids": [
+        3
+      ],
+      "distractor_instance_ids": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ],
+      "target_instances": 1,
+      "distractor_instances": 5,
+      "target_pixels": 1185,
+      "distractor_pixels": 47201,
+      "anchor_pixels": 38892,
+      "filled_pixels": 0,
+      "source_gt": [
+        "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_1535.png",
+        "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_1535.png"
+      ],
+      "source_semantic": {
+        "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_1535_t1.npz",
+        "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_1535_t2.npz"
+      },
+      "rule": {
+        "buffer_pixels": 32,
+        "minimum_overlap_fraction": 0.1,
+        "instance_min_pixels": 150,
+        "target_min_pixels": 400,
+        "anchor_min_pixels": 400,
+        "semantic_probability": 0.55,
+        "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+        "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+      },
+      "instruction": "找出紧邻道路周边的建筑变化。",
+      "status": "pending_review",
+      "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+      "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically"
+    }
+  ],
+  "reasons": {
+    "no_target_or_no_distractor": 2,
+    "no_stable_playground_anchor": 1,
+    "road_not_salient_spanning": 2
+  }
+}

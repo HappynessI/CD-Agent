@@ -1,0 +1,53 @@
+{
+  "audit": {
+    "dataset": "SECOND",
+    "image_id": "train_1322.png",
+    "direction": "disappeared",
+    "initial_f1": 54.16906267970098,
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_1322.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "status": "eligible_initial"
+  },
+  "candidates": [
+    {
+      "id": "SECOND_train_1322_disappeared_Coarse-Merge_0",
+      "dataset": "SECOND",
+      "image_id": "train_1322.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1322.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1322.png",
+      "direction": "disappeared",
+      "lesion_type": "Coarse-Merge",
+      "lesion_index": 0,
+      "operation": "修边",
+      "bbox": [
+        177,
+        327,
+        208,
+        377
+      ],
+      "point": [
+        197,
+        345
+      ],
+      "lesion_pixels": 1268,
+      "error_pixels": 775,
+      "initial_f1": 54.16906267970098,
+      "ideal_local_f1": 100.0,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_1322.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面下方的当前建筑变化掩码与周围区域粘连，请按建筑边界修整。",
+      "status": "pending_review"
+    }
+  ]
+}

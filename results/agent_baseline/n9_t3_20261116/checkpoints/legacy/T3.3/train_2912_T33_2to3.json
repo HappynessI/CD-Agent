@@ -1,0 +1,74 @@
+{
+  "id": "train_2912_T33_2to3",
+  "task_type": "T3.3",
+  "split": "tune",
+  "query_image": "train_2912.png",
+  "geometry": {
+    "area": 55,
+    "hole_pixels": 0,
+    "hole_ratio": 0.0,
+    "bbox": [
+      29,
+      24,
+      35,
+      40
+    ],
+    "bbox_fill": 0.5729166666666666,
+    "components": 1
+  },
+  "query_support": {
+    "pixels": 593,
+    "components": 1,
+    "largest_component": 593
+  },
+  "reasons": [
+    "example_area_below64"
+  ],
+  "automatic_geometry_pass": false,
+  "original_task": {
+    "change_direction": "any",
+    "constraint": null,
+    "examples": [
+      {
+        "image_t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_2912_T33_2to3/0/t1.png",
+        "image_t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_2912_T33_2to3/0/t2.png",
+        "mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_2912_T33_2to3/0/mask.png",
+        "role": "positive"
+      }
+    ],
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/truth/train_2912_T33_2to3.png",
+    "id": "train_2912_T33_2to3",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2912.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2912.png",
+    "init_mask": null,
+    "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary change mask.",
+    "meta": {
+      "example_provenance": [
+        {
+          "area": 55,
+          "bbox": [
+            344,
+            108,
+            350,
+            124
+          ],
+          "component": 6,
+          "crop_box": [
+            315,
+            84,
+            379,
+            148
+          ],
+          "name": "train_777.png",
+          "role": "positive",
+          "source": 2,
+          "target": 3
+        }
+      ],
+      "seed": 16665,
+      "transition": "2->3"
+    },
+    "target": "any change",
+    "task_type": "T3.3"
+  }
+}

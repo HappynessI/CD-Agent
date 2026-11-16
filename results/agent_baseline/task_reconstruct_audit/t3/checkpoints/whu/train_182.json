@@ -1,0 +1,50 @@
+{
+  "status": "complete",
+  "identity": {
+    "dataset": "whu",
+    "stem": "train_182",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_182.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_182.png",
+    "policy": {
+      "example_area": [
+        200,
+        5000
+      ],
+      "max_original_hole_ratio": 0.05,
+      "min_rotated_rectangle_fill": 0.45,
+      "single_date_dino_cosine": 0.75,
+      "rgb_mean_euclidean_normalized_max": 0.15,
+      "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+      "minimum_other_matching_instances": 2,
+      "min_full_remaining_pixels": 400,
+      "preferred_cluster_area_fraction": 0.85,
+      "connectivity": 8,
+      "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+      "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+      "labels_role": "offline construction/review only",
+      "review_status": "pending_review"
+    }
+  },
+  "candidates": [],
+  "groups": {
+    "whu/building/build": {
+      "images": 1,
+      "original_instances": 2,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "fewer_than_two_other_matches": 2
+      }
+    },
+    "whu/building/demolish": {
+      "images": 1,
+      "original_instances": 1,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "example_area": 1,
+        "remaining_pixels": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,446 @@
+[
+  {
+    "id": "WHU-CD_train_460_appeared_FN-Build_0",
+    "dataset": "WHU-CD",
+    "image_id": "train_460.png",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_460.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_460.png",
+    "direction": "appeared",
+    "lesion_type": "FN-Build",
+    "lesion_index": 0,
+    "operation": "补检",
+    "bbox": [
+      339,
+      27,
+      512,
+      296
+    ],
+    "point": [
+      511,
+      108
+    ],
+    "lesion_pixels": 28389,
+    "error_pixels": 21968,
+    "initial_f1": 36.89169778799196,
+    "ideal_local_f1": 100.0,
+    "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_appeared/train_460.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_appeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "feedback_text": "画面右上方的新建建筑漏检了，请参照后期影像补全。",
+    "status": "pending_review",
+    "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/m_init.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/gt.png",
+    "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/lesion.png",
+    "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/ignore.png",
+    "input_fields": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_460.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_460.png",
+      "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/m_init.png"
+    },
+    "evaluation_fields": {
+      "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/gt.png",
+      "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/ignore.png",
+      "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_460_appeared_FN-Build_0/lesion.png",
+      "initial_f1": 36.89169778799196,
+      "ideal_local_f1": 100.0
+    },
+    "paired_tasks": [
+      {
+        "task_type": "T5.2",
+        "feedback": {
+          "bbox": [
+            339,
+            27,
+            512,
+            296
+          ],
+          "point": [
+            511,
+            108
+          ],
+          "operation": "补检"
+        }
+      },
+      {
+        "task_type": "T5.3",
+        "feedback": "画面右上方的新建建筑漏检了，请参照后期影像补全。"
+      }
+    ],
+    "gt_policy": "official WHU change with semantic direction and ambiguous direction ignored"
+  },
+  {
+    "id": "WHU-CD_train_916_disappeared_FN-Demolish_0",
+    "dataset": "WHU-CD",
+    "image_id": "train_916.png",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_916.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_916.png",
+    "direction": "disappeared",
+    "lesion_type": "FN-Demolish",
+    "lesion_index": 0,
+    "operation": "补检",
+    "bbox": [
+      311,
+      319,
+      380,
+      369
+    ],
+    "point": [
+      341,
+      341
+    ],
+    "lesion_pixels": 2006,
+    "error_pixels": 2006,
+    "initial_f1": 64.35492095869455,
+    "ideal_local_f1": 98.84649511978705,
+    "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_disappeared/train_916.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_disappeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "feedback_text": "画面右下方的原有建筑后期已拆除但漏检了，请参照前期影像补全。",
+    "status": "pending_review",
+    "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/m_init.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/gt.png",
+    "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/lesion.png",
+    "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/ignore.png",
+    "input_fields": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_916.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_916.png",
+      "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/m_init.png"
+    },
+    "evaluation_fields": {
+      "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/gt.png",
+      "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/ignore.png",
+      "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_916_disappeared_FN-Demolish_0/lesion.png",
+      "initial_f1": 64.35492095869455,
+      "ideal_local_f1": 98.84649511978705
+    },
+    "paired_tasks": [
+      {
+        "task_type": "T5.2",
+        "feedback": {
+          "bbox": [
+            311,
+            319,
+            380,
+            369
+          ],
+          "point": [
+            341,
+            341
+          ],
+          "operation": "补检"
+        }
+      },
+      {
+        "task_type": "T5.3",
+        "feedback": "画面右下方的原有建筑后期已拆除但漏检了，请参照前期影像补全。"
+      }
+    ],
+    "gt_policy": "official WHU change with semantic direction and ambiguous direction ignored"
+  },
+  {
+    "id": "WHU-CD_train_155_appeared_FP_3",
+    "dataset": "WHU-CD",
+    "image_id": "train_155.png",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_155.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_155.png",
+    "direction": "appeared",
+    "lesion_type": "FP",
+    "lesion_index": 3,
+    "operation": "剔除",
+    "bbox": [
+      49,
+      218,
+      149,
+      447
+    ],
+    "point": [
+      99,
+      396
+    ],
+    "lesion_pixels": 21935,
+    "error_pixels": 21935,
+    "initial_f1": 34.8237682664841,
+    "ideal_local_f1": 46.98069940760558,
+    "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_appeared/train_155.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_appeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "feedback_text": "画面左侧中部的当前变化掩码中的该片区域为误检，请剔除。",
+    "status": "pending_review",
+    "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/m_init.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/gt.png",
+    "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/lesion.png",
+    "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/ignore.png",
+    "input_fields": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_155.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_155.png",
+      "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/m_init.png"
+    },
+    "evaluation_fields": {
+      "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/gt.png",
+      "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/ignore.png",
+      "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/WHU-CD_train_155_appeared_FP_3/lesion.png",
+      "initial_f1": 34.8237682664841,
+      "ideal_local_f1": 46.98069940760558
+    },
+    "paired_tasks": [
+      {
+        "task_type": "T5.2",
+        "feedback": {
+          "bbox": [
+            49,
+            218,
+            149,
+            447
+          ],
+          "point": [
+            99,
+            396
+          ],
+          "operation": "剔除"
+        }
+      },
+      {
+        "task_type": "T5.3",
+        "feedback": "画面左侧中部的当前变化掩码中的该片区域为误检，请剔除。"
+      }
+    ],
+    "gt_policy": "official WHU change with semantic direction and ambiguous direction ignored"
+  },
+  {
+    "id": "SECOND_train_555_appeared_FN-Build_3",
+    "dataset": "SECOND",
+    "image_id": "train_555.png",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_555.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_555.png",
+    "direction": "appeared",
+    "lesion_type": "FN-Build",
+    "lesion_index": 3,
+    "operation": "补检",
+    "bbox": [
+      183,
+      133,
+      512,
+      512
+    ],
+    "point": [
+      511,
+      442
+    ],
+    "lesion_pixels": 100142,
+    "error_pixels": 50343,
+    "initial_f1": 66.03593925484643,
+    "ideal_local_f1": 97.52492120929146,
+    "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/train_555.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "feedback_text": "画面右侧中部的新建建筑漏检了，请参照后期影像补全。",
+    "status": "pending_review",
+    "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/m_init.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/gt.png",
+    "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/lesion.png",
+    "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/ignore.png",
+    "input_fields": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_555.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_555.png",
+      "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/m_init.png"
+    },
+    "evaluation_fields": {
+      "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/gt.png",
+      "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/ignore.png",
+      "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_555_appeared_FN-Build_3/lesion.png",
+      "initial_f1": 66.03593925484643,
+      "ideal_local_f1": 97.52492120929146
+    },
+    "paired_tasks": [
+      {
+        "task_type": "T5.2",
+        "feedback": {
+          "bbox": [
+            183,
+            133,
+            512,
+            512
+          ],
+          "point": [
+            511,
+            442
+          ],
+          "operation": "补检"
+        }
+      },
+      {
+        "task_type": "T5.3",
+        "feedback": "画面右侧中部的新建建筑漏检了，请参照后期影像补全。"
+      }
+    ],
+    "gt_policy": "SECOND directed building transition; unchanged/unlabelled excluded"
+  },
+  {
+    "id": "SECOND_train_119_disappeared_FN-Demolish_5",
+    "dataset": "SECOND",
+    "image_id": "train_119.png",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_119.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_119.png",
+    "direction": "disappeared",
+    "lesion_type": "FN-Demolish",
+    "lesion_index": 5,
+    "operation": "补检",
+    "bbox": [
+      1,
+      436,
+      218,
+      512
+    ],
+    "point": [
+      66,
+      511
+    ],
+    "lesion_pixels": 11293,
+    "error_pixels": 11293,
+    "initial_f1": 53.56791822292117,
+    "ideal_local_f1": 85.37575256304218,
+    "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_119.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "feedback_text": "画面左下方的原有建筑后期已拆除但漏检了，请参照前期影像补全。",
+    "status": "pending_review",
+    "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/m_init.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/gt.png",
+    "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/lesion.png",
+    "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/ignore.png",
+    "input_fields": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_119.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_119.png",
+      "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/m_init.png"
+    },
+    "evaluation_fields": {
+      "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/gt.png",
+      "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/ignore.png",
+      "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_119_disappeared_FN-Demolish_5/lesion.png",
+      "initial_f1": 53.56791822292117,
+      "ideal_local_f1": 85.37575256304218
+    },
+    "paired_tasks": [
+      {
+        "task_type": "T5.2",
+        "feedback": {
+          "bbox": [
+            1,
+            436,
+            218,
+            512
+          ],
+          "point": [
+            66,
+            511
+          ],
+          "operation": "补检"
+        }
+      },
+      {
+        "task_type": "T5.3",
+        "feedback": "画面左下方的原有建筑后期已拆除但漏检了，请参照前期影像补全。"
+      }
+    ],
+    "gt_policy": "SECOND directed building transition; unchanged/unlabelled excluded"
+  },
+  {
+    "id": "SECOND_train_2677_appeared_FP_5",
+    "dataset": "SECOND",
+    "image_id": "train_2677.png",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2677.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2677.png",
+    "direction": "appeared",
+    "lesion_type": "FP",
+    "lesion_index": 5,
+    "operation": "剔除",
+    "bbox": [
+      32,
+      347,
+      307,
+      500
+    ],
+    "point": [
+      189,
+      400
+    ],
+    "lesion_pixels": 25720,
+    "error_pixels": 25720,
+    "initial_f1": 66.66728484927162,
+    "ideal_local_f1": 85.37601975988885,
+    "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/train_2677.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "feedback_text": "画面左下方的当前变化掩码中的该片区域为误检，请剔除。",
+    "status": "pending_review",
+    "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/m_init.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/gt.png",
+    "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/lesion.png",
+    "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/ignore.png",
+    "input_fields": {
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2677.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2677.png",
+      "m_init": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/m_init.png"
+    },
+    "evaluation_fields": {
+      "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/gt.png",
+      "gt_ignore_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/ignore.png",
+      "lesion_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t5/samples/SECOND_train_2677_appeared_FP_5/lesion.png",
+      "initial_f1": 66.66728484927162,
+      "ideal_local_f1": 85.37601975988885
+    },
+    "paired_tasks": [
+      {
+        "task_type": "T5.2",
+        "feedback": {
+          "bbox": [
+            32,
+            347,
+            307,
+            500
+          ],
+          "point": [
+            189,
+            400
+          ],
+          "operation": "剔除"
+        }
+      },
+      {
+        "task_type": "T5.3",
+        "feedback": "画面左下方的当前变化掩码中的该片区域为误检，请剔除。"
+      }
+    ],
+    "gt_policy": "SECOND directed building transition; unchanged/unlabelled excluded"
+  }
+]

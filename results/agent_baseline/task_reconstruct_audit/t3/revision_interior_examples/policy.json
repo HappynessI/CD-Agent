@@ -1,0 +1,22 @@
+{
+  "example_area": [
+    200,
+    5000
+  ],
+  "max_original_hole_ratio": 0.05,
+  "min_rotated_rectangle_fill": 0.45,
+  "single_date_dino_cosine": 0.75,
+  "rgb_mean_euclidean_normalized_max": 0.15,
+  "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+  "minimum_other_matching_instances": 2,
+  "min_full_remaining_pixels": 400,
+  "preferred_cluster_area_fraction": 0.85,
+  "connectivity": 8,
+  "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+  "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+  "labels_role": "offline construction/review only",
+  "review_status": "pending_review",
+  "revision": "whole_gt_interior_v1",
+  "border_rule": "Reject image/category/direction task if ANY full-GT instance touches an image boundary; retain all instances in audit/full GT",
+  "fallback": "none; fewer than three distinct strict images reported without relaxation"
+}

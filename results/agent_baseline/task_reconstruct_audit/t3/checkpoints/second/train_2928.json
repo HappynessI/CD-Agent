@@ -1,0 +1,223 @@
+{
+  "status": "complete",
+  "identity": {
+    "dataset": "second",
+    "stem": "train_2928",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2928.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2928.png",
+    "policy": {
+      "example_area": [
+        200,
+        5000
+      ],
+      "max_original_hole_ratio": 0.05,
+      "min_rotated_rectangle_fill": 0.45,
+      "single_date_dino_cosine": 0.75,
+      "rgb_mean_euclidean_normalized_max": 0.15,
+      "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+      "minimum_other_matching_instances": 2,
+      "min_full_remaining_pixels": 400,
+      "preferred_cluster_area_fraction": 0.85,
+      "connectivity": 8,
+      "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+      "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+      "labels_role": "offline construction/review only",
+      "review_status": "pending_review"
+    }
+  },
+  "candidates": [
+    {
+      "example_id": 5,
+      "example_area": 2634,
+      "bbox": [
+        459,
+        408,
+        512,
+        512
+      ],
+      "hole_ratio": 0.0,
+      "compactness": 0.47786647314949204,
+      "cluster_area_fraction": 0.6175039071221254,
+      "full_pixels": 22395,
+      "remaining_pixels": 19761,
+      "remaining_instances": 4,
+      "matching_other_instances": 2,
+      "matching_other_pixels": 11195,
+      "instances": [
+        {
+          "id": 1,
+          "raw_area": 5909,
+          "area": 5909,
+          "bbox": [
+            0,
+            14,
+            144,
+            122
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.7176084819650794,
+          "min_rectangle_area": 8234.295090574955,
+          "rgb_mean": [
+            169.34675918091048,
+            179.967845659164,
+            180.50516161787104
+          ],
+          "cosine": 0.609592854976654,
+          "rgb_distance": 0.2484988107331122,
+          "is_example": false,
+          "is_match": false,
+          "intact_geometry": true
+        },
+        {
+          "id": 2,
+          "raw_area": 3747,
+          "area": 3747,
+          "bbox": [
+            170,
+            118,
+            286,
+            195
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.8855643788996029,
+          "min_rectangle_area": 4231.2,
+          "rgb_mean": [
+            69.56631972244462,
+            118.07099012543368,
+            172.8636242327195
+          ],
+          "cosine": 0.7564190626144409,
+          "rgb_distance": 0.043634205216741176,
+          "is_example": false,
+          "is_match": true,
+          "intact_geometry": true
+        },
+        {
+          "id": 3,
+          "raw_area": 7448,
+          "area": 7448,
+          "bbox": [
+            421,
+            252,
+            512,
+            379
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.7694602191246489,
+          "min_rectangle_area": 9679.512747875351,
+          "rgb_mean": [
+            102.6233888292159,
+            141.55222878625133,
+            188.19132653061226
+          ],
+          "cosine": 0.8883374333381653,
+          "rgb_distance": 0.07387596184389819,
+          "is_example": false,
+          "is_match": true,
+          "intact_geometry": true
+        },
+        {
+          "id": 4,
+          "raw_area": 2657,
+          "area": 2657,
+          "bbox": [
+            50,
+            355,
+            164,
+            429
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.9229902918862517,
+          "min_rectangle_area": 2878.6868327402144,
+          "rgb_mean": [
+            109.34211516748212,
+            128.70944674444863,
+            154.70794128716597
+          ],
+          "cosine": 0.6415385007858276,
+          "rgb_distance": 0.11317392379912901,
+          "is_example": false,
+          "is_match": false,
+          "intact_geometry": true
+        },
+        {
+          "id": 5,
+          "raw_area": 2634,
+          "area": 2634,
+          "bbox": [
+            459,
+            408,
+            512,
+            512
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.47786647314949204,
+          "min_rectangle_area": 5512.0,
+          "rgb_mean": [
+            72.61237661351556,
+            128.75322703113136,
+            188.61237661351558
+          ],
+          "cosine": 1.0,
+          "rgb_distance": 0.0,
+          "is_example": true,
+          "is_match": true,
+          "intact_geometry": true
+        }
+      ],
+      "sample_instance_ids": [
+        3,
+        2
+      ],
+      "dataset": "second",
+      "stem": "train_2928",
+      "category": "building",
+      "direction": "demolish",
+      "example_time": "t1"
+    }
+  ],
+  "groups": {
+    "second/building/build": {
+      "images": 1,
+      "original_instances": 1,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "remaining_pixels": 1
+      }
+    },
+    "second/building/demolish": {
+      "images": 1,
+      "original_instances": 5,
+      "eligible_examples": 2,
+      "eligible_images": 1,
+      "failures": {
+        "example_area": 2,
+        "fewer_than_two_other_matches": 1
+      }
+    },
+    "second/playground/build": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    }
+  }
+}

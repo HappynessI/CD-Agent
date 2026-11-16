@@ -1,0 +1,53 @@
+{
+  "audit": {
+    "dataset": "WHU-CD",
+    "image_id": "train_916.png",
+    "direction": "disappeared",
+    "initial_f1": 64.35492095869455,
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_disappeared/train_916.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_disappeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "status": "eligible_initial"
+  },
+  "candidates": [
+    {
+      "id": "WHU-CD_train_916_disappeared_FN-Demolish_0",
+      "dataset": "WHU-CD",
+      "image_id": "train_916.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_916.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_916.png",
+      "direction": "disappeared",
+      "lesion_type": "FN-Demolish",
+      "lesion_index": 0,
+      "operation": "补检",
+      "bbox": [
+        311,
+        319,
+        380,
+        369
+      ],
+      "point": [
+        341,
+        341
+      ],
+      "lesion_pixels": 2006,
+      "error_pixels": 2006,
+      "initial_f1": 64.35492095869455,
+      "ideal_local_f1": 98.84649511978705,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_disappeared/train_916.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/whu_fixed/whu_disappeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面右下方的原有建筑后期已拆除但漏检了，请参照前期影像补全。",
+      "status": "pending_review"
+    }
+  ]
+}

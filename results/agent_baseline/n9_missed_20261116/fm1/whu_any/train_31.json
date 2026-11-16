@@ -1,0 +1,766 @@
+{
+  "group": "whu_any",
+  "stem": "train_31",
+  "split": "confirm",
+  "profile": "any",
+  "direction": "any",
+  "scope": "building_rebuild_excluded",
+  "instruction": "Find all buildings that changed between T1 and T2 (newly built or demolished). Output a binary change mask.",
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_31.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_31.png",
+  "base": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/base/whu_any/train_31.npz",
+  "sources": {
+    "S1_02": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_any/S1_02/train_31.npz",
+    "S2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_any/S2/train_31.npz",
+    "S3": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_any/S3/train_31.npz",
+    "S4": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_any/S4/train_31.npz",
+    "S5": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/candidates/whu_any/S5/train_31.npz"
+  },
+  "semantic": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/semantic/whu/train_31_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/semantic/whu/train_31_t2.npz"
+  },
+  "features": {
+    "t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/whu/train_31/extract_features_t1.npz",
+    "t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch99_find_missed_pre/artifacts/gpu_cache/dynamic/whu/train_31/extract_features_t2.npz"
+  },
+  "shape": [
+    512,
+    512
+  ],
+  "candidates": [
+    {
+      "index": 0,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 1044,
+      "bbox": [
+        88,
+        178,
+        126,
+        207
+      ],
+      "semantic_delta": 0.022096596658229828,
+      "p1": 0.5074126124382019,
+      "p2": 0.5078293085098267,
+      "dino": 0.057834506034851074
+    },
+    {
+      "index": 1,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 753,
+      "bbox": [
+        278,
+        233,
+        293,
+        294
+      ],
+      "semantic_delta": 0.0631481260061264,
+      "p1": 0.24634648859500885,
+      "p2": 0.3091564476490021,
+      "dino": 0.6278277635574341
+    },
+    {
+      "index": 2,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 1437,
+      "bbox": [
+        77,
+        353,
+        137,
+        381
+      ],
+      "semantic_delta": 0.06954915821552277,
+      "p1": 0.2433624118566513,
+      "p2": 0.2416152060031891,
+      "dino": 0.43174129724502563
+    },
+    {
+      "index": 3,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 547,
+      "bbox": [
+        6,
+        366,
+        21,
+        408
+      ],
+      "semantic_delta": 0.03060952201485634,
+      "p1": 0.2644020617008209,
+      "p2": 0.29482501745224,
+      "dino": 0.2397816777229309
+    },
+    {
+      "index": 4,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 492,
+      "bbox": [
+        185,
+        481,
+        208,
+        512
+      ],
+      "semantic_delta": 0.20509600639343262,
+      "p1": 0.23824550211429596,
+      "p2": 0.2551468014717102,
+      "dino": 0.2496492862701416
+    },
+    {
+      "index": 5,
+      "sources": [
+        "S1_02"
+      ],
+      "area": 336,
+      "bbox": [
+        0,
+        495,
+        27,
+        510
+      ],
+      "semantic_delta": 0.32958531379699707,
+      "p1": 0.13128606975078583,
+      "p2": 0.4608713686466217,
+      "dino": 0.38434743881225586
+    },
+    {
+      "index": 6,
+      "sources": [
+        "S2"
+      ],
+      "area": 455,
+      "bbox": [
+        185,
+        481,
+        208,
+        512
+      ],
+      "semantic_delta": 0.21264581382274628,
+      "p1": 0.24553880095481873,
+      "p2": 0.2558617889881134,
+      "dino": 0.24969083070755005
+    },
+    {
+      "index": 7,
+      "sources": [
+        "S3"
+      ],
+      "area": 849,
+      "bbox": [
+        473,
+        0,
+        512,
+        50
+      ],
+      "semantic_delta": 0.14875957369804382,
+      "p1": 0.38113313913345337,
+      "p2": 0.23237356543540955,
+      "dino": 0.2704653739929199
+    },
+    {
+      "index": 8,
+      "sources": [
+        "S3"
+      ],
+      "area": 36,
+      "bbox": [
+        507,
+        54,
+        512,
+        64
+      ],
+      "semantic_delta": 0.1133015975356102,
+      "p1": 0.3383517861366272,
+      "p2": 0.2250501811504364,
+      "dino": 0.3655015826225281
+    },
+    {
+      "index": 9,
+      "sources": [
+        "S3"
+      ],
+      "area": 762,
+      "bbox": [
+        306,
+        173,
+        377,
+        193
+      ],
+      "semantic_delta": 0.06440746784210205,
+      "p1": 0.3048480153083801,
+      "p2": 0.24053987860679626,
+      "dino": 0.19413292407989502
+    },
+    {
+      "index": 10,
+      "sources": [
+        "S4"
+      ],
+      "area": 86,
+      "bbox": [
+        336,
+        163,
+        351,
+        173
+      ],
+      "semantic_delta": 0.09887411445379257,
+      "p1": 0.29586154222488403,
+      "p2": 0.19698742032051086,
+      "dino": 0.5992593169212341
+    },
+    {
+      "index": 11,
+      "sources": [
+        "S4"
+      ],
+      "area": 749,
+      "bbox": [
+        275,
+        233,
+        292,
+        303
+      ],
+      "semantic_delta": 0.14743143320083618,
+      "p1": 0.22487454116344452,
+      "p2": 0.3723059892654419,
+      "dino": 0.5632734298706055
+    },
+    {
+      "index": 12,
+      "sources": [
+        "S4"
+      ],
+      "area": 440,
+      "bbox": [
+        143,
+        393,
+        174,
+        411
+      ],
+      "semantic_delta": 0.1346665769815445,
+      "p1": 0.13031034171581268,
+      "p2": 0.2649769186973572,
+      "dino": 0.567558765411377
+    },
+    {
+      "index": 13,
+      "sources": [
+        "S4"
+      ],
+      "area": 453,
+      "bbox": [
+        398,
+        398,
+        430,
+        423
+      ],
+      "semantic_delta": 0.12072066962718964,
+      "p1": 0.24479274451732635,
+      "p2": 0.12682552635669708,
+      "dino": 0.5715566277503967
+    },
+    {
+      "index": 14,
+      "sources": [
+        "S4"
+      ],
+      "area": 173,
+      "bbox": [
+        204,
+        446,
+        223,
+        458
+      ],
+      "semantic_delta": 0.28860723972320557,
+      "p1": 0.0008489685715176165,
+      "p2": 0.28945621848106384,
+      "dino": 0.662024736404419
+    },
+    {
+      "index": 15,
+      "sources": [
+        "S4"
+      ],
+      "area": 31,
+      "bbox": [
+        221,
+        447,
+        226,
+        455
+      ],
+      "semantic_delta": 0.27564725279808044,
+      "p1": 0.0014759647892788053,
+      "p2": 0.27712324261665344,
+      "dino": 0.7101134061813354
+    },
+    {
+      "index": 16,
+      "sources": [
+        "S4"
+      ],
+      "area": 1631,
+      "bbox": [
+        8,
+        456,
+        73,
+        494
+      ],
+      "semantic_delta": 0.356638640165329,
+      "p1": 0.09423117339611053,
+      "p2": 0.4508697986602783,
+      "dino": 0.597378134727478
+    },
+    {
+      "index": 17,
+      "sources": [
+        "S4"
+      ],
+      "area": 231,
+      "bbox": [
+        205,
+        460,
+        231,
+        474
+      ],
+      "semantic_delta": 0.2337886095046997,
+      "p1": 0.07007557898759842,
+      "p2": 0.30386418104171753,
+      "dino": 0.574812650680542
+    },
+    {
+      "index": 18,
+      "sources": [
+        "S4"
+      ],
+      "area": 45,
+      "bbox": [
+        208,
+        486,
+        218,
+        498
+      ],
+      "semantic_delta": 0.26232096552848816,
+      "p1": 0.0053114150650799274,
+      "p2": 0.2676323652267456,
+      "dino": 0.46365463733673096
+    },
+    {
+      "index": 19,
+      "sources": [
+        "S4"
+      ],
+      "area": 62,
+      "bbox": [
+        34,
+        497,
+        41,
+        507
+      ],
+      "semantic_delta": 0.3661469519138336,
+      "p1": 0.0960545688867569,
+      "p2": 0.4622015058994293,
+      "dino": 0.6641567945480347
+    },
+    {
+      "index": 20,
+      "sources": [
+        "S5"
+      ],
+      "area": 771,
+      "bbox": [
+        279,
+        232,
+        292,
+        294
+      ],
+      "semantic_delta": 0.06518760323524475,
+      "p1": 0.2450719028711319,
+      "p2": 0.3099932074546814,
+      "dino": 0.6257805824279785
+    },
+    {
+      "index": 21,
+      "sources": [
+        "S5"
+      ],
+      "area": 527,
+      "bbox": [
+        496,
+        237,
+        510,
+        277
+      ],
+      "semantic_delta": 0.11964141577482224,
+      "p1": 0.40484723448753357,
+      "p2": 0.36764103174209595,
+      "dino": 0.38377779722213745
+    },
+    {
+      "index": 22,
+      "sources": [
+        "S5"
+      ],
+      "area": 548,
+      "bbox": [
+        477,
+        239,
+        492,
+        278
+      ],
+      "semantic_delta": 0.1094084158539772,
+      "p1": 0.3364010453224182,
+      "p2": 0.3502092659473419,
+      "dino": 0.336215615272522
+    },
+    {
+      "index": 23,
+      "sources": [
+        "S5"
+      ],
+      "area": 268,
+      "bbox": [
+        413,
+        260,
+        425,
+        286
+      ],
+      "semantic_delta": 0.013069266453385353,
+      "p1": 0.2468717247247696,
+      "p2": 0.25186702609062195,
+      "dino": 0.22739744186401367
+    },
+    {
+      "index": 24,
+      "sources": [
+        "S5"
+      ],
+      "area": 222,
+      "bbox": [
+        427,
+        263,
+        437,
+        287
+      ],
+      "semantic_delta": 0.022426845505833626,
+      "p1": 0.25467440485954285,
+      "p2": 0.25958582758903503,
+      "dino": 0.2032262682914734
+    },
+    {
+      "index": 25,
+      "sources": [
+        "S5"
+      ],
+      "area": 239,
+      "bbox": [
+        389,
+        265,
+        400,
+        289
+      ],
+      "semantic_delta": 0.06292597204446793,
+      "p1": 0.18224994838237762,
+      "p2": 0.24277538061141968,
+      "dino": 0.31147676706314087
+    },
+    {
+      "index": 26,
+      "sources": [
+        "S5"
+      ],
+      "area": 264,
+      "bbox": [
+        421,
+        342,
+        432,
+        368
+      ],
+      "semantic_delta": 0.10490463674068451,
+      "p1": 0.27583545446395874,
+      "p2": 0.17093080282211304,
+      "dino": 0.28881198167800903
+    },
+    {
+      "index": 27,
+      "sources": [
+        "S5"
+      ],
+      "area": 2203,
+      "bbox": [
+        218,
+        353,
+        266,
+        429
+      ],
+      "semantic_delta": 0.07151562720537186,
+      "p1": 0.22648604214191437,
+      "p2": 0.23413512110710144,
+      "dino": 0.22731465101242065
+    },
+    {
+      "index": 28,
+      "sources": [
+        "S5"
+      ],
+      "area": 278,
+      "bbox": [
+        202,
+        359,
+        215,
+        386
+      ],
+      "semantic_delta": 0.019187433645129204,
+      "p1": 0.23237577080726624,
+      "p2": 0.24932730197906494,
+      "dino": 0.3661500811576843
+    },
+    {
+      "index": 29,
+      "sources": [
+        "S5"
+      ],
+      "area": 541,
+      "bbox": [
+        6,
+        366,
+        21,
+        408
+      ],
+      "semantic_delta": 0.029913319274783134,
+      "p1": 0.2642260491847992,
+      "p2": 0.29395073652267456,
+      "dino": 0.2415839433670044
+    },
+    {
+      "index": 30,
+      "sources": [
+        "S5"
+      ],
+      "area": 279,
+      "bbox": [
+        493,
+        368,
+        510,
+        394
+      ],
+      "semantic_delta": 0.10916323959827423,
+      "p1": 0.22086851298809052,
+      "p2": 0.32494068145751953,
+      "dino": 0.31445229053497314
+    },
+    {
+      "index": 31,
+      "sources": [
+        "S5"
+      ],
+      "area": 243,
+      "bbox": [
+        409,
+        369,
+        419,
+        396
+      ],
+      "semantic_delta": 0.06919427216053009,
+      "p1": 0.2676389217376709,
+      "p2": 0.22722208499908447,
+      "dino": 0.5546824336051941
+    },
+    {
+      "index": 32,
+      "sources": [
+        "S5"
+      ],
+      "area": 261,
+      "bbox": [
+        371,
+        370,
+        382,
+        396
+      ],
+      "semantic_delta": 0.009222622960805893,
+      "p1": 0.2633603811264038,
+      "p2": 0.25466346740722656,
+      "dino": 0.5817174911499023
+    },
+    {
+      "index": 33,
+      "sources": [
+        "S5"
+      ],
+      "area": 263,
+      "bbox": [
+        421,
+        370,
+        432,
+        396
+      ],
+      "semantic_delta": 0.0770207941532135,
+      "p1": 0.284069687128067,
+      "p2": 0.2691822052001953,
+      "dino": 0.5468337535858154
+    },
+    {
+      "index": 34,
+      "sources": [
+        "S5"
+      ],
+      "area": 257,
+      "bbox": [
+        396,
+        371,
+        407,
+        397
+      ],
+      "semantic_delta": 0.06941098719835281,
+      "p1": 0.27960941195487976,
+      "p2": 0.2109013944864273,
+      "dino": 0.5478215217590332
+    },
+    {
+      "index": 35,
+      "sources": [
+        "S5"
+      ],
+      "area": 342,
+      "bbox": [
+        452,
+        376,
+        464,
+        409
+      ],
+      "semantic_delta": 0.17445756494998932,
+      "p1": 0.14938853681087494,
+      "p2": 0.32384610176086426,
+      "dino": 0.49891501665115356
+    },
+    {
+      "index": 36,
+      "sources": [
+        "S5"
+      ],
+      "area": 270,
+      "bbox": [
+        368,
+        397,
+        380,
+        426
+      ],
+      "semantic_delta": 0.023072192445397377,
+      "p1": 0.2994592785835266,
+      "p2": 0.28748732805252075,
+      "dino": 0.655595064163208
+    },
+    {
+      "index": 37,
+      "sources": [
+        "S5"
+      ],
+      "area": 250,
+      "bbox": [
+        409,
+        397,
+        419,
+        423
+      ],
+      "semantic_delta": 0.19815966486930847,
+      "p1": 0.3146635890007019,
+      "p2": 0.11650390923023224,
+      "dino": 0.5725581645965576
+    },
+    {
+      "index": 38,
+      "sources": [
+        "S5"
+      ],
+      "area": 257,
+      "bbox": [
+        356,
+        398,
+        367,
+        425
+      ],
+      "semantic_delta": 0.04075675830245018,
+      "p1": 0.28818994760513306,
+      "p2": 0.2585325837135315,
+      "dino": 0.49722641706466675
+    },
+    {
+      "index": 39,
+      "sources": [
+        "S5"
+      ],
+      "area": 285,
+      "bbox": [
+        383,
+        398,
+        396,
+        424
+      ],
+      "semantic_delta": 0.09864544868469238,
+      "p1": 0.12232837080955505,
+      "p2": 0.2148309051990509,
+      "dino": 0.6260061264038086
+    },
+    {
+      "index": 40,
+      "sources": [
+        "S5"
+      ],
+      "area": 251,
+      "bbox": [
+        396,
+        398,
+        407,
+        424
+      ],
+      "semantic_delta": 0.09658217430114746,
+      "p1": 0.19435076415538788,
+      "p2": 0.15457311272621155,
+      "dino": 0.5786449909210205
+    },
+    {
+      "index": 41,
+      "sources": [
+        "S5"
+      ],
+      "area": 138,
+      "bbox": [
+        267,
+        402,
+        277,
+        419
+      ],
+      "semantic_delta": 0.08752551674842834,
+      "p1": 0.19284522533416748,
+      "p2": 0.18457916378974915,
+      "dino": 0.4527164697647095
+    }
+  ],
+  "masks": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/fm1/whu_any/train_31.npz",
+  "audit": {
+    "enabled_sources": [
+      "S1_02",
+      "S2",
+      "S3",
+      "S4",
+      "S5"
+    ],
+    "s5_before": 99,
+    "s5_after_dino020": 89,
+    "source_components_after_dilation25": {
+      "S1_02": 6,
+      "S2": 1,
+      "S3": 3,
+      "S4": 10,
+      "S5": 22
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "cd-task-reconstruct-20261116",
+  "partition": "gre",
+  "hook_node": "gpu42",
+  "jobs_glob": "jobs/01-*.sbatch",
+  "auto_start": true,
+  "metric": [
+    "/usr/bin/python3",
+    "metric.py"
+  ],
+  "agent_bridge": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/exp-loop-agent/bridge.json",
+  "notify": true,
+  "git": {
+    "repo": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent",
+    "branch": "claude/project-thread-2tuaib",
+    "paths": [
+      "results/agent_baseline/task_reconstruct_audit",
+      "code/agent_baseline/analysis/task_reconstruct_t44.py",
+      "doc/agent_baseline/README_ai.md",
+      "task_plan.md",
+      "findings.md",
+      "progress.md"
+    ],
+    "state_export": "results/agent_baseline/task_reconstruct_audit/state_at_stop.json"
+  }
+}

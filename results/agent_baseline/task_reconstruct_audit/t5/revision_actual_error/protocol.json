@@ -1,0 +1,21 @@
+{
+  "status": "pending_review",
+  "initial_f1_percent": [
+    20,
+    75
+  ],
+  "minimum_error_pixels": {
+    "WHU-CD": 800,
+    "SECOND": 400
+  },
+  "weak_method": "Fixed unverified SAM3 IMC p0.85 score0.5 tile512 overlap0.25, same version on every image; never GT corruption",
+  "alternative_not_used": "base/*.npz start is fixed connected components after historical f37_corr verifier rejection; yes is accepted components. Neither is selected per image.",
+  "connectivity": 8,
+  "hole_fill_background_connectivity": 4,
+  "selection": "per dataset choose one FN-Build, FN-Demolish and FP/Coarse-Merge on different images; prioritize error area then stable ID",
+  "api_calls": 0,
+  "online_runs": 0,
+  "revision": "actual_prediction_error_counts",
+  "error_definition": "FP/TP always intersect the unchanged real prediction; filled holes do not create predicted pixels",
+  "ideal_edit_definition": "remove: M_init minus region; add: M_init union GT inside region; refine: replace region by local GT. GT-assisted ideal edits are audit only."
+}

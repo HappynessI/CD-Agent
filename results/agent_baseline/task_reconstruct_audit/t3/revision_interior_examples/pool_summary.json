@@ -1,0 +1,185 @@
+{
+  "status": "complete_pending_review",
+  "policy": {
+    "example_area": [
+      200,
+      5000
+    ],
+    "max_original_hole_ratio": 0.05,
+    "min_rotated_rectangle_fill": 0.45,
+    "single_date_dino_cosine": 0.75,
+    "rgb_mean_euclidean_normalized_max": 0.15,
+    "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+    "minimum_other_matching_instances": 2,
+    "min_full_remaining_pixels": 400,
+    "preferred_cluster_area_fraction": 0.85,
+    "connectivity": 8,
+    "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+    "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+    "labels_role": "offline construction/review only",
+    "review_status": "pending_review",
+    "revision": "whole_gt_interior_v1",
+    "border_rule": "Reject image/category/direction task if ANY full-GT instance touches an image boundary; retain all instances in audit/full GT",
+    "fallback": "none; fewer than three distinct strict images reported without relaxation"
+  },
+  "groups": {
+    "whu/building/build": {
+      "images": 60,
+      "original_instances": 169,
+      "border_instances": 90,
+      "whole_gt_interior_images": 7,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 26,
+        "whole_gt_has_border_instances": 27,
+        "border_instances": 90,
+        "fewer_than_two_other_matches": 10,
+        "remaining_pixels": 2,
+        "example_area": 2
+      }
+    },
+    "whu/building/demolish": {
+      "images": 60,
+      "original_instances": 24,
+      "border_instances": 12,
+      "whole_gt_interior_images": 3,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 48,
+        "whole_gt_has_border_instances": 9,
+        "border_instances": 12,
+        "remaining_pixels": 3,
+        "example_area": 1
+      }
+    },
+    "second/building/build": {
+      "images": 60,
+      "original_instances": 501,
+      "border_instances": 118,
+      "whole_gt_interior_images": 10,
+      "eligible_examples": 8,
+      "eligible_images": 1,
+      "failures": {
+        "fewer_than_two_other_matches": 9,
+        "example_area": 11,
+        "whole_gt_has_border_instances": 44,
+        "border_instances": 118,
+        "remaining_pixels": 7,
+        "empty_direction": 6
+      }
+    },
+    "second/building/demolish": {
+      "images": 60,
+      "original_instances": 185,
+      "border_instances": 38,
+      "whole_gt_interior_images": 19,
+      "eligible_examples": 10,
+      "eligible_images": 3,
+      "failures": {
+        "empty_direction": 19,
+        "fewer_than_two_other_matches": 19,
+        "example_area": 20,
+        "whole_gt_has_border_instances": 22,
+        "border_instances": 38,
+        "remaining_pixels": 12,
+        "example_holes": 1,
+        "example_compactness": 1
+      }
+    },
+    "second/playground/build": {
+      "images": 60,
+      "original_instances": 4,
+      "border_instances": 0,
+      "whole_gt_interior_images": 2,
+      "eligible_examples": 3,
+      "eligible_images": 1,
+      "failures": {
+        "empty_direction": 58,
+        "example_area": 1,
+        "remaining_pixels": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 60,
+      "original_instances": 1,
+      "border_instances": 1,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 59,
+        "whole_gt_has_border_instances": 1,
+        "border_instances": 1
+      }
+    }
+  },
+  "images_scanned": 120,
+  "strict_eligible_candidates": 5,
+  "strict_eligible_physical_images": 5,
+  "candidates_at_least_85_percent": 4,
+  "selected": 3,
+  "shortage_reason": null,
+  "candidate_summaries": [
+    {
+      "dataset": "second",
+      "stem": "train_156",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 4,
+      "cluster_area_fraction": 1.0,
+      "remaining_pixels": 3704,
+      "whole_gt_interior": true
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2043",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 2,
+      "cluster_area_fraction": 1.0,
+      "remaining_pixels": 6029,
+      "whole_gt_interior": true
+    },
+    {
+      "dataset": "second",
+      "stem": "train_2571",
+      "category": "building",
+      "direction": "demolish",
+      "example_id": 3,
+      "cluster_area_fraction": 1.0,
+      "remaining_pixels": 1154,
+      "whole_gt_interior": true
+    },
+    {
+      "dataset": "second",
+      "stem": "train_385",
+      "category": "playground",
+      "direction": "build",
+      "example_id": 1,
+      "cluster_area_fraction": 1.0,
+      "remaining_pixels": 3416,
+      "whole_gt_interior": true
+    },
+    {
+      "dataset": "second",
+      "stem": "train_443",
+      "category": "building",
+      "direction": "build",
+      "example_id": 12,
+      "cluster_area_fraction": 0.7249423697556477,
+      "remaining_pixels": 10427,
+      "whole_gt_interior": true
+    }
+  ],
+  "original_results_preserved": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t3",
+  "checkpoint_counts": {
+    "images_computed_this_attempt": 120,
+    "images_processed": 120
+  },
+  "api_cost_cny": 0,
+  "elapsed_seconds": 29.265634797513485,
+  "slurm_job": "187672",
+  "review_status": "pending_review"
+}

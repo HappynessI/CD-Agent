@@ -1,0 +1,30 @@
+"""Offline status report; never chooses a revised profile or submits a request."""
+import json,os
+from pathlib import Path
+from .n9_missed_assets import OUT
+
+def main():
+    assert os.environ.get('SLURM_JOB_ID')
+    legacy=OUT/'legacy_all_source_dino020_abstain'
+    report=json.loads((legacy/'scores_tune.json').read_text())
+    audit=json.loads((legacy/'answer_failure_audit.json').read_text())
+    reuse=json.loads((OUT/'method_revision_s5_only/offline_reuse_status.json').read_text())
+    metric=json.loads((legacy/'metric.json').read_text())
+    groups={}
+    for rec in report['summaries'].values():
+        for group,line in rec['lines'].items():groups.setdefault(group,[]).append(line)
+    lines=['# N9 补漏：离线核验与未完成项','',
+        '本轮没有运行在线Agent。原版核验已完成，以下仅为带额外DINO门槛的历史版本敏感性结果，不是修正版标定或确认结论。','',
+        f"已完成 {audit['counts']['total_answers']} 次 qwen3.7-flash 单轮候选核验，实际费用 ¥{metric['actual_parent_cost_cny']:.6f}。其中 {audit['counts']['invalid_abstain']} 份 JSON 因长度截断无法解析，比例 {audit['invalid_rate']:.3%}；原始回复保留，按弃权处理，不添加该候选，不将其改写成no。",'',
+        '| 开发调参任务行（每行30图） | 不补漏 F1 | 旧版配置 ΔF1 范围 | 配置数 |','|---|---:|---:|---:|']
+    for group,rows in sorted(groups.items()):
+        deltas=[x['delta_f1'] for x in rows]
+        lines.append(f"| {group} | {rows[0]['baseline']['f1']:.4f} | {min(deltas):+.4f} 至 {max(deltas):+.4f} | {len(rows)} |")
+    lines+=['','每项F1只在单个数据集×任务行内累加像素；表中的范围是事后描述，不能当作预先选定策略或在线Agent收益。完整P/R、逐例结果、错误率及调用成本见scores_tune.json。','',
+        '## 修正版进度与阻碍','',
+        '已按规范将build/demolish的0.2门槛限制于S5原始来源构造，取消对所有净候选的额外硬筛；any、排序因子、语义网格、划分与其他参数不变。',
+        f"修正版需 {reuse['requested_slots']} 份答案，已逐字节核对四图、完整问题及参数，复用 {reuse['reused_slots']} 份本N9已付费答案；尚缺 {len(reuse['missing_new_verifications'])} 份。新API调用0，未呈现缺答案的F1，未冻结正式参数。",
+        '新增外部API作业被自动审批以本轮在线实验限制拒绝，复核单轮无工具调用链后仍被拒绝；新候选核验未提交。需明确新增单轮候选API核验授权后才能继续修正版tune/confirm，在线Agent仍不运行。','',
+        '下一步：补齐新候选核验后，按any/build/demolish独立冻结参数，再各数据集任务行单独confirm；不把旧版与修正版择优混合，不使用报告/测试集。','']
+    (OUT/'offline_status_report.md').write_text('\n'.join(lines))
+if __name__=='__main__':main()

@@ -1,0 +1,173 @@
+{
+  "status": "complete",
+  "identity": {
+    "dataset": "second",
+    "stem": "train_2255",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2255.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2255.png",
+    "policy": {
+      "example_area": [
+        200,
+        5000
+      ],
+      "max_original_hole_ratio": 0.05,
+      "min_rotated_rectangle_fill": 0.45,
+      "single_date_dino_cosine": 0.75,
+      "rgb_mean_euclidean_normalized_max": 0.15,
+      "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+      "minimum_other_matching_instances": 2,
+      "min_full_remaining_pixels": 400,
+      "preferred_cluster_area_fraction": 0.85,
+      "connectivity": 8,
+      "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+      "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+      "labels_role": "offline construction/review only",
+      "review_status": "pending_review"
+    }
+  },
+  "candidates": [
+    {
+      "example_id": 3,
+      "example_area": 1737,
+      "bbox": [
+        350,
+        474,
+        420,
+        512
+      ],
+      "hole_ratio": 0.0,
+      "compactness": 0.6530075187969925,
+      "cluster_area_fraction": 1.0,
+      "full_pixels": 19326,
+      "remaining_pixels": 17589,
+      "remaining_instances": 2,
+      "matching_other_instances": 2,
+      "matching_other_pixels": 17589,
+      "instances": [
+        {
+          "id": 1,
+          "raw_area": 15467,
+          "area": 15467,
+          "bbox": [
+            174,
+            403,
+            338,
+            512
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.895186520760211,
+          "min_rectangle_area": 17277.963464938126,
+          "rgb_mean": [
+            114.46453740221116,
+            108.52957910389863,
+            110.81412038533652
+          ],
+          "cosine": 0.7617233991622925,
+          "rgb_distance": 0.10240595154014905,
+          "is_example": false,
+          "is_match": true,
+          "intact_geometry": true
+        },
+        {
+          "id": 2,
+          "raw_area": 2122,
+          "area": 2122,
+          "bbox": [
+            375,
+            442,
+            492,
+            512
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.6295742390626753,
+          "min_rectangle_area": 3370.531810766722,
+          "rgb_mean": [
+            128.76013195098963,
+            154.55278039585298,
+            172.23421300659754
+          ],
+          "cosine": 0.94911789894104,
+          "rgb_distance": 0.09039629968516032,
+          "is_example": false,
+          "is_match": true,
+          "intact_geometry": true
+        },
+        {
+          "id": 3,
+          "raw_area": 1737,
+          "area": 1737,
+          "bbox": [
+            350,
+            474,
+            420,
+            512
+          ],
+          "hole_ratio": 0.0,
+          "filled_pixels": 0,
+          "compactness": 0.6530075187969925,
+          "min_rectangle_area": 2660.0,
+          "rgb_mean": [
+            106.79274611398964,
+            129.6511226252159,
+            150.06678180771445
+          ],
+          "cosine": 0.9999997615814209,
+          "rgb_distance": 0.0,
+          "is_example": true,
+          "is_match": true,
+          "intact_geometry": true
+        }
+      ],
+      "sample_instance_ids": [
+        1,
+        2
+      ],
+      "dataset": "second",
+      "stem": "train_2255",
+      "category": "building",
+      "direction": "build",
+      "example_time": "t2"
+    }
+  ],
+  "groups": {
+    "second/building/build": {
+      "images": 1,
+      "original_instances": 3,
+      "eligible_examples": 1,
+      "eligible_images": 1,
+      "failures": {
+        "example_area": 1,
+        "fewer_than_two_other_matches": 1
+      }
+    },
+    "second/building/demolish": {
+      "images": 1,
+      "original_instances": 3,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "fewer_than_two_other_matches": 3
+      }
+    },
+    "second/playground/build": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 1,
+      "original_instances": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    }
+  }
+}

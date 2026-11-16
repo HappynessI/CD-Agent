@@ -1,0 +1,88 @@
+{
+  "audit": {
+    "dataset": "SECOND",
+    "image_id": "train_2227.png",
+    "direction": "appeared",
+    "initial_f1": 37.86039453717754,
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/train_2227.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "status": "eligible_initial"
+  },
+  "candidates": [
+    {
+      "id": "SECOND_train_2227_appeared_FP_0",
+      "dataset": "SECOND",
+      "image_id": "train_2227.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2227.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2227.png",
+      "direction": "appeared",
+      "lesion_type": "FP",
+      "lesion_index": 0,
+      "operation": "剔除",
+      "bbox": [
+        358,
+        295,
+        407,
+        330
+      ],
+      "point": [
+        374,
+        312
+      ],
+      "lesion_pixels": 1396,
+      "error_pixels": 1396,
+      "initial_f1": 37.86039453717754,
+      "ideal_local_f1": 51.496388028895765,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/train_2227.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面右侧中部的当前变化掩码中的该片区域为误检，请剔除。",
+      "status": "pending_review"
+    },
+    {
+      "id": "SECOND_train_2227_appeared_FP_1",
+      "dataset": "SECOND",
+      "image_id": "train_2227.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2227.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2227.png",
+      "direction": "appeared",
+      "lesion_type": "FP",
+      "lesion_index": 1,
+      "operation": "剔除",
+      "bbox": [
+        0,
+        298,
+        66,
+        319
+      ],
+      "point": [
+        34,
+        308
+      ],
+      "lesion_pixels": 1196,
+      "error_pixels": 1196,
+      "initial_f1": 37.86039453717754,
+      "ideal_local_f1": 48.969578017664375,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/train_2227.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/appeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面左侧中部的当前变化掩码中的该片区域为误检，请剔除。",
+      "status": "pending_review"
+    }
+  ]
+}

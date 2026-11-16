@@ -1,0 +1,21 @@
+........
+----------------------------------------------------------------------
+Ran 8 tests in 2.101s
+
+OK
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/n7-missed/code/agent_baseline/analysis/n9_missed_prepare.py", line 71, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/n7-missed/code/agent_baseline/analysis/n9_missed_prepare.py", line 69, in main
+    globals()[a.command](a)
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/n7-missed/code/agent_baseline/analysis/n9_missed_prepare.py", line 37, in fill
+    with torch.inference_mode(): value=backend.semantic(image,CLASSES) if key=='semantic' else backend.features(image)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/guisongxia01/pangchao/wangyihan/wyh/cd-agent-worktrees/n7-missed/code/agent_baseline/t13_worker.py", line 56, in semantic
+    from dynamic_earth.identifier.segearth_ov_ext import SegEarth_OV
+  File "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/batch56_ovcd_de/DynamicEarth/dynamic_earth/identifier/segearth_ov_ext.py", line 7, in <module>
+    from mmseg.registry import MODELS
+ModuleNotFoundError: No module named 'mmseg'

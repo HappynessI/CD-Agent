@@ -1,0 +1,246 @@
+{
+  "name": "cd-n9-missed-20261116",
+  "status": "awaiting_agent",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/01-assets.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02-fill-reconstruct.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02b-fill-reconstruct.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02c-fill-reconstruct.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/03-tune-verify.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/04-s5-only-offline.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch",
+  "job_id": "187685",
+  "hook_id": "187686",
+  "rounds": 7,
+  "rounds_submitted": 7,
+  "primary_best": null,
+  "cost_cny": 0.415421,
+  "finalized": false,
+  "finalize_requested": false,
+  "started_at": "2026-11-16 02:39:46",
+  "started_epoch": 1794796786.0973337,
+  "history": [
+    {
+      "job": "01-assets.sbatch",
+      "job_id": "187570",
+      "hook_id": "187571",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {},
+      "metric_error": "Expecting value: line 1 column 1 (char 0)",
+      "at": "2026-11-16 03:12:04"
+    },
+    {
+      "job": "02-fill-reconstruct.sbatch",
+      "job_id": "187577",
+      "hook_id": "187578",
+      "state": "CANCELLED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "asset_qc",
+        "status": "complete",
+        "tasks": 360,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 03:38:25"
+    },
+    {
+      "job": "02b-fill-reconstruct.sbatch",
+      "job_id": "187590",
+      "hook_id": "187591",
+      "state": "FAILED",
+      "exit": "1:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "asset_qc",
+        "status": "complete",
+        "tasks": 360,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 03:48:40"
+    },
+    {
+      "job": "02c-fill-reconstruct.sbatch",
+      "job_id": "187593",
+      "hook_id": "187594",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "fm1_reconstruct",
+        "status": "running",
+        "completed": 360,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:31:34"
+    },
+    {
+      "job": "03-tune-verify.sbatch",
+      "job_id": "187631",
+      "hook_id": "187632",
+      "state": "FAILED",
+      "exit": "1:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.415421,
+      "metric": {
+        "stage": "verified_tune",
+        "status": "complete",
+        "completed": 1741,
+        "requests": 1741,
+        "cost_cny": 0.4154209999999996,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:18:33"
+    },
+    {
+      "job": "04-s5-only-offline.sbatch",
+      "job_id": "187679",
+      "hook_id": "187680",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "verified_tune",
+        "status": "complete",
+        "completed": 1741,
+        "requests": 1741,
+        "cost_cny": 0.4154209999999996,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:23:11"
+    },
+    {
+      "job": "05-legacy-abstain.sbatch",
+      "job_id": "187685",
+      "hook_id": "187686",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "verified_tune",
+        "status": "complete",
+        "completed": 1741,
+        "requests": 1741,
+        "cost_cny": 0.4154209999999996,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:25:07"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "finalize_attempts": 0,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "hook_attempts": 14,
+  "submitted_at": "2026-11-16 05:24:25",
+  "last_advance_at": "2026-11-16 05:24:25",
+  "review_count": 7,
+  "review": {
+    "id": "event-0007",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-16 05:25:07",
+    "job_id": "187685",
+    "hook_id": "187686",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch",
+    "latest": {
+      "job": "05-legacy-abstain.sbatch",
+      "job_id": "187685",
+      "hook_id": "187686",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "verified_tune",
+        "status": "complete",
+        "completed": 1741,
+        "requests": 1741,
+        "cost_cny": 0.4154209999999996,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:25:07"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.415421,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-16 05:25:10",
+    "delivery_turn_id": "01a1e295-ac35-79d1-8610-87989da627d6",
+    "delivery_via": "cron_local"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02-fill-reconstruct.sbatch",
+      "reason": "Asset QC completed: six lines each60, all source and official WHU GT complete, 234 semantic images missing and all360 DINO present. Hook parser expected one-line JSON; corrected metric adapter without rerunning QC. Continue actual feature fill, contract tests and candidate reconstruction.",
+      "at": "2026-11-16 03:13:32"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02b-fill-reconstruct.sbatch",
+      "reason": "187577 never started; cancelled unnecessary gpu46-only resource wait. Same local-model fill/reconstruction and contract tests, now any eligible gre GPU. No API in this stage; later API wrappers remain pinned to validated gpu42. Asset QC360 is prior-stage metric, not evidence that fill ran.",
+      "at": "2026-11-16 03:39:14"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02c-fill-reconstruct.sbatch",
+      "reason": "Eight pipeline/online contracts passed. Feature fill failed before any inference due to mmseg absent in exp5-env; use existing configured ovcd-de-env as proven N8 fill entry does. Freeze shell copy, skip redundant passed tests, resume fill and reconstruction; no API spent.",
+      "at": "2026-11-16 03:49:32"
+    },
+    {
+      "event_id": "event-0004",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/03-tune-verify.sbatch",
+      "reason": "Verified fill complete234 missing semantic images and reconstruction complete360 tasks. New candidates: SECOND build1407/demolish904, WHU any1911/build1177/demolish258, LEVIR any4644. Demolish excludesS3/S4. Proceed actual fresh qwen3.7-flash tune verification, task-only profiles, workspace models200 on pinned gpu42, no old-answer substitution. Total authorization30, FM allocation20 actual spend.",
+      "at": "2026-11-16 04:32:23"
+    },
+    {
+      "event_id": "event-0005",
+      "action": "continue",
+      "job": null,
+      "reason": "All1741 API requests completed; score failed on truncated JSON, not network or missing API calls. Preserve raw answers, continue only queued offline revised rankings and exact paid-answer reuse. Versioned abstention scoring/error audit will follow without new API.",
+      "at": "2026-11-16 05:20:37"
+    },
+    {
+      "event_id": "event-0006",
+      "action": "continue",
+      "job": null,
+      "reason": "Revised offline rankings and byte-exact prior answer reuse completed without API. Continue queued pure offline invalid-answer audit and original-gate sensitivity scoring; no formal freeze or online progression.",
+      "at": "2026-11-16 05:24:24"
+    }
+  ]
+}

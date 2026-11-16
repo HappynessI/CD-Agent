@@ -1,0 +1,31 @@
+{
+  "name": "cd-n9-missed-20261116",
+  "partition": "gre",
+  "hook_node": "gpu42",
+  "jobs_glob": "jobs/01-*.sbatch",
+  "auto_start": false,
+  "metric": [
+    "/usr/bin/python3",
+    "metric.py"
+  ],
+  "stop": {
+    "budget_cny": 20
+  },
+  "agent_bridge": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/.runtime/exp-loop-agent/bridge.json",
+  "notify": true,
+  "git": {
+    "repo": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent",
+    "branch": "claude/project-thread-2tuaib",
+    "paths": [
+      "results/agent_baseline/n9_missed_20261116",
+      "doc/agent_baseline/README_ai.md",
+      "task_plan.md",
+      "findings.md",
+      "progress.md",
+      ":(exclude,glob)results/agent_baseline/n9_missed_20261116/semantic/**",
+      ":(exclude,glob)results/agent_baseline/n9_missed_20261116/features/**",
+      ":(exclude,glob)results/agent_baseline/n9_missed_20261116/model_runtime/**"
+    ],
+    "state_export": "results/agent_baseline/n9_missed_20261116/state_at_stop.json"
+  }
+}

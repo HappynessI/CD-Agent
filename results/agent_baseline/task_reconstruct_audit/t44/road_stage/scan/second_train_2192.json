@@ -1,0 +1,70 @@
+{
+  "candidates": [
+    {
+      "id": "T44_second_train_2192_road_0",
+      "dataset": "second",
+      "image_id": "train_2192",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2192.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2192.png",
+      "anchor_class": "road",
+      "anchor_class_cn": "道路",
+      "anchor_index": 0,
+      "target_instance_ids": [
+        8,
+        10,
+        13
+      ],
+      "distractor_instance_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "target_instances": 3,
+      "distractor_instances": 16,
+      "target_pixels": 8361,
+      "distractor_pixels": 43685,
+      "anchor_pixels": 16249,
+      "filled_pixels": 818,
+      "source_gt": [
+        "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_2192.png",
+        "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_2192.png"
+      ],
+      "source_semantic": {
+        "t1": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_2192_t1.npz",
+        "t2": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/task_reconstruct_audit/t44/road_stage/semantic/second/train_2192_t2.npz"
+      },
+      "rule": {
+        "buffer_pixels": 32,
+        "minimum_overlap_fraction": 0.1,
+        "instance_min_pixels": 150,
+        "target_min_pixels": 400,
+        "anchor_min_pixels": 400,
+        "semantic_probability": 0.55,
+        "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+        "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+      },
+      "instruction": "找出紧邻道路周边的建筑变化。",
+      "status": "pending_review",
+      "anchor_source": "SegEarth same-class high-confidence intersection of both dates; visual approval required",
+      "legacy_relation": "Replaces directional/new-class R3 examples; no old task approved automatically"
+    }
+  ],
+  "reasons": {
+    "no_stable_water_anchor": 1,
+    "no_stable_playground_anchor": 1,
+    "road_not_salient_spanning": 1
+  }
+}

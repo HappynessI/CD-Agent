@@ -1,0 +1,35 @@
+{
+  "scanned_images": {
+    "second": 60,
+    "whu": 60
+  },
+  "qualified_configurations": 9,
+  "qualified_images": 9,
+  "by_dataset": {
+    "second": 6,
+    "whu": 3
+  },
+  "rejections": {
+    "no_stable_water_anchor": 68,
+    "no_stable_playground_anchor": 75,
+    "road_not_salient_spanning": 148,
+    "no_stable_road_anchor": 15,
+    "no_target_or_no_distractor": 15,
+    "target_below_400": 1,
+    "fewer_than_two_building_instances": 45
+  },
+  "selected": 3,
+  "gap": 0,
+  "rule": {
+    "buffer_pixels": 32,
+    "minimum_overlap_fraction": 0.1,
+    "instance_min_pixels": 150,
+    "target_min_pixels": 400,
+    "anchor_min_pixels": 400,
+    "semantic_probability": 0.55,
+    "temporal_rule": "same semantic class argmax and probability >= .55 in both dates",
+    "topology": "Euclidean buffer; retain entire filled instance, no clipping"
+  },
+  "api_cost_cny": 0,
+  "limitation": "Explicit road-aware local SegEarth; stable anchors require visual review"
+}

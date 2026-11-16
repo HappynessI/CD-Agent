@@ -1,0 +1,423 @@
+{
+  "identity": {
+    "dataset": "second",
+    "stem": "train_2912",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2912.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2912.png",
+    "policy": {
+      "example_area": [
+        200,
+        5000
+      ],
+      "max_original_hole_ratio": 0.05,
+      "min_rotated_rectangle_fill": 0.45,
+      "single_date_dino_cosine": 0.75,
+      "rgb_mean_euclidean_normalized_max": 0.15,
+      "rgb_normalization": "euclidean RGB mean distance / (sqrt(3)*255)",
+      "minimum_other_matching_instances": 2,
+      "min_full_remaining_pixels": 400,
+      "preferred_cluster_area_fraction": 0.85,
+      "connectivity": 8,
+      "datasets": "WHU official dev60 and SECOND frozen dev60 only; no report/test",
+      "full_gt": "union of ALL hole-filled same-category same-direction components, including nonmatches",
+      "labels_role": "offline construction/review only",
+      "review_status": "pending_review",
+      "revision": "whole_gt_interior_v1",
+      "border_rule": "Reject image/category/direction task if ANY full-GT instance touches an image boundary; retain all instances in audit/full GT",
+      "fallback": "none; fewer than three distinct strict images reported without relaxation"
+    }
+  },
+  "candidates": [],
+  "groups": {
+    "second/building/build": {
+      "images": 1,
+      "original_instances": 12,
+      "border_instances": 1,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "whole_gt_has_border_instances": 1,
+        "border_instances": 1
+      }
+    },
+    "second/building/demolish": {
+      "images": 1,
+      "original_instances": 4,
+      "border_instances": 1,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "whole_gt_has_border_instances": 1,
+        "border_instances": 1
+      }
+    },
+    "second/playground/build": {
+      "images": 1,
+      "original_instances": 0,
+      "border_instances": 0,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    },
+    "second/playground/demolish": {
+      "images": 1,
+      "original_instances": 0,
+      "border_instances": 0,
+      "whole_gt_interior_images": 0,
+      "eligible_examples": 0,
+      "eligible_images": 0,
+      "failures": {
+        "empty_direction": 1
+      }
+    }
+  },
+  "instance_audit": {
+    "second/building/build": [
+      {
+        "id": 1,
+        "raw_area": 1103,
+        "area": 1103,
+        "bbox": [
+          368,
+          42,
+          422,
+          82
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8796245597305322,
+        "min_rectangle_area": 1253.9440694310508,
+        "rgb_mean": [
+          70.88213961922031,
+          96.74252039891206,
+          155.7388939256573
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 2,
+        "raw_area": 3215,
+        "area": 3215,
+        "bbox": [
+          206,
+          73,
+          274,
+          188
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8590158194901277,
+        "min_rectangle_area": 3742.6551724137935,
+        "rgb_mean": [
+          141.47433903576982,
+          151.8519440124417,
+          165.52317262830482
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 3,
+        "raw_area": 1373,
+        "area": 1373,
+        "bbox": [
+          165,
+          116,
+          212,
+          178
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.872743452834985,
+        "min_rectangle_area": 1573.2000000000019,
+        "rgb_mean": [
+          77.34522942461763,
+          108.0830298616169,
+          161.59650400582666
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 4,
+        "raw_area": 489,
+        "area": 489,
+        "bbox": [
+          107,
+          128,
+          137,
+          181
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8385194479297358,
+        "min_rectangle_area": 583.1707317073176,
+        "rgb_mean": [
+          96.48670756646217,
+          118.66053169734151,
+          149.36400817995911
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 5,
+        "raw_area": 256,
+        "area": 256,
+        "bbox": [
+          141,
+          199,
+          162,
+          231
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.7550728225884575,
+        "min_rectangle_area": 339.04014598540175,
+        "rgb_mean": [
+          118.76171875,
+          143.48046875,
+          172.2265625
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 6,
+        "raw_area": 240,
+        "area": 240,
+        "bbox": [
+          307,
+          241,
+          325,
+          266
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8165548098434022,
+        "min_rectangle_area": 293.91780821917746,
+        "rgb_mean": [
+          61.079166666666666,
+          71.10833333333333,
+          101.7375
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 7,
+        "raw_area": 313,
+        "area": 313,
+        "bbox": [
+          61,
+          273,
+          86,
+          295
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8632101489244345,
+        "min_rectangle_area": 362.6000000000001,
+        "rgb_mean": [
+          146.0031948881789,
+          168.94888178913737,
+          194.96166134185304
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 8,
+        "raw_area": 284,
+        "area": 284,
+        "bbox": [
+          70,
+          341,
+          94,
+          371
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.6528735632183912,
+        "min_rectangle_area": 434.9999999999997,
+        "rgb_mean": [
+          108.58802816901408,
+          132.3661971830986,
+          151.35915492957747
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 9,
+        "raw_area": 237,
+        "area": 237,
+        "bbox": [
+          78,
+          365,
+          101,
+          391
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5974617974617983,
+        "min_rectangle_area": 396.6780821917803,
+        "rgb_mean": [
+          129.40928270042195,
+          145.49367088607596,
+          164.32489451476792
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 10,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          2,
+          429,
+          3,
+          430
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          86.0,
+          74.0,
+          69.0
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 11,
+        "raw_area": 955,
+        "area": 955,
+        "bbox": [
+          1,
+          432,
+          28,
+          502
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5052910052910053,
+        "min_rectangle_area": 1890.0,
+        "rgb_mean": [
+          147.5392670157068,
+          168.6743455497382,
+          195.47015706806283
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 12,
+        "raw_area": 1478,
+        "area": 1478,
+        "bbox": [
+          312,
+          478,
+          398,
+          512
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.5054719562243503,
+        "min_rectangle_area": 2924.0,
+        "rgb_mean": [
+          80.4235453315291,
+          66.56698240866035,
+          77.78890392422193
+        ],
+        "touches_border": true
+      }
+    ],
+    "second/building/demolish": [
+      {
+        "id": 1,
+        "raw_area": 429,
+        "area": 429,
+        "bbox": [
+          0,
+          198,
+          19,
+          228
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.7526315789473684,
+        "min_rectangle_area": 570.0,
+        "rgb_mean": [
+          98.72494172494173,
+          112.7062937062937,
+          175.6130536130536
+        ],
+        "touches_border": true
+      },
+      {
+        "id": 2,
+        "raw_area": 1408,
+        "area": 1632,
+        "bbox": [
+          28,
+          207,
+          78,
+          276
+        ],
+        "hole_ratio": 0.13725490196078433,
+        "filled_pixels": 224,
+        "compactness": 0.9099330931549147,
+        "min_rectangle_area": 1793.5384615384623,
+        "rgb_mean": [
+          113.48468137254902,
+          128.9515931372549,
+          191.13970588235293
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 3,
+        "raw_area": 307,
+        "area": 307,
+        "bbox": [
+          300,
+          477,
+          327,
+          500
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 0.8454101712543239,
+        "min_rectangle_area": 363.137339055796,
+        "rgb_mean": [
+          106.54397394136808,
+          120.35504885993485,
+          138.76872964169382
+        ],
+        "touches_border": false
+      },
+      {
+        "id": 4,
+        "raw_area": 1,
+        "area": 1,
+        "bbox": [
+          298,
+          490,
+          299,
+          491
+        ],
+        "hole_ratio": 0.0,
+        "filled_pixels": 0,
+        "compactness": 1.0,
+        "min_rectangle_area": 1.0,
+        "rgb_mean": [
+          145.0,
+          145.0,
+          153.0
+        ],
+        "touches_border": false
+      }
+    ],
+    "second/playground/build": [],
+    "second/playground/demolish": []
+  }
+}

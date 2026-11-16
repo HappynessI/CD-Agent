@@ -1,0 +1,123 @@
+{
+  "audit": {
+    "dataset": "SECOND",
+    "image_id": "train_1798.png",
+    "direction": "disappeared",
+    "initial_f1": 31.421319796954315,
+    "source": {
+      "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_1798.png",
+      "generated": false,
+      "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+      "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+    },
+    "status": "eligible_initial"
+  },
+  "candidates": [
+    {
+      "id": "SECOND_train_1798_disappeared_FN-Demolish_0",
+      "dataset": "SECOND",
+      "image_id": "train_1798.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1798.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1798.png",
+      "direction": "disappeared",
+      "lesion_type": "FN-Demolish",
+      "lesion_index": 0,
+      "operation": "补检",
+      "bbox": [
+        301,
+        119,
+        395,
+        138
+      ],
+      "point": [
+        384,
+        127
+      ],
+      "lesion_pixels": 1512,
+      "error_pixels": 1512,
+      "initial_f1": 31.421319796954315,
+      "ideal_local_f1": 78.17314746881878,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_1798.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面右上方的原有建筑后期已拆除但漏检了，请参照前期影像补全。",
+      "status": "pending_review"
+    },
+    {
+      "id": "SECOND_train_1798_disappeared_Coarse-Merge_1",
+      "dataset": "SECOND",
+      "image_id": "train_1798.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1798.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1798.png",
+      "direction": "disappeared",
+      "lesion_type": "Coarse-Merge",
+      "lesion_index": 1,
+      "operation": "修边",
+      "bbox": [
+        315,
+        0,
+        365,
+        27
+      ],
+      "point": [
+        323,
+        19
+      ],
+      "lesion_pixels": 1178,
+      "error_pixels": 556,
+      "initial_f1": 31.421319796954315,
+      "ideal_local_f1": 36.72866843814585,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_1798.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面上方的当前建筑变化掩码与周围区域粘连，请按建筑边界修整。",
+      "status": "pending_review"
+    },
+    {
+      "id": "SECOND_train_1798_disappeared_FP_2",
+      "dataset": "SECOND",
+      "image_id": "train_1798.png",
+      "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1798.png",
+      "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1798.png",
+      "direction": "disappeared",
+      "lesion_type": "FP",
+      "lesion_index": 2,
+      "operation": "剔除",
+      "bbox": [
+        0,
+        503,
+        57,
+        512
+      ],
+      "point": [
+        15,
+        511
+      ],
+      "lesion_pixels": 450,
+      "error_pixels": 450,
+      "initial_f1": 31.421319796954315,
+      "ideal_local_f1": 35.47277936962751,
+      "weak_method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+      "source": {
+        "method": "SAM3 building IMC fixed p0.85 score0.5 tile512 overlap0.25, unverified",
+        "prediction": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/train_1798.png",
+        "generated": false,
+        "settings": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/fixed/disappeared/settings.json",
+        "baseline_builder": "agent_baseline.analysis.missed_sources:build_baseline uses this fixed mask before historical verifier filtering"
+      },
+      "feedback_text": "画面左下方的当前变化掩码中的该片区域为误检，请剔除。",
+      "status": "pending_review"
+    }
+  ]
+}
