@@ -9,15 +9,18 @@
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/02c-fill-reconstruct.sbatch",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/03-tune-verify.sbatch",
     "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/04-s5-only-offline.sbatch",
-    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch"
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/06-authorized-tune.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/07-authorized-confirm.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/08-final-report.sbatch"
   ],
-  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch",
-  "job_id": "187685",
-  "hook_id": "187686",
-  "rounds": 7,
-  "rounds_submitted": 7,
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/08-final-report.sbatch",
+  "job_id": "187775",
+  "hook_id": "187776",
+  "rounds": 10,
+  "rounds_submitted": 10,
   "primary_best": null,
-  "cost_cny": 0.415421,
+  "cost_cny": 0.710057,
   "finalized": false,
   "finalize_requested": true,
   "started_at": "2026-11-16 02:39:46",
@@ -152,6 +155,66 @@
       },
       "metric_error": null,
       "at": "2026-11-16 05:25:07"
+    },
+    {
+      "job": "06-authorized-tune.sbatch",
+      "job_id": "187737",
+      "hook_id": "187738",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.140015,
+      "metric": {
+        "stage": "scored_tune",
+        "status": "complete",
+        "cost_cny": 0.5554355999999997,
+        "cumulative": true,
+        "configurations": 52,
+        "line_count": 6
+      },
+      "metric_error": null,
+      "at": "2026-11-16 06:49:18"
+    },
+    {
+      "job": "07-authorized-confirm.sbatch",
+      "job_id": "187758",
+      "hook_id": "187759",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.154621,
+      "metric": {
+        "stage": "scored_confirm",
+        "status": "complete",
+        "cost_cny": 0.7100567999999996,
+        "cumulative": true,
+        "configurations": 3,
+        "line_count": 6
+      },
+      "metric_error": null,
+      "at": "2026-11-16 07:15:47"
+    },
+    {
+      "job": "08-final-report.sbatch",
+      "job_id": "187775",
+      "hook_id": "187776",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "scored_confirm",
+        "status": "complete",
+        "cost_cny": 0.7100567999999996,
+        "cumulative": true,
+        "configurations": 3,
+        "line_count": 6
+      },
+      "metric_error": null,
+      "at": "2026-11-16 07:18:16"
     }
   ],
   "driver": "dependency",
@@ -160,43 +223,43 @@
   "git_committed": false,
   "git_pushed": false,
   "notified": false,
-  "hook_attempts": 14,
-  "submitted_at": "2026-11-16 05:24:25",
-  "last_advance_at": "2026-11-16 05:24:25",
-  "review_count": 7,
+  "hook_attempts": 20,
+  "submitted_at": "2026-11-16 07:17:16",
+  "last_advance_at": "2026-11-16 07:17:16",
+  "review_count": 10,
   "review": {
-    "id": "event-0007",
+    "id": "event-0010",
     "kind": "round_finished",
     "error": null,
-    "at": "2026-11-16 05:25:07",
-    "job_id": "187685",
-    "hook_id": "187686",
-    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/05-legacy-abstain.sbatch",
+    "at": "2026-11-16 07:18:16",
+    "job_id": "187775",
+    "hook_id": "187776",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/08-final-report.sbatch",
     "latest": {
-      "job": "05-legacy-abstain.sbatch",
-      "job_id": "187685",
-      "hook_id": "187686",
+      "job": "08-final-report.sbatch",
+      "job_id": "187775",
+      "hook_id": "187776",
       "state": "COMPLETED",
       "exit": "0:0",
       "primary": null,
       "gain": null,
       "cost_cny": 0.0,
       "metric": {
-        "stage": "verified_tune",
+        "stage": "scored_confirm",
         "status": "complete",
-        "completed": 1741,
-        "requests": 1741,
-        "cost_cny": 0.4154209999999996,
-        "cumulative": true
+        "cost_cny": 0.7100567999999996,
+        "cumulative": true,
+        "configurations": 3,
+        "line_count": 6
       },
       "metric_error": null,
-      "at": "2026-11-16 05:25:07"
+      "at": "2026-11-16 07:18:16"
     },
     "queued_jobs": [],
-    "cost_cny": 0.415421,
+    "cost_cny": 0.710057,
     "delivery": "accepted",
-    "delivered_at": "2026-11-16 05:25:10",
-    "delivery_turn_id": "01a1e295-ac35-79d1-8610-87989da627d6",
+    "delivered_at": "2026-11-16 07:19:07",
+    "delivery_turn_id": "01a1e336-9bfd-7fd0-9ca4-7e6aaa0f6c57",
     "delivery_via": "cron_local"
   },
   "decisions": [
@@ -247,9 +310,30 @@
       "action": "finish",
       "reason": "Authorized offline phase archived and pushed:1741 paid answers,3 truncated invalid abstentions, cost0.415421. Corrected protocol reuses1693 of2280;587 new verifications blocked by automatic approval review. Await explicit API clarification; no online Agent.",
       "at": "2026-11-16 05:41:44"
+    },
+    {
+      "event_id": "event-0008",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/07-authorized-confirm.sbatch",
+      "reason": "授权单轮核验：tune已完成，冻结三轨参数，运行180条独立confirm任务；不运行在线Agent",
+      "at": "2026-11-16 06:56:01"
+    },
+    {
+      "event_id": "event-0009",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-missed-20261116/jobs/08-final-report.sbatch",
+      "reason": "180确认任务及668次新核验完成；不再调参，生成最终掩码、候选召回、逐例失败及分任务报告，无新增API",
+      "at": "2026-11-16 07:17:09"
+    },
+    {
+      "event_id": "event-0010",
+      "action": "finish",
+      "reason": "Single-turn results committed and pushed; no further jobs; actual cost0.7100568CNY; request normal watchdog closing.",
+      "at": "2026-11-16 07:35:10"
     }
   ],
-  "stop_reason": "Authorized offline phase archived and pushed:1741 paid answers,3 truncated invalid abstentions, cost0.415421. Corrected protocol reuses1693 of2280;587 new verifications blocked by automatic approval review. Await explicit API clarification; no online Agent.",
-  "finished_at": "2026-11-16 05:41:44",
-  "elapsed_seconds": 10918.8
+  "elapsed_seconds": 17724.5,
+  "finalized_at": "2026-11-16 05:42:48",
+  "stop_reason": "Single-turn results committed and pushed; no further jobs; actual cost0.7100568CNY; request normal watchdog closing.",
+  "finished_at": "2026-11-16 07:35:10"
 }
