@@ -1,0 +1,114 @@
+{
+ "task_id": "T1.1xC1",
+ "final_handle": "mask#3",
+ "mask_path": "masks/mask_3.png",
+ "summary": "Final answer: 1 newly constructed building detected. Component 1 (area 16097 pixels) shows an empty unpaved lot in T1 that became a large brown-roofed building in T2. Verifier confirmed as \"new_building\". Excluded 2 false positives: parked vehicles (component 2) and green mesh/tarp (component 3), both present in both dates per verifier. Small additional \"yes\" proposals from find_missed around bbox [360-410, 484-510] were excluded because direct verifier inspection of the corresponding mask component (id=3) classified them as non-building changes (green mesh/tarp in both dates).",
+ "summary_source": "model",
+ "submitted_by": "model",
+ "termination_reason": "submit",
+ "fallback_kind": "none",
+ "change_component_count": 1,
+ "change_area_px": 16097,
+ "eval": {
+  "tp": 15168,
+  "fp": 929,
+  "fn": 4158,
+  "f1": 0.8563927391807583,
+  "iou": 0.7488521352752406
+ },
+ "initial_eval": {
+  "tp": 0,
+  "fp": 0,
+  "fn": 19326,
+  "f1": 0.0,
+  "iou": 0.0
+ },
+ "objects": {
+  "gt_objects": 3,
+  "missed": 2,
+  "pred_objects": 1,
+  "false_alarms": 0
+ },
+ "initial_objects": {
+  "gt_objects": 3,
+  "missed": 3,
+  "pred_objects": 0,
+  "false_alarms": 0
+ },
+ "precision": 0.942287382736272,
+ "recall": 0.7848494256401487,
+ "planning_rounds": 14,
+ "api_attempts": 27,
+ "planner_api_attempts": 14,
+ "ask_api_attempts": 13,
+ "tool_calls": 14,
+ "tokens": {
+  "input": 149178,
+  "cached": 73728,
+  "output": 3441
+ },
+ "planner_tokens": {
+  "input": 136899,
+  "cached": 73728,
+  "output": 2787
+ },
+ "ask_tokens": {
+  "input": 12279,
+  "cached": 0,
+  "output": 654
+ },
+ "cost_cny": 0.032588400000000003,
+ "planner_cost_cny": 0.0296094,
+ "ask_cost_cny": 0.0029790000000000003,
+ "planner_model": "qwen3.7-flash",
+ "elapsed_seconds": 61.60375700518489,
+ "identical_to_init": false,
+ "added_px": 16097,
+ "removed_px": 0,
+ "view_calls": 4,
+ "ask_calls": 2,
+ "initial_images_present": true,
+ "final_delta": {
+  "tp": 15168,
+  "fp": 929,
+  "fn": 4158,
+  "f1": 0.8563927391807583,
+  "iou": 0.7488521352752406,
+  "delta_f1": 0.0
+ },
+ "error": null,
+ "backends": {
+  "ask": "api",
+  "review": false,
+  "status": true,
+  "verify_stage": true,
+  "plan": false,
+  "skills": [],
+  "ask_correspondence": true,
+  "missed_candidates": false,
+  "missed_verifier_variant": null,
+  "ask_model": "qwen3.7-flash",
+  "sam3_worker": true,
+  "pixel_thr": 0.85,
+  "sam_prompt": "shared_cpu",
+  "sam_model": "SAM ViT-H",
+  "n9_profile": "build",
+  "n9_arm": "find_missed",
+  "n9_find_missed": true,
+  "n9_config": {
+   "profile": "build",
+   "semantic": 0.05,
+   "dino": null,
+   "alpha": 0.5,
+   "verifier": "V3",
+   "k": 10,
+   "sources": "all"
+  },
+  "n9_current_mask_reconstruction": true,
+  "gate5": true,
+  "gate4": true,
+  "gate3": true,
+  "gate2": true,
+  "big_box_share": 0.1
+ }
+}

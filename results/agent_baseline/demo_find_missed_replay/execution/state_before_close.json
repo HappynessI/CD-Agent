@@ -1,0 +1,167 @@
+{
+  "name": "cd-missed-replay-20261116",
+  "status": "awaiting_agent",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/01-online.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/01b-online-lazy.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/02-page.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/03-layout.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/03-layout.sbatch",
+  "job_id": "187844",
+  "hook_id": "187845",
+  "rounds": 4,
+  "rounds_submitted": 4,
+  "primary_best": null,
+  "cost_cny": 0.032588,
+  "finalized": false,
+  "finalize_requested": false,
+  "started_at": "2026-11-16 08:13:33",
+  "started_epoch": 1794816813.5422618,
+  "history": [
+    {
+      "job": "01-online.sbatch",
+      "job_id": "187826",
+      "hook_id": "187827",
+      "state": "FAILED",
+      "exit": "1:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "single_replay",
+        "status": "pending",
+        "sessions": 0,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 08:35:18"
+    },
+    {
+      "job": "01b-online-lazy.sbatch",
+      "job_id": "187838",
+      "hook_id": "187839",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.032588,
+      "metric": {
+        "stage": "single_replay",
+        "status": "complete",
+        "sessions": 1,
+        "cost_cny": 0.032588400000000003,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 08:41:17"
+    },
+    {
+      "job": "02-page.sbatch",
+      "job_id": "187841",
+      "hook_id": "187842",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "single_replay",
+        "status": "complete",
+        "sessions": 1,
+        "cost_cny": 0.032588400000000003,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 08:44:46"
+    },
+    {
+      "job": "03-layout.sbatch",
+      "job_id": "187844",
+      "hook_id": "187845",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "single_replay",
+        "status": "complete",
+        "sessions": 1,
+        "cost_cny": 0.032588400000000003,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 08:49:17"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-16 08:48:16",
+  "last_advance_at": "2026-11-16 08:48:16",
+  "hook_attempts": 7,
+  "review_count": 4,
+  "review": {
+    "id": "event-0004",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-16 08:49:17",
+    "job_id": "187844",
+    "hook_id": "187845",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/03-layout.sbatch",
+    "latest": {
+      "job": "03-layout.sbatch",
+      "job_id": "187844",
+      "hook_id": "187845",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "single_replay",
+        "status": "complete",
+        "sessions": 1,
+        "cost_cny": 0.032588400000000003,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 08:49:17"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.032588,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-16 08:50:08",
+    "delivery_turn_id": "01a1e38c-a86a-7942-b000-5070017c1569",
+    "delivery_via": "cron_local"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/01b-online-lazy.sbatch",
+      "reason": "6 tests and workspace200 passed; eager SAM3 initialization timed out before any Agent inference. Use demo-only lazy real SAM3 server, rerun same single authorized session, preserve failed logs.",
+      "at": "2026-11-16 08:38:28"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/02-page.sbatch",
+      "reason": "One real online session completed, cost0.0325884. Generate G3-style replay from actual saved trace and funnel masks, validate offline browser and package portable assets. No more API.",
+      "at": "2026-11-16 08:42:44"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-missed-replay-20261116/jobs/03-layout.sbatch",
+      "reason": "Offline page layout fix and browser validation only. No API or Agent rerun.",
+      "at": "2026-11-16 08:47:55"
+    }
+  ],
+  "finalize_attempts": 0,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false
+}

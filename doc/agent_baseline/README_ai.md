@@ -1,5 +1,9 @@
 # Agent baseline：给 AI 看的开发文档
 
+> 2026-11-16 组会单样本真实在线完成：SECOND train_2255，起点为空（F1/P/R=0/0/0，零分母记0），Agent最终F1=85.6393、P=94.2287、R=78.4849，TP15168/FP929/FN4158。1次find_missed、14次工具调用、14轮，模型自行submit；2次view bad_args均保留。首次SAM3预加载失败发生在Agent启动前，修复后仅1次真实会话，实际API¥0.0325884。该样本按收益选择且指令要求调用工具，不能证明自发调用或平均收益。 页面已生成，91处静态图片引用逐张通过，离线Chromium检查本地file打开、图片解码、时间轴、放大与手机宽度通过；页面无外部请求。入口results/agent_baseline/demo_find_missed_replay/index.html，下载包download.zip。
+
+> 2026-11-16 组会单样本回放：用户另行授权真实在线演示1次，选择SECOND train_2255（按离线正收益挑选，非代表性评测），接入冻结build档位；显式请求调用find_missed，由Agent自行选择与提交。工具新增可选中间掩码导出，不读GT；复用G3视觉样式，交付demo_find_missed_replay/index.html。
+
 > 2026-11-16 补漏单轮实验完成：tune180条/52配置，冻结后confirm180条/668次新核验；最终F1变化：LEVIR any−0.0237、WHU any+0.1534、SECOND build+6.5474、WHU build−1.0078、SECOND demolish+2.5711、WHU demolish+14.6042。所有区间包含或触及0，WHU拆除仅1图获益，不能宣称稳定提升。累计实际¥0.7100568；180份最终掩码及逐例证据齐全，无在线Agent、新待审数据或正式测试。 详见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/final_report.md` 与 `interpretation.md`。
 
 > 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm现已完成，最终结果见置顶更新。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
@@ -2855,3 +2859,7 @@ N9探索性tune298任务已完成（187613，API¥0）：T3.1 delta Top8 F1 12.4
 N9逐例诊断已完成：T3.1 delta8为27胜/55平/34负，macro仅+0.50805；R1后池覆盖约20%，去自匹配本身仅损1090覆盖像素。继续只读缓存区分原SAM/R1过滤损失并导出最终预测，冻结方法不变。2项完整confirm入口契约测试通过；该入口尚未正式执行。
 
 N9覆盖分解已验证：raw SAM约90%覆盖，经R1仅约20%，主要支持损失来自R1面积/长宽/颜色预筛；不能把覆盖上限当识别效果或声称去掉R1必然涨F1。1490份最终预测与原统计完全一致；完整指标/轻量预测进Git，原大池与派生特征缓存保留服务器。旧审计2128/2128已补齐、空任务312；原读取故障复核通过，未覆盖原mask。补漏234幅特征与360任务10301候选已实际重构，gpu42直连workspace HTTP200后已开始qwen3.7-flash新核验。T3正式确认/在线仍等待明确数据批准。
+
+组会演示启动修复：187826的6项回归及workspace HTTP200通过，但SAM3 eager加载超过900秒，尚无Agent/API会话；演示专用worker改为实际分割调用时再加载模型，标准worker及实验默认行为不变。保留原失败日志，重试同一演示样本，不增加样本数。
+
+组会回放最终验收：187844完成布局复验及ZIP完整性检查；真实在线仅1会话，成本¥0.0325884。91处静态图片引用均可读（浏览器放大后含dialog为92），0外部请求、0脚本错误；桌面/手机截图已归档，全部计算作业结束。

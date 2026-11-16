@@ -1,0 +1,1228 @@
+<!doctype html><html lang="zh-CN" data-theme="light"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>find_missed · SECOND train_2255 真实回放</title><style>
+:root{color-scheme:light;--bg:#f5f2ea;--panel:#fdfbf6;--text:#1f1c17;--muted:#57514a;--line:#cbc3b4;--accent:#8c2f1e;--tint:#f5e5df;--up:#2e6a3b;--down:#a3251b;--warn:#7f5300;--warnbg:#f6ecd6;--tp:#2cce78;--fp:#ef5050;--fn:#458dff;--backdrop:#0009;--font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Roboto,Arial,sans-serif;--font-serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Songti SC","STSong","Noto Serif CJK SC",serif;--font-mono:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,monospace}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#15130f;--panel:#1c1a15;--text:#ebe5d8;--muted:#b5ad9e;--line:#4a443a;--accent:#e59a7d;--tint:#3a2219;--up:#8cc79a;--down:#f0928a;--warn:#e3b866;--warnbg:#352a13}}
+::root[data-theme=dark]{color-scheme:dark;--bg:#15130f;--panel:#1c1a15;--text:#ebe5d8;--muted:#b5ad9e;--line:#4a443a;--accent:#e59a7d;--tint:#3a2219;--up:#8cc79a;--down:#f0928a;--warn:#e3b866;--warnbg:#352a13}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;overflow-wrap:anywhere}
+header,footer{padding:18px 24px;background:var(--panel)}header{border-bottom:1px solid var(--line)}h1{font-size:23px;line-height:1.3;margin:5px 0 10px}h2{font-size:17px;margin:0 0 10px}h3{font-size:15px;margin:0}p{margin:7px 0}.eyebrow,.muted,figcaption{color:var(--muted)}.warning{font-weight:700;color:var(--warn);background:var(--warnbg);padding:8px 12px;border-left:3px solid var(--warn)}
+.headtop{display:flex;justify-content:space-between;gap:12px;align-items:start}.metrics{display:flex;flex-wrap:wrap;gap:8px 25px;margin:12px 0}.metric strong{display:block;font-size:21px;line-height:1.25;font-variant-numeric:tabular-nums}.metric span{font-size:12px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(320px,1.55fr) minmax(240px,1fr);gap:16px;padding:18px 24px;max-width:1800px;margin:auto}.layout>*{min-width:0}.panel,.step{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}.step{margin-bottom:12px;scroll-margin-top:16px}.step.active{border-color:var(--accent);border-left:4px solid var(--accent);padding-left:9px}.stephead{display:flex;align-items:center;justify-content:space-between;gap:10px}.thought{border-left:2px solid var(--line);padding-left:10px;white-space:pre-wrap;margin:12px 0}.call{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.call.error{border-left:3px solid var(--down);padding-left:10px}.errorlabel,.down{color:var(--down)}.up{color:var(--up)}.badge{background:var(--tint);color:var(--accent);padding:2px 6px;border-radius:3px;margin-right:6px}.toolname{font-weight:600}pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;margin:8px 0}details{margin:8px 0}summary{cursor:pointer;color:var(--accent)}
+figure{margin:10px 0;min-width:0}figcaption{font-size:12px;margin-top:4px}img{display:block;width:100%;height:auto;max-width:100%;border-radius:3px}button,select{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:5px 9px;cursor:pointer;max-width:100%}button:hover{border-color:var(--accent)}button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.zoom{display:block;padding:0;border:0;width:100%;cursor:zoom-in}.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.thumb{max-width:180px}.sticky{position:sticky;top:12px}.sticky figure img{max-height:27vh;object-fit:contain;background:var(--bg)}.legend{display:flex;gap:12px;font-size:12px;flex-wrap:wrap}.legend i{display:inline-block;width:9px;height:9px;margin-right:4px}.legend .tp{background:var(--tp)}.legend .fp{background:var(--fp)}.legend .fn{background:var(--fn)}.chart{width:100%;display:block;color:var(--muted)}.chart text{fill:currentColor;font-size:10px}.chart .axis{stroke:var(--line)}.chart .trace{fill:none;stroke:var(--accent);stroke-width:2}.chart .point{fill:var(--panel);stroke:var(--accent);stroke-width:2;cursor:pointer}.chart .point.active{fill:var(--accent);stroke-width:3}.chart .cursor{stroke:var(--muted);stroke-dasharray:3 3}.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.empty{padding:25px 10px;text-align:center;color:var(--muted);border:1px dashed var(--line);margin:12px 0}.js-only{display:none}.has-js .js-only{display:initial}[hidden]{display:none!important}footer{border-top:1px solid var(--line)}footer pre{max-width:1200px}dialog{border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--text);max-width:95vw;max-height:95vh;padding:14px}dialog::backdrop{background:var(--backdrop)}dialog img{max-width:85vw;max-height:80vh;object-fit:contain;width:auto}dialog .close{float:right;margin-bottom:10px}
+@media(max-width:900px){.layout{grid-template-columns:1fr;padding:16px}.sticky{position:static}.sticky figure img{max-height:none}.inputs .pair{grid-template-columns:1fr 1fr}header,footer{padding:16px}.headtop{flex-wrap:wrap}}
+.inputs.sticky{max-height:calc(100vh - 24px);overflow-y:auto}.inputs .empty{margin:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:8px}.system{margin:18px 24px 0;max-width:1752px}.sysscroll{overflow-x:auto}.sys{display:block;width:100%;min-width:1040px;height:auto;color:var(--text)}.sys text{fill:currentColor;font-size:13px;}.sys .title{font-size:16px;font-weight:700}.sys .head{font-size:15px;font-weight:700}.sys .body{font-size:13px}.sys .small{font-size:12.5px}.sys .label{font-size:12px;fill:var(--muted)}.sys .muted{fill:var(--muted)}.sys .strong{font-weight:700;fill:var(--text)}.sys .mono{font:11.5px ui-monospace,SFMono-Regular,Consolas,monospace}.sys rect{fill:var(--panel);stroke:var(--line);stroke-width:1.2}.sys .frame{fill:none;stroke-width:1.5}.sys .plan{stroke:var(--accent);stroke-width:2}.sys .ver{stroke:var(--up);stroke-width:2}.sys .gate{stroke:var(--warn);stroke-width:2}.sys .dashbox{stroke-dasharray:5 4}.sys .chip{fill:var(--tint);stroke:none}.sys .tool{fill:var(--tint);stroke:none}.sys .tool-ver{stroke:var(--up);stroke-width:1.5}.sys .tool-gate{stroke:var(--warn);stroke-width:1.5}.sys .off{opacity:.45}.sys .edge{fill:none;stroke-width:1.6}.sys .edge-main{stroke:var(--text)}.sys .edge-plan{stroke:var(--accent)}.sys .edge-ver{stroke:var(--up)}.sys .edge-gate{stroke:var(--warn)}.sys .edge-mute{stroke:var(--muted)}.sys .dash{stroke-dasharray:6 5}.sys .boundary{stroke:var(--up);stroke-width:1.6;stroke-dasharray:5 5}.sys .head-main{fill:var(--text)}.sys .head-plan{fill:var(--accent)}.sys .head-ver{fill:var(--up)}.sys .head-gate{fill:var(--warn)}.sys .head-mute{fill:var(--muted)}.system figure{margin:0}.system figcaption{font-size:13px;margin-top:8px;color:var(--text)}.tablewrap{overflow-x:auto}.ledger table{border-collapse:collapse;width:100%;font-size:12px}.ledger th,.ledger td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top;white-space:nowrap}.ledger td:last-child{white-space:normal;min-width:320px}.ledger .against{background:var(--warnbg)}.answers{margin:8px 0;padding-left:18px;font-size:13px}.reportbox{white-space:pre-wrap;background:var(--warnbg);border-left:3px solid var(--warn);padding:8px 10px;margin:8px 0;font-size:13px}.hub{max-width:1752px;margin:auto;padding:18px 24px}.hubtable{border-collapse:collapse;width:100%}.hubtable th,.hubtable td{border-bottom:1px solid var(--line);padding:8px;text-align:left}a{color:var(--accent)}
+@media(max-width:900px){.inputs.sticky{max-height:none;overflow:visible}.system{margin:12px 16px 0}.hub{padding:16px}}
+@media(prefers-reduced-motion:no-preference){.step{transition:border-color .15s}}
+/* ── 纸张风格覆盖：与 agent_task_system 页面统一 ── */
+body{font:14.5px/1.62 var(--font-sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-serif);font-weight:600}
+h1{font-size:26px;line-height:1.28;margin:6px 0 12px}
+h2{font-size:18px}h3{font-size:15.5px}
+header{padding:22px 28px;background:var(--panel);border-bottom:1px solid var(--line)}
+.layout{padding:20px 28px;gap:20px;max-width:1720px}
+.panel,.step{border:1px solid var(--line);border-radius:2px;padding:14px 16px}
+.step.active{border-left:3px solid var(--accent);padding-left:14px}
+.metric strong{font-family:var(--font-serif);font-size:22px}
+.metrics{gap:8px 26px}
+.badge{background:var(--tint);color:var(--accent);border-radius:2px;padding:2px 6px;font-size:11.5px;letter-spacing:.02em}
+button,select{border:1px solid var(--line);border-radius:2px;background:var(--panel);padding:6px 10px;font-size:13px}
+pre{background:var(--fill);border:1px solid var(--line);border-radius:2px;padding:9px 11px;font:11.5px/1.6 var(--font-mono)}
+img{border:1px solid var(--line);border-radius:2px}
+figcaption{font-size:11.5px;color:var(--muted)}
+.warning{background:var(--warnbg);border-left:3px solid var(--warn);padding:9px 14px;font-weight:600}
+.thought{border-left:2px solid var(--line);color:var(--text)}
+.call{border-top:1px solid var(--line)}
+footer{background:var(--panel);border-top:1px solid var(--line);padding:18px 28px;color:var(--muted)}
+.empty{border:1px dashed var(--line);border-radius:2px}
+dialog{border-radius:2px;border:1px solid var(--line)}
+.stephead h2{margin:0}
+
+/* 流程图和术语 */
+.sys{min-width:1180px}.sys text{font-size:14px}.sys .title{font-size:17px}.sys .head{font-size:16px}.sys .body{font-size:14px}.sys .small{font-size:13.5px}.sys .label{font-size:13px}.sys .mono{font:12px var(--font-mono)}.sys .cat{font-size:13.5px;fill:var(--muted)}.sys .tool-plan{stroke:none}.sys .chiptext{font-size:13px}.sys .group{fill:none;stroke:var(--line);stroke-width:1}
+.syscap{font-size:13.5px;margin-top:12px;color:var(--text)}.syscap>strong{display:block;margin-bottom:8px}.capgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 28px}.capgrid h3{font-size:14px;margin:4px 0}.capgrid ol,.capgrid ul{margin:0;padding-left:20px}.capgrid li{margin:3px 0}.terms{margin:0 24px;max-width:1752px}.termgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:4px 28px;margin:6px 0 0}.termgrid div{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:4px 0;border-bottom:1px solid var(--line)}.termgrid dt{font-weight:600}.termgrid dd{margin:0}
+.system .terms{margin:12px 0 0}
+.answers{border:1px solid var(--line);border-radius:2px;padding:9px 11px 9px 28px}main>.terms{margin:16px 0 0}.hubtable td:nth-child(-n+3){white-space:nowrap}
+@media(max-width:900px){.capgrid{grid-template-columns:1fr}.termgrid{grid-template-columns:1fr}.termgrid div{grid-template-columns:80px 1fr}}
+
+.prompts{margin-top:16px}.promptgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;align-items:start}.promptgrid h3{font-size:16px;margin:0 0 4px}.promptgrid h4{font-size:13.5px;margin:12px 0 4px;color:var(--muted);font-weight:600}.prompttext{white-space:pre-wrap;border:1px solid var(--line);border-radius:2px;padding:9px 12px;font-size:13.5px;line-height:1.65}
+@media(max-width:900px){.promptgrid{grid-template-columns:1fr}}
+
+
+/* Additions for the G3/G4 site. Same tokens as the G1 pages (hub.css). */
+.entry{max-width:1752px;margin:16px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.entry a.card{display:block;text-decoration:none;color:var(--text);background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:2px;padding:14px 16px}
+.entry a.card:hover{border-color:var(--accent)}
+.entry .card h2{font-size:16px;margin:0 0 6px;color:var(--accent)}
+.entry .card p{margin:4px 0;color:var(--muted);font-size:13px}
+.entry .card .go{color:var(--accent);font-size:13px;margin-top:8px}
+.hubtable td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.hubtable td.best{font-weight:700}
+.hubtable .task{white-space:normal!important}
+.hubtable .task span{display:block;color:var(--muted);font-size:12.5px}
+.hubtable .hv{font-family:var(--font-mono);font-size:12.5px}
+.compare{margin:16px 24px 0;max-width:1752px}
+.compare .trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.compare .trio>div{min-width:0}
+.compare .trio h3{font-size:14.5px;margin:0 0 6px}
+.compare .trio img{max-height:360px;object-fit:contain;background:var(--bg)}
+.compare .score{font-variant-numeric:tabular-nums;margin:4px 0 0}
+.compare .route{font-size:13px;color:var(--muted)}
+.compare table,.example table{border-collapse:collapse;width:100%;font-size:12.5px}
+.compare th,.compare td,.example th,.example td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.tabs button{border-radius:2px;padding:6px 14px}
+.tabs button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.subtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.subtabs button{font-size:12.5px;padding:4px 10px;border-radius:2px}
+.subtabs button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);font-weight:600}
+.routebox{border:1px solid var(--line);border-radius:2px;padding:12px 14px;background:var(--panel)}
+.routebox .scores{font-size:13px;color:var(--muted)}
+.steps-figs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:start}
+.steps-figs figure{margin:0}
+.steps-figs .empty{aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin:0;font-size:12.5px}
+.example{margin:16px 24px 0;max-width:1752px}
+.example .pairs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;align-items:start}
+.has-js .route-panel[hidden]{display:none}
+@media(max-width:900px){.entry{grid-template-columns:1fr;padding:0 16px}.compare,.example{margin:12px 16px 0}.compare .trio{grid-template-columns:1fr}.steps-figs{grid-template-columns:1fr 1fr}.example .pairs{grid-template-columns:1fr}}
+.sys .sw{stroke:var(--accent);stroke-width:1.2;stroke-dasharray:4 3}
+.controls td{vertical-align:top;font-size:13px;min-width:150px}.controls td:first-child{min-width:120px}.controls td.num{white-space:normal;min-width:170px}
+.trio.duo{grid-template-columns:repeat(2,minmax(0,1fr))}.errfig{margin:8px 0}.err-panel h3{margin-top:6px}.has-js .err-panel[hidden]{display:none}@media(max-width:900px){.trio.duo{grid-template-columns:1fr}}
+main{max-width:1600px;margin:auto;padding:24px}.overview,.five{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.section{margin:18px 0}.section>figure{max-width:620px;margin:16px auto}.section h3{margin-top:20px}.candidate-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.candidate{padding:12px;border:2px solid var(--down)}.candidate.yes{border-color:var(--up)}table{width:100%;border-collapse:collapse}td,th{padding:6px;text-align:left;border-bottom:1px solid var(--line)}.controls{position:sticky;top:0;background:var(--panel);padding:12px;z-index:5;border:1px solid var(--line)}@media(max-width:900px){.overview,.five{grid-template-columns:repeat(2,minmax(0,1fr))}.candidate-grid{grid-template-columns:1fr}}</style><header><div class="eyebrow">CD-AGENT / G3 REPLAY STYLE / SINGLE CASE</div><h1>从漏检到找回：find_missed 四级漏斗</h1><p>SECOND · train_2255 · 新建建筑 · qwen3.7-flash · 冻结build参数</p><p class="warning">按离线收益挑选的组会展示样本；本次真实在线运行1次。指令明确要求演示find_missed，不能据此证明Agent自主触发能力或总体平均收益。</p><div class="metrics"><div class="metric"><span>F1 · 初始 → Agent最终</span><strong>0.00 → 85.64</strong><span>变化 +85.64 个百分点</span></div><div class="metric"><span>Precision · 初始 → Agent最终</span><strong>0.00 → 94.23</strong><span>变化 +94.23 个百分点</span></div><div class="metric"><span>Recall · 初始 → Agent最终</span><strong>0.00 → 78.48</strong><span>变化 +78.48 个百分点</span></div></div></header><main><section class="panel section"><h2>全局对照</h2><div class="overview"><figure><button class="zoom" type="button" aria-label="放大 T1 · 较早时相"><img src="assets/t1.png" alt="T1 · 较早时相"></button><figcaption>T1 · 较早时相</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2 · 较晚时相"><img src="assets/t2.png" alt="T2 · 较晚时相"></button><figcaption>T2 · 较晚时相</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 初始掩码 · 真实固定路线起点"><img src="assets/initial.png" alt="初始掩码 · 真实固定路线起点"></button><figcaption>初始掩码 · 真实固定路线起点</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 Agent最终提交掩码"><img src="assets/final.png" alt="Agent最终提交掩码"></button><figcaption>Agent最终提交掩码</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 GT真值对照 · 新增正确像素与剩余错误"><img src="assets/gt_compare.png" alt="GT真值对照 · 新增正确像素与剩余错误"></button><figcaption>GT真值对照 · 新增正确像素与剩余错误</figcaption></figure></div><div class="legend"><span><i style="background:rgb(44, 206, 120)"></i>原有正确 TP</span><span><i style="background:rgb(255, 193, 7)"></i>新增找回 TP</span><span><i style="background:rgb(239, 80, 80)"></i>误检 FP</span><span><i style="background:rgb(69, 141, 255)"></i>仍漏检 FN</span></div></section><div class="controls"><button id="prev">← 上一步</button><button id="next">下一步 →</button><span id="position">完整轨迹</span><button id="theme">切换明暗</button><a href="#step1">定位补漏步骤</a></div><h2>Agent完整执行轨迹</h2><article class="step" id="step0" data-step="0"><div class="stephead"><h2>输入起点</h2><span class="badge">mask#0</span></div><div class="thought">本步未记录Planner文字摘要。</div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step0.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step1" data-step="1"><div class="stephead"><h2>Step 1</h2><span class="badge">mask#0</span></div><div class="thought">I need to find newly constructed buildings between T1 and T2. The initial answer is mask#0 with area=0 (empty). Let me first call find_missed to get proposals for potential new buildings, then review the evidence.
+
+</div><div class="call"><h3>find_missed · 成功</h3><pre>{
+  &quot;limit&quot;: 10
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;props&quot;:&quot;props#1&quot;,&quot;n&quot;:10,&quot;area&quot;:17966,&quot;score_range&quot;:[0.1,1.0],&quot;reference_answer&quot;:&quot;mask#0&quot;,&quot;answer_changed&quot;:false,&quot;profile&quot;:&quot;build&quot;,&quot;candidates&quot;:[{&quot;id&quot;:1,&quot;area&quot;:15309,&quot;sources&quot;:[&quot;S4&quot;],&quot;answer&quot;:&quot;yes&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground in T1 and a large building with a brown roof in T2, indicating new construction.&quot;},{&quot;id&quot;:2,&quot;area&quot;:7421,&quot;sources&quot;:[&quot;S1_02&quot;],&quot;answer&quot;:&quot;no&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground or temporary materials in T1 and remains as bare ground or similar non-building surface in T2, with no clear evidence of a newly constructed building.&quot;},{&quot;id&quot;:3,&quot;area&quot;:3780,&quot;sources&quot;:[&quot;S2&quot;],&quot;answer&quot;:&quot;yes&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground/vegetation in T1 and a clearly constructed building with a roof in T2, indicating new construction.&quot;},{&quot;id&quot;:4,&quot;area&quot;:3287,&quot;sources&quot;:[&quot;S2&quot;],&quot;answer&quot;:&quot;yes&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground or temporary covering in T1, which is replaced by a distinct building structure with a roof in T2, indicating new construction.&quot;},{&quot;id&quot;:5,&quot;area&quot;:3632,&quot;sources&quot;:[&quot;S1_02&quot;],&quot;answer&quot;:&quot;no&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground or temporary covering in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).&quot;},{&quot;id&quot;:6,&quot;area&quot;:3434,&quot;sources&quot;:[&quot;S2&quot;],&quot;answer&quot;:&quot;no&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground or temporary material in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).&quot;},{&quot;id&quot;:7,&quot;area&quot;:747,&quot;sources&quot;:[&quot;S1_02&quot;],&quot;answer&quot;:&quot;yes&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground or temporary covering in T1 and a distinct, solid building roof in T2, indicating new construction.&quot;},{&quot;id&quot;:8,&quot;area&quot;:707,&quot;sources&quot;:[&quot;S4&quot;],&quot;answer&quot;:&quot;yes&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows bare ground or vegetation in T1 and a distinct building roof with clear structural edges in T2, indicating new construction.&quot;},{&quot;id&quot;:9,&quot;area&quot;:683,&quot;sources&quot;:[&quot;S2&quot;],&quot;answer&quot;:&quot;yes&quot;,&quot;reason&quot;:&quot;The area inside the contour shows bare ground/vegetation in T1 and a distinct new building roof in T2, indicating new construction.&quot;},{&quot;id&quot;:10,&quot;area&quot;:1113,&quot;sources&quot;:[&quot;S1_02&quot;],&quot;answer&quot;:&quot;no&quot;,&quot;reason&quot;:&quot;The area inside the red contour shows an open lot or parking space in both T1 and T2, with no new building constructed.&quot;}],&quot;accepted_ids&quot;:[1,3,4,7,8,9],&quot;note&quot;:&quot;Verifier decisions are advisory. Select proposals and combine only if you choose.&quot;,&quot;current_mask_reconstructed&quot;:true}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step1.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div><section class="panel section"><h2>find_missed 漏斗机制可视化拆解</h2><p class="warning">此面板来自本次真实工具调用。虚线框及TP/FP统计仅在运行结束后用GT生成，用于讲解，未输入Agent或核验器。工具返回提议，由Agent决定采用，不自动改写主掩码。</p><figure><button class="zoom" type="button" aria-label="放大 输入 M_init：0像素；F1 0.00；黄虚线为事后标出的遗漏GT"><img src="assets/call1_start.png" alt="输入 M_init：0像素；F1 0.00；黄虚线为事后标出的遗漏GT"></button><figcaption>输入 M_init：0像素；F1 0.00；黄虚线为事后标出的遗漏GT</figcaption></figure><h3>01 多源候选池 · S1–S5</h3><p>候选条目 53 · 合并连通域 43 · 去重像素 53,341</p><figure><button class="zoom" type="button" aria-label="放大 全部来源合并；原始指本工具读取的既有图像候选池，并非未经任何处理的模型输出"><img src="assets/call1_raw.png" alt="全部来源合并；原始指本工具读取的既有图像候选池，并非未经任何处理的模型输出"></button><figcaption>全部来源合并；原始指本工具读取的既有图像候选池，并非未经任何处理的模型输出</figcaption></figure><details><summary>展开五种来源</summary><div class="five"><figure><button class="zoom" type="button" aria-label="放大 S1_02 · 32域 / 25,612像素"><img src="assets/call1_source_S1_02.png" alt="S1_02 · 32域 / 25,612像素"></button><figcaption>S1_02 · 32域 / 25,612像素</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 S2 · 19域 / 36,312像素"><img src="assets/call1_source_S2.png" alt="S2 · 19域 / 36,312像素"></button><figcaption>S2 · 19域 / 36,312像素</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 S3 · 0域 / 0像素"><img src="assets/call1_source_S3.png" alt="S3 · 0域 / 0像素"></button><figcaption>S3 · 0域 / 0像素</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 S4 · 2域 / 16,016像素"><img src="assets/call1_source_S4.png" alt="S4 · 2域 / 16,016像素"></button><figcaption>S4 · 2域 / 16,016像素</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 S5 · 0域 / 0像素"><img src="assets/call1_source_S5.png" alt="S5 · 0域 / 0像素"></button><figcaption>S5 · 0域 / 0像素</figcaption></figure></div></details><h3>02 物理硬筛 · 扣除已检区域并筛选</h3><p>候选条目 20 · 合并连通域 11 · 去重像素 25,814；候选覆盖像素减少 51.6%（不是误检减少率）。</p><figure><button class="zoom" type="button" aria-label="放大 灰：被筛掉的候选区域；青：幸存候选"><img src="assets/call1_filtered.png" alt="灰：被筛掉的候选区域；青：幸存候选"></button><figcaption>灰：被筛掉的候选区域；青：幸存候选</figcaption></figure><p>实际规则：起点膨胀半径3像素后扣除；净组件≥25像素；本次新建保留全部来源；S5构造DINO差≥0.2；净候选语义差≥0.05；无全来源DINO硬阈值。没有在图示中虚构未启用的门控。</p><h3>03 证据排序 · Top-K</h3><p>候选条目 10 · 合并连通域 3 · 去重像素 17,966</p><figure><button class="zoom" type="button" aria-label="放大 真正送入VLM的候选编号"><img src="assets/call1_ranked.png" alt="真正送入VLM的候选编号"></button><figcaption>真正送入VLM的候选编号</figcaption></figure><table><tr><th>排名</th><th>候选ID</th><th>得分</th><th>面积</th><th>来源</th></tr><tr><td>#1</td><td>36</td><td>14.1885</td><td>15309</td><td>S4</td></tr><tr><td>#2</td><td>10</td><td>11.3031</td><td>7421</td><td>S1_02</td></tr><tr><td>#3</td><td>31</td><td>8.5211</td><td>3780</td><td>S2</td></tr><tr><td>#4</td><td>30</td><td>7.8451</td><td>3287</td><td>S2</td></tr><tr><td>#5</td><td>15</td><td>7.1153</td><td>3632</td><td>S1_02</td></tr><tr><td>#6</td><td>34</td><td>7.0233</td><td>3434</td><td>S2</td></tr><tr><td>#7</td><td>16</td><td>4.5371</td><td>747</td><td>S1_02</td></tr><tr><td>#8</td><td>37</td><td>4.4472</td><td>707</td><td>S4</td></tr><tr><td>#9</td><td>35</td><td>4.3528</td><td>683</td><td>S2</td></tr><tr><td>#10</td><td>12</td><td>0.9302</td><td>1113</td><td>S1_02</td></tr></table><p>排序得分 = max(语义差,0) × max(DINO差,0) × 面积^0.5；冻结K=10，候选不足时按实际数量。</p><h3>04 视觉核验 · 真实输入与逐项裁决</h3><div class="candidate-grid"><article class="candidate yes"><h3>#1 · yes</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate1_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate1_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate1_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate1_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground in T1 and a large building with a brown roof in T2, indicating new construction.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local1.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter1.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_01/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_01/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_01/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_01/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025655
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 36,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;yes&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;yes&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground in T1 and a large building with a brown roof in T2, indicating new construction.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;yes\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground in T1 and a large building with a brown roof in T2, indicating new construction.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 968,
+    &quot;completion_tokens&quot;: 44,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 44
+    }
+  },
+  &quot;cost_cny&quot;: 0.00022
+}</pre></details></article><article class="candidate no"><h3>#2 · no</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate2_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate2_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate2_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate2_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground or temporary materials in T1 and remains as bare ground or similar non-building surface in T2, with no clear evidence of a newly constructed building.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local2.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter2.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_02/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_02/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_02/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_02/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025656
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 10,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;no&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;no&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground or temporary materials in T1 and remains as bare ground or similar non-building surface in T2, with no clear evidence of a newly constructed building.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;no\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground or temporary materials in T1 and remains as bare ground or similar non-building surface in T2, with no clear evidence of a newly constructed building.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 979,
+    &quot;completion_tokens&quot;: 55,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 55
+    }
+  },
+  &quot;cost_cny&quot;: 0.0002288
+}</pre></details></article><article class="candidate yes"><h3>#3 · yes</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate3_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate3_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate3_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate3_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground/vegetation in T1 and a clearly constructed building with a roof in T2, indicating new construction.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local3.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter3.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_03/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_03/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_03/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_03/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025657
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 31,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;yes&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;yes&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground/vegetation in T1 and a clearly constructed building with a roof in T2, indicating new construction.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;yes\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground/vegetation in T1 and a clearly constructed building with a roof in T2, indicating new construction.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 971,
+    &quot;completion_tokens&quot;: 47,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 47
+    }
+  },
+  &quot;cost_cny&quot;: 0.0002224
+}</pre></details></article><article class="candidate yes"><h3>#4 · yes</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate4_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate4_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate4_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate4_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground or temporary covering in T1, which is replaced by a distinct building structure with a roof in T2, indicating new construction.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local4.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter4.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_04/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_04/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_04/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_04/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025658
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 30,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;yes&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;yes&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground or temporary covering in T1, which is replaced by a distinct building structure with a roof in T2, indicating new construction.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;yes\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground or temporary covering in T1, which is replaced by a distinct building structure with a roof in T2, indicating new construction.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 975,
+    &quot;completion_tokens&quot;: 51,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 51
+    }
+  },
+  &quot;cost_cny&quot;: 0.00022560000000000004
+}</pre></details></article><article class="candidate no"><h3>#5 · no</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate5_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate5_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate5_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate5_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground or temporary covering in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local5.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter5.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_05/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_05/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_05/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_05/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025659
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 15,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;no&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;no&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground or temporary covering in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;no\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground or temporary covering in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 980,
+    &quot;completion_tokens&quot;: 56,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 56
+    }
+  },
+  &quot;cost_cny&quot;: 0.00022960000000000002
+}</pre></details></article><article class="candidate no"><h3>#6 · no</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate6_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate6_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate6_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate6_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground or temporary material in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local6.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter6.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_06/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_06/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_06/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_06/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025660
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 34,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;no&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;no&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground or temporary material in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;no\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground or temporary material in both T1 and T2, with no evidence of a newly constructed building (absent in T1, present in T2).\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 980,
+    &quot;completion_tokens&quot;: 56,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 56
+    }
+  },
+  &quot;cost_cny&quot;: 0.00022960000000000002
+}</pre></details></article><article class="candidate yes"><h3>#7 · yes</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate7_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate7_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate7_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate7_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground or temporary covering in T1 and a distinct, solid building roof in T2, indicating new construction.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local7.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter7.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_07/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_07/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_07/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_07/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025661
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 16,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;yes&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;yes&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground or temporary covering in T1 and a distinct, solid building roof in T2, indicating new construction.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;yes\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground or temporary covering in T1 and a distinct, solid building roof in T2, indicating new construction.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 970,
+    &quot;completion_tokens&quot;: 46,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 46
+    }
+  },
+  &quot;cost_cny&quot;: 0.00022160000000000002
+}</pre></details></article><article class="candidate yes"><h3>#8 · yes</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate8_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate8_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate8_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate8_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows bare ground or vegetation in T1 and a distinct building roof with clear structural edges in T2, indicating new construction.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local8.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter8.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_08/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_08/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_08/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_08/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025662
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 37,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;yes&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;yes&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows bare ground or vegetation in T1 and a distinct building roof with clear structural edges in T2, indicating new construction.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;yes\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows bare ground or vegetation in T1 and a distinct building roof with clear structural edges in T2, indicating new construction.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 971,
+    &quot;completion_tokens&quot;: 47,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 47
+    }
+  },
+  &quot;cost_cny&quot;: 0.0002224
+}</pre></details></article><article class="candidate yes"><h3>#9 · yes</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate9_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate9_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate9_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate9_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the contour shows bare ground/vegetation in T1 and a distinct new building roof in T2, indicating new construction.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local9.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter9.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_09/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_09/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_09/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_09/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025663
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 35,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;yes&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;yes&quot;,
+    &quot;reason&quot;: &quot;The area inside the contour shows bare ground/vegetation in T1 and a distinct new building roof in T2, indicating new construction.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;yes\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the contour shows bare ground/vegetation in T1 and a distinct new building roof in T2, indicating new construction.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 968,
+    &quot;completion_tokens&quot;: 44,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 44
+    }
+  },
+  &quot;cost_cny&quot;: 0.00022
+}</pre></details></article><article class="candidate no"><h3>#10 · no</h3><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 T1局部轮廓 · 实际核验输入"><img src="assets/call1_candidate10_0.png" alt="T1局部轮廓 · 实际核验输入"></button><figcaption>T1局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2局部轮廓 · 实际核验输入"><img src="assets/call1_candidate10_1.png" alt="T2局部轮廓 · 实际核验输入"></button><figcaption>T2局部轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T1宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate10_2.png" alt="T1宽视野轮廓 · 实际核验输入"></button><figcaption>T1宽视野轮廓 · 实际核验输入</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 T2宽视野轮廓 · 实际核验输入"><img src="assets/call1_candidate10_3.png" alt="T2宽视野轮廓 · 实际核验输入"></button><figcaption>T2宽视野轮廓 · 实际核验输入</figcaption></figure></div><p>The area inside the red contour shows an open lot or parking space in both T1 and T2, with no new building constructed.</p><details><summary>候选局部原图 / 截至本项yes并集示意</summary><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 局部原图"><img src="assets/call1_local10.png" alt="局部原图"></button><figcaption>局部原图</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 yes并集示意，非Agent已执行写回"><img src="assets/call1_localafter10.png" alt="yes并集示意，非Agent已执行写回"></button><figcaption>yes并集示意，非Agent已执行写回</figcaption></figure></div></details><details><summary>实际核验请求与回复</summary><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;role&quot;: &quot;system&quot;,
+      &quot;content&quot;: &quot;You verify changes of the class \&quot;building\&quot; between two co-registered remote sensing images of the same place: T1 (earlier) and T2 (later).\nScope card for \&quot;building\&quot;.\nCOUNTS as a building change:\n- a building newly constructed (absent in T1, present in T2)\nDoes NOT count:\n- shadows\n- seasonal, illumination or color/tone differences of the same building\n- edge responses caused by misregistration between T1 and T2\n- vehicles and temporary piles or materials\n- changes of non-building land cover (roads, vegetation, bare soil)\n- a building replaced by a different building at the same location (answer no, type rebuilt). Land, soil or vegetation in T1 with a building in T2 is new construction, not a replacement\n- changes in the disappeared direction; replacement alone is not evidence of the requested direction\nQuote the scope card when you decide.&quot;
+    },
+    {
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_10/0.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 close-up&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_10/1.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T1 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_10/2.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;T2 wider view&quot;
+        },
+        {
+          &quot;type&quot;: &quot;image_url&quot;,
+          &quot;image_url&quot;: {
+            &quot;url&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/demo_find_missed_replay/run/illustrative/T1.1xC1/val/train_2255/n9_missed/call_001/candidate_10/3.jpg&quot;
+          }
+        },
+        {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;text&quot;: &quot;Judge only the area INSIDE the red contour, not adjacent buildings or changes outside it. Does this area show clear evidence of the requested building change between T1 and T2? A roof fragment can be part of a real change, but do not infer change from a different object nearby. Answer yes only when the two dates support that change inside the candidate; otherwise answer no. Follow the scope card and requested direction. Reply JSON only: {\&quot;change\&quot;:\&quot;yes\&quot; or \&quot;no\&quot;,\&quot;reason\&quot;:\&quot;one short evidence sentence\&quot;}. Requested direction: appeared.&quot;
+        }
+      ]
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;model&quot;: &quot;qwen3.7-flash&quot;,
+    &quot;temperature&quot;: 0,
+    &quot;max_tokens&quot;: 256,
+    &quot;enable_thinking&quot;: false,
+    &quot;response_format&quot;: {
+      &quot;type&quot;: &quot;json_object&quot;
+    },
+    &quot;logprobs&quot;: true,
+    &quot;top_logprobs&quot;: 5,
+    &quot;seed&quot;: 1025664
+  },
+  &quot;verifier&quot;: &quot;V3&quot;,
+  &quot;candidate&quot;: 12,
+  &quot;current_answer&quot;: &quot;mask#0&quot;,
+  &quot;reuse&quot;: &quot;none; actual current residual rendered anew&quot;
+}</pre><pre>{
+  &quot;answer&quot;: &quot;no&quot;,
+  &quot;parsed&quot;: {
+    &quot;change&quot;: &quot;no&quot;,
+    &quot;reason&quot;: &quot;The area inside the red contour shows an open lot or parking space in both T1 and T2, with no new building constructed.&quot;
+  },
+  &quot;raw&quot;: &quot;{\n\&quot;change\&quot;: \&quot;no\&quot;,\n\&quot;reason\&quot;: \&quot;The area inside the red contour shows an open lot or parking space in both T1 and T2, with no new building constructed.\&quot;\n}&quot;,
+  &quot;finish_reason&quot;: &quot;stop&quot;,
+  &quot;parse_failure&quot;: false,
+  &quot;unknown&quot;: false,
+  &quot;usage&quot;: {
+    &quot;prompt_tokens&quot;: 924,
+    &quot;total_tokens&quot;: 967,
+    &quot;completion_tokens&quot;: 43,
+    &quot;prompt_tokens_details&quot;: {
+      &quot;cached_tokens&quot;: 0,
+      &quot;image_tokens&quot;: 584,
+      &quot;text_tokens&quot;: 340
+    },
+    &quot;completion_tokens_details&quot;: {
+      &quot;text_tokens&quot;: 43
+    }
+  },
+  &quot;cost_cny&quot;: 0.00021920000000000002
+}</pre></details></article></div><p>候选条目 6 · 合并连通域 2 · 去重像素 16,065；yes候选并集仅为工具建议，实际提交以Agent轨迹为准。</p><div class="pair"><figure><button class="zoom" type="button" aria-label="放大 工具yes建议并入起点后的效果（建议结果）"><img src="assets/call1_yes.png" alt="工具yes建议并入起点后的效果（建议结果）"></button><figcaption>工具yes建议并入起点后的效果（建议结果）</figcaption></figure><figure><button class="zoom" type="button" aria-label="放大 Agent实际最终提交（真实结果）"><img src="assets/call1_actual.png" alt="Agent实际最终提交（真实结果）"></button><figcaption>Agent实际最终提交（真实结果）</figcaption></figure></div></section></article><article class="step" id="step2" data-step="2"><div class="stephead"><h2>Step 2</h2><span class="badge">mask#0</span></div><div class="thought">I have 10 proposals from find_missed. The verifier gave advisory &quot;yes&quot; for IDs 1,3,4,7,8,9 and &quot;no&quot; for IDs 2,5,6,10. I need to review the evidence by viewing the regions to verify which are actual new buildings. Let me view the image with the proposed regions overlaid to check them.
+
+</div><div class="call"><h3>view · 错误</h3><pre>{
+  &quot;region&quot;: [
+    0,
+    0,
+    512,
+    512
+  ],
+  &quot;overlay&quot;: &quot;props#1&quot;,
+  &quot;label_components&quot;: true
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:false,&quot;error_code&quot;:&quot;bad_args&quot;,&quot;message&quot;:&quot;Component labels need a mask handle; call to_mask first.&quot;}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step2.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step3" data-step="3"><div class="stephead"><h2>Step 3</h2><span class="badge">mask#0</span></div><div class="thought">I need to convert the proposal set to a mask first, then view it with labels. Let me create a mask from the proposals and view it.
+
+</div><div class="call"><h3>to_mask · 成功</h3><pre>{
+  &quot;sets&quot;: [
+    &quot;props#1&quot;
+  ],
+  &quot;set_current&quot;: false
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;mask&quot;:&quot;mask#2&quot;,&quot;area&quot;:17966,&quot;component_count&quot;:3}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step3.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step4" data-step="4"><div class="stephead"><h2>Step 4</h2><span class="badge">mask#0</span></div><div class="thought">Now I have mask#2 with 3 components from the proposals. Let me view it with labels to see the regions and verify which are actual new buildings.
+
+</div><div class="call"><h3>view · 成功</h3><pre>{
+  &quot;region&quot;: [
+    0,
+    0,
+    512,
+    512
+  ],
+  &quot;overlay&quot;: &quot;mask#2&quot;,
+  &quot;label_components&quot;: true
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;view_id&quot;:&quot;view#1&quot;,&quot;region&quot;:[0,0,512,512],&quot;overlay&quot;:&quot;mask#2&quot;,&quot;display_size&quot;:[768,768],&quot;image_size&quot;:[796,796],&quot;scale&quot;:1.5,&quot;padding&quot;:[28,28],&quot;labelled_ids&quot;:[1,2,3],&quot;unlabelled_count&quot;:0}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step4.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step5" data-step="5"><div class="stephead"><h2>Step 5</h2><span class="badge">mask#0</span></div><div class="thought">I can see the three components in mask#2. Let me inspect them to get their IDs and areas, then view each region more closely to verify if they are actual new buildings.
+
+</div><div class="call"><h3>inspect · 成功</h3><pre>{
+  &quot;mask&quot;: &quot;mask#2&quot;
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;mask&quot;:&quot;mask#2&quot;,&quot;total_components&quot;:3,&quot;returned&quot;:3,&quot;has_more&quot;:false,&quot;components&quot;:[{&quot;id&quot;:1,&quot;area&quot;:16097,&quot;bbox&quot;:[173,400,348,512]},{&quot;id&quot;:2,&quot;area&quot;:1113,&quot;bbox&quot;:[372,442,434,482]},{&quot;id&quot;:3,&quot;area&quot;:756,&quot;bbox&quot;:[360,484,408,510]}]}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step5.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step6" data-step="6"><div class="stephead"><h2>Step 6</h2><span class="badge">mask#0</span></div><div class="thought">I can see three components in mask#2. Looking at the views:
+- Component 1 (bbox [173,400,348,512]): In T1 it shows bare ground/vegetation, in T2 it shows a large building with brown roof - this looks like new construction
+- Component 2 (bbox [372,442,434,482]): Small region, need to check more closely
+- Component 3 (bbox [360,484,408,510]: Another small region
+
+The find_missed results showed that proposals 1,3,4,7,8,9 were marked &quot;yes&quot; by verifier. But these are from props#1 which got combined into mask#2 with only 3 components. The component IDs in mask#2 (1,2,3) correspond to the merged regions.
+
+Let me view each component separately to verify. First, let me look at component 1 more closely since it&#x27;s the largest and clearly shows a building appearing.
+
+</div><div class="call"><h3>view · 成功</h3><pre>{
+  &quot;region&quot;: [
+    150,
+    380,
+    370,
+    512
+  ],
+  &quot;overlay&quot;: &quot;mask#2&quot;,
+  &quot;label_components&quot;: true,
+  &quot;ids&quot;: [
+    1
+  ]
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;view_id&quot;:&quot;view#2&quot;,&quot;region&quot;:[150,380,370,512],&quot;overlay&quot;:&quot;mask#2&quot;,&quot;display_size&quot;:[768,461],&quot;image_size&quot;:[796,489],&quot;scale&quot;:3.4909090909090907,&quot;padding&quot;:[28,28],&quot;labelled_ids&quot;:[1],&quot;unlabelled_count&quot;:0}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step6.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step7" data-step="7"><div class="stephead"><h2>Step 7</h2><span class="badge">mask#0</span></div><div class="thought">Component 1 clearly shows new construction: in T1 it&#x27;s bare ground/vegetation, in T2 it&#x27;s a large building with brown roof. This is definitely a new building.
+
+Now let me check components 2 and 3 more closely to see if they are actual new buildings or just temporary materials/vehicles.
+
+</div><div class="call"><h3>view · 成功</h3><pre>{
+  &quot;region&quot;: [
+    350,
+    430,
+    450,
+    512
+  ],
+  &quot;overlay&quot;: &quot;mask#2&quot;,
+  &quot;label_components&quot;: true,
+  &quot;ids&quot;: [
+    2,
+    3
+  ]
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;view_id&quot;:&quot;view#3&quot;,&quot;region&quot;:[350,430,450,512],&quot;overlay&quot;:&quot;mask#2&quot;,&quot;display_size&quot;:[768,630],&quot;image_size&quot;:[796,658],&quot;scale&quot;:7.68,&quot;padding&quot;:[28,28],&quot;labelled_ids&quot;:[2,3],&quot;unlabelled_count&quot;:0}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step7.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step8" data-step="8"><div class="stephead"><h2>Step 8</h2><span class="badge">mask#0</span></div><div class="thought">Looking at components 2 and 3:
+- Component 2 (bbox [372,442,434,482]): In T1 it shows some material, in T2 it still looks like similar material - the verifier said &quot;no&quot; for proposal 5 which corresponds to this area. It appears to be temporary covering or bare ground, not a new building.
+- Component 3 (bbox [360,484,408,510]: In T1 it shows greenish material, in T2 it shows a blue roof-like structure. The verifier said &quot;yes&quot; for proposal 9 which might correspond to this.
+
+Wait, I need to re-examine. The find_missed results showed proposals with IDs 1-10, but mask#2 only has 3 components. The component IDs in mask#2 are different from proposal IDs. Let me check what the actual proposals were that got &quot;yes&quot; answers: 1,3,4,7,8,9.
+
+Looking at the views more carefully:
+- Component 1 is clearly new construction (bare ground → large building)
+- Component 2 appears to be similar in both times (temporary materials), so likely NOT new construction
+- Component 3 shows some change - in T1 it&#x27;s greenish/vegetation, in T2 it appears to have a blue roof
+
+But I should be careful. The task says to count only newly constructed buildings. Let me also check if there are other areas I might have missed by looking at the full images again.
+
+Actually, looking back at the find_missed output, the accepted_ids are [1,3,4,7,8,9]. These are proposal IDs, not component IDs. The mask#2 was created from all proposals combined, resulting in 3 merged components.
+
+I need to decide which regions to include. Based on my visual inspection:
+- Component 1 (the large brown-roofed building): Definitely new construction - KEEP
+- Component 2: Looks like temporary materials in both times - likely NOT new construction
+- Component 3: Shows some change, possibly a small new building
+
+Let me verify by asking the verifier about these components to get more certainty.
+
+</div><div class="call"><h3>ask · 成功</h3><pre>{
+  &quot;regions&quot;: [
+    {
+      &quot;mask&quot;: &quot;mask#2&quot;,
+      &quot;ids&quot;: [
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;results&quot;:[{&quot;mask&quot;:&quot;mask#2&quot;,&quot;id&quot;:1,&quot;p_yes&quot;:0.9999996940985195,&quot;answer&quot;:&quot;yes&quot;,&quot;type&quot;:&quot;new_building&quot;,&quot;reason&quot;:&quot;The area inside the red contour is an empty, unpaved lot in T1 and contains a large building with a brown roof in T2.&quot;,&quot;status&quot;:&quot;parsed&quot;},{&quot;mask&quot;:&quot;mask#2&quot;,&quot;id&quot;:2,&quot;p_yes&quot;:0.00015843595894518802,&quot;answer&quot;:&quot;no&quot;,&quot;type&quot;:&quot;non_building_change&quot;,&quot;reason&quot;:&quot;The object inside the red contour is a row of parked vehicles present in both dates, not a building, and changes in non-building land cover or vehicles do not count.&quot;,&quot;status&quot;:&quot;parsed&quot;},{&quot;mask&quot;:&quot;mask#2&quot;,&quot;id&quot;:3,&quot;p_yes&quot;:0.01590626352970424,&quot;answer&quot;:&quot;no&quot;,&quot;type&quot;:&quot;non_building_change&quot;,&quot;reason&quot;:&quot;The object inside the contour is a green mesh or tarp covering the ground in both dates, indicating a change in non-building land cover rather than new construction.&quot;,&quot;status&quot;:&quot;parsed&quot;}],&quot;remaining_unverified&quot;:0}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step8.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step9" data-step="9"><div class="stephead"><h2>Step 9</h2><span class="badge">mask#3</span></div><div class="thought">The verifier has checked all 3 components of mask#2:
+- Component 1: &quot;yes&quot; - new building (empty lot in T1 → large brown-roofed building in T2)
+- Component 2: &quot;no&quot; - row of parked vehicles present in both dates, not a building
+- Component 3: &quot;no&quot; - green mesh/tarp covering ground in both dates, non-building change
+
+So only component 1 is a valid new building. I need to create a final mask with only component 1 from mask#2. Let me remove components 2 and 3, keeping only component 1.
+
+</div><div class="call"><h3>remove_region · 成功</h3><pre>{
+  &quot;mask&quot;: &quot;mask#2&quot;,
+  &quot;ids&quot;: [
+    2,
+    3
+  ],
+  &quot;set_current&quot;: true
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;mask&quot;:&quot;mask#3&quot;,&quot;area&quot;:16097,&quot;component_count&quot;:1,&quot;added_px&quot;:0,&quot;removed_px&quot;:1869,&quot;current_mask&quot;:{&quot;before&quot;:&quot;mask#0&quot;,&quot;after&quot;:&quot;mask#3&quot;}}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step9.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step10" data-step="10"><div class="stephead"><h2>Step 10</h2><span class="badge">mask#3</span></div><div class="thought">I have mask#3 with 1 component (the new building). The verifier has already checked this component and answered &quot;yes&quot; for new_building. Now I need to submit this as the final answer.
+
+Let me verify by asking if there are any remaining unverified components, then submit.
+
+</div><div class="call"><h3>ask · 成功</h3><pre>{}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;results&quot;:[],&quot;remaining_unverified&quot;:0}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step10.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step11" data-step="11"><div class="stephead"><h2>Step 11</h2><span class="badge">mask#3</span></div><div class="thought">All components have been verified. The final mask (mask#3) contains 1 component representing a newly constructed building: an empty lot in T1 that became a large brown-roofed building in T2. The verifier confirmed this as &quot;new_building&quot; with high confidence (p_yes ~1.0).
+
+</div><div class="call"><h3>submit · 成功</h3><pre>{
+  &quot;mask&quot;: &quot;mask#3&quot;,
+  &quot;summary&quot;: &quot;Found 1 newly constructed building: an empty unpaved lot in T1 that became a large brown-roofed building in T2 (component 1 of mask#3, area 16097 pixels). Removed 2 false positives: parked vehicles (component 2) and green mesh/tarp (component 3), both present in both dates and not new construction.&quot;
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;submitted&quot;:false,&quot;report&quot;:&quot;Report before submission. Every run gets this report as the first response to submit; it does not judge the mask, and nothing has to change. mask#3 is now your current answer: 16097 pixels in 1 components.\nVerifier answers on mask#3: 1 yes, 0 no, 0 unparsed, 0 with no answer. An answer applies only to the exact outline it was about; a view is not an answer.\n  IDs answered yes: [1]\nAnswered yes and not in mask#3: 3 regions, 2137 pixels.\n  area=747 bbox=[360, 484, 408, 510] reason=The area inside the red contour shows bare ground or temporary covering in T1 and a distinct, solid building roof in T2,\n  area=707 bbox=[360, 485, 407, 508] reason=The area inside the red contour shows bare ground or vegetation in T1 and a distinct building roof with clear structural\n  area=683 bbox=[360, 485, 408, 509] reason=The area inside the contour shows bare ground/vegetation in T1 and a distinct new building roof in T2, indicating new co\nCompared with the given mask: 16097 pixels added, in components [1]; 0 pixels removed; 0 given components are gone: 0 answered no, 0 answered yes, 0 with no answer. Removed pixels are not the same as corrected errors.\nA verifier answer is evidence, not an order, and it can be wrong in both directions. No answer is not an error. To finish with this mask, call submit with mask#3 again. To change it, edit and submit the new handle; components the verifier has not seen will be reported again. In the summary, say what you changed, and why you went against any verifier answer. You have 19 replies left.&quot;}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step11.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step12" data-step="12"><div class="stephead"><h2>Step 12</h2><span class="badge">mask#3</span></div><div class="thought">The report shows that there are 3 additional regions (from the original find_missed proposals) that the verifier answered &quot;yes&quot; for but are not in my current mask#3. These are small regions around bbox [360, 484-408, 485-510] with areas 747, 707, and 683 pixels. The verifier said they show &quot;distinct building roof&quot; or &quot;new building roof&quot; in T2.
+
+However, when I viewed components 2 and 3 of mask#2 earlier, the verifier already checked them and said:
+- Component 2: &quot;no&quot; - parked vehicles present in both dates
+- Component 3: &quot;no&quot; - green mesh/tarp covering ground in both dates
+
+These small regions (747, 707, 683 pixels) might be part of component 3 or separate small features. Let me check if these are actually new buildings by viewing that area more closely. The bboxes are very close together around [360, 484-408, 485-510], which is near where component 3 was located.
+
+Looking back at view#3, component 3 showed a blue-ish area in T2 that looked like it could be a roof. But the verifier said it was &quot;green mesh or tarp covering the ground in both dates&quot;. There might be some confusion here.
+
+Let me view this specific region to verify whether these small regions are actual new buildings or not.
+
+</div><div class="call"><h3>view · 错误</h3><pre>{
+  &quot;region&quot;: [
+    340,
+    470,
+    430,
+    520
+  ]
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:false,&quot;error_code&quot;:&quot;bad_args&quot;,&quot;message&quot;:&quot;region must be an ordered box inside the full image.&quot;}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step12.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step13" data-step="13"><div class="stephead"><h2>Step 13</h2><span class="badge">mask#3</span></div><div class="thought">The region coordinates need to be within the full image bounds. Let me use proper coordinates based on the bboxes mentioned (around 360-410, 484-510).
+
+</div><div class="call"><h3>view · 成功</h3><pre>{
+  &quot;region&quot;: [
+    340,
+    470,
+    420,
+    512
+  ]
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;view_id&quot;:&quot;view#4&quot;,&quot;region&quot;:[340,448,420,512],&quot;overlay&quot;:null,&quot;display_size&quot;:[768,614],&quot;image_size&quot;:[796,642],&quot;scale&quot;:9.6,&quot;padding&quot;:[28,28],&quot;labelled_ids&quot;:[],&quot;unlabelled_count&quot;:0}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step13.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><article class="step" id="step14" data-step="14"><div class="stephead"><h2>Step 14</h2><span class="badge">mask#3</span></div><div class="thought">Looking at this region, I can see in T1 there&#x27;s greenish/vegetation material, and in T2 there appears to be a blue roof-like structure. However, the verifier already checked component 3 of mask#2 (which covers this area) and said it was &quot;green mesh or tarp covering the ground in both dates&quot; - meaning it&#x27;s non-building change, not new construction.
+
+The report mentions 3 small regions with &quot;yes&quot; answers that are not in my current mask. These might be overlapping or very close proposals from find_missed that the verifier marked as &quot;yes&quot; but which actually represent the same area as component 3 (which the verifier later said was &quot;no&quot; when directly inspected).
+
+Since the direct verification of component 3 said &quot;no&quot; (non_building_change), and the images show what appears to be temporary covering rather than a solid building, I should trust the direct verifier answer on the actual mask component. The small &quot;yes&quot; responses in the report might be from proposal-level analysis that wasn&#x27;t refined by direct inspection.
+
+I&#x27;ll keep my current mask#3 with just the one confirmed new building (component 1) and submit again to finalize.
+
+</div><div class="call"><h3>submit · 成功</h3><pre>{
+  &quot;mask&quot;: &quot;mask#3&quot;,
+  &quot;summary&quot;: &quot;Final answer: 1 newly constructed building detected. Component 1 (area 16097 pixels) shows an empty unpaved lot in T1 that became a large brown-roofed building in T2. Verifier confirmed as \&quot;new_building\&quot;. Excluded 2 false positives: parked vehicles (component 2) and green mesh/tarp (component 3), both present in both dates per verifier. Small additional \&quot;yes\&quot; proposals from find_missed around bbox [360-410, 484-510] were excluded because direct verifier inspection of the corresponding mask component (id=3) classified them as non-building changes (green mesh/tarp in both dates).&quot;
+}</pre><details><summary>实际返回 · 句柄与统计（展开）</summary><pre>{&quot;ok&quot;:true,&quot;mask&quot;:&quot;mask#3&quot;,&quot;area&quot;:16097,&quot;component_count&quot;:1,&quot;current_mask&quot;:{&quot;before&quot;:&quot;mask#3&quot;,&quot;after&quot;:&quot;mask#3&quot;},&quot;submitted&quot;:true}</pre></details></div><div class="thumb"><figure><button class="zoom" type="button" aria-label="放大 本步当前答案与GT对照"><img src="assets/step14.png" alt="本步当前答案与GT对照"></button><figcaption>本步当前答案与GT对照</figcaption></figure></div></article><span id="funnel-link"></span><section class="panel section"><h2>运行与真实性记录</h2><pre>{
+  &quot;sample&quot;: &quot;train_2255&quot;,
+  &quot;termination&quot;: &quot;submit&quot;,
+  &quot;submitted_by&quot;: &quot;model&quot;,
+  &quot;cost_cny&quot;: 0.032588400000000003,
+  &quot;calls&quot;: 14,
+  &quot;rounds&quot;: 14,
+  &quot;instruction&quot;: &quot;Find the buildings that were newly built between T1 and T2. Review the supplied initial answer. For this tool demonstration, call find_missed once, inspect its evidence, decide which proposals to adopt, and submit your final mask. Do not call find_missed repeatedly.&quot;,
+  &quot;gt_role&quot;: &quot;仅用于事后评分与虚线框，不进入Agent/核验器&quot;,
+  &quot;source_scope&quot;: &quot;Existing image-derived source pools; historical source construction may already exclude baseline regions.&quot;
+}</pre></section></main><dialog><button>关闭</button><img alt="放大图"></dialog><script>const steps=[...document.querySelectorAll('.step[data-step]')];let current=0;function go(i){current=Math.max(0,Math.min(steps.length-1,i));steps.forEach((e,j)=>e.classList.toggle('active',j===current));steps[current].scrollIntoView({block:'start'});document.querySelector('#position').textContent='Step '+steps[current].dataset.step;}document.querySelector('#prev').onclick=()=>go(current-1);document.querySelector('#next').onclick=()=>go(current+1);const dialog=document.querySelector('dialog');document.querySelectorAll('.zoom').forEach(b=>b.onclick=()=>{dialog.querySelector('img').src=b.querySelector('img').src;dialog.showModal();});dialog.querySelector('button').onclick=()=>dialog.close();document.querySelector('#theme').onclick=()=>{const e=document.documentElement;e.dataset.theme=e.dataset.theme==='dark'?'light':'dark';};</script></html>

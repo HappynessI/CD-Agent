@@ -1,5 +1,9 @@
 # findings.md — Change Detection Agent 研究事实与证据账本
 
+> 2026-11-16 组会单样本真实在线完成：SECOND train_2255，起点为空（F1/P/R=0/0/0，零分母记0），Agent最终F1=85.6393、P=94.2287、R=78.4849，TP15168/FP929/FN4158。1次find_missed、14次工具调用、14轮，模型自行submit；2次view bad_args均保留。首次SAM3预加载失败发生在Agent启动前，修复后仅1次真实会话，实际API¥0.0325884。该样本按收益选择且指令要求调用工具，不能证明自发调用或平均收益。 页面已生成，91处静态图片引用逐张通过，离线Chromium检查本地file打开、图片解码、时间轴、放大与手机宽度通过；页面无外部请求。入口results/agent_baseline/demo_find_missed_replay/index.html，下载包download.zip。
+
+> 2026-11-16 单样本组会回放：新增授权仅跑1次真实在线Agent。SECOND train_2255，冻结N9 build档位；按离线高收益挑选且目视检查，明确演示指令要求find_missed，不作为自主触发或整体平均评测。在线作业187826/hook187827；完成后运行G3同风格页面生成及离线Chromium检查。
+
 > 2026-11-16 补漏单轮实验完成：tune180条/52配置，冻结后confirm180条/668次新核验；最终F1变化：LEVIR any−0.0237、WHU any+0.1534、SECOND build+6.5474、WHU build−1.0078、SECOND demolish+2.5711、WHU demolish+14.6042。所有区间包含或触及0，WHU拆除仅1图获益，不能宣称稳定提升。累计实际¥0.7100568；180份最终掩码及逐例证据齐全，无在线Agent、新待审数据或正式测试。 详见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/final_report.md` 与 `interpretation.md`。
 
 > 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm现已完成，最终结果见置顶更新。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
@@ -479,3 +483,5 @@ N9 raw SAM覆盖T3.1 90.3655%、T3.3 89.3391%，经过R1后仅20.5792%/19.6693%�
 ### 2026-11-16 抽样目视复核后的真实缺口
 
 T5数值门槛候选237，其中触边83、非触边154；非触边不等于单体完整。替换大面积粘连/裁断样本后，送审5个候选（WHU2、SECOND3），另1张WHU train916明确不合格诊断：官方拆除GT仅覆盖旧棚屋下部，不自行修改官方标签或补全GT。T3初筛53个图像类别方向候选/49图，排除整组GT触边任务后剩5图（SECOND4建筑+1运动场；WHU0），抽3图。T4.4显式道路语义后9查询，整条排除目标触边后5条，抽3条；只有1条全部变化干扰也均不触边，页面标注这一限制。以上均待用户人工审核，不是正式通过。
+
+组会回放最终验收：187844完成布局复验及ZIP完整性检查；真实在线仅1会话，成本¥0.0325884。91处静态图片引用均可读（浏览器放大后含dialog为92），0外部请求、0脚本错误；桌面/手机截图已归档，全部计算作业结束。

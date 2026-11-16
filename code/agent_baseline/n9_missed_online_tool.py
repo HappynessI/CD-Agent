@@ -47,10 +47,14 @@ class CurrentMaskProvider:
 
     def candidates(self, current, limit=None):
         self.load(current.shape)
-        candidates, _, audit = reconstruct(self.sources, current, self.direction, self.probabilities, self.features)
+        candidates, stages, audit = reconstruct(self.sources, current, self.direction, self.probabilities, self.features)
         config = dict(self.config)
         if limit is not None: config['k'] = min(limit, config['k'])
         indexes = candidate_indices(candidates, config)
+        # Keep actual inference intermediates for opt-in presentation export; no GT.
+        full_config = dict(config, k=len(candidates))
+        self.last_export = dict(candidates=candidates, stages=stages,
+            surviving_indexes=candidate_indices(candidates, full_config), selected_indexes=indexes)
         return [candidates[i] for i in indexes], audit
 
 
@@ -73,6 +77,16 @@ class N9Toolbox(Toolbox):
         folder.mkdir(parents=True, exist_ok=True)
         started = time.monotonic()
         selected, audit = self.missed_provider.candidates(current, limit)
+        if self.runtime.get('export_funnel'):
+            snapshot = self.missed_provider.last_export
+            save_masks(folder/'funnel_candidates.npz', [c['mask'] for c in snapshot['candidates']], current.shape)
+            np.savez_compressed(folder/'funnel_stages.npz', current=current,
+                **snapshot['stages'], **{f'source_{s}':m for s,m in self.missed_provider.sources.items()})
+            write(folder/'funnel.json', dict(
+                candidates=[{k:v for k,v in c.items() if k!='mask'} for c in snapshot['candidates']],
+                surviving_indexes=snapshot['surviving_indexes'], selected_indexes=snapshot['selected_indexes'],
+                source_note='Existing image-derived source pools; historical source construction may already exclude baseline regions.',
+                labels_accessed=False))
         config = self.runtime['config']; masks = [c['mask'] for c in selected]
         save_masks(folder/'candidates.npz', masks, current.shape, current=np.packbits(current))
         write(folder/'generation.json', dict(config=config, reference_answer=current_handle,

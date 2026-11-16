@@ -71,14 +71,14 @@ def final_path(online,row,seed,arm,attempt):
     return online/'run'/row['group']/f'seed{seed}'/arm/row['stem']/f'attempt_{attempt:03d}'/row['task_type']/'val'/row['stem']/'final.json'
 
 
-def start_worker(code, online, env):
+def start_worker(code, online, env, worker_module=None):
     with socket.socket() as sock:
         sock.bind(('127.0.0.1',0)); port=sock.getsockname()[1]
     endpoint=f'http://127.0.0.1:{port}'
     log=online/'logs'/f'sam3-{os.environ["SLURM_JOB_ID"]}.log'; log.parent.mkdir(parents=True,exist_ok=True)
     stream=log.open('a')
     process=subprocess.Popen(['/guisongxia01/pangchao/wangyihan/conda_envs/omniovcd-env/bin/python','-B',
-        str(code/'agent_baseline/workers/sam3_worker.py'),'--port',str(port)],cwd=code/'agent_baseline',env=env,stdout=stream,stderr=subprocess.STDOUT)
+        *(['-m',worker_module] if worker_module else [str(code/'agent_baseline/workers/sam3_worker.py')]),'--port',str(port)],cwd=code/'agent_baseline',env=env,stdout=stream,stderr=subprocess.STDOUT)
     try:
         deadline=time.monotonic()+900
         while time.monotonic()<deadline:
