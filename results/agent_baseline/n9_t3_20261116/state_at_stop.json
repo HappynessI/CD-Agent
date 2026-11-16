@@ -1,0 +1,270 @@
+{
+  "name": "cd-n9-t3-20261116",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/01-data-audit.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/01b-clean-resume.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/01c-legacy-review.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/02-exploratory-tune.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/03-tune-diagnostics.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/04-raw-coverage.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/05-legacy-recheck.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/05-legacy-recheck.sbatch",
+  "job_id": "187640",
+  "hook_id": "187641",
+  "rounds": 7,
+  "rounds_submitted": 7,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-16 02:39:45",
+  "started_epoch": 1794796785.7014205,
+  "history": [
+    {
+      "job": "01-data-audit.sbatch",
+      "job_id": "187567",
+      "hook_id": "187568",
+      "state": "CANCELLED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "data_audit",
+        "status": "incomplete_artifacts",
+        "completed": 0,
+        "review_ready": false,
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 03:15:15"
+    },
+    {
+      "job": "01b-clean-resume.sbatch",
+      "job_id": "187580",
+      "hook_id": "187581",
+      "state": "FAILED",
+      "exit": "2:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "clean_construction",
+        "status": "pending_review",
+        "completed": 1692,
+        "legacy_audit_status": "pending_separate_stage",
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 03:33:53"
+    },
+    {
+      "job": "01c-legacy-review.sbatch",
+      "job_id": "187586",
+      "hook_id": "187587",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "data_audit",
+        "status": "pending_review",
+        "completed": 1692,
+        "review_ready": true,
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:02:21"
+    },
+    {
+      "job": "02-exploratory-tune.sbatch",
+      "job_id": "187613",
+      "hook_id": "187614",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "exploratory_tune",
+        "status": "exploratory_dev_tune_only_pending_review",
+        "completed": 298,
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:20:21"
+    },
+    {
+      "job": "03-tune-diagnostics.sbatch",
+      "job_id": "187624",
+      "hook_id": "187625",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "tune_diagnostics",
+        "status": "complete",
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:24:02"
+    },
+    {
+      "job": "04-raw-coverage.sbatch",
+      "job_id": "187628",
+      "hook_id": "187629",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "raw_coverage_diagnostic",
+        "status": "tune_diagnostic_complete",
+        "completed": 298,
+        "predictions": 1490,
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:30:59"
+    },
+    {
+      "job": "05-legacy-recheck.sbatch",
+      "job_id": "187640",
+      "hook_id": "187641",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "legacy_recheck",
+        "status": "resolved",
+        "comparison": "pixel_equal",
+        "completed": 2128,
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:39:02"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "hook_attempts": 14,
+  "submitted_at": "2026-11-16 04:38:58",
+  "last_advance_at": "2026-11-16 04:38:58",
+  "review_count": 7,
+  "review": {
+    "id": "event-0007",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-16 04:39:02",
+    "job_id": "187640",
+    "hook_id": "187641",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/05-legacy-recheck.sbatch",
+    "latest": {
+      "job": "05-legacy-recheck.sbatch",
+      "job_id": "187640",
+      "hook_id": "187641",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "legacy_recheck",
+        "status": "resolved",
+        "comparison": "pixel_equal",
+        "completed": 2128,
+        "formal_evaluation_allowed": false,
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 04:39:02"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-16 04:39:02",
+    "delivery_turn_id": "01a1e295-ac35-79d1-8610-87989da627d6",
+    "delivery_via": "hook_http"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/01b-clean-resume.sbatch",
+      "reason": "Original audit cancelled after confirmed D-state read stall on legacy train_2020_T33_1to5 mask. New checkpointed clean-first entry preserves source/query progress and creates six pending-review manifests independently of old-mask I/O; no formal evaluation.",
+      "at": "2026-11-16 03:15:54"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/01c-legacy-review.sbatch",
+      "reason": "Clean construction complete: six valid JSON manifests contain1692 tasks; exit2 came from editing running shell to add notification, not Python construction. Current shell syntax valid; snapshot scripts now frozen. Continue checkpointed legacy audit, six-case review and contract/delivery checks; do not rerun clean construction.",
+      "at": "2026-11-16 03:35:12"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/02-exploratory-tune.sbatch",
+      "reason": "1692 pending-review tasks, six-case page HTTP200,15 tests and133 links passed. Human approval requested, not yet granted. Continue explicitly exploratory dev_tune fixed R1 and clean delta/joint K5/8 only; recover legacy-source candidate separately without overwriting original. No formal confirm/online or report performance.",
+      "at": "2026-11-16 04:04:15"
+    },
+    {
+      "event_id": "event-0004",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/03-tune-diagnostics.sbatch",
+      "reason": "Exploratory tune298 complete: T31 delta8 improves2.59016 F1 with more FP; T33 joint8 improves0.33850 but object group declines. Freeze tune recommendations; diagnose existing outputs and run two new full-confirm contract tests, no new inference or parameter search. Formal confirmation/online still awaits explicit human data approval.",
+      "at": "2026-11-16 04:23:54"
+    },
+    {
+      "event_id": "event-0005",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/04-raw-coverage.sbatch",
+      "reason": "Diagnostics show R1 candidate coverage only20.58%/19.67%, so distinguish raw SAM support from geometry-filter losses without changing method or reading confirm/report. Export all1490 existing final predictions with exact TP/FP/FN checks, preserve1.4GiB original pools locally. No new model/API inference; formal evaluation remains approval-gated.",
+      "at": "2026-11-16 04:28:34"
+    },
+    {
+      "event_id": "event-0006",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-n9-t3-20261116/jobs/05-legacy-recheck.sbatch",
+      "reason": "Raw coverage and1490 prediction exports verified. Storage reads and Git push recovered; make one bounded5min attempt to compare the single deferred legacy mask with independent reconstruction and append only its audit if equal. Preserve original/deferred evidence; no rerun of clean or inference. Afterward T3 formal evaluation waits for human approval.",
+      "at": "2026-11-16 04:38:55"
+    },
+    {
+      "event_id": "event-0007",
+      "action": "finish",
+      "reason": "User rejected N9 T3 data; all exploratory results and full2128 audit archived, original records preserved. No formal confirm or online run; replaced by new pending-review static reconstruction.",
+      "at": "2026-11-16 05:41:45"
+    }
+  ],
+  "stop_reason": "User rejected N9 T3 data; all exploratory results and full2128 audit archived, original records preserved. No formal confirm or online run; replaced by new pending-review static reconstruction.",
+  "finished_at": "2026-11-16 05:41:45",
+  "elapsed_seconds": 10919.5
+}
