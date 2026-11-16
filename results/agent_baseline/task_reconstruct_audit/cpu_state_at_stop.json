@@ -1,0 +1,191 @@
+{
+  "name": "cd-task-reconstruct-cpu-20261116",
+  "status": "done",
+  "queue": [],
+  "done": [
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/01-t5.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/02-t3.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/03-t5-actual.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/04-t3-interior.sbatch",
+    "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/05-t5-visual.sbatch"
+  ],
+  "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/05-t5-visual.sbatch",
+  "job_id": "187682",
+  "hook_id": "187683",
+  "rounds": 5,
+  "rounds_submitted": 5,
+  "primary_best": null,
+  "cost_cny": 0.0,
+  "finalized": false,
+  "finalize_requested": true,
+  "started_at": "2026-11-16 05:09:07",
+  "started_epoch": 1794805747.5733535,
+  "history": [
+    {
+      "job": "01-t5.sbatch",
+      "job_id": "187659",
+      "hook_id": "187660",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_data",
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:09:38"
+    },
+    {
+      "job": "02-t3.sbatch",
+      "job_id": "187664",
+      "hook_id": "187665",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_data",
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:12:49"
+    },
+    {
+      "job": "03-t5-actual.sbatch",
+      "job_id": "187667",
+      "hook_id": "187668",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_data",
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:13:19"
+    },
+    {
+      "job": "04-t3-interior.sbatch",
+      "job_id": "187672",
+      "hook_id": "187673",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_data",
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:16:46"
+    },
+    {
+      "job": "05-t5-visual.sbatch",
+      "job_id": "187682",
+      "hook_id": "187683",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_data",
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:24:19"
+    }
+  ],
+  "driver": "dependency",
+  "recorded_current": true,
+  "submitted_at": "2026-11-16 05:24:12",
+  "last_advance_at": "2026-11-16 05:24:12",
+  "hook_attempts": 9,
+  "review_count": 5,
+  "review": {
+    "id": "event-0005",
+    "kind": "round_finished",
+    "error": null,
+    "at": "2026-11-16 05:24:19",
+    "job_id": "187682",
+    "hook_id": "187683",
+    "current": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/05-t5-visual.sbatch",
+    "latest": {
+      "job": "05-t5-visual.sbatch",
+      "job_id": "187682",
+      "hook_id": "187683",
+      "state": "COMPLETED",
+      "exit": "0:0",
+      "primary": null,
+      "gain": null,
+      "cost_cny": 0.0,
+      "metric": {
+        "stage": "offline_data",
+        "cost_cny": 0,
+        "cumulative": true
+      },
+      "metric_error": null,
+      "at": "2026-11-16 05:24:19"
+    },
+    "queued_jobs": [],
+    "cost_cny": 0.0,
+    "delivery": "accepted",
+    "delivered_at": "2026-11-16 05:24:26",
+    "delivery_turn_id": "01a1e295-ac35-79d1-8610-87989da627d6",
+    "delivery_via": "cron_local"
+  },
+  "decisions": [
+    {
+      "event_id": "event-0001",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/02-t3.sbatch",
+      "reason": "T5 first pass completed but actual FP count needs correcting separately; use independent CPU slot to screen T3 homogeneous clusters on120 development images from existing single-date DINO caches, no Agent/API and only three sampled exports.",
+      "at": "2026-11-16 05:12:04"
+    },
+    {
+      "event_id": "event-0002",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/03-t5-actual.sbatch",
+      "reason": "Append versioned T5 actual-error recount and operation-specific ideal repair. Preserve first-pass results; same real predictions, GT and thresholds. Run after current T3 offline screening.",
+      "at": "2026-11-16 05:12:49"
+    },
+    {
+      "event_id": "event-0003",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/04-t3-interior.sbatch",
+      "reason": "Actual image review found two selected examples clipped by image edges. Preserve initial pool; versioned strict whole-instance pool rejects a scene-direction if any GT instance touches image boundary, never deletes individual GT members; same DINO/RGB thresholds; report shortage honestly.",
+      "at": "2026-11-16 05:16:09"
+    },
+    {
+      "event_id": "event-0004",
+      "action": "add",
+      "job": "/guisongxia01/pangchao/wangyihan/wyh/exp-loop/experiments/cd-task-reconstruct-cpu-20261116/jobs/05-t5-visual.sbatch",
+      "reason": "Visual review replaces three clipped/merged lesions with existing clearer candidates, unchanged source masks. WHU only demolition candidate official GT covers partial shed: keep as explicitly failed diagnostic, not qualifying sample. Export five valid pending-review samples plus one diagnostic; record shortage1.",
+      "at": "2026-11-16 05:24:09"
+    },
+    {
+      "event_id": "event-0005",
+      "action": "finish",
+      "reason": "Offline sample reconstruction completed and archived. T5 valid5 with WHU demolition shortage1; T3 strict pool5 selected3. Await human visual review, no further construction.",
+      "at": "2026-11-16 05:41:44"
+    }
+  ],
+  "finalize_attempts": 1,
+  "git_committed": false,
+  "git_pushed": false,
+  "notified": false,
+  "stop_reason": "Offline sample reconstruction completed and archived. T5 valid5 with WHU demolition shortage1; T3 strict pool5 selected3. Await human visual review, no further construction.",
+  "finished_at": "2026-11-16 05:41:44",
+  "elapsed_seconds": 1956.8
+}
