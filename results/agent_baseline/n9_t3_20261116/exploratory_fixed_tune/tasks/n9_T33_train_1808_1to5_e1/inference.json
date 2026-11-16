@@ -1,0 +1,194 @@
+{
+  "raw_candidates": 150,
+  "r1_candidates": 12,
+  "r1_raw_ids": [
+    9,
+    12,
+    15,
+    18,
+    28,
+    39,
+    48,
+    56,
+    57,
+    67,
+    92,
+    106
+  ],
+  "clean_candidates": 12,
+  "clean_original_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "cleaning": [],
+  "same_image": false,
+  "original_delta_scores": [
+    -0.03390156850218773,
+    0.00770425284281373,
+    0.028809446841478348,
+    0.07237188518047333,
+    -0.010707114823162556,
+    0.4577924907207489,
+    -0.015290466137230396,
+    0.10950233042240143,
+    0.19087359309196472,
+    0.0017155366949737072,
+    0.005691853817552328,
+    0.31314799189567566
+  ],
+  "original_delta_order": [
+    5,
+    11,
+    8,
+    7,
+    3,
+    2,
+    1,
+    10,
+    9,
+    4,
+    6,
+    0
+  ],
+  "clean_scores": {
+    "delta": [
+      -0.03390156850218773,
+      0.00770425284281373,
+      0.028809446841478348,
+      0.07237188518047333,
+      -0.010707114823162556,
+      0.4577924907207489,
+      -0.015290466137230396,
+      0.10950233042240143,
+      0.19087359309196472,
+      0.0017155366949737072,
+      0.005691853817552328,
+      0.31314799189567566
+    ],
+    "joint": [
+      0.235385924577713,
+      0.23399487137794495,
+      0.2643211781978607,
+      0.2637671232223511,
+      0.24557538330554962,
+      0.4918721914291382,
+      0.17568117380142212,
+      0.2288866639137268,
+      0.28501129150390625,
+      0.1814965307712555,
+      0.2403169423341751,
+      0.403290331363678
+    ]
+  },
+  "clean_orders": {
+    "delta": [
+      5,
+      11,
+      8,
+      7,
+      3,
+      2,
+      1,
+      10,
+      9,
+      4,
+      6,
+      0
+    ],
+    "joint": [
+      5,
+      11,
+      8,
+      2,
+      3,
+      4,
+      10,
+      0,
+      1,
+      7,
+      9,
+      6
+    ]
+  },
+  "input_policy": "RGB query pair, RGB reference pair, E, SAM proposals and DINO features only; no GT/classes/task identifiers",
+  "fresh_example_features": true,
+  "net_region_features_recomputed": true,
+  "global_gate": false,
+  "semantic_route": false,
+  "micro_overlap_policy": "C minus E; no minimum net area or score threshold",
+  "input_identity": [
+    {
+      "path": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1808.png",
+      "size": 276558,
+      "mtime": 1602232178000000000
+    },
+    {
+      "path": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1808.png",
+      "size": 302059,
+      "mtime": 1602232178000000000
+    },
+    {
+      "path": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2796.png",
+      "size": 403092,
+      "mtime": 1602232606000000000
+    },
+    {
+      "path": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2796.png",
+      "size": 425921,
+      "mtime": 1602232606000000000
+    },
+    {
+      "path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/tune/n9_T33_train_1808_1to5_e1/example.png",
+      "size": 635,
+      "mtime": 1794799182278326274
+    }
+  ],
+  "vision_calls": [
+    {
+      "operation": "segment_everything",
+      "time": "t1",
+      "source": "exact_source_cache",
+      "cache": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/vision"
+    },
+    {
+      "operation": "segment_everything",
+      "time": "t2",
+      "source": "exact_source_cache",
+      "cache": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/vision"
+    },
+    {
+      "operation": "extract_features",
+      "time": "t1",
+      "source": "exact_source_cache",
+      "cache": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/vision"
+    },
+    {
+      "operation": "extract_features",
+      "time": "t2",
+      "source": "exact_source_cache",
+      "cache": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3_diag/cache/vision"
+    },
+    {
+      "operation": "extract_features",
+      "time": "t1",
+      "source": "live_local_worker",
+      "cache": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/exploratory_fixed_tune/vision_cache"
+    },
+    {
+      "operation": "extract_features",
+      "time": "t2",
+      "source": "live_local_worker",
+      "cache": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/exploratory_fixed_tune/vision_cache"
+    }
+  ]
+}

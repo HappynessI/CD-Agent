@@ -2831,3 +2831,7 @@ N9 clean构造已完成1692候选：T3.1 tune/confirm/report=116/106/450，T3.3=
 N9补漏8项在线相关契约测试已通过；首次填充因Python环境缺mmseg失败，已切换到已有SegEarth环境ovcd-de-env续跑。最新clean产物推送遇Git对象读取错误，正在恢复；正式数据批准和实际效果评测仍未完成。
 
 N9独立六例中文数据审核页已交付：[审核页](../../results/agent_baseline/n9_t3_data_review/index.html)。现有8876服务的 `/review-pages/n9_t3_data_review/index.html` 返回200；可SSH转发8876。15项测试与133链接检查通过；旧任务审计2127/2128，312空任务独立封存，1条旧mask读取故障保留。全部clean仍pending_review，已请求开发集人工批准，尚未启动正式confirm/online；探索性tune与补漏继续。意见在浏览器本地保存，需导出，不自动批准正式任务。
+
+N9探索性tune298任务已完成（187613，API¥0）：T3.1 delta Top8 F1 12.43881→15.02897（+2.59016），P/R均升但FP增加91931；T3.3 joint Top8 9.94386→10.28236（+0.33850），目标类反而退化，低召回仍突出。已按各类型tune冻结选择，继续逐例诊断；数据未获明确批准，正式confirm/online未运行。完整分组见 `results/agent_baseline/n9_t3_20261116/exploratory_fixed_tune/report_T31_T33.md`。clean候选及审核页Git推送已恢复成功。
+
+N9逐例诊断已完成：T3.1 delta8为27胜/55平/34负，macro仅+0.50805；R1后池覆盖约20%，去自匹配本身仅损1090覆盖像素。继续只读缓存区分原SAM/R1过滤损失并导出最终预测，冻结方法不变。2项完整confirm入口契约测试通过；该入口尚未正式执行。
