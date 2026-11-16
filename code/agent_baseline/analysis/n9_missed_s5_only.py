@@ -133,6 +133,7 @@ def main():
     if a.command=='reuse':reuse(a);return
     pipeline,score=install()
     if a.command=='score':
+        a.allow_abstain=True
         score.score(a)
         if a.split=='confirm':
             path=a.out/'offline_decision.json';decisions=read(path)

@@ -49,7 +49,7 @@ def candidate_indices(candidates, config):
     enabled = SOURCES if config.get('sources', 'all') == 'all' else ('S1_02', 'S2', 'S5')
     accepted = [c for c in candidates if (set(c.get('sources', SOURCES)) & set(enabled))
                 and c['semantic_delta'] >= config['semantic']
-                and c['dino'] >= config['dino']]
+                and (config['dino'] is None or c['dino'] >= config['dino'])]
     accepted.sort(key=lambda c: (-(max(c['semantic_delta'], 0.) * max(c['dino'], 0.)
                                   * c['area'] ** config['alpha']), c['index']))
     return [c['index'] for c in accepted[:config['k']]]

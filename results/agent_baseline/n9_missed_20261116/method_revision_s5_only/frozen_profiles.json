@@ -1,0 +1,326 @@
+{
+  "profiles": {
+    "any": {
+      "config": {
+        "profile": "any",
+        "semantic": 0.4,
+        "dino": 0.4,
+        "alpha": 0.0,
+        "verifier": "V2",
+        "k": 3,
+        "sources": "S1_S2_S5"
+      },
+      "split": "tune",
+      "lines": {
+        "levir_any": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 1244041,
+            "fp": 212470,
+            "fn": 342183,
+            "f1": 81.77123541813533,
+            "precision": 85.41239990635155,
+            "recall": 78.42782608257093
+          },
+          "after": {
+            "tp": 1246005,
+            "fp": 213299,
+            "fn": 340219,
+            "f1": 81.82522045438427,
+            "precision": 85.38351159182734,
+            "recall": 78.5516421388152
+          },
+          "delta_f1": 0.053985036248931806,
+          "macro_baseline": {
+            "f1": 71.27269319007537,
+            "precision": 72.42967964144441,
+            "recall": 72.45597099355005
+          },
+          "macro_after": {
+            "f1": 71.27554921831997,
+            "precision": 72.38401120181074,
+            "recall": 72.4875064524761
+          },
+          "macro_delta": 0.0028560282445897183,
+          "added_tp": 1964,
+          "added_fp": 829,
+          "wins": 1,
+          "losses": 2,
+          "ties": 27,
+          "harm_rate": 0.06666666666666667,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 34,
+          "vlm_trigger_rate": 0.4666666666666667,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.0084612,
+          "empty_gt_tasks": 3,
+          "empty_gt_fp": 0,
+          "empty_gt_added_fp": 0
+        },
+        "whu_any": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 259920,
+            "fp": 26853,
+            "fn": 273716,
+            "f1": 63.36351746506925,
+            "precision": 90.63614775449571,
+            "recall": 48.70735857400925
+          },
+          "after": {
+            "tp": 277087,
+            "fp": 30472,
+            "fn": 256549,
+            "f1": 65.8793739858178,
+            "precision": 90.09230749222101,
+            "recall": 51.924345433966224
+          },
+          "delta_f1": 2.5158565207485424,
+          "macro_baseline": {
+            "f1": 30.55842763288482,
+            "precision": 34.1146577635443,
+            "recall": 32.762488050274214
+          },
+          "macro_after": {
+            "f1": 32.84198399450211,
+            "precision": 39.1173996239007,
+            "recall": 34.567553761694896
+          },
+          "macro_delta": 2.283556361617292,
+          "added_tp": 17167,
+          "added_fp": 3619,
+          "wins": 4,
+          "losses": 2,
+          "ties": 24,
+          "harm_rate": 0.06666666666666667,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 29,
+          "vlm_trigger_rate": 0.4,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.0072962,
+          "empty_gt_tasks": 12,
+          "empty_gt_fp": 4583,
+          "empty_gt_added_fp": 826
+        }
+      },
+      "equal_line_delta_f1": 1.284920778498737
+    },
+    "build": {
+      "config": {
+        "profile": "build",
+        "semantic": 0.05,
+        "dino": null,
+        "alpha": 0.5,
+        "verifier": "V3",
+        "k": 10,
+        "sources": "all"
+      },
+      "split": "tune",
+      "lines": {
+        "second_appeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 361182,
+            "fp": 57738,
+            "fn": 395629,
+            "f1": 61.43956398189722,
+            "precision": 86.21741621311945,
+            "recall": 47.72420062604798
+          },
+          "after": {
+            "tp": 519769,
+            "fp": 142665,
+            "fn": 237042,
+            "f1": 73.24584550236217,
+            "precision": 78.4635148558196,
+            "recall": 68.67883791329672
+          },
+          "delta_f1": 11.80628152046495,
+          "macro_baseline": {
+            "f1": 39.76254206254327,
+            "precision": 56.901434709350966,
+            "recall": 37.4649669476569
+          },
+          "macro_after": {
+            "f1": 53.96937385678371,
+            "precision": 60.81044178846034,
+            "recall": 55.20913958742711
+          },
+          "macro_delta": 14.206831794240438,
+          "added_tp": 158587,
+          "added_fp": 84927,
+          "wins": 17,
+          "losses": 7,
+          "ties": 6,
+          "harm_rate": 0.23333333333333334,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 241,
+          "vlm_trigger_rate": 0.9333333333333333,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.054980799999999996,
+          "empty_gt_tasks": 1,
+          "empty_gt_fp": 3054,
+          "empty_gt_added_fp": 0
+        },
+        "whu_appeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 258422,
+            "fp": 29318,
+            "fn": 259864,
+            "f1": 64.12249728916933,
+            "precision": 89.81094043233475,
+            "recall": 49.86088761803329
+          },
+          "after": {
+            "tp": 400575,
+            "fp": 102601,
+            "fn": 117711,
+            "f1": 78.43169887866607,
+            "precision": 79.609321589265,
+            "recall": 77.28840833053565
+          },
+          "delta_f1": 14.309201589496737,
+          "macro_baseline": {
+            "f1": 28.995468978049516,
+            "precision": 32.64381548316174,
+            "recall": 30.657824811681685
+          },
+          "macro_after": {
+            "f1": 32.61470989502485,
+            "precision": 32.624697561437515,
+            "recall": 37.629391510178465
+          },
+          "macro_delta": 3.6192409169753414,
+          "added_tp": 142153,
+          "added_fp": 73283,
+          "wins": 5,
+          "losses": 8,
+          "ties": 17,
+          "harm_rate": 0.26666666666666666,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 196,
+          "vlm_trigger_rate": 0.8333333333333334,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.0449632,
+          "empty_gt_tasks": 15,
+          "empty_gt_fp": 11273,
+          "empty_gt_added_fp": 6617
+        }
+      },
+      "equal_line_delta_f1": 13.057741554980844
+    },
+    "demolish": {
+      "config": {
+        "profile": "demolish",
+        "semantic": 0.2,
+        "dino": null,
+        "alpha": 0.0,
+        "verifier": "V4",
+        "k": 15,
+        "sources": "S1_S2_S5"
+      },
+      "split": "tune",
+      "lines": {
+        "second_disappeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 33862,
+            "fp": 35128,
+            "fn": 89712,
+            "f1": 35.16960594919092,
+            "precision": 49.082475721119,
+            "recall": 27.402204347192775
+          },
+          "after": {
+            "tp": 38583,
+            "fp": 36977,
+            "fn": 84991,
+            "f1": 38.75079092470397,
+            "precision": 51.06273160402329,
+            "recall": 31.222587275640507
+          },
+          "delta_f1": 3.581184975513054,
+          "macro_baseline": {
+            "f1": 16.28248973729737,
+            "precision": 22.377787972745693,
+            "recall": 16.310965859871043
+          },
+          "macro_after": {
+            "f1": 17.010605227800916,
+            "precision": 22.326267265902306,
+            "recall": 17.000706424476057
+          },
+          "macro_delta": 0.7281154905035431,
+          "added_tp": 4721,
+          "added_fp": 1849,
+          "wins": 2,
+          "losses": 0,
+          "ties": 28,
+          "harm_rate": 0.0,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 64,
+          "vlm_trigger_rate": 0.5333333333333333,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.014760800000000004,
+          "empty_gt_tasks": 8,
+          "empty_gt_fp": 1023,
+          "empty_gt_added_fp": 0
+        },
+        "whu_disappeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 2308,
+            "fp": 5576,
+            "fn": 9598,
+            "f1": 23.324911571500756,
+            "precision": 29.274479959411465,
+            "recall": 19.38518394087015
+          },
+          "after": {
+            "tp": 2308,
+            "fp": 10403,
+            "fn": 9598,
+            "f1": 18.75126944794248,
+            "precision": 18.157501376760287,
+            "recall": 19.38518394087015
+          },
+          "delta_f1": -4.573642123558276,
+          "macro_baseline": {
+            "f1": 9.56194892308296,
+            "precision": 9.272369691555218,
+            "recall": 9.886250838771268
+          },
+          "macro_after": {
+            "f1": 9.56194892308296,
+            "precision": 9.272369691555218,
+            "recall": 9.886250838771268
+          },
+          "macro_delta": 0.0,
+          "added_tp": 0,
+          "added_fp": 4827,
+          "wins": 0,
+          "losses": 0,
+          "ties": 30,
+          "harm_rate": 0.0,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 44,
+          "vlm_trigger_rate": 0.5333333333333333,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.010137600000000002,
+          "empty_gt_tasks": 25,
+          "empty_gt_fp": 9346,
+          "empty_gt_added_fp": 4827
+        }
+      },
+      "equal_line_delta_f1": -0.4962285740226111
+    }
+  },
+  "criterion": "Each profile independently maximizes equal mean of its two tune-line delta F1 values; ties fewer calls, smaller K, fixed enumeration"
+}

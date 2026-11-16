@@ -9,12 +9,16 @@ set -euo pipefail
 : "${BAILIAN_CSV:?Workspace credential path}"
 PART=${1:?tune or confirm}
 ROOT=/guisongxia01/pangchao/wangyihan/wyh
-export PYTHONPATH="$ROOT/cd-agent-worktrees/n7-missed/code:$ROOT/exp6_staging/agent_baseline_run/code_w/ovcd_v0"
+export PYTHONPATH="$ROOT/CD-Agent/code:$ROOT/exp6_staging/agent_baseline_run/code_w/ovcd_v0"
 export OVCD_CODE="$ROOT/exp6_staging/agent_baseline_run/code_w/ovcd_v0"
 export PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 while IFS= read -r var; do if [[ ${var,,} == *proxy* ]]; then unset "$var"; fi; done < <(compgen -e)
 PY=/guisongxia01/pangchao/wangyihan/conda_envs/exp5-env/bin/python
-"$PY" -B -m unittest agent_baseline.tests.test_n9_missed_s5_only
+if [[ "$PART" == "confirm" ]]; then
+  "$PY" -B -m unittest agent_baseline.tests.test_n9_missed_runtime_none_reconstruction agent_baseline.tests.test_n9_missed_score_integration
+else
+  "$PY" -B -m unittest agent_baseline.tests.test_n9_missed_s5_only agent_baseline.tests.test_n9_missed_score_abstain
+fi
 "$PY" -B -m agent_baseline.analysis.n9_missed_s5_only initialize
 "$PY" -B -m agent_baseline.analysis.n9_missed_s5_only prepare --split "$PART"
 "$PY" -B -m agent_baseline.analysis.n9_missed_s5_only reuse --split "$PART"

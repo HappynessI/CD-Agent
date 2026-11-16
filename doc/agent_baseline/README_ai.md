@@ -1,5 +1,9 @@
 # Agent baseline：给 AI 看的开发文档
 
+> 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm已提交，尚无确认结论。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
+
+> 2026-11-16 最新授权：用户明确允许继续单轮API核验并完成补漏实验。恢复S5-only修正版tune→冻结三参数档位→分任务confirm；原有数据审核停止点及禁止多轮在线Agent不变。解析失败按unknown弃权计数，不添加候选，不篡改原回复。
+
 日期：2026-11-03。读者：服务器上负责实现和运行的 Claude 会话，以及之后接手的任何 AI 会话。
 自 2026-11-13 起，本文件是唯一维护的技术 README；`index.html` 保留历史展示，不再要求同步更新。`task_plan.md`、`findings.md`、`progress.md` 保留为流程文档。
 
@@ -13,7 +17,7 @@
 
 此次数据构造复核发现并修正了三种真实问题：T5填洞支撑区域不等于真实FP，错误计数须交原预测；局部理论修复须区分补检/剔除/修边；T3高相似示例仍可能被图像边界裁断，最终送审要求整组GT不触边、不删减GT。T4.4现有六类模型缺道路通道，已离线补显式道路语义，不把非植被地表改称道路。所有中间版本和原预测保持不变。
 
-FM原版1741次单轮核验已完成，实际¥0.415421；3次因256-token输出截断导致JSON不可解析。离线敏感性报告将其记为invalid_abstain，不添加候选、不改写为no。代码审计确认原build/demolish额外将DINO≥.2施加于所有净候选，另建S5-only修正版，不依据结果择优。新版本2280个请求位已精确复用1693份答案，587份缺新核验；新增API提交被自动审批拒绝，故未正式冻结或进入confirm。详情见 `results/agent_baseline/n9_missed_20261116/offline_status_report.md`。
+FM原版1741次核验及3次截断弃权记录保持不变。此前自动审批拒绝已由用户明确单轮API授权解除；修正版587份缺失核验现已完成，参数已冻结，当前推进独立confirm。调参结果及原始证据见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md`。
 
 ---
 

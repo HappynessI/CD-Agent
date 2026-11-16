@@ -1,5 +1,9 @@
 # task_plan.md — Change Detection Agent 研究与实验迭代计划
 
+> 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm已提交，尚无确认结论。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
+
+> 2026-11-16 最新授权：用户明确允许继续单轮API核验并完成补漏实验。恢复S5-only修正版tune→冻结三参数档位→分任务confirm；原有数据审核停止点及禁止多轮在线Agent不变。解析失败按unknown弃权计数，不添加候选，不篡改原回复。
+
 ## 2026-11-16 当前：统一离线数据重构与静态抽样审核
 
 - [x] 同步新规范；旧N9 T3数据已被用户否决，保留历史结果，取消其正式confirm/online。

@@ -34,6 +34,8 @@ def summarize_line(rows):
         macro_delta=float(np.mean([r['delta_f1'] for r in rows])),
         added_tp=sum(r['added_tp'] for r in rows), added_fp=sum(r['added_fp'] for r in rows),
         wins=wins, losses=losses, ties=len(rows)-wins-losses, harm_rate=losses/len(rows),
+        invalid_calls=sum(len(r.get('invalid_answers',[])) for r in rows),
+        tasks_with_invalid=sum(bool(r.get('invalid_answers')) for r in rows),
         calls=sum(r['calls'] for r in rows), vlm_trigger_rate=sum(r['calls']>0 for r in rows)/len(rows),
         candidate_generation_rate=1., counterfactual_answer_cost_cny=sum(r['answer_cost_cny'] for r in rows),
         empty_gt_tasks=len(empty), empty_gt_fp=sum(r['after']['fp'] for r in empty),
@@ -57,6 +59,14 @@ def sensitivity(rows):
         pooled_delta_ci=interval[:,0].tolist(), macro_delta_ci=interval[:,1].tolist(), leave_one_image_out=loo)
 
 
+def answer_action(answer, allow_abstain=False):
+    value=answer.get('answer')
+    if value=='yes':return True
+    if value=='no':return False
+    if allow_abstain:return None
+    raise RuntimeError('Unresolved verifier response')
+
+
 def score(a):
     refs = {(r['group'], r['stem']): r['task'] for r in read(a.out/'evaluation_manifest.json')}
     cases = {}; metadata = {}
@@ -71,19 +81,20 @@ def score(a):
         for config in configs_for(a.out, item['profile'], a.split):
             key = config_key(config); metadata[key] = config
             indexes = state['rankings'][key]; pred = base.copy(); covered = np.zeros_like(base)
-            accepted = []; charge = 0.
+            accepted = []; invalid = []; charge = 0.
             for i in indexes:
                 uid = f"{item['group']}__{item['stem']}__n9_{i:04d}"
                 answer = read(a.out/'answers'/config['verifier']/(uid+'.json'))
-                if answer.get('answer') not in ('yes','no'):
-                    raise RuntimeError('Unresolved response: '+uid+' '+config['verifier'])
+                action=answer_action(answer,getattr(a,'allow_abstain',False))
                 covered |= masks[i]; charge += answer.get('cost_cny',0.)
-                if answer['answer'] == 'yes': pred |= masks[i]; accepted.append(i)
+                if action is None:
+                    invalid.append(dict(uid=uid,variant=config['verifier'],finish_reason=answer.get('finish_reason'),answer=answer.get('answer'),decision='invalid_abstain'))
+                elif action: pred |= masks[i]; accepted.append(i)
             after = metric(pred, truth, valid)
             cases.setdefault(key, []).append(dict(group=item['group'], stem=item['stem'], profile=item['profile'], split=a.split,
                 config=config, baseline=before, after=after, delta_f1=after['f1']-before['f1'],
                 added_tp=after['tp']-before['tp'], added_fp=after['fp']-before['fp'],
-                calls=len(indexes), submitted_indexes=indexes, accepted_indexes=accepted, answer_cost_cny=charge,
+                calls=len(indexes), invalid_answers=invalid, submitted_indexes=indexes, accepted_indexes=accepted, answer_cost_cny=charge,
                 topk_candidate_tp=int((covered & truth & ~base & valid).sum()),
                 topk_candidate_fp=int((covered & ~truth & ~base & valid).sum()),
                 baseline_path=item['base'], candidate_masks=item['masks'], gt_path=reference['gt_mask'],
