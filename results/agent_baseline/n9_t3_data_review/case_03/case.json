@@ -1,0 +1,123 @@
+{
+  "review_id": "N9审查03",
+  "version": "旧版",
+  "task_type": "T3.3",
+  "id": "train_1136_T33_2to1",
+  "split": "tune",
+  "transition_cn": "非植被地表→低矮植被",
+  "geometry": {
+    "area": 332,
+    "hole_pixels": 0,
+    "hole_ratio": 0.0,
+    "bbox": [
+      70,
+      73,
+      111,
+      92
+    ],
+    "bbox_fill": 0.42618741976893454,
+    "components": 1
+  },
+  "query_support": {
+    "pixels": 148565,
+    "components": 28,
+    "largest_component": 113086
+  },
+  "automatic_reasons": [],
+  "explanation_cn": "通过固定自动几何筛选；仍待人工审核，未获正式评测批准",
+  "review_status": "pending_review",
+  "decision_cn": "待人工审核",
+  "note_cn": "",
+  "source_task": {
+    "change_direction": "any",
+    "constraint": null,
+    "examples": [
+      {
+        "image_t1": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_1136_T33_2to1/0/t1.png",
+        "image_t2": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_1136_T33_2to1/0/t2.png",
+        "mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_1136_T33_2to1/0/mask.png",
+        "role": "positive"
+      }
+    ],
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/truth/train_1136_T33_2to1.png",
+    "id": "train_1136_T33_2to1",
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1136.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1136.png",
+    "init_mask": null,
+    "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary change mask.",
+    "meta": {
+      "example_provenance": [
+        {
+          "area": 332,
+          "bbox": [
+            418,
+            222,
+            459,
+            241
+          ],
+          "component": 10,
+          "crop_box": [
+            348,
+            149,
+            512,
+            313
+          ],
+          "name": "train_2743.png",
+          "role": "positive",
+          "source": 2,
+          "target": 1
+        }
+      ],
+      "seed": 14634,
+      "transition": "2->1"
+    },
+    "target": "any change",
+    "task_type": "T3.3"
+  },
+  "assets": {
+    "example_t1": {
+      "path": "case_03/example_t1.png",
+      "title": "示例图 T1 原图（完整原生视野）"
+    },
+    "example_overlay_t1": {
+      "path": "case_03/example_overlay_t1.png",
+      "title": "示例图 T1 红色支持区；孔洞不着色"
+    },
+    "query_t1": {
+      "path": "case_03/query_t1.png",
+      "title": "查询图 T1 原图"
+    },
+    "query_remaining_t1": {
+      "path": "case_03/query_remaining_t1.png",
+      "title": "查询图 T1 可检索真值（绿色，仅审核）"
+    },
+    "example_t2": {
+      "path": "case_03/example_t2.png",
+      "title": "示例图 T2 原图（完整原生视野）"
+    },
+    "example_overlay_t2": {
+      "path": "case_03/example_overlay_t2.png",
+      "title": "示例图 T2 红色支持区；孔洞不着色"
+    },
+    "query_t2": {
+      "path": "case_03/query_t2.png",
+      "title": "查询图 T2 原图"
+    },
+    "query_remaining_t2": {
+      "path": "case_03/query_remaining_t2.png",
+      "title": "查询图 T2 可检索真值（绿色，仅审核）"
+    },
+    "example_mask": {
+      "path": "case_03/example_mask.png",
+      "title": "示例二值掩码：白色有效，黑色不属于示例"
+    },
+    "query_gt": {
+      "path": "case_03/query_gt.png",
+      "title": "完整转换真值：白色目标（仅审核）"
+    },
+    "query_remaining_gt": {
+      "path": "case_03/query_remaining_gt.png",
+      "title": "T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"
+    }
+  }
+}

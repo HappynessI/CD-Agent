@@ -6,7 +6,8 @@
 - [x] fetch、检查工作区、pull --rebase同步研究分支，完整阅读N9；N8两队列已完成归档通知，无遗留实验。
 - [x] T3完整候选来源与图像划分审计；冻结E几何口径，构建1692条独立T3.1/T3.3 clean候选（全部pending_review）。
 - [ ] 旧任务逐例审计与旧空任务归档；处理已记录的旧mask读取阻塞，保留原始文件。
-- [ ] 独立中文审核页：旧3+新3、逐例中文意见及可下载记录，全部pending_review；不放入demo_g3。
+- [x] 独立中文审核页：旧3+新3、逐例中文意见及可下载记录，HTTP200与133链接通过，全部pending_review；不放入demo_g3。
+- [ ] 等待用户明确批准clean开发集；其间继续探索性tune与FM，不运行正式T3confirm/online。
 - [ ] T3去自匹配固定检索与在线代码准备。正式clean confirm/online须用户明确批准；确认任务不足20如实报告，不跨划分补数。
 - [ ] FM按any/build/demolish独立tune、冻结，同profile统一配置但逐数据集/任务行独立确认，不计算跨数据集pooled晋级值。
 - [ ] 正向FM任务行按10任务×两臂×三seed真实在线，保留全部正常失败与费用。

@@ -1,0 +1,152 @@
+{
+  "review_id": "N9审查05",
+  "version": "新版候选",
+  "task_type": "T3.3",
+  "id": "n9_T33_train_1177_1to3_e26",
+  "split": "confirm",
+  "transition_cn": "低矮植被→树木",
+  "geometry": {
+    "area": 122,
+    "hole_pixels": 0,
+    "hole_ratio": 0.0,
+    "bbox": [
+      492,
+      440,
+      512,
+      460
+    ],
+    "bbox_fill": 0.305,
+    "components": 1
+  },
+  "query_support": {
+    "pixels": 204,
+    "components": 1,
+    "largest_component": 204
+  },
+  "automatic_reasons": [],
+  "explanation_cn": "通过固定自动几何筛选；仍待人工审核，未获正式评测批准",
+  "review_status": "pending_review",
+  "decision_cn": "待人工审核",
+  "note_cn": "",
+  "source_task": {
+    "id": "n9_T33_train_1177_1to3_e26",
+    "task_type": "T3.3",
+    "target": "any change",
+    "change_direction": "any",
+    "instruction": "Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.",
+    "constraint": null,
+    "init_mask": null,
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1177.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1177.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/confirm/n9_T33_train_1177_1to3_e26/gt.png",
+    "review_status": "pending_review",
+    "meta": {
+      "review_status": "pending_review",
+      "data_version": "N9-clean-candidate",
+      "split": "confirm",
+      "old_id": "train_1177_T33_1to3",
+      "transition": "1->3",
+      "transition_cn": "低矮植被→树木",
+      "example_provenance": [
+        {
+          "name": "train_626.png",
+          "source": 1,
+          "target": 3,
+          "component": 26,
+          "geometry": {
+            "area": 122,
+            "hole_pixels": 0,
+            "hole_ratio": 0.0,
+            "bbox": [
+              492,
+              440,
+              512,
+              460
+            ],
+            "bbox_fill": 0.305,
+            "components": 1
+          }
+        }
+      ],
+      "geometry": {
+        "area": 122,
+        "hole_pixels": 0,
+        "hole_ratio": 0.0,
+        "bbox": [
+          492,
+          440,
+          512,
+          460
+        ],
+        "bbox_fill": 0.305,
+        "components": 1
+      },
+      "query_support": {
+        "pixels": 204,
+        "components": 1,
+        "largest_component": 204
+      },
+      "inference_whitelist": [
+        "image_t1",
+        "image_t2",
+        "instruction",
+        "examples"
+      ],
+      "gt_policy": "full original directed-transition pixels; exclude E only at T3.1 scoring"
+    },
+    "examples": [
+      {
+        "role": "positive",
+        "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_626.png",
+        "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_626.png",
+        "mask": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/confirm/n9_T33_train_1177_1to3_e26/example.png"
+      }
+    ]
+  },
+  "assets": {
+    "example_t1": {
+      "path": "case_05/example_t1.png",
+      "title": "示例图 T1 原图（完整原生视野）"
+    },
+    "example_overlay_t1": {
+      "path": "case_05/example_overlay_t1.png",
+      "title": "示例图 T1 红色支持区；孔洞不着色"
+    },
+    "query_t1": {
+      "path": "case_05/query_t1.png",
+      "title": "查询图 T1 原图"
+    },
+    "query_remaining_t1": {
+      "path": "case_05/query_remaining_t1.png",
+      "title": "查询图 T1 可检索真值（绿色，仅审核）"
+    },
+    "example_t2": {
+      "path": "case_05/example_t2.png",
+      "title": "示例图 T2 原图（完整原生视野）"
+    },
+    "example_overlay_t2": {
+      "path": "case_05/example_overlay_t2.png",
+      "title": "示例图 T2 红色支持区；孔洞不着色"
+    },
+    "query_t2": {
+      "path": "case_05/query_t2.png",
+      "title": "查询图 T2 原图"
+    },
+    "query_remaining_t2": {
+      "path": "case_05/query_remaining_t2.png",
+      "title": "查询图 T2 可检索真值（绿色，仅审核）"
+    },
+    "example_mask": {
+      "path": "case_05/example_mask.png",
+      "title": "示例二值掩码：白色有效，黑色不属于示例"
+    },
+    "query_gt": {
+      "path": "case_05/query_gt.png",
+      "title": "完整转换真值：白色目标（仅审核）"
+    },
+    "query_remaining_gt": {
+      "path": "case_05/query_remaining_gt.png",
+      "title": "T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"
+    }
+  }
+}

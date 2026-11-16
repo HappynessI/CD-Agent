@@ -1,0 +1,301 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>N9 T3 独立任务数据审核</title><style>
+body{margin:0;background:#f2f5f8;color:#172b3a;font:16px/1.7 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:24px}.card,header{background:white;border:1px solid #dce4eb;border-radius:12px;padding:24px;margin-bottom:24px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}figure{margin:0}img{width:100%;height:auto;display:block}figcaption{padding:8px;background:#f5f7fa}textarea{display:block;width:95%;min-height:90px}select,button{font-size:16px;padding:8px;margin:8px}pre{white-space:pre-wrap;word-break:break-all}h1,h2{line-height:1.3}@media(max-width:700px){.grid{grid-template-columns:1fr}main{padding:10px}.card{padding:14px}}
+</style><main><header><h1>N9 T3 任务数据审核：旧3例＋新3例</h1><p>这是任务数据审查，不是Agent回放。所有新任务均为候选，默认待人工审核；自动QC和本页六例意见都不等于整个clean数据集获批准。真值及目标类别仅供本页审核，禁止输入Agent。</p><p>前景八连通；背景四连通填洞；64≤示例面积≤4096；孔洞占比≤10%；边框填充率≥25%；查询目标≥64且有≥32像素组件。图像完整原生视野，点击可打开原图。未按模型成绩选例。</p><p>意见只保存在当前浏览器localStorage，不会写回服务器。请导出意见文件交给研究负责人；也可下载<a href="review_records.json">空白审核记录</a>填写。明确批准前不得正式confirm或online。</p><button id="export">导出本地中文审核意见</button><p id="notice">尚未提交人工批准</p></header><section class="card" id="case-1"><h2>N9审查01 · 旧版 · T3.1</h2><p>train_1065_1to5 ｜ 查询图：train_1065.png ｜ 划分：开发调参</p><p><strong>目标变化：低矮植被→建筑</strong>。同图示例：绿色查询目标已扣除红色示例E。</p><p>示例面积 14329 像素；孔洞占比 0.000%；边框填充率 43.123%。查询剩余目标 0 像素 / 0 连通组件，最大组件 0 像素。</p><p>自动结果：示例超过4096像素；查询目标少于64像素；查询没有至少32像素的目标组件</p><p>请检查示例是否指向真实目标、孔洞异类是否误导、是否是建筑群局部或细碎模糊区域；不要仅凭类别文字判断。</p><div class="grid"><figure><a href="case_01/example_t1.png"><img loading="lazy" src="case_01/example_t1.png" alt="示例图 T1 原图（完整原生视野）"></a><figcaption>示例图 T1 原图（完整原生视野）</figcaption></figure><figure><a href="case_01/example_overlay_t1.png"><img loading="lazy" src="case_01/example_overlay_t1.png" alt="示例图 T1 红色支持区；孔洞不着色"></a><figcaption>示例图 T1 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_01/query_t1.png"><img loading="lazy" src="case_01/query_t1.png" alt="查询图 T1 原图"></a><figcaption>查询图 T1 原图</figcaption></figure><figure><a href="case_01/query_remaining_t1.png"><img loading="lazy" src="case_01/query_remaining_t1.png" alt="查询图 T1 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T1 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_01/example_t2.png"><img loading="lazy" src="case_01/example_t2.png" alt="示例图 T2 原图（完整原生视野）"></a><figcaption>示例图 T2 原图（完整原生视野）</figcaption></figure><figure><a href="case_01/example_overlay_t2.png"><img loading="lazy" src="case_01/example_overlay_t2.png" alt="示例图 T2 红色支持区；孔洞不着色"></a><figcaption>示例图 T2 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_01/query_t2.png"><img loading="lazy" src="case_01/query_t2.png" alt="查询图 T2 原图"></a><figcaption>查询图 T2 原图</figcaption></figure><figure><a href="case_01/query_remaining_t2.png"><img loading="lazy" src="case_01/query_remaining_t2.png" alt="查询图 T2 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T2 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_01/example_mask.png"><img loading="lazy" src="case_01/example_mask.png" alt="示例二值掩码：白色有效，黑色不属于示例"></a><figcaption>示例二值掩码：白色有效，黑色不属于示例</figcaption></figure><figure><a href="case_01/query_gt.png"><img loading="lazy" src="case_01/query_gt.png" alt="完整转换真值：白色目标（仅审核）"></a><figcaption>完整转换真值：白色目标（仅审核）</figcaption></figure><figure><a href="case_01/query_remaining_gt.png"><img loading="lazy" src="case_01/query_remaining_gt.png" alt="T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"></a><figcaption>T3.1扣示例后目标 / T3.3完整查询目标（仅审核）</figcaption></figure></div><p>示例来源：与查询同图，原任务exemplar_mask</p><details><summary>原始路径与标注来源（只读）</summary><pre>{
+  &quot;id&quot;: &quot;train_1065_1to5&quot;,
+  &quot;task_type&quot;: &quot;T3.1&quot;,
+  &quot;target&quot;: &quot;any change&quot;,
+  &quot;change_direction&quot;: &quot;any&quot;,
+  &quot;instruction&quot;: &quot;Find all land-cover changes with the same transition as the marked example. Output a binary mask.&quot;,
+  &quot;constraint&quot;: null,
+  &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1065.png&quot;,
+  &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1065.png&quot;,
+  &quot;init_mask&quot;: null,
+  &quot;exemplar_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1065_1to5_exemplar.png&quot;,
+  &quot;gt_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1065_1to5_gt.png&quot;,
+  &quot;meta&quot;: {
+    &quot;transition&quot;: &quot;low vegetation -&gt; building&quot;
+  }
+}</pre></details><label>人工意见 <select data-review="N9审查01"><option>待人工审核</option><option>合理</option><option>不合理</option><option>存疑</option></select></label><label>中文备注 <textarea data-note="N9审查01" placeholder="说明示例指向、目标可检索性及疑问"></textarea></label></section><section class="card" id="case-2"><h2>N9审查02 · 旧版 · T3.1</h2><p>train_1129_2to5 ｜ 查询图：train_1129.png ｜ 划分：开发确认</p><p><strong>目标变化：非植被地表→建筑</strong>。同图示例：绿色查询目标已扣除红色示例E。</p><p>示例面积 15035 像素；孔洞占比 0.000%；边框填充率 60.265%。查询剩余目标 47619 像素 / 28 连通组件，最大组件 20869 像素。</p><p>自动结果：示例超过4096像素</p><p>请检查示例是否指向真实目标、孔洞异类是否误导、是否是建筑群局部或细碎模糊区域；不要仅凭类别文字判断。</p><div class="grid"><figure><a href="case_02/example_t1.png"><img loading="lazy" src="case_02/example_t1.png" alt="示例图 T1 原图（完整原生视野）"></a><figcaption>示例图 T1 原图（完整原生视野）</figcaption></figure><figure><a href="case_02/example_overlay_t1.png"><img loading="lazy" src="case_02/example_overlay_t1.png" alt="示例图 T1 红色支持区；孔洞不着色"></a><figcaption>示例图 T1 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_02/query_t1.png"><img loading="lazy" src="case_02/query_t1.png" alt="查询图 T1 原图"></a><figcaption>查询图 T1 原图</figcaption></figure><figure><a href="case_02/query_remaining_t1.png"><img loading="lazy" src="case_02/query_remaining_t1.png" alt="查询图 T1 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T1 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_02/example_t2.png"><img loading="lazy" src="case_02/example_t2.png" alt="示例图 T2 原图（完整原生视野）"></a><figcaption>示例图 T2 原图（完整原生视野）</figcaption></figure><figure><a href="case_02/example_overlay_t2.png"><img loading="lazy" src="case_02/example_overlay_t2.png" alt="示例图 T2 红色支持区；孔洞不着色"></a><figcaption>示例图 T2 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_02/query_t2.png"><img loading="lazy" src="case_02/query_t2.png" alt="查询图 T2 原图"></a><figcaption>查询图 T2 原图</figcaption></figure><figure><a href="case_02/query_remaining_t2.png"><img loading="lazy" src="case_02/query_remaining_t2.png" alt="查询图 T2 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T2 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_02/example_mask.png"><img loading="lazy" src="case_02/example_mask.png" alt="示例二值掩码：白色有效，黑色不属于示例"></a><figcaption>示例二值掩码：白色有效，黑色不属于示例</figcaption></figure><figure><a href="case_02/query_gt.png"><img loading="lazy" src="case_02/query_gt.png" alt="完整转换真值：白色目标（仅审核）"></a><figcaption>完整转换真值：白色目标（仅审核）</figcaption></figure><figure><a href="case_02/query_remaining_gt.png"><img loading="lazy" src="case_02/query_remaining_gt.png" alt="T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"></a><figcaption>T3.1扣示例后目标 / T3.3完整查询目标（仅审核）</figcaption></figure></div><p>示例来源：与查询同图，原任务exemplar_mask</p><details><summary>原始路径与标注来源（只读）</summary><pre>{
+  &quot;id&quot;: &quot;train_1129_2to5&quot;,
+  &quot;task_type&quot;: &quot;T3.1&quot;,
+  &quot;target&quot;: &quot;any change&quot;,
+  &quot;change_direction&quot;: &quot;any&quot;,
+  &quot;instruction&quot;: &quot;Find all land-cover changes with the same transition as the marked example. Output a binary mask.&quot;,
+  &quot;constraint&quot;: null,
+  &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1129.png&quot;,
+  &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1129.png&quot;,
+  &quot;init_mask&quot;: null,
+  &quot;exemplar_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1129_2to5_exemplar.png&quot;,
+  &quot;gt_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1129_2to5_gt.png&quot;,
+  &quot;meta&quot;: {
+    &quot;transition&quot;: &quot;non-vegetated ground -&gt; building&quot;
+  }
+}</pre></details><label>人工意见 <select data-review="N9审查02"><option>待人工审核</option><option>合理</option><option>不合理</option><option>存疑</option></select></label><label>中文备注 <textarea data-note="N9审查02" placeholder="说明示例指向、目标可检索性及疑问"></textarea></label></section><section class="card" id="case-3"><h2>N9审查03 · 旧版 · T3.3</h2><p>train_1136_T33_2to1 ｜ 查询图：train_1136.png ｜ 划分：开发调参</p><p><strong>目标变化：非植被地表→低矮植被</strong>。跨图双时相示例：示例图与查询图分别显示；查询GT不扣示例。</p><p>示例面积 332 像素；孔洞占比 0.000%；边框填充率 42.619%。查询剩余目标 148565 像素 / 28 连通组件，最大组件 113086 像素。</p><p>自动结果：通过固定自动几何筛选；仍待人工审核，未获正式评测批准</p><p>请检查示例是否指向真实目标、孔洞异类是否误导、是否是建筑群局部或细碎模糊区域；不要仅凭类别文字判断。</p><div class="grid"><figure><a href="case_03/example_t1.png"><img loading="lazy" src="case_03/example_t1.png" alt="示例图 T1 原图（完整原生视野）"></a><figcaption>示例图 T1 原图（完整原生视野）</figcaption></figure><figure><a href="case_03/example_overlay_t1.png"><img loading="lazy" src="case_03/example_overlay_t1.png" alt="示例图 T1 红色支持区；孔洞不着色"></a><figcaption>示例图 T1 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_03/query_t1.png"><img loading="lazy" src="case_03/query_t1.png" alt="查询图 T1 原图"></a><figcaption>查询图 T1 原图</figcaption></figure><figure><a href="case_03/query_remaining_t1.png"><img loading="lazy" src="case_03/query_remaining_t1.png" alt="查询图 T1 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T1 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_03/example_t2.png"><img loading="lazy" src="case_03/example_t2.png" alt="示例图 T2 原图（完整原生视野）"></a><figcaption>示例图 T2 原图（完整原生视野）</figcaption></figure><figure><a href="case_03/example_overlay_t2.png"><img loading="lazy" src="case_03/example_overlay_t2.png" alt="示例图 T2 红色支持区；孔洞不着色"></a><figcaption>示例图 T2 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_03/query_t2.png"><img loading="lazy" src="case_03/query_t2.png" alt="查询图 T2 原图"></a><figcaption>查询图 T2 原图</figcaption></figure><figure><a href="case_03/query_remaining_t2.png"><img loading="lazy" src="case_03/query_remaining_t2.png" alt="查询图 T2 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T2 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_03/example_mask.png"><img loading="lazy" src="case_03/example_mask.png" alt="示例二值掩码：白色有效，黑色不属于示例"></a><figcaption>示例二值掩码：白色有效，黑色不属于示例</figcaption></figure><figure><a href="case_03/query_gt.png"><img loading="lazy" src="case_03/query_gt.png" alt="完整转换真值：白色目标（仅审核）"></a><figcaption>完整转换真值：白色目标（仅审核）</figcaption></figure><figure><a href="case_03/query_remaining_gt.png"><img loading="lazy" src="case_03/query_remaining_gt.png" alt="T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"></a><figcaption>T3.1扣示例后目标 / T3.3完整查询目标（仅审核）</figcaption></figure></div><p>示例来源：[{&quot;area&quot;: 332, &quot;bbox&quot;: [418, 222, 459, 241], &quot;component&quot;: 10, &quot;crop_box&quot;: [348, 149, 512, 313], &quot;name&quot;: &quot;train_2743.png&quot;, &quot;role&quot;: &quot;positive&quot;, &quot;source&quot;: 2, &quot;target&quot;: 1}]</p><details><summary>原始路径与标注来源（只读）</summary><pre>{
+  &quot;change_direction&quot;: &quot;any&quot;,
+  &quot;constraint&quot;: null,
+  &quot;examples&quot;: [
+    {
+      &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_1136_T33_2to1/0/t1.png&quot;,
+      &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_1136_T33_2to1/0/t2.png&quot;,
+      &quot;mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/examples/train_1136_T33_2to1/0/mask.png&quot;,
+      &quot;role&quot;: &quot;positive&quot;
+    }
+  ],
+  &quot;gt_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/t3x/tasks/dev/truth/train_1136_T33_2to1.png&quot;,
+  &quot;id&quot;: &quot;train_1136_T33_2to1&quot;,
+  &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1136.png&quot;,
+  &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1136.png&quot;,
+  &quot;init_mask&quot;: null,
+  &quot;instruction&quot;: &quot;Find all changes with the same directed transition as the positive external before/after example. Output a binary change mask.&quot;,
+  &quot;meta&quot;: {
+    &quot;example_provenance&quot;: [
+      {
+        &quot;area&quot;: 332,
+        &quot;bbox&quot;: [
+          418,
+          222,
+          459,
+          241
+        ],
+        &quot;component&quot;: 10,
+        &quot;crop_box&quot;: [
+          348,
+          149,
+          512,
+          313
+        ],
+        &quot;name&quot;: &quot;train_2743.png&quot;,
+        &quot;role&quot;: &quot;positive&quot;,
+        &quot;source&quot;: 2,
+        &quot;target&quot;: 1
+      }
+    ],
+    &quot;seed&quot;: 14634,
+    &quot;transition&quot;: &quot;2-&gt;1&quot;
+  },
+  &quot;target&quot;: &quot;any change&quot;,
+  &quot;task_type&quot;: &quot;T3.3&quot;
+}</pre></details><label>人工意见 <select data-review="N9审查03"><option>待人工审核</option><option>合理</option><option>不合理</option><option>存疑</option></select></label><label>中文备注 <textarea data-note="N9审查03" placeholder="说明示例指向、目标可检索性及疑问"></textarea></label></section><section class="card" id="case-4"><h2>N9审查04 · 新版候选 · T3.1</h2><p>n9_T31_train_1166_2to3_e3 ｜ 查询图：train_1166.png ｜ 划分：开发调参</p><p><strong>目标变化：非植被地表→树木</strong>。同图示例：绿色查询目标已扣除红色示例E。</p><p>示例面积 275 像素；孔洞占比 0.000%；边框填充率 30.556%。查询剩余目标 296 像素 / 2 连通组件，最大组件 159 像素。</p><p>自动结果：通过固定自动几何筛选；仍待人工审核，未获正式评测批准</p><p>请检查示例是否指向真实目标、孔洞异类是否误导、是否是建筑群局部或细碎模糊区域；不要仅凭类别文字判断。</p><div class="grid"><figure><a href="case_04/example_t1.png"><img loading="lazy" src="case_04/example_t1.png" alt="示例图 T1 原图（完整原生视野）"></a><figcaption>示例图 T1 原图（完整原生视野）</figcaption></figure><figure><a href="case_04/example_overlay_t1.png"><img loading="lazy" src="case_04/example_overlay_t1.png" alt="示例图 T1 红色支持区；孔洞不着色"></a><figcaption>示例图 T1 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_04/query_t1.png"><img loading="lazy" src="case_04/query_t1.png" alt="查询图 T1 原图"></a><figcaption>查询图 T1 原图</figcaption></figure><figure><a href="case_04/query_remaining_t1.png"><img loading="lazy" src="case_04/query_remaining_t1.png" alt="查询图 T1 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T1 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_04/example_t2.png"><img loading="lazy" src="case_04/example_t2.png" alt="示例图 T2 原图（完整原生视野）"></a><figcaption>示例图 T2 原图（完整原生视野）</figcaption></figure><figure><a href="case_04/example_overlay_t2.png"><img loading="lazy" src="case_04/example_overlay_t2.png" alt="示例图 T2 红色支持区；孔洞不着色"></a><figcaption>示例图 T2 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_04/query_t2.png"><img loading="lazy" src="case_04/query_t2.png" alt="查询图 T2 原图"></a><figcaption>查询图 T2 原图</figcaption></figure><figure><a href="case_04/query_remaining_t2.png"><img loading="lazy" src="case_04/query_remaining_t2.png" alt="查询图 T2 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T2 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_04/example_mask.png"><img loading="lazy" src="case_04/example_mask.png" alt="示例二值掩码：白色有效，黑色不属于示例"></a><figcaption>示例二值掩码：白色有效，黑色不属于示例</figcaption></figure><figure><a href="case_04/query_gt.png"><img loading="lazy" src="case_04/query_gt.png" alt="完整转换真值：白色目标（仅审核）"></a><figcaption>完整转换真值：白色目标（仅审核）</figcaption></figure><figure><a href="case_04/query_remaining_gt.png"><img loading="lazy" src="case_04/query_remaining_gt.png" alt="T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"></a><figcaption>T3.1扣示例后目标 / T3.3完整查询目标（仅审核）</figcaption></figure></div><p>示例来源：[{&quot;component&quot;: 3, &quot;geometry&quot;: {&quot;area&quot;: 275, &quot;hole_pixels&quot;: 0, &quot;hole_ratio&quot;: 0.0, &quot;bbox&quot;: [172, 78, 202, 108], &quot;bbox_fill&quot;: 0.3055555555555556, &quot;components&quot;: 1}, &quot;query_support&quot;: {&quot;pixels&quot;: 296, &quot;components&quot;: 2, &quot;largest_component&quot;: 159}, &quot;name&quot;: &quot;train_1166.png&quot;, &quot;source&quot;: 2, &quot;target&quot;: 3}]</p><details><summary>原始路径与标注来源（只读）</summary><pre>{
+  &quot;id&quot;: &quot;n9_T31_train_1166_2to3_e3&quot;,
+  &quot;task_type&quot;: &quot;T3.1&quot;,
+  &quot;target&quot;: &quot;any change&quot;,
+  &quot;change_direction&quot;: &quot;any&quot;,
+  &quot;instruction&quot;: &quot;Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.&quot;,
+  &quot;constraint&quot;: null,
+  &quot;init_mask&quot;: null,
+  &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1166.png&quot;,
+  &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1166.png&quot;,
+  &quot;gt_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/tune/n9_T31_train_1166_2to3_e3/gt.png&quot;,
+  &quot;review_status&quot;: &quot;pending_review&quot;,
+  &quot;meta&quot;: {
+    &quot;review_status&quot;: &quot;pending_review&quot;,
+    &quot;data_version&quot;: &quot;N9-clean-candidate&quot;,
+    &quot;split&quot;: &quot;tune&quot;,
+    &quot;old_id&quot;: &quot;train_1166_2to3&quot;,
+    &quot;transition&quot;: &quot;2-&gt;3&quot;,
+    &quot;transition_cn&quot;: &quot;非植被地表→树木&quot;,
+    &quot;example_provenance&quot;: [
+      {
+        &quot;component&quot;: 3,
+        &quot;geometry&quot;: {
+          &quot;area&quot;: 275,
+          &quot;hole_pixels&quot;: 0,
+          &quot;hole_ratio&quot;: 0.0,
+          &quot;bbox&quot;: [
+            172,
+            78,
+            202,
+            108
+          ],
+          &quot;bbox_fill&quot;: 0.3055555555555556,
+          &quot;components&quot;: 1
+        },
+        &quot;query_support&quot;: {
+          &quot;pixels&quot;: 296,
+          &quot;components&quot;: 2,
+          &quot;largest_component&quot;: 159
+        },
+        &quot;name&quot;: &quot;train_1166.png&quot;,
+        &quot;source&quot;: 2,
+        &quot;target&quot;: 3
+      }
+    ],
+    &quot;geometry&quot;: {
+      &quot;area&quot;: 275,
+      &quot;hole_pixels&quot;: 0,
+      &quot;hole_ratio&quot;: 0.0,
+      &quot;bbox&quot;: [
+        172,
+        78,
+        202,
+        108
+      ],
+      &quot;bbox_fill&quot;: 0.3055555555555556,
+      &quot;components&quot;: 1
+    },
+    &quot;query_support&quot;: {
+      &quot;pixels&quot;: 296,
+      &quot;components&quot;: 2,
+      &quot;largest_component&quot;: 159
+    },
+    &quot;inference_whitelist&quot;: [
+      &quot;image_t1&quot;,
+      &quot;image_t2&quot;,
+      &quot;instruction&quot;,
+      &quot;exemplar_mask&quot;
+    ],
+    &quot;gt_policy&quot;: &quot;full original directed-transition pixels; exclude E only at T3.1 scoring&quot;,
+    &quot;remaining_gt_review_only&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/tune/n9_T31_train_1166_2to3_e3/remaining_gt_review_only.png&quot;
+  },
+  &quot;exemplar_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/tune/n9_T31_train_1166_2to3_e3/example.png&quot;
+}</pre></details><label>人工意见 <select data-review="N9审查04"><option>待人工审核</option><option>合理</option><option>不合理</option><option>存疑</option></select></label><label>中文备注 <textarea data-note="N9审查04" placeholder="说明示例指向、目标可检索性及疑问"></textarea></label></section><section class="card" id="case-5"><h2>N9审查05 · 新版候选 · T3.3</h2><p>n9_T33_train_1177_1to3_e26 ｜ 查询图：train_1177.png ｜ 划分：开发确认</p><p><strong>目标变化：低矮植被→树木</strong>。跨图双时相示例：示例图与查询图分别显示；查询GT不扣示例。</p><p>示例面积 122 像素；孔洞占比 0.000%；边框填充率 30.500%。查询剩余目标 204 像素 / 1 连通组件，最大组件 204 像素。</p><p>自动结果：通过固定自动几何筛选；仍待人工审核，未获正式评测批准</p><p>请检查示例是否指向真实目标、孔洞异类是否误导、是否是建筑群局部或细碎模糊区域；不要仅凭类别文字判断。</p><div class="grid"><figure><a href="case_05/example_t1.png"><img loading="lazy" src="case_05/example_t1.png" alt="示例图 T1 原图（完整原生视野）"></a><figcaption>示例图 T1 原图（完整原生视野）</figcaption></figure><figure><a href="case_05/example_overlay_t1.png"><img loading="lazy" src="case_05/example_overlay_t1.png" alt="示例图 T1 红色支持区；孔洞不着色"></a><figcaption>示例图 T1 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_05/query_t1.png"><img loading="lazy" src="case_05/query_t1.png" alt="查询图 T1 原图"></a><figcaption>查询图 T1 原图</figcaption></figure><figure><a href="case_05/query_remaining_t1.png"><img loading="lazy" src="case_05/query_remaining_t1.png" alt="查询图 T1 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T1 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_05/example_t2.png"><img loading="lazy" src="case_05/example_t2.png" alt="示例图 T2 原图（完整原生视野）"></a><figcaption>示例图 T2 原图（完整原生视野）</figcaption></figure><figure><a href="case_05/example_overlay_t2.png"><img loading="lazy" src="case_05/example_overlay_t2.png" alt="示例图 T2 红色支持区；孔洞不着色"></a><figcaption>示例图 T2 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_05/query_t2.png"><img loading="lazy" src="case_05/query_t2.png" alt="查询图 T2 原图"></a><figcaption>查询图 T2 原图</figcaption></figure><figure><a href="case_05/query_remaining_t2.png"><img loading="lazy" src="case_05/query_remaining_t2.png" alt="查询图 T2 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T2 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_05/example_mask.png"><img loading="lazy" src="case_05/example_mask.png" alt="示例二值掩码：白色有效，黑色不属于示例"></a><figcaption>示例二值掩码：白色有效，黑色不属于示例</figcaption></figure><figure><a href="case_05/query_gt.png"><img loading="lazy" src="case_05/query_gt.png" alt="完整转换真值：白色目标（仅审核）"></a><figcaption>完整转换真值：白色目标（仅审核）</figcaption></figure><figure><a href="case_05/query_remaining_gt.png"><img loading="lazy" src="case_05/query_remaining_gt.png" alt="T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"></a><figcaption>T3.1扣示例后目标 / T3.3完整查询目标（仅审核）</figcaption></figure></div><p>示例来源：[{&quot;name&quot;: &quot;train_626.png&quot;, &quot;source&quot;: 1, &quot;target&quot;: 3, &quot;component&quot;: 26, &quot;geometry&quot;: {&quot;area&quot;: 122, &quot;hole_pixels&quot;: 0, &quot;hole_ratio&quot;: 0.0, &quot;bbox&quot;: [492, 440, 512, 460], &quot;bbox_fill&quot;: 0.305, &quot;components&quot;: 1}}]</p><details><summary>原始路径与标注来源（只读）</summary><pre>{
+  &quot;id&quot;: &quot;n9_T33_train_1177_1to3_e26&quot;,
+  &quot;task_type&quot;: &quot;T3.3&quot;,
+  &quot;target&quot;: &quot;any change&quot;,
+  &quot;change_direction&quot;: &quot;any&quot;,
+  &quot;instruction&quot;: &quot;Find all changes with the same directed transition as the positive external before/after example. Output a binary mask.&quot;,
+  &quot;constraint&quot;: null,
+  &quot;init_mask&quot;: null,
+  &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1177.png&quot;,
+  &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1177.png&quot;,
+  &quot;gt_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/confirm/n9_T33_train_1177_1to3_e26/gt.png&quot;,
+  &quot;review_status&quot;: &quot;pending_review&quot;,
+  &quot;meta&quot;: {
+    &quot;review_status&quot;: &quot;pending_review&quot;,
+    &quot;data_version&quot;: &quot;N9-clean-candidate&quot;,
+    &quot;split&quot;: &quot;confirm&quot;,
+    &quot;old_id&quot;: &quot;train_1177_T33_1to3&quot;,
+    &quot;transition&quot;: &quot;1-&gt;3&quot;,
+    &quot;transition_cn&quot;: &quot;低矮植被→树木&quot;,
+    &quot;example_provenance&quot;: [
+      {
+        &quot;name&quot;: &quot;train_626.png&quot;,
+        &quot;source&quot;: 1,
+        &quot;target&quot;: 3,
+        &quot;component&quot;: 26,
+        &quot;geometry&quot;: {
+          &quot;area&quot;: 122,
+          &quot;hole_pixels&quot;: 0,
+          &quot;hole_ratio&quot;: 0.0,
+          &quot;bbox&quot;: [
+            492,
+            440,
+            512,
+            460
+          ],
+          &quot;bbox_fill&quot;: 0.305,
+          &quot;components&quot;: 1
+        }
+      }
+    ],
+    &quot;geometry&quot;: {
+      &quot;area&quot;: 122,
+      &quot;hole_pixels&quot;: 0,
+      &quot;hole_ratio&quot;: 0.0,
+      &quot;bbox&quot;: [
+        492,
+        440,
+        512,
+        460
+      ],
+      &quot;bbox_fill&quot;: 0.305,
+      &quot;components&quot;: 1
+    },
+    &quot;query_support&quot;: {
+      &quot;pixels&quot;: 204,
+      &quot;components&quot;: 1,
+      &quot;largest_component&quot;: 204
+    },
+    &quot;inference_whitelist&quot;: [
+      &quot;image_t1&quot;,
+      &quot;image_t2&quot;,
+      &quot;instruction&quot;,
+      &quot;examples&quot;
+    ],
+    &quot;gt_policy&quot;: &quot;full original directed-transition pixels; exclude E only at T3.1 scoring&quot;
+  },
+  &quot;examples&quot;: [
+    {
+      &quot;role&quot;: &quot;positive&quot;,
+      &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_626.png&quot;,
+      &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_626.png&quot;,
+      &quot;mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T33/confirm/n9_T33_train_1177_1to3_e26/example.png&quot;
+    }
+  ]
+}</pre></details><label>人工意见 <select data-review="N9审查05"><option>待人工审核</option><option>合理</option><option>不合理</option><option>存疑</option></select></label><label>中文备注 <textarea data-note="N9审查05" placeholder="说明示例指向、目标可检索性及疑问"></textarea></label></section><section class="card" id="case-6"><h2>N9审查06 · 新版候选 · T3.1</h2><p>n9_T31_train_119_1to2_e3 ｜ 查询图：train_119.png ｜ 划分：开发调参</p><p><strong>目标变化：低矮植被→非植被地表</strong>。同图示例：绿色查询目标已扣除红色示例E。</p><p>示例面积 88 像素；孔洞占比 0.000%；边框填充率 40.741%。查询剩余目标 39245 像素 / 7 连通组件，最大组件 31474 像素。</p><p>自动结果：通过固定自动几何筛选；仍待人工审核，未获正式评测批准</p><p>请检查示例是否指向真实目标、孔洞异类是否误导、是否是建筑群局部或细碎模糊区域；不要仅凭类别文字判断。</p><div class="grid"><figure><a href="case_06/example_t1.png"><img loading="lazy" src="case_06/example_t1.png" alt="示例图 T1 原图（完整原生视野）"></a><figcaption>示例图 T1 原图（完整原生视野）</figcaption></figure><figure><a href="case_06/example_overlay_t1.png"><img loading="lazy" src="case_06/example_overlay_t1.png" alt="示例图 T1 红色支持区；孔洞不着色"></a><figcaption>示例图 T1 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_06/query_t1.png"><img loading="lazy" src="case_06/query_t1.png" alt="查询图 T1 原图"></a><figcaption>查询图 T1 原图</figcaption></figure><figure><a href="case_06/query_remaining_t1.png"><img loading="lazy" src="case_06/query_remaining_t1.png" alt="查询图 T1 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T1 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_06/example_t2.png"><img loading="lazy" src="case_06/example_t2.png" alt="示例图 T2 原图（完整原生视野）"></a><figcaption>示例图 T2 原图（完整原生视野）</figcaption></figure><figure><a href="case_06/example_overlay_t2.png"><img loading="lazy" src="case_06/example_overlay_t2.png" alt="示例图 T2 红色支持区；孔洞不着色"></a><figcaption>示例图 T2 红色支持区；孔洞不着色</figcaption></figure><figure><a href="case_06/query_t2.png"><img loading="lazy" src="case_06/query_t2.png" alt="查询图 T2 原图"></a><figcaption>查询图 T2 原图</figcaption></figure><figure><a href="case_06/query_remaining_t2.png"><img loading="lazy" src="case_06/query_remaining_t2.png" alt="查询图 T2 可检索真值（绿色，仅审核）"></a><figcaption>查询图 T2 可检索真值（绿色，仅审核）</figcaption></figure><figure><a href="case_06/example_mask.png"><img loading="lazy" src="case_06/example_mask.png" alt="示例二值掩码：白色有效，黑色不属于示例"></a><figcaption>示例二值掩码：白色有效，黑色不属于示例</figcaption></figure><figure><a href="case_06/query_gt.png"><img loading="lazy" src="case_06/query_gt.png" alt="完整转换真值：白色目标（仅审核）"></a><figcaption>完整转换真值：白色目标（仅审核）</figcaption></figure><figure><a href="case_06/query_remaining_gt.png"><img loading="lazy" src="case_06/query_remaining_gt.png" alt="T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"></a><figcaption>T3.1扣示例后目标 / T3.3完整查询目标（仅审核）</figcaption></figure></div><p>示例来源：[{&quot;component&quot;: 3, &quot;geometry&quot;: {&quot;area&quot;: 88, &quot;hole_pixels&quot;: 0, &quot;hole_ratio&quot;: 0.0, &quot;bbox&quot;: [195, 240, 213, 252], &quot;bbox_fill&quot;: 0.4074074074074074, &quot;components&quot;: 1}, &quot;query_support&quot;: {&quot;pixels&quot;: 39245, &quot;components&quot;: 7, &quot;largest_component&quot;: 31474}, &quot;name&quot;: &quot;train_119.png&quot;, &quot;source&quot;: 1, &quot;target&quot;: 2}]</p><details><summary>原始路径与标注来源（只读）</summary><pre>{
+  &quot;id&quot;: &quot;n9_T31_train_119_1to2_e3&quot;,
+  &quot;task_type&quot;: &quot;T3.1&quot;,
+  &quot;target&quot;: &quot;any change&quot;,
+  &quot;change_direction&quot;: &quot;any&quot;,
+  &quot;instruction&quot;: &quot;Find all land-cover changes with the same directed transition as the marked example. Output a binary mask.&quot;,
+  &quot;constraint&quot;: null,
+  &quot;init_mask&quot;: null,
+  &quot;image_t1&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_119.png&quot;,
+  &quot;image_t2&quot;: &quot;/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_119.png&quot;,
+  &quot;gt_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/tune/n9_T31_train_119_1to2_e3/gt.png&quot;,
+  &quot;review_status&quot;: &quot;pending_review&quot;,
+  &quot;meta&quot;: {
+    &quot;review_status&quot;: &quot;pending_review&quot;,
+    &quot;data_version&quot;: &quot;N9-clean-candidate&quot;,
+    &quot;split&quot;: &quot;tune&quot;,
+    &quot;old_id&quot;: &quot;train_119_1to2&quot;,
+    &quot;transition&quot;: &quot;1-&gt;2&quot;,
+    &quot;transition_cn&quot;: &quot;低矮植被→非植被地表&quot;,
+    &quot;example_provenance&quot;: [
+      {
+        &quot;component&quot;: 3,
+        &quot;geometry&quot;: {
+          &quot;area&quot;: 88,
+          &quot;hole_pixels&quot;: 0,
+          &quot;hole_ratio&quot;: 0.0,
+          &quot;bbox&quot;: [
+            195,
+            240,
+            213,
+            252
+          ],
+          &quot;bbox_fill&quot;: 0.4074074074074074,
+          &quot;components&quot;: 1
+        },
+        &quot;query_support&quot;: {
+          &quot;pixels&quot;: 39245,
+          &quot;components&quot;: 7,
+          &quot;largest_component&quot;: 31474
+        },
+        &quot;name&quot;: &quot;train_119.png&quot;,
+        &quot;source&quot;: 1,
+        &quot;target&quot;: 2
+      }
+    ],
+    &quot;geometry&quot;: {
+      &quot;area&quot;: 88,
+      &quot;hole_pixels&quot;: 0,
+      &quot;hole_ratio&quot;: 0.0,
+      &quot;bbox&quot;: [
+        195,
+        240,
+        213,
+        252
+      ],
+      &quot;bbox_fill&quot;: 0.4074074074074074,
+      &quot;components&quot;: 1
+    },
+    &quot;query_support&quot;: {
+      &quot;pixels&quot;: 39245,
+      &quot;components&quot;: 7,
+      &quot;largest_component&quot;: 31474
+    },
+    &quot;inference_whitelist&quot;: [
+      &quot;image_t1&quot;,
+      &quot;image_t2&quot;,
+      &quot;instruction&quot;,
+      &quot;exemplar_mask&quot;
+    ],
+    &quot;gt_policy&quot;: &quot;full original directed-transition pixels; exclude E only at T3.1 scoring&quot;,
+    &quot;remaining_gt_review_only&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/tune/n9_T31_train_119_1to2_e3/remaining_gt_review_only.png&quot;
+  },
+  &quot;exemplar_mask&quot;: &quot;/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_t3_20261116/data/T31/tune/n9_T31_train_119_1to2_e3/example.png&quot;
+}</pre></details><label>人工意见 <select data-review="N9审查06"><option>待人工审核</option><option>合理</option><option>不合理</option><option>存疑</option></select></label><label>中文备注 <textarea data-note="N9审查06" placeholder="说明示例指向、目标可检索性及疑问"></textarea></label></section><script>const key='n9-t3-review-20261116';let saved=JSON.parse(localStorage.getItem(key)||'{}');
+function save(){document.querySelectorAll('[data-review]').forEach(e=>{let id=e.dataset.review;saved[id]={状态:e.value,备注:document.querySelector('[data-note="'+id+'"]').value}});localStorage.setItem(key,JSON.stringify(saved));document.getElementById('notice').textContent='已保存到当前浏览器本地；尚未上传，也未批准任何数据集。'}
+document.querySelectorAll('[data-review]').forEach(e=>{let id=e.dataset.review;if(saved[id]){e.value=saved[id].状态;document.querySelector('[data-note="'+id+'"]').value=saved[id].备注||''}e.onchange=save});document.querySelectorAll('[data-note]').forEach(e=>e.oninput=save);
+document.getElementById('export').onclick=()=>{save();let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}));a.download='N9_T3_人工意见.json';a.click();URL.revokeObjectURL(a.href)};</script></main></html>

@@ -1,0 +1,95 @@
+{
+  "review_id": "N9审查02",
+  "version": "旧版",
+  "task_type": "T3.1",
+  "id": "train_1129_2to5",
+  "split": "confirm",
+  "transition_cn": "非植被地表→建筑",
+  "geometry": {
+    "area": 15035,
+    "hole_pixels": 0,
+    "hole_ratio": 0.0,
+    "bbox": [
+      136,
+      249,
+      298,
+      403
+    ],
+    "bbox_fill": 0.602653519320186,
+    "components": 1
+  },
+  "query_support": {
+    "pixels": 47619,
+    "components": 28,
+    "largest_component": 20869
+  },
+  "automatic_reasons": [
+    "example_area_above4096"
+  ],
+  "explanation_cn": "示例超过4096像素",
+  "review_status": "pending_review",
+  "decision_cn": "待人工审核",
+  "note_cn": "",
+  "source_task": {
+    "id": "train_1129_2to5",
+    "task_type": "T3.1",
+    "target": "any change",
+    "change_direction": "any",
+    "instruction": "Find all land-cover changes with the same transition as the marked example. Output a binary mask.",
+    "constraint": null,
+    "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1129.png",
+    "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1129.png",
+    "init_mask": null,
+    "exemplar_mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1129_2to5_exemplar.png",
+    "gt_mask": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/results/agent_baseline/data/t3_tasks_dev_0of1/train_1129_2to5_gt.png",
+    "meta": {
+      "transition": "non-vegetated ground -> building"
+    }
+  },
+  "assets": {
+    "example_t1": {
+      "path": "case_02/example_t1.png",
+      "title": "示例图 T1 原图（完整原生视野）"
+    },
+    "example_overlay_t1": {
+      "path": "case_02/example_overlay_t1.png",
+      "title": "示例图 T1 红色支持区；孔洞不着色"
+    },
+    "query_t1": {
+      "path": "case_02/query_t1.png",
+      "title": "查询图 T1 原图"
+    },
+    "query_remaining_t1": {
+      "path": "case_02/query_remaining_t1.png",
+      "title": "查询图 T1 可检索真值（绿色，仅审核）"
+    },
+    "example_t2": {
+      "path": "case_02/example_t2.png",
+      "title": "示例图 T2 原图（完整原生视野）"
+    },
+    "example_overlay_t2": {
+      "path": "case_02/example_overlay_t2.png",
+      "title": "示例图 T2 红色支持区；孔洞不着色"
+    },
+    "query_t2": {
+      "path": "case_02/query_t2.png",
+      "title": "查询图 T2 原图"
+    },
+    "query_remaining_t2": {
+      "path": "case_02/query_remaining_t2.png",
+      "title": "查询图 T2 可检索真值（绿色，仅审核）"
+    },
+    "example_mask": {
+      "path": "case_02/example_mask.png",
+      "title": "示例二值掩码：白色有效，黑色不属于示例"
+    },
+    "query_gt": {
+      "path": "case_02/query_gt.png",
+      "title": "完整转换真值：白色目标（仅审核）"
+    },
+    "query_remaining_gt": {
+      "path": "case_02/query_remaining_gt.png",
+      "title": "T3.1扣示例后目标 / T3.3完整查询目标（仅审核）"
+    }
+  }
+}

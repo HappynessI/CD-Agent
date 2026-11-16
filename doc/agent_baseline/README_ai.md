@@ -2827,3 +2827,7 @@ N8 T3 seed2027也已完成20/20（两臂各1正常回退）；F1 3.4703→8.9409
 N9第一阶段FM资产QC已实测完成：六行各60任务、各30 tune/30 confirm，全部来源完整，WHU官方v3/ignore核对通过；语义概率缺234/360幅，DINO360/360完整，继续真实模型补齐与候选重构。尚无N9调参/确认/在线结果，API实际¥0。T3审计因旧跨图示例读取发生I/O等待，正在拆分增量构造，不把作业已提交算作完成。详细事实见 `results/agent_baseline/n9_summary_report.md`。
 
 N9 clean构造已完成1692候选：T3.1 tune/confirm/report=116/106/450，T3.3=182/156/682。全部pending_review，确认数量充足但尚未人工批准。旧数据审计与独立六例审核页继续执行；原旧文件未替换。构造Python成功，shell收尾因运行期间追加通知逻辑报EOF，已冻结后续脚本并保留故障记录，不重跑完整构造。
+
+N9补漏8项在线相关契约测试已通过；首次填充因Python环境缺mmseg失败，已切换到已有SegEarth环境ovcd-de-env续跑。最新clean产物推送遇Git对象读取错误，正在恢复；正式数据批准和实际效果评测仍未完成。
+
+N9独立六例中文数据审核页已交付：[审核页](../../results/agent_baseline/n9_t3_data_review/index.html)。现有8876服务的 `/review-pages/n9_t3_data_review/index.html` 返回200；可SSH转发8876。15项测试与133链接检查通过；旧任务审计2127/2128，312空任务独立封存，1条旧mask读取故障保留。全部clean仍pending_review，已请求开发集人工批准，尚未启动正式confirm/online；探索性tune与补漏继续。意见在浏览器本地保存，需导出，不自动批准正式任务。
