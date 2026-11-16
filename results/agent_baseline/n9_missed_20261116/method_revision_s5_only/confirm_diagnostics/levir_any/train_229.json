@@ -1,0 +1,114 @@
+{
+  "group": "levir_any",
+  "stem": "train_229",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 212982,
+    "fp": 38865,
+    "fn": 15681,
+    "f1": 88.64831116938254,
+    "precision": 84.56801153081037,
+    "recall": 93.14230986211149
+  },
+  "after": {
+    "tp": 212982,
+    "fp": 40181,
+    "fn": 15681,
+    "f1": 88.406188126004,
+    "precision": 84.12840738970544,
+    "recall": 93.14230986211149
+  },
+  "delta_f1": -0.24212304337854107,
+  "missing_gt_pixels": 15681,
+  "all_source_recalled_pixels": 4844,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 1316,
+  "choices": [
+    {
+      "uid": "levir_any__train_229__n9_0031",
+      "index": 31,
+      "bbox": [
+        131,
+        355,
+        179,
+        405
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.7688408493995667,
+      "dino": 0.46219635009765625,
+      "area": 1290,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 1290,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area was undeveloped vegetation in T1 and contains a new bright building structure in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_229__n9_0031.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_229__n9_0031/request.json"
+    },
+    {
+      "uid": "levir_any__train_229__n9_0008",
+      "index": 8,
+      "bbox": [
+        131,
+        355,
+        178,
+        405
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.76320481300354,
+      "dino": 0.4614534378051758,
+      "area": 1307,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 1307,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area was undeveloped vegetation in T1 and contains a new building structure in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_229__n9_0008.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_229__n9_0008/request.json"
+    },
+    {
+      "uid": "levir_any__train_229__n9_0055",
+      "index": 55,
+      "bbox": [
+        219,
+        92,
+        225,
+        111
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.4096955955028534,
+      "dino": 0.6587865352630615,
+      "area": 29,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 29,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour marks an unpaved driveway or access path between buildings, which is a non-building land cover feature present in both dates; the blue polygons represent the adjacent buildings that remain consistent.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_229__n9_0055.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_229__n9_0055/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 2,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_229.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_229.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_229.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/levir_any/train_229.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

@@ -1,6 +1,8 @@
 # task_plan.md — Change Detection Agent 研究与实验迭代计划
 
-> 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm已提交，尚无确认结论。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
+> 2026-11-16 补漏单轮实验完成：tune180条/52配置，冻结后confirm180条/668次新核验；最终F1变化：LEVIR any−0.0237、WHU any+0.1534、SECOND build+6.5474、WHU build−1.0078、SECOND demolish+2.5711、WHU demolish+14.6042。所有区间包含或触及0，WHU拆除仅1图获益，不能宣称稳定提升。累计实际¥0.7100568；180份最终掩码及逐例证据齐全，无在线Agent、新待审数据或正式测试。 详见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/final_report.md` 与 `interpretation.md`。
+
+> 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm现已完成，最终结果见置顶更新。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
 
 > 2026-11-16 最新授权：用户明确允许继续单轮API核验并完成补漏实验。恢复S5-only修正版tune→冻结三参数档位→分任务confirm；原有数据审核停止点及禁止多轮在线Agent不变。解析失败按unknown弃权计数，不添加候选，不篡改原回复。
 
@@ -23,8 +25,8 @@
 - [x] 独立中文审核页：旧3+新3、逐例中文意见及可下载记录，HTTP200与133链接通过，全部pending_review；不放入demo_g3。
 - [ ] 等待用户明确批准clean开发集；其间继续探索性tune与FM，不运行正式T3confirm/online。
 - [ ] T3去自匹配固定检索与在线代码准备。正式clean confirm/online须用户明确批准；确认任务不足20如实报告，不跨划分补数。
-- [ ] FM按any/build/demolish独立tune、冻结，同profile统一配置但逐数据集/任务行独立确认，不计算跨数据集pooled晋级值。
-- [ ] 正向FM任务行按10任务×两臂×三seed真实在线，保留全部正常失败与费用。
+- [x] FM按any/build/demolish独立tune、冻结并完成180条confirm；六行独立报告，未取得稳定通用收益。
+- [ ] 历史在线扩展计划本轮不执行：当前授权单轮核验，确认收益尚不稳定。
 - [ ] n9_summary_report.md、README与流程文档、复现归档和Git推送。
 
 最新用户指令明确授权执行，覆盖N9文档创建时的“本次仅提交文档”；新版T3人工批准闸门仍有效。总体API上限¥30，qwen3.7-flash；两个独立astra-low工作区，最多两条Agent推理并发。使用exp-loop事件驱动，管理节点不执行计算实验；保留所有N7/N8历史数据/指标。报告池仅构造审计，不用于调参和未获批准评测。

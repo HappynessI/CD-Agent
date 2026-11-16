@@ -1,0 +1,68 @@
+{
+  "group": "whu_any",
+  "stem": "train_548",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 53474,
+    "fp": 6,
+    "fn": 7211,
+    "f1": 93.67844786055271,
+    "precision": 99.9887808526552,
+    "recall": 88.1173271813463
+  },
+  "after": {
+    "tp": 53474,
+    "fp": 6,
+    "fn": 7211,
+    "f1": 93.67844786055271,
+    "precision": 99.9887808526552,
+    "recall": 88.1173271813463
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 7211,
+  "all_source_recalled_pixels": 3672,
+  "topk_recalled_pixels": 19,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "whu_any__train_548__n9_0002",
+      "index": 2,
+      "bbox": [
+        0,
+        422,
+        29,
+        455
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.434911847114563,
+      "dino": 0.5435301661491394,
+      "area": 348,
+      "new_tp_pixels": 19,
+      "new_fp_pixels": 329,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour maintains the same shape, size, and position relative to the building edge in both dates, indicating it is the same feature with a color change likely due to seasonal or illumination differences.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_548__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_548__n9_0002/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_548.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_548.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_548.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_548.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

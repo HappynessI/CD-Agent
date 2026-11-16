@@ -1,0 +1,114 @@
+{
+  "group": "whu_any",
+  "stem": "train_835",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 82226,
+    "fp": 3074,
+    "fn": 1478,
+    "f1": 97.30657262549998,
+    "precision": 96.39624853458382,
+    "recall": 98.2342540380388
+  },
+  "after": {
+    "tp": 82226,
+    "fp": 3074,
+    "fn": 1478,
+    "f1": 97.30657262549998,
+    "precision": 96.39624853458382,
+    "recall": 98.2342540380388
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 1478,
+  "all_source_recalled_pixels": 1,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "whu_any__train_835__n9_0077",
+      "index": 77,
+      "bbox": [
+        400,
+        143,
+        412,
+        147
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.7820838689804077,
+      "dino": 0.8777403831481934,
+      "area": 34,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 34,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour highlights the same small roof feature in both dates, with no evidence of new construction, demolition, or replacement by a different building.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_835__n9_0077.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_835__n9_0077/request.json"
+    },
+    {
+      "uid": "whu_any__train_835__n9_0000",
+      "index": 0,
+      "bbox": [
+        279,
+        492,
+        296,
+        512
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.5379372239112854,
+      "dino": 0.743370532989502,
+      "area": 232,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 232,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour maintains the same position, size, and general shape across both dates, indicating it is the same structure with only minor variations in color and texture likely due to illumination or rendering differences.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_835__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_835__n9_0000/request.json"
+    },
+    {
+      "uid": "whu_any__train_835__n9_0069",
+      "index": 69,
+      "bbox": [
+        358,
+        0,
+        380,
+        10
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.5385211706161499,
+      "dino": 0.6649187803268433,
+      "area": 139,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 139,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red-contour region shows the same small, light-colored structure in both dates with consistent shape and position relative to fixed neighbors, indicating no construction or demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_835__n9_0069.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_835__n9_0069/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_835.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_835.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_835.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_835.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

@@ -1,6 +1,8 @@
 # Agent baseline：给 AI 看的开发文档
 
-> 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm已提交，尚无确认结论。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
+> 2026-11-16 补漏单轮实验完成：tune180条/52配置，冻结后confirm180条/668次新核验；最终F1变化：LEVIR any−0.0237、WHU any+0.1534、SECOND build+6.5474、WHU build−1.0078、SECOND demolish+2.5711、WHU demolish+14.6042。所有区间包含或触及0，WHU拆除仅1图获益，不能宣称稳定提升。累计实际¥0.7100568；180份最终掩码及逐例证据齐全，无在线Agent、新待审数据或正式测试。 详见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/final_report.md` 与 `interpretation.md`。
+
+> 2026-11-16 补漏阶段交付：tune的2280份核验完成（精确复用1693、新增587），52组配置评分并冻结any/build/demolish三档；新增¥0.1400146，累计¥0.5554356。180条分任务confirm现已完成，最终结果见置顶更新。详见 results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md。
 
 > 2026-11-16 最新授权：用户明确允许继续单轮API核验并完成补漏实验。恢复S5-only修正版tune→冻结三参数档位→分任务confirm；原有数据审核停止点及禁止多轮在线Agent不变。解析失败按unknown弃权计数，不添加候选，不篡改原回复。
 
@@ -17,7 +19,7 @@
 
 此次数据构造复核发现并修正了三种真实问题：T5填洞支撑区域不等于真实FP，错误计数须交原预测；局部理论修复须区分补检/剔除/修边；T3高相似示例仍可能被图像边界裁断，最终送审要求整组GT不触边、不删减GT。T4.4现有六类模型缺道路通道，已离线补显式道路语义，不把非植被地表改称道路。所有中间版本和原预测保持不变。
 
-FM原版1741次核验及3次截断弃权记录保持不变。此前自动审批拒绝已由用户明确单轮API授权解除；修正版587份缺失核验现已完成，参数已冻结，当前推进独立confirm。调参结果及原始证据见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md`。
+FM原版1741次核验及3次截断弃权记录保持不变。此前自动审批拒绝已由用户明确单轮API授权解除；修正版587份缺失核验现已完成，参数已冻结，独立confirm及证据归档已完成。调参结果及原始证据见 `results/agent_baseline/n9_missed_20261116/method_revision_s5_only/tune_report.md`。
 
 ---
 

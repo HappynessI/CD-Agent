@@ -1,0 +1,91 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_306",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 93,
+    "f1": 0.0,
+    "precision": 0,
+    "recall": 0.0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 93,
+    "f1": 0.0,
+    "precision": 0,
+    "recall": 0.0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 93,
+  "all_source_recalled_pixels": 66,
+  "topk_recalled_pixels": 58,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "whu_appeared__train_306__n9_0001",
+      "index": 1,
+      "bbox": [
+        105,
+        503,
+        141,
+        512
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.16565649211406708,
+      "dino": 0.09860032796859741,
+      "area": 276,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 276,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is present in both T1 and T2 with no clear evidence of new construction; it appears to be the same structure (likely a vehicle or temporary material) visible in both dates.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_306__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_306__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_306__n9_0002",
+      "index": 2,
+      "bbox": [
+        2,
+        506,
+        26,
+        512
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.08228498697280884,
+      "dino": 0.18830132484436035,
+      "area": 93,
+      "new_tp_pixels": 58,
+      "new_fp_pixels": 35,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows only vegetation and ground in both T1 and T2, with no evidence of a newly constructed building.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_306__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_306__n9_0002/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_306.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_306.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_306.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_306.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_appeared/train_306.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

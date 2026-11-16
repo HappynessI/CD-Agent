@@ -1,0 +1,68 @@
+{
+  "group": "whu_disappeared",
+  "stem": "train_68",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "f1": 0,
+    "precision": 0,
+    "recall": 0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "f1": 0,
+    "precision": 0,
+    "recall": 0
+  },
+  "delta_f1": 0,
+  "missing_gt_pixels": 0,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "whu_disappeared__train_68__n9_0000",
+      "index": 0,
+      "bbox": [
+        0,
+        487,
+        17,
+        512
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.21222780644893646,
+      "dino": 0.2311384081840515,
+      "area": 242,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 242,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red-contour area shows a building edge present in both T1 and T2 with no evidence of demolition; the structure remains intact.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/whu_disappeared__train_68__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/whu_disappeared__train_68__n9_0000/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_68.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_68.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/demolished/train_68.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_68.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_disappeared/train_68.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

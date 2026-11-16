@@ -1,0 +1,91 @@
+{
+  "group": "second_appeared",
+  "stem": "train_968",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 11058,
+    "fp": 544,
+    "fn": 3813,
+    "f1": 83.54172175424017,
+    "precision": 95.31115324943976,
+    "recall": 74.35949162800081
+  },
+  "after": {
+    "tp": 11058,
+    "fp": 544,
+    "fn": 3813,
+    "f1": 83.54172175424017,
+    "precision": 95.31115324943976,
+    "recall": 74.35949162800081
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 3813,
+  "all_source_recalled_pixels": 1977,
+  "topk_recalled_pixels": 797,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "second_appeared__train_968__n9_0004",
+      "index": 4,
+      "bbox": [
+        391,
+        105,
+        431,
+        154
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.22549936175346375,
+      "dino": 0.2152256965637207,
+      "area": 832,
+      "new_tp_pixels": 770,
+      "new_fp_pixels": 62,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a row of trees or vegetation in both T1 and T2, with no evidence of a newly constructed building; the dark linear features correspond to the same vegetation line visible in the wider views.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/second_appeared__train_968__n9_0004.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/second_appeared__train_968__n9_0004/request.json"
+    },
+    {
+      "uid": "second_appeared__train_968__n9_0000",
+      "index": 0,
+      "bbox": [
+        390,
+        105,
+        451,
+        172
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.13472941517829895,
+      "dino": 0.20592457056045532,
+      "area": 1554,
+      "new_tp_pixels": 797,
+      "new_fp_pixels": 757,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a linear feature, likely a row of trees or vegetation, in both T1 and T2; there is no clear evidence of a building being newly constructed (appeared) within this specific boundary.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/second_appeared__train_968__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/second_appeared__train_968__n9_0000/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_968.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_968.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_968.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_appeared/train_968.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

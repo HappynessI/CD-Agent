@@ -1,5 +1,11 @@
 > 最新决定（2026-11-16）：用户否决本版T3数据。以下探索结果保留供追溯，不是正式评测；T3转新规范静态抽样审核。FM继续离线验证，本轮无在线Agent。
 
+## 单轮补漏最终交付
+
+2026-11-16 补漏单轮实验完成：tune180条/52配置，冻结后confirm180条/668次新核验；最终F1变化：LEVIR any−0.0237、WHU any+0.1534、SECOND build+6.5474、WHU build−1.0078、SECOND demolish+2.5711、WHU demolish+14.6042。所有区间包含或触及0，WHU拆除仅1图获益，不能宣称稳定提升。累计实际¥0.7100568；180份最终掩码及逐例证据齐全，无在线Agent、新待审数据或正式测试。
+
+[完整F1/P/R、召回及逐例证据](n9_missed_20261116/method_revision_s5_only/final_report.md)；[解释与下一轮建议](n9_missed_20261116/method_revision_s5_only/interpretation.md)。
+
 ## 2026-11-16 单轮补漏核验阶段更新
 
 修正版tune核验2280份完成（新增587份），52组配置评分并冻结三档。新增实际¥0.1400146，含原版累计¥0.5554356。六行结果与限制见 [调参报告](n9_missed_20261116/method_revision_s5_only/tune_report.md)。180条独立开发确认任务已提交，尚未完成；本节不声称在线Agent收益。此前API审批阻塞已由用户明确授权解除。

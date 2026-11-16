@@ -1,0 +1,91 @@
+{
+  "group": "levir_any",
+  "stem": "train_90",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 39442,
+    "fp": 7765,
+    "fn": 13565,
+    "f1": 78.71554872572695,
+    "precision": 83.55116825894464,
+    "recall": 74.40904031543003
+  },
+  "after": {
+    "tp": 39442,
+    "fp": 7765,
+    "fn": 13565,
+    "f1": 78.71554872572695,
+    "precision": 83.55116825894464,
+    "recall": 74.40904031543003
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 13565,
+  "all_source_recalled_pixels": 3986,
+  "topk_recalled_pixels": 6,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "levir_any__train_90__n9_0067",
+      "index": 67,
+      "bbox": [
+        294,
+        563,
+        325,
+        602
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4385606348514557,
+      "dino": 0.5807392597198486,
+      "area": 457,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 457,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour maintains the same outline and position in both dates, with the color difference (brownish in T1 to white/grey in T2) likely due to illumination or seasonal changes rather than demolition or construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_90__n9_0067.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_90__n9_0067/request.json"
+    },
+    {
+      "uid": "levir_any__train_90__n9_0089",
+      "index": 89,
+      "bbox": [
+        474,
+        980,
+        510,
+        1022
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4694192111492157,
+      "dino": 0.42597663402557373,
+      "area": 888,
+      "new_tp_pixels": 6,
+      "new_fp_pixels": 882,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour maintains the same outline and position in both dates, with the primary difference being a change in color/tone from brownish in T1 to bright white in T2, which aligns with scope card exclusions for seasonal or illumination differences.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_90__n9_0089.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_90__n9_0089/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_90.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_90.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_90.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/levir_any/train_90.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

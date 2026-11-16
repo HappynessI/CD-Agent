@@ -1,0 +1,114 @@
+{
+  "group": "whu_any",
+  "stem": "train_184",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 2805,
+    "fp": 61,
+    "fn": 89111,
+    "f1": 5.918845350382984,
+    "precision": 97.87159804605723,
+    "recall": 3.051699377692676
+  },
+  "after": {
+    "tp": 4457,
+    "fp": 745,
+    "fn": 87459,
+    "f1": 9.178525093185609,
+    "precision": 85.67858515955402,
+    "recall": 4.848992558422908
+  },
+  "delta_f1": 3.259679742802625,
+  "missing_gt_pixels": 89111,
+  "all_source_recalled_pixels": 53832,
+  "topk_recalled_pixels": 1652,
+  "added_tp": 1652,
+  "added_fp": 684,
+  "choices": [
+    {
+      "uid": "whu_any__train_184__n9_0078",
+      "index": 78,
+      "bbox": [
+        64,
+        333,
+        82,
+        356
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.5331161618232727,
+      "dino": 0.6244468688964844,
+      "area": 302,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 302,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object inside the contour is bare ground or a small pile in T1, but a distinct building structure with a roof and shadow appears in the same location in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_184__n9_0078.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_184__n9_0078/request.json"
+    },
+    {
+      "uid": "whu_any__train_184__n9_0001",
+      "index": 1,
+      "bbox": [
+        70,
+        332,
+        136,
+        378
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4775227904319763,
+      "dino": 0.6693081855773926,
+      "area": 2192,
+      "new_tp_pixels": 1652,
+      "new_fp_pixels": 540,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour was bare ground or non-structural material in T1, and a distinct white rectangular building structure is present in the same location in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_184__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_184__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_any__train_184__n9_0079",
+      "index": 79,
+      "bbox": [
+        86,
+        341,
+        135,
+        378
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.4472709894180298,
+      "dino": 0.694067120552063,
+      "area": 1546,
+      "new_tp_pixels": 1522,
+      "new_fp_pixels": 24,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area was bare ground in T1 and contains a new white building structure on top of an existing roof in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_184__n9_0079.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_184__n9_0079/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_184.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_184.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_184.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_184.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

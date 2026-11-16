@@ -1,0 +1,68 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_1527",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1608,
+    "f1": 0.0,
+    "precision": 0,
+    "recall": 0.0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1608,
+    "f1": 0.0,
+    "precision": 0,
+    "recall": 0.0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 1608,
+  "all_source_recalled_pixels": 1513,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_1527__n9_0002",
+      "index": 2,
+      "bbox": [
+        306,
+        151,
+        348,
+        191
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.20870448648929596,
+      "dino": 0.1400376558303833,
+      "area": 700,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 700,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is present in both T1 and T2, showing changes in surface tone and texture but not evidence of demolition or disappearance.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_1527__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_1527__n9_0002/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1527.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1527.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_1527.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_1527.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

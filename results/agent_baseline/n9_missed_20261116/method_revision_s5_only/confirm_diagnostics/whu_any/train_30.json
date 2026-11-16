@@ -1,0 +1,91 @@
+{
+  "group": "whu_any",
+  "stem": "train_30",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 3352,
+    "fp": 160,
+    "fn": 2820,
+    "f1": 69.22759190417183,
+    "precision": 95.44419134396355,
+    "recall": 54.30978613091381
+  },
+  "after": {
+    "tp": 4597,
+    "fp": 208,
+    "fn": 1575,
+    "f1": 83.7569463423522,
+    "precision": 95.67117585848075,
+    "recall": 74.48152948801037
+  },
+  "delta_f1": 14.529354438180363,
+  "missing_gt_pixels": 2820,
+  "all_source_recalled_pixels": 2509,
+  "topk_recalled_pixels": 1256,
+  "added_tp": 1245,
+  "added_fp": 48,
+  "choices": [
+    {
+      "uid": "whu_any__train_30__n9_0016",
+      "index": 16,
+      "bbox": [
+        347,
+        367,
+        372,
+        430
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.4653664827346802,
+      "dino": 0.44707268476486206,
+      "area": 1293,
+      "new_tp_pixels": 1245,
+      "new_fp_pixels": 48,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area marked by the red contour is bare ground in T1 and contains a new white rectangular building structure in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_30__n9_0016.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_30__n9_0016/request.json"
+    },
+    {
+      "uid": "whu_any__train_30__n9_0005",
+      "index": 5,
+      "bbox": [
+        346,
+        366,
+        372,
+        430
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4633425772190094,
+      "dino": 0.44227153062820435,
+      "area": 1337,
+      "new_tp_pixels": 1256,
+      "new_fp_pixels": 81,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the contour is a temporary trailer or vehicle present in both dates, not a permanent building, and its appearance change is due to illumination or sensor differences.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_30__n9_0005.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_30__n9_0005/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_30.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_30.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_30.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_30.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

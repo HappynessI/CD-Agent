@@ -1,0 +1,114 @@
+{
+  "group": "second_appeared",
+  "stem": "train_37",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "f1": 0,
+    "precision": 0,
+    "recall": 0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 90,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 0,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 90,
+  "choices": [
+    {
+      "uid": "second_appeared__train_37__n9_0000",
+      "index": 0,
+      "bbox": [
+        499,
+        186,
+        512,
+        194
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.23313839733600616,
+      "dino": 0.22149968147277832,
+      "area": 90,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 90,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows vegetation/ground in T1 and a distinct building structure in T2, indicating new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/second_appeared__train_37__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/second_appeared__train_37__n9_0000/request.json"
+    },
+    {
+      "uid": "second_appeared__train_37__n9_0002",
+      "index": 2,
+      "bbox": [
+        102,
+        159,
+        231,
+        231
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.05515724793076515,
+      "dino": 0.11231106519699097,
+      "area": 6178,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 6178,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building footprint inside the red contour is present in both T1 and T2 with no evidence of new construction; it is the same structure, so it does not meet the criteria for 'appeared' (newly constructed).",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/second_appeared__train_37__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/second_appeared__train_37__n9_0002/request.json"
+    },
+    {
+      "uid": "second_appeared__train_37__n9_0007",
+      "index": 7,
+      "bbox": [
+        287,
+        288,
+        333,
+        327
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.13583828508853912,
+      "dino": 0.07179403305053711,
+      "area": 1027,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 1027,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2 with no evidence of new construction; it is not absent in T1.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/second_appeared__train_37__n9_0007.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/second_appeared__train_37__n9_0007/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_37.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_37.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/new/train_37.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_appeared/train_37.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

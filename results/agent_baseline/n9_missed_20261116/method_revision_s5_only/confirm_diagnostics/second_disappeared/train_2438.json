@@ -1,0 +1,68 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_2438",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 20395,
+    "fp": 5707,
+    "fn": 4308,
+    "f1": 80.28737329003052,
+    "precision": 78.13577503639569,
+    "recall": 82.56082257215722
+  },
+  "after": {
+    "tp": 20395,
+    "fp": 5707,
+    "fn": 4308,
+    "f1": 80.28737329003052,
+    "precision": 78.13577503639569,
+    "recall": 82.56082257215722
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 4308,
+  "all_source_recalled_pixels": 2062,
+  "topk_recalled_pixels": 254,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_2438__n9_0006",
+      "index": 6,
+      "bbox": [
+        312,
+        357,
+        333,
+        373
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.226072296500206,
+      "dino": 0.3033040165901184,
+      "area": 254,
+      "new_tp_pixels": 254,
+      "new_fp_pixels": 0,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour persists in T2 (appearing as a light-colored roof or structure) rather than being demolished, so there is no evidence of disappearance.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2438__n9_0006.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2438__n9_0006/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2438.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2438.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_2438.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_2438.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

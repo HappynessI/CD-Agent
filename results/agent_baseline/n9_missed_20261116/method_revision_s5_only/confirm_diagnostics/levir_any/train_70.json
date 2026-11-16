@@ -1,0 +1,114 @@
+{
+  "group": "levir_any",
+  "stem": "train_70",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 96657,
+    "fp": 13482,
+    "fn": 12681,
+    "f1": 88.0793887286595,
+    "precision": 87.7591044044344,
+    "recall": 88.40201942600011
+  },
+  "after": {
+    "tp": 101228,
+    "fp": 13560,
+    "fn": 8110,
+    "f1": 90.33133148318356,
+    "precision": 88.1869184932223,
+    "recall": 92.58263366807515
+  },
+  "delta_f1": 2.251942754524066,
+  "missing_gt_pixels": 12681,
+  "all_source_recalled_pixels": 5554,
+  "topk_recalled_pixels": 4647,
+  "added_tp": 4571,
+  "added_fp": 78,
+  "choices": [
+    {
+      "uid": "levir_any__train_70__n9_0053",
+      "index": 53,
+      "bbox": [
+        607,
+        48,
+        614,
+        57
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.4807237982749939,
+      "dino": 0.5882768630981445,
+      "area": 49,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 49,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour maintains a consistent shape and position relative to the newly constructed road in T2, indicating it is the same structure with altered appearance due to lighting or seasonal changes.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_70__n9_0053.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_70__n9_0053/request.json"
+    },
+    {
+      "uid": "levir_any__train_70__n9_0098",
+      "index": 98,
+      "bbox": [
+        1017,
+        532,
+        1024,
+        548
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.40159979462623596,
+      "dino": 0.6182798147201538,
+      "area": 76,
+      "new_tp_pixels": 76,
+      "new_fp_pixels": 0,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red-contour region shows a consistent building structure in both T1 and T2 with no evidence of demolition or new construction, only differences in color and visibility due to imaging conditions.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_70__n9_0098.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_70__n9_0098/request.json"
+    },
+    {
+      "uid": "levir_any__train_70__n9_0088",
+      "index": 88,
+      "bbox": [
+        850,
+        461,
+        1024,
+        518
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.4152846336364746,
+      "dino": 0.5939732789993286,
+      "area": 4649,
+      "new_tp_pixels": 4571,
+      "new_fp_pixels": 78,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The red-contour area shows a small, irregular structure in T1 that is absent in T2, where a large, new rectangular building footprint has been constructed nearby, indicating the old structure was demolished and the site rebuilt.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_70__n9_0088.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_70__n9_0088/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_70.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_70.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_70.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/levir_any/train_70.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

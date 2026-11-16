@@ -1,0 +1,114 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_37",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 348,
+    "f1": 0.0,
+    "precision": 0,
+    "recall": 0.0
+  },
+  "after": {
+    "tp": 225,
+    "fp": 1807,
+    "fn": 123,
+    "f1": 18.907563025210084,
+    "precision": 11.07283464566929,
+    "recall": 64.65517241379311
+  },
+  "delta_f1": 18.907563025210084,
+  "missing_gt_pixels": 348,
+  "all_source_recalled_pixels": 225,
+  "topk_recalled_pixels": 225,
+  "added_tp": 225,
+  "added_fp": 1807,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_37__n9_0002",
+      "index": 2,
+      "bbox": [
+        0,
+        154,
+        32,
+        177
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.39769214391708374,
+      "dino": 0.24332094192504883,
+      "area": 668,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 668,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a distinct building structure in T1 that is completely absent in T2, replaced by vegetation/ground, indicating the building has been demolished.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_37__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_37__n9_0002/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_37__n9_0003",
+      "index": 3,
+      "bbox": [
+        466,
+        346,
+        479,
+        360
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4019358158111572,
+      "dino": 0.23318874835968018,
+      "area": 166,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 166,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building is present in both T1 and T2 within the red contour; the change in color/tone from bright white to blueish-grey is likely due to seasonal, illumination, or sensor differences rather than demolition, as the structural footprint remains.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_37__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_37__n9_0003/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_37__n9_0000",
+      "index": 0,
+      "bbox": [
+        437,
+        0,
+        507,
+        26
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2750365734100342,
+      "dino": 0.1905440092086792,
+      "area": 1364,
+      "new_tp_pixels": 225,
+      "new_fp_pixels": 1139,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The building present in T1 within the red contour is absent in T2, indicating it has been demolished.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_37__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_37__n9_0000/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_37.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_37.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_37.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_37.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

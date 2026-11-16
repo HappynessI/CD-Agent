@@ -1,0 +1,183 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_182",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 1837,
+    "fp": 67,
+    "fn": 3685,
+    "f1": 49.47481820630218,
+    "precision": 96.48109243697479,
+    "recall": 33.266932270916335
+  },
+  "after": {
+    "tp": 5422,
+    "fp": 1685,
+    "fn": 100,
+    "f1": 85.86586428062397,
+    "precision": 76.29098072323062,
+    "recall": 98.18906193408185
+  },
+  "delta_f1": 36.391046074321785,
+  "missing_gt_pixels": 3685,
+  "all_source_recalled_pixels": 3585,
+  "topk_recalled_pixels": 3585,
+  "added_tp": 3585,
+  "added_fp": 1618,
+  "choices": [
+    {
+      "uid": "whu_appeared__train_182__n9_0001",
+      "index": 1,
+      "bbox": [
+        112,
+        83,
+        172,
+        171
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.17815949022769928,
+      "dino": 0.439561128616333,
+      "area": 5218,
+      "new_tp_pixels": 3585,
+      "new_fp_pixels": 1618,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows temporary materials and vehicles in T1, which are replaced by a new building roof structure in T2, indicating new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_182__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_182__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_182__n9_0002",
+      "index": 2,
+      "bbox": [
+        392,
+        78,
+        403,
+        99
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.29702556133270264,
+      "dino": 0.5622405409812927,
+      "area": 197,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 197,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is a vehicle (car) in both T1 and T2, not a building; changes in vehicles do not count as building changes.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_182__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_182__n9_0002/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_182__n9_0003",
+      "index": 3,
+      "bbox": [
+        232,
+        138,
+        242,
+        163
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.11450555920600891,
+      "dino": 0.5644713044166565,
+      "area": 237,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 237,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour in T2 is a vehicle (car) parked in a parking space, not a building. According to the scope card, vehicles do not count as building changes.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_182__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_182__n9_0003/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_182__n9_0006",
+      "index": 6,
+      "bbox": [
+        297,
+        420,
+        306,
+        427
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.11905298382043839,
+      "dino": 0.7660260796546936,
+      "area": 39,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 39,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour in T2 is a white vehicle parked in a parking space, not a building, and vehicles are explicitly excluded by the scope card.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_182__n9_0006.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_182__n9_0006/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_182__n9_0005",
+      "index": 5,
+      "bbox": [
+        300,
+        410,
+        306,
+        418
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.10041001439094543,
+      "dino": 0.6375631093978882,
+      "area": 34,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 34,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a parking space with a car in T2 and empty pavement in T1; this is a vehicle change, not a building change.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_182__n9_0005.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_182__n9_0005/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_182__n9_0004",
+      "index": 4,
+      "bbox": [
+        131,
+        401,
+        141,
+        418
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.06040409579873085,
+      "dino": 0.577919602394104,
+      "area": 112,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 112,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is a vehicle (car) in both T1 and T2, not a building; changes involving vehicles do not count as building change.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_182__n9_0004.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_182__n9_0004/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_182.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_182.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_182.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_182.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_appeared/train_182.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

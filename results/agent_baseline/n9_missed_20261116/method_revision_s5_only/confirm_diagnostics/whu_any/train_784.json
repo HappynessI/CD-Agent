@@ -1,0 +1,114 @@
+{
+  "group": "whu_any",
+  "stem": "train_784",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 56035,
+    "fp": 2704,
+    "fn": 2085,
+    "f1": 95.90189886957786,
+    "precision": 95.39658489249051,
+    "recall": 96.41259463179628
+  },
+  "after": {
+    "tp": 56046,
+    "fp": 3474,
+    "fn": 2074,
+    "f1": 95.2839170350221,
+    "precision": 94.1633064516129,
+    "recall": 96.43152099105299
+  },
+  "delta_f1": -0.6179818345557635,
+  "missing_gt_pixels": 2085,
+  "all_source_recalled_pixels": 312,
+  "topk_recalled_pixels": 11,
+  "added_tp": 11,
+  "added_fp": 770,
+  "choices": [
+    {
+      "uid": "whu_any__train_784__n9_0001",
+      "index": 1,
+      "bbox": [
+        97,
+        36,
+        105,
+        44
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.7126234173774719,
+      "dino": 0.8038462400436401,
+      "area": 37,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 37,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour is a small roof structure (e.g., a chimney or vent) present in both dates at the same location, showing consistent shape and position relative to the main building, with no evidence of construction, demolition, or replacement.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_784__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_784__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_any__train_784__n9_0000",
+      "index": 0,
+      "bbox": [
+        117,
+        30,
+        146,
+        56
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.6623348593711853,
+      "dino": 0.6584010124206543,
+      "area": 379,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 379,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour maintains the same position, size, and rectangular shape in both dates, indicating it is the same building with only differences in roof texture and coloration.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_784__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_784__n9_0000/request.json"
+    },
+    {
+      "uid": "whu_any__train_784__n9_0004",
+      "index": 4,
+      "bbox": [
+        0,
+        151,
+        26,
+        199
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.5740290880203247,
+      "dino": 0.5442776083946228,
+      "area": 781,
+      "new_tp_pixels": 11,
+      "new_fp_pixels": 770,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is bare ground or a non-building feature in T1, while a distinct building with a white roof appears in the same location in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_784__n9_0004.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_784__n9_0004/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_784.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_784.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_784.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_784.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

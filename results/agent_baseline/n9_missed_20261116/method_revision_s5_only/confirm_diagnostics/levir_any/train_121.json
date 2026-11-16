@@ -1,0 +1,114 @@
+{
+  "group": "levir_any",
+  "stem": "train_121",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 39247,
+    "fp": 10230,
+    "fn": 1679,
+    "f1": 86.82676459851996,
+    "precision": 79.32372617579885,
+    "recall": 95.89747348873577
+  },
+  "after": {
+    "tp": 39247,
+    "fp": 12217,
+    "fn": 1679,
+    "f1": 84.95941119168741,
+    "precision": 76.26107570340432,
+    "recall": 95.89747348873577
+  },
+  "delta_f1": -1.8673534068325495,
+  "missing_gt_pixels": 1679,
+  "all_source_recalled_pixels": 171,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 1987,
+  "choices": [
+    {
+      "uid": "levir_any__train_121__n9_0014",
+      "index": 14,
+      "bbox": [
+        541,
+        581,
+        556,
+        602
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.5695394277572632,
+      "dino": 0.7283044457435608,
+      "area": 43,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 43,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour highlights a gap between two buildings that remain present in both dates; the apparent shift in the blue building masks relative to the background is due to misregistration, not a change in the building itself.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_121__n9_0014.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_121__n9_0014/request.json"
+    },
+    {
+      "uid": "levir_any__train_121__n9_0010",
+      "index": 10,
+      "bbox": [
+        533,
+        529,
+        603,
+        570
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4377155303955078,
+      "dino": 0.6813498735427856,
+      "area": 604,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 604,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red-contour region marks the same elongated building structure in both T1 and T2, with consistent shape and position relative to neighboring buildings and the road, despite differences in surrounding land cover and image clarity.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_121__n9_0010.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_121__n9_0010/request.json"
+    },
+    {
+      "uid": "levir_any__train_121__n9_0003",
+      "index": 3,
+      "bbox": [
+        755,
+        278,
+        817,
+        336
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4705587923526764,
+      "dino": 0.6279555559158325,
+      "area": 1987,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 1987,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is a building with a distinct roof structure in T1, but it is absent in T2 where the area appears as cleared ground or pavement, indicating demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_121__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_121__n9_0003/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_121.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_121.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_121.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/levir_any/train_121.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

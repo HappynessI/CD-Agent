@@ -1,0 +1,183 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_2461",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 2563,
+    "fp": 187,
+    "fn": 3573,
+    "f1": 57.686248030609946,
+    "precision": 93.2,
+    "recall": 41.76988265971317
+  },
+  "after": {
+    "tp": 3613,
+    "fp": 1180,
+    "fn": 2523,
+    "f1": 66.11766858815994,
+    "precision": 75.38076361360316,
+    "recall": 58.882007822685786
+  },
+  "delta_f1": 8.431420557549998,
+  "missing_gt_pixels": 3573,
+  "all_source_recalled_pixels": 2320,
+  "topk_recalled_pixels": 2037,
+  "added_tp": 1050,
+  "added_fp": 993,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_2461__n9_0009",
+      "index": 9,
+      "bbox": [
+        239,
+        176,
+        304,
+        196
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.5162598490715027,
+      "dino": 0.3271949887275696,
+      "area": 1140,
+      "new_tp_pixels": 865,
+      "new_fp_pixels": 275,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2; there is no evidence of demolition or disappearance.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2461__n9_0009.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2461__n9_0009/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_2461__n9_0010",
+      "index": 10,
+      "bbox": [
+        309,
+        234,
+        347,
+        257
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.46150946617126465,
+      "dino": 0.3190392851829529,
+      "area": 546,
+      "new_tp_pixels": 480,
+      "new_fp_pixels": 66,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour is present in both T1 and T2 (visible as a small structure in T1 and a lighter patch in T2), so it has not disappeared; per scope card, replacement would be 'rebuilt' and non-building changes are excluded.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2461__n9_0010.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2461__n9_0010/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_2461__n9_0001",
+      "index": 1,
+      "bbox": [
+        308,
+        233,
+        347,
+        257
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.45166313648223877,
+      "dino": 0.31078410148620605,
+      "area": 586,
+      "new_tp_pixels": 488,
+      "new_fp_pixels": 98,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2 (changing appearance from blue to grey/white), so it has not disappeared; per scope, a building replaced by a different building at the same location is 'rebuilt', not demolished.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2461__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2461__n9_0001/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_2461__n9_0000",
+      "index": 0,
+      "bbox": [
+        220,
+        176,
+        306,
+        208
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.46723097562789917,
+      "dino": 0.22414296865463257,
+      "area": 2043,
+      "new_tp_pixels": 1050,
+      "new_fp_pixels": 993,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The red-contour area shows a building with a distinct roof in T1 that is absent in T2, where the location appears as bare ground or vegetation, indicating demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2461__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2461__n9_0000/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_2461__n9_0011",
+      "index": 11,
+      "bbox": [
+        388,
+        238,
+        422,
+        257
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.27163586020469666,
+      "dino": 0.18277758359909058,
+      "area": 583,
+      "new_tp_pixels": 499,
+      "new_fp_pixels": 84,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building is present in both T1 and T2 within the red contour, showing only illumination or tone differences rather than demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2461__n9_0011.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2461__n9_0011/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_2461__n9_0003",
+      "index": 3,
+      "bbox": [
+        388,
+        238,
+        432,
+        261
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2138577550649643,
+      "dino": 0.15687775611877441,
+      "area": 841,
+      "new_tp_pixels": 499,
+      "new_fp_pixels": 342,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building is present in both T1 and T2 (only tone/illumination changed), so it is not demolished; per scope, replacement at the same location would be 'rebuilt', not disappeared.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_2461__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_2461__n9_0003/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_2461.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_2461.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_2461.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_2461.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

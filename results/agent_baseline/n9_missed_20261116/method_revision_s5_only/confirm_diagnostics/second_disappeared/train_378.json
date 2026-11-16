@@ -1,0 +1,114 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_378",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 532,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 920,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 0,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 388,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_378__n9_0032",
+      "index": 32,
+      "bbox": [
+        173,
+        61,
+        200,
+        84
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.46825385093688965,
+      "dino": 0.27767521142959595,
+      "area": 388,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 388,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The building present in T1 (bright white roof) is absent in T2, where the footprint shows only a small remnant or shadow with no complete structure, indicating demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_378__n9_0032.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_378__n9_0032/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_378__n9_0037",
+      "index": 37,
+      "bbox": [
+        217,
+        133,
+        236,
+        147
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.22338998317718506,
+      "dino": 0.1480952501296997,
+      "area": 187,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 187,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building within the red contour remains present in T2 with no clear evidence of demolition, as the structure and roof are still visible.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_378__n9_0037.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_378__n9_0037/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_378__n9_0002",
+      "index": 2,
+      "bbox": [
+        452,
+        51,
+        468,
+        68
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2918785512447357,
+      "dino": 0.0549314022064209,
+      "area": 197,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 197,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2, so it has not disappeared.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_378__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_378__n9_0002/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_378.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_378.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_378.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_378.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

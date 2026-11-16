@@ -1,0 +1,137 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_1370",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 797,
+    "fp": 3950,
+    "fn": 4102,
+    "f1": 16.52498444951275,
+    "precision": 16.78955129555509,
+    "recall": 16.268626250255153
+  },
+  "after": {
+    "tp": 797,
+    "fp": 3950,
+    "fn": 4102,
+    "f1": 16.52498444951275,
+    "precision": 16.78955129555509,
+    "recall": 16.268626250255153
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 4102,
+  "all_source_recalled_pixels": 905,
+  "topk_recalled_pixels": 232,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_1370__n9_0010",
+      "index": 10,
+      "bbox": [
+        142,
+        353,
+        154,
+        378
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.20268119871616364,
+      "dino": 0.24249857664108276,
+      "area": 247,
+      "new_tp_pixels": 232,
+      "new_fp_pixels": 15,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2, showing only tonal/illumination differences rather than demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_1370__n9_0010.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_1370__n9_0010/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_1370__n9_0003",
+      "index": 3,
+      "bbox": [
+        99,
+        162,
+        115,
+        203
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.3434769809246063,
+      "dino": 0.0751878023147583,
+      "area": 444,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 444,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2 with consistent shape and location, showing no evidence of demolition or disappearance.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_1370__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_1370__n9_0003/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_1370__n9_0014",
+      "index": 14,
+      "bbox": [
+        17,
+        393,
+        41,
+        416
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.21414457261562347,
+      "dino": 0.10058045387268066,
+      "area": 336,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 336,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2, showing only minor color/tone differences which are excluded by the scope card.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_1370__n9_0014.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_1370__n9_0014/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_1370__n9_0002",
+      "index": 2,
+      "bbox": [
+        60,
+        150,
+        87,
+        202
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2416297048330307,
+      "dino": 0.06962519884109497,
+      "area": 1080,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 1080,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both T1 and T2 with no evidence of demolition, so it does not meet the criteria for a disappeared building change.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_1370__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_1370__n9_0002/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_1370.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_1370.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_1370.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_1370.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

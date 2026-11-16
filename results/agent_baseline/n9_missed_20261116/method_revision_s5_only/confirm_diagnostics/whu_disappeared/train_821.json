@@ -1,0 +1,114 @@
+{
+  "group": "whu_disappeared",
+  "stem": "train_821",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 358,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 592,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 0,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 234,
+  "choices": [
+    {
+      "uid": "whu_disappeared__train_821__n9_0001",
+      "index": 1,
+      "bbox": [
+        382,
+        76,
+        407,
+        91
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2929379343986511,
+      "dino": 0.15463411808013916,
+      "area": 210,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 210,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour changes from a white roof-like structure in T1 to green vegetation in T2, indicating land cover change (e.g., demolition followed by regrowth or removal of debris), but there is no clear evidence of a building disappearing; rather, the feature appears to have been replaced by non-building cover.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/whu_disappeared__train_821__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/whu_disappeared__train_821__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_disappeared__train_821__n9_0003",
+      "index": 3,
+      "bbox": [
+        41,
+        32,
+        59,
+        52
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.3602546751499176,
+      "dino": 0.08470731973648071,
+      "area": 229,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 229,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a distinct white building structure in T1 that is absent in T2, replaced by vegetation and ground, indicating the building has been demolished.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/whu_disappeared__train_821__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/whu_disappeared__train_821__n9_0003/request.json"
+    },
+    {
+      "uid": "whu_disappeared__train_821__n9_0000",
+      "index": 0,
+      "bbox": [
+        41,
+        32,
+        59,
+        52
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.35694485902786255,
+      "dino": 0.08398663997650146,
+      "area": 233,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 233,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a distinct white building roof in T1 that is absent in T2, replaced by vegetation/ground cover, indicating the building has disappeared.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/whu_disappeared__train_821__n9_0000.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/whu_disappeared__train_821__n9_0000/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 2,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_821.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_821.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/demolished/train_821.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_821.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_disappeared/train_821.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

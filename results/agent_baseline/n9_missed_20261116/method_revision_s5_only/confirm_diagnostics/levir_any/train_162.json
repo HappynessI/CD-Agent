@@ -1,0 +1,114 @@
+{
+  "group": "levir_any",
+  "stem": "train_162",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 76774,
+    "fp": 5742,
+    "fn": 7452,
+    "f1": 92.08717659617852,
+    "precision": 93.04134955644966,
+    "recall": 91.15237575095576
+  },
+  "after": {
+    "tp": 77026,
+    "fp": 6132,
+    "fn": 7200,
+    "f1": 92.03508101132725,
+    "precision": 92.62608528343635,
+    "recall": 91.4515707738703
+  },
+  "delta_f1": -0.05209558485127275,
+  "missing_gt_pixels": 7452,
+  "all_source_recalled_pixels": 667,
+  "topk_recalled_pixels": 467,
+  "added_tp": 252,
+  "added_fp": 390,
+  "choices": [
+    {
+      "uid": "levir_any__train_162__n9_0002",
+      "index": 2,
+      "bbox": [
+        485,
+        472,
+        510,
+        512
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.7588192224502563,
+      "dino": 0.7161271572113037,
+      "area": 642,
+      "new_tp_pixels": 252,
+      "new_fp_pixels": 390,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object in the red contour has changed from a simple, uniform grey shape in T1 to a complex structure with distinct white linear roof elements and shadows in T2, indicating the original building was demolished and replaced by a different one.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_162__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_162__n9_0002/request.json"
+    },
+    {
+      "uid": "levir_any__train_162__n9_0005",
+      "index": 5,
+      "bbox": [
+        587,
+        647,
+        599,
+        667
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.43591830134391785,
+      "dino": 0.7242250442504883,
+      "area": 219,
+      "new_tp_pixels": 215,
+      "new_fp_pixels": 4,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object maintains the same outline and position in both dates, with the tonal difference (grey to white) likely caused by illumination or seasonal changes rather than demolition or construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_162__n9_0005.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_162__n9_0005/request.json"
+    },
+    {
+      "uid": "levir_any__train_162__n9_0011",
+      "index": 11,
+      "bbox": [
+        962,
+        895,
+        982,
+        902
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.4941631853580475,
+      "dino": 0.5098799467086792,
+      "area": 71,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 71,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour marks the same small roof structure on the corner of the main building in both dates, with consistent shape and position relative to the building's fixed geometry.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_162__n9_0011.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_162__n9_0011/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_162.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_162.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_162.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/levir_any/train_162.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

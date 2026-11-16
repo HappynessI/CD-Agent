@@ -1,0 +1,160 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_723",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 353,
+    "fp": 121,
+    "fn": 20,
+    "f1": 83.3530106257379,
+    "precision": 74.47257383966245,
+    "recall": 94.63806970509384
+  },
+  "after": {
+    "tp": 353,
+    "fp": 172,
+    "fn": 20,
+    "f1": 78.61915367483296,
+    "precision": 67.23809523809524,
+    "recall": 94.63806970509384
+  },
+  "delta_f1": -4.733856950904936,
+  "missing_gt_pixels": 20,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 51,
+  "choices": [
+    {
+      "uid": "whu_appeared__train_723__n9_0007",
+      "index": 7,
+      "bbox": [
+        8,
+        80,
+        22,
+        95
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.24964763224124908,
+      "dino": 0.5878365635871887,
+      "area": 119,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 119,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour in T2 appears to be a vehicle (likely a truck or construction equipment) rather than a building, and vehicles are explicitly excluded from building changes.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_723__n9_0007.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_723__n9_0007/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_723__n9_0006",
+      "index": 6,
+      "bbox": [
+        390,
+        7,
+        399,
+        15
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.25431016087532043,
+      "dino": 0.6659464836120605,
+      "area": 51,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 51,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows bare ground/vegetation in T1 and a distinct new building roof structure in T2, indicating new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_723__n9_0006.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_723__n9_0006/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_723__n9_0002",
+      "index": 2,
+      "bbox": [
+        165,
+        121,
+        183,
+        141
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.17761333286762238,
+      "dino": 0.2894192934036255,
+      "area": 237,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 237,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour in T1 appears to be a piece of construction equipment (like an excavator) rather than a building, and while a white structure appears in T2, the T1 target is not a building that was absent, thus failing the 'newly constructed' definition for buildings.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_723__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_723__n9_0002/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_723__n9_0008",
+      "index": 8,
+      "bbox": [
+        279,
+        256,
+        288,
+        263
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.17620380222797394,
+      "dino": 0.7321600317955017,
+      "area": 26,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 26,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows construction vehicles in T1 and a parking space line in T2; since vehicles are explicitly excluded and no building structure is present in T2, there is no evidence of new building construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_723__n9_0008.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_723__n9_0008/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_723__n9_0009",
+      "index": 9,
+      "bbox": [
+        287,
+        266,
+        297,
+        274
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.1372612863779068,
+      "dino": 0.7096757888793945,
+      "area": 27,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 27,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour in T1 is a piece of construction equipment (vehicle), which is explicitly excluded by the scope card, and it is absent in T2 where only parking lines remain.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_723__n9_0009.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_723__n9_0009/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_723.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_723.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_723.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_723.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_appeared/train_723.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

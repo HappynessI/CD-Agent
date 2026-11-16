@@ -1,0 +1,114 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_47",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 4208,
+    "fp": 466,
+    "fn": 577,
+    "f1": 88.97346442541495,
+    "precision": 90.02995293110826,
+    "recall": 87.94148380355277
+  },
+  "after": {
+    "tp": 4208,
+    "fp": 730,
+    "fn": 577,
+    "f1": 86.55764681682608,
+    "precision": 85.21668691778048,
+    "recall": 87.94148380355277
+  },
+  "delta_f1": -2.415817608588867,
+  "missing_gt_pixels": 577,
+  "all_source_recalled_pixels": 277,
+  "topk_recalled_pixels": 277,
+  "added_tp": 0,
+  "added_fp": 264,
+  "choices": [
+    {
+      "uid": "whu_appeared__train_47__n9_0002",
+      "index": 2,
+      "bbox": [
+        422,
+        203,
+        439,
+        223
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.22010275721549988,
+      "dino": 0.3657316565513611,
+      "area": 237,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 237,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour in T2 appears to be a shadow cast by the adjacent large building, not a newly constructed building, as it lacks structural features and matches the shape of an overhang.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_47__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_47__n9_0002/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_47__n9_0001",
+      "index": 1,
+      "bbox": [
+        386,
+        132,
+        410,
+        173
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.25631630420684814,
+      "dino": 0.22445303201675415,
+      "area": 329,
+      "new_tp_pixels": 277,
+      "new_fp_pixels": 52,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a tree and garden space in T1 that is covered by a new dark roof structure in T2; however, the specific object highlighted (a thin vertical feature resembling a fence or trellis) appears to be removed or obscured rather than a building newly constructed, and the primary change is the large adjacent roof extension which falls outside the strict contour.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_47__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_47__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_47__n9_0005",
+      "index": 5,
+      "bbox": [
+        370,
+        451,
+        388,
+        470
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.07214286178350449,
+      "dino": 0.07920867204666138,
+      "area": 264,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 264,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows bare ground in T1 and a distinct dark, circular roof structure in T2, indicating new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_47__n9_0005.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_47__n9_0005/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_47.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_47.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_47.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_47.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_appeared/train_47.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

@@ -1,0 +1,183 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_356",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 9779,
+    "fp": 486,
+    "fn": 436,
+    "f1": 95.498046875,
+    "precision": 95.26546517291769,
+    "recall": 95.73176700930004
+  },
+  "after": {
+    "tp": 9779,
+    "fp": 1086,
+    "fn": 436,
+    "f1": 92.77988614800759,
+    "precision": 90.00460193281178,
+    "recall": 95.73176700930004
+  },
+  "delta_f1": -2.7181607269924086,
+  "missing_gt_pixels": 436,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 600,
+  "choices": [
+    {
+      "uid": "whu_appeared__train_356__n9_0007",
+      "index": 7,
+      "bbox": [
+        198,
+        207,
+        225,
+        235
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.27226248383522034,
+      "dino": 0.5540817975997925,
+      "area": 408,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 408,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a transition from dense tree canopy in T1 to bare ground/vegetation in T2, with no visible building structure or roof fragments appearing in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_356__n9_0007.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_356__n9_0007/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_356__n9_0008",
+      "index": 8,
+      "bbox": [
+        175,
+        418,
+        192,
+        429
+      ],
+      "sources": [
+        "S4"
+      ],
+      "semantic_delta": 0.4795907735824585,
+      "dino": 0.603462815284729,
+      "area": 91,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 91,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows grass/vegetation in T1 and a new building roof structure in T2, indicating new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_356__n9_0008.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_356__n9_0008/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_356__n9_0005",
+      "index": 5,
+      "bbox": [
+        429,
+        376,
+        455,
+        403
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.1588527411222458,
+      "dino": 0.27567607164382935,
+      "area": 387,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 387,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "A building structure is present inside the red contour in both T1 and T2, so it is not a newly constructed building; the changes appear to be due to illumination, tone, or misregistration artifacts rather than actual construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_356__n9_0005.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_356__n9_0005/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_356__n9_0001",
+      "index": 1,
+      "bbox": [
+        345,
+        262,
+        377,
+        296
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.1382901966571808,
+      "dino": 0.16833537817001343,
+      "area": 355,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 355,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a distinct, newly constructed roof structure in T2 that is absent in T1, where only ground or debris was visible previously.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_356__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_356__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_356__n9_0004",
+      "index": 4,
+      "bbox": [
+        204,
+        343,
+        218,
+        358
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2953088879585266,
+      "dino": 0.10197001695632935,
+      "area": 154,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 154,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows bare ground/vegetation in T1 and a new building roof in T2, indicating new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_356__n9_0004.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_356__n9_0004/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_356__n9_0003",
+      "index": 3,
+      "bbox": [
+        491,
+        335,
+        512,
+        360
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.056756217032670975,
+      "dino": 0.13695257902145386,
+      "area": 292,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 292,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows vegetation and ground in T1 and remains as non-building land cover (vegetation/ground) in T2, with no new building constructed.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_356__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_356__n9_0003/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 3,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_356.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_356.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_356.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_356.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_appeared/train_356.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

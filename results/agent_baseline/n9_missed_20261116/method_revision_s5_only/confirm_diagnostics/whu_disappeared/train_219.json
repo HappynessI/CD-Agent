@@ -1,0 +1,68 @@
+{
+  "group": "whu_disappeared",
+  "stem": "train_219",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 448,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 742,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 0,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 294,
+  "choices": [
+    {
+      "uid": "whu_disappeared__train_219__n9_0003",
+      "index": 3,
+      "bbox": [
+        127,
+        433,
+        141,
+        459
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.5446759462356567,
+      "dino": 0.14283615350723267,
+      "area": 294,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 294,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The building present in T1 (white roof) is absent in T2, where the area shows ground/vegetation instead, indicating a demolished change.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/whu_disappeared__train_219__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/whu_disappeared__train_219__n9_0003/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_219.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_219.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/demolished/train_219.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_219.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_disappeared/train_219.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

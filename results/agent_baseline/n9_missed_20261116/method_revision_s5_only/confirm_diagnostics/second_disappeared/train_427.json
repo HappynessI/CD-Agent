@@ -1,0 +1,91 @@
+{
+  "group": "second_disappeared",
+  "stem": "train_427",
+  "config": {
+    "profile": "demolish",
+    "semantic": 0.2,
+    "dino": null,
+    "alpha": 0.0,
+    "verifier": "V4",
+    "k": 15,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 2447,
+    "fn": 189,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0.0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 2883,
+    "fn": 189,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0.0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 189,
+  "all_source_recalled_pixels": 162,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 436,
+  "choices": [
+    {
+      "uid": "second_disappeared__train_427__n9_0006",
+      "index": 6,
+      "bbox": [
+        0,
+        166,
+        20,
+        198
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.28946200013160706,
+      "dino": 0.31285107135772705,
+      "area": 436,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 436,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a bright, structured roof in T1 that has disappeared and been replaced by bare ground/vegetation in T2, indicating demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_427__n9_0006.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_427__n9_0006/request.json"
+    },
+    {
+      "uid": "second_disappeared__train_427__n9_0008",
+      "index": 8,
+      "bbox": [
+        0,
+        275,
+        10,
+        298
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.32848626375198364,
+      "dino": 0.15181517601013184,
+      "area": 148,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 148,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a small structure or pile in T1 that is no longer present in T2, but given the low resolution and proximity to other objects, it is ambiguous whether this represents a demolished building or merely temporary materials/vehicles which do not count as building change.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V4/second_disappeared__train_427__n9_0008.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V4/second_disappeared__train_427__n9_0008/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img1/train_427.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/SECOND/img2/train_427.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/second_dev/second/gt/demolished/train_427.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/second_disappeared/train_427.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

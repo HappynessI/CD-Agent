@@ -1,0 +1,894 @@
+{
+  "status": "single_turn_tune_and_confirm_complete",
+  "profiles": {
+    "any": {
+      "config": {
+        "profile": "any",
+        "semantic": 0.4,
+        "dino": 0.4,
+        "alpha": 0.0,
+        "verifier": "V2",
+        "k": 3,
+        "sources": "S1_S2_S5"
+      },
+      "split": "tune",
+      "lines": {
+        "levir_any": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 1244041,
+            "fp": 212470,
+            "fn": 342183,
+            "f1": 81.77123541813533,
+            "precision": 85.41239990635155,
+            "recall": 78.42782608257093
+          },
+          "after": {
+            "tp": 1246005,
+            "fp": 213299,
+            "fn": 340219,
+            "f1": 81.82522045438427,
+            "precision": 85.38351159182734,
+            "recall": 78.5516421388152
+          },
+          "delta_f1": 0.053985036248931806,
+          "macro_baseline": {
+            "f1": 71.27269319007537,
+            "precision": 72.42967964144441,
+            "recall": 72.45597099355005
+          },
+          "macro_after": {
+            "f1": 71.27554921831997,
+            "precision": 72.38401120181074,
+            "recall": 72.4875064524761
+          },
+          "macro_delta": 0.0028560282445897183,
+          "added_tp": 1964,
+          "added_fp": 829,
+          "wins": 1,
+          "losses": 2,
+          "ties": 27,
+          "harm_rate": 0.06666666666666667,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 34,
+          "vlm_trigger_rate": 0.4666666666666667,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.0084612,
+          "empty_gt_tasks": 3,
+          "empty_gt_fp": 0,
+          "empty_gt_added_fp": 0
+        },
+        "whu_any": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 259920,
+            "fp": 26853,
+            "fn": 273716,
+            "f1": 63.36351746506925,
+            "precision": 90.63614775449571,
+            "recall": 48.70735857400925
+          },
+          "after": {
+            "tp": 277087,
+            "fp": 30472,
+            "fn": 256549,
+            "f1": 65.8793739858178,
+            "precision": 90.09230749222101,
+            "recall": 51.924345433966224
+          },
+          "delta_f1": 2.5158565207485424,
+          "macro_baseline": {
+            "f1": 30.55842763288482,
+            "precision": 34.1146577635443,
+            "recall": 32.762488050274214
+          },
+          "macro_after": {
+            "f1": 32.84198399450211,
+            "precision": 39.1173996239007,
+            "recall": 34.567553761694896
+          },
+          "macro_delta": 2.283556361617292,
+          "added_tp": 17167,
+          "added_fp": 3619,
+          "wins": 4,
+          "losses": 2,
+          "ties": 24,
+          "harm_rate": 0.06666666666666667,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 29,
+          "vlm_trigger_rate": 0.4,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.0072962,
+          "empty_gt_tasks": 12,
+          "empty_gt_fp": 4583,
+          "empty_gt_added_fp": 826
+        }
+      },
+      "equal_line_delta_f1": 1.284920778498737
+    },
+    "build": {
+      "config": {
+        "profile": "build",
+        "semantic": 0.05,
+        "dino": null,
+        "alpha": 0.5,
+        "verifier": "V3",
+        "k": 10,
+        "sources": "all"
+      },
+      "split": "tune",
+      "lines": {
+        "second_appeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 361182,
+            "fp": 57738,
+            "fn": 395629,
+            "f1": 61.43956398189722,
+            "precision": 86.21741621311945,
+            "recall": 47.72420062604798
+          },
+          "after": {
+            "tp": 519769,
+            "fp": 142665,
+            "fn": 237042,
+            "f1": 73.24584550236217,
+            "precision": 78.4635148558196,
+            "recall": 68.67883791329672
+          },
+          "delta_f1": 11.80628152046495,
+          "macro_baseline": {
+            "f1": 39.76254206254327,
+            "precision": 56.901434709350966,
+            "recall": 37.4649669476569
+          },
+          "macro_after": {
+            "f1": 53.96937385678371,
+            "precision": 60.81044178846034,
+            "recall": 55.20913958742711
+          },
+          "macro_delta": 14.206831794240438,
+          "added_tp": 158587,
+          "added_fp": 84927,
+          "wins": 17,
+          "losses": 7,
+          "ties": 6,
+          "harm_rate": 0.23333333333333334,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 241,
+          "vlm_trigger_rate": 0.9333333333333333,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.054980799999999996,
+          "empty_gt_tasks": 1,
+          "empty_gt_fp": 3054,
+          "empty_gt_added_fp": 0
+        },
+        "whu_appeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 258422,
+            "fp": 29318,
+            "fn": 259864,
+            "f1": 64.12249728916933,
+            "precision": 89.81094043233475,
+            "recall": 49.86088761803329
+          },
+          "after": {
+            "tp": 400575,
+            "fp": 102601,
+            "fn": 117711,
+            "f1": 78.43169887866607,
+            "precision": 79.609321589265,
+            "recall": 77.28840833053565
+          },
+          "delta_f1": 14.309201589496737,
+          "macro_baseline": {
+            "f1": 28.995468978049516,
+            "precision": 32.64381548316174,
+            "recall": 30.657824811681685
+          },
+          "macro_after": {
+            "f1": 32.61470989502485,
+            "precision": 32.624697561437515,
+            "recall": 37.629391510178465
+          },
+          "macro_delta": 3.6192409169753414,
+          "added_tp": 142153,
+          "added_fp": 73283,
+          "wins": 5,
+          "losses": 8,
+          "ties": 17,
+          "harm_rate": 0.26666666666666666,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 196,
+          "vlm_trigger_rate": 0.8333333333333334,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.0449632,
+          "empty_gt_tasks": 15,
+          "empty_gt_fp": 11273,
+          "empty_gt_added_fp": 6617
+        }
+      },
+      "equal_line_delta_f1": 13.057741554980844
+    },
+    "demolish": {
+      "config": {
+        "profile": "demolish",
+        "semantic": 0.2,
+        "dino": null,
+        "alpha": 0.0,
+        "verifier": "V4",
+        "k": 15,
+        "sources": "S1_S2_S5"
+      },
+      "split": "tune",
+      "lines": {
+        "second_disappeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 33862,
+            "fp": 35128,
+            "fn": 89712,
+            "f1": 35.16960594919092,
+            "precision": 49.082475721119,
+            "recall": 27.402204347192775
+          },
+          "after": {
+            "tp": 38583,
+            "fp": 36977,
+            "fn": 84991,
+            "f1": 38.75079092470397,
+            "precision": 51.06273160402329,
+            "recall": 31.222587275640507
+          },
+          "delta_f1": 3.581184975513054,
+          "macro_baseline": {
+            "f1": 16.28248973729737,
+            "precision": 22.377787972745693,
+            "recall": 16.310965859871043
+          },
+          "macro_after": {
+            "f1": 17.010605227800916,
+            "precision": 22.326267265902306,
+            "recall": 17.000706424476057
+          },
+          "macro_delta": 0.7281154905035431,
+          "added_tp": 4721,
+          "added_fp": 1849,
+          "wins": 2,
+          "losses": 0,
+          "ties": 28,
+          "harm_rate": 0.0,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 64,
+          "vlm_trigger_rate": 0.5333333333333333,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.014760800000000004,
+          "empty_gt_tasks": 8,
+          "empty_gt_fp": 1023,
+          "empty_gt_added_fp": 0
+        },
+        "whu_disappeared": {
+          "tasks": 30,
+          "baseline": {
+            "tp": 2308,
+            "fp": 5576,
+            "fn": 9598,
+            "f1": 23.324911571500756,
+            "precision": 29.274479959411465,
+            "recall": 19.38518394087015
+          },
+          "after": {
+            "tp": 2308,
+            "fp": 10403,
+            "fn": 9598,
+            "f1": 18.75126944794248,
+            "precision": 18.157501376760287,
+            "recall": 19.38518394087015
+          },
+          "delta_f1": -4.573642123558276,
+          "macro_baseline": {
+            "f1": 9.56194892308296,
+            "precision": 9.272369691555218,
+            "recall": 9.886250838771268
+          },
+          "macro_after": {
+            "f1": 9.56194892308296,
+            "precision": 9.272369691555218,
+            "recall": 9.886250838771268
+          },
+          "macro_delta": 0.0,
+          "added_tp": 0,
+          "added_fp": 4827,
+          "wins": 0,
+          "losses": 0,
+          "ties": 30,
+          "harm_rate": 0.0,
+          "invalid_calls": 0,
+          "tasks_with_invalid": 0,
+          "calls": 44,
+          "vlm_trigger_rate": 0.5333333333333333,
+          "candidate_generation_rate": 1.0,
+          "counterfactual_answer_cost_cny": 0.010137600000000002,
+          "empty_gt_tasks": 25,
+          "empty_gt_fp": 9346,
+          "empty_gt_added_fp": 4827
+        }
+      },
+      "equal_line_delta_f1": -0.4962285740226111
+    }
+  },
+  "confirm_lines": {
+    "second_appeared": {
+      "tasks": 30,
+      "baseline": {
+        "tp": 328188,
+        "fp": 26227,
+        "fn": 260585,
+        "f1": 69.59121617323376,
+        "precision": 92.5999181750208,
+        "recall": 55.74100714536842
+      },
+      "after": {
+        "tp": 427592,
+        "fp": 106828,
+        "fn": 161181,
+        "f1": 76.1386511490011,
+        "precision": 80.01047864975114,
+        "recall": 72.62425416926388
+      },
+      "delta_f1": 6.547434975767345,
+      "macro_baseline": {
+        "f1": 39.83342137038621,
+        "precision": 50.24565314589828,
+        "recall": 35.268170687186725
+      },
+      "macro_after": {
+        "f1": 48.001159545257295,
+        "precision": 51.3302917116964,
+        "recall": 49.40355327951397
+      },
+      "macro_delta": 8.167738174871076,
+      "added_tp": 99404,
+      "added_fp": 80601,
+      "wins": 9,
+      "losses": 9,
+      "ties": 12,
+      "harm_rate": 0.3,
+      "invalid_calls": 0,
+      "tasks_with_invalid": 0,
+      "calls": 253,
+      "vlm_trigger_rate": 0.9666666666666667,
+      "candidate_generation_rate": 1.0,
+      "counterfactual_answer_cost_cny": 0.05757920000000001,
+      "empty_gt_tasks": 5,
+      "empty_gt_fp": 2521,
+      "empty_gt_added_fp": 849
+    },
+    "whu_appeared": {
+      "tasks": 30,
+      "baseline": {
+        "tp": 468272,
+        "fp": 24398,
+        "fn": 196734,
+        "f1": 80.89862794080554,
+        "precision": 95.04780075912883,
+        "recall": 70.41620677106673
+      },
+      "after": {
+        "tp": 543589,
+        "fp": 152235,
+        "fn": 121417,
+        "f1": 79.89080193705313,
+        "precision": 78.12162270919083,
+        "recall": 81.74196924539027
+      },
+      "delta_f1": -1.0078260037524132,
+      "macro_baseline": {
+        "f1": 41.48537346907799,
+        "precision": 47.02418850069064,
+        "recall": 40.42948087338332
+      },
+      "macro_after": {
+        "f1": 47.087943744468326,
+        "precision": 47.41638817927263,
+        "recall": 50.207541055645315
+      },
+      "macro_delta": 5.602570275390345,
+      "added_tp": 75317,
+      "added_fp": 127837,
+      "wins": 6,
+      "losses": 11,
+      "ties": 13,
+      "harm_rate": 0.36666666666666664,
+      "invalid_calls": 2,
+      "tasks_with_invalid": 2,
+      "calls": 203,
+      "vlm_trigger_rate": 0.9333333333333333,
+      "candidate_generation_rate": 1.0,
+      "counterfactual_answer_cost_cny": 0.0465608,
+      "empty_gt_tasks": 11,
+      "empty_gt_fp": 12188,
+      "empty_gt_added_fp": 8465
+    },
+    "second_disappeared": {
+      "tasks": 30,
+      "baseline": {
+        "tp": 55710,
+        "fp": 38434,
+        "fn": 55157,
+        "f1": 54.348303261776195,
+        "precision": 59.17530591434399,
+        "recall": 50.24939792724616
+      },
+      "after": {
+        "tp": 64120,
+        "fp": 50314,
+        "fn": 46747,
+        "f1": 56.919410033688266,
+        "precision": 56.03229809322404,
+        "recall": 57.83506363480567
+      },
+      "delta_f1": 2.5711067719120706,
+      "macro_baseline": {
+        "f1": 20.93214778819949,
+        "precision": 28.54967988305068,
+        "recall": 18.544987707705243
+      },
+      "macro_after": {
+        "f1": 24.74724415956278,
+        "precision": 28.615248655339062,
+        "recall": 24.162738682620702
+      },
+      "macro_delta": 3.815096371363289,
+      "added_tp": 8410,
+      "added_fp": 11880,
+      "wins": 5,
+      "losses": 0,
+      "ties": 25,
+      "harm_rate": 0.0,
+      "invalid_calls": 0,
+      "tasks_with_invalid": 0,
+      "calls": 96,
+      "vlm_trigger_rate": 0.8,
+      "candidate_generation_rate": 1.0,
+      "counterfactual_answer_cost_cny": 0.0220312,
+      "empty_gt_tasks": 11,
+      "empty_gt_fp": 16623,
+      "empty_gt_added_fp": 5781
+    },
+    "whu_disappeared": {
+      "tasks": 30,
+      "baseline": {
+        "tp": 0,
+        "fp": 3323,
+        "fn": 17128,
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "after": {
+        "tp": 1893,
+        "fp": 6903,
+        "fn": 15235,
+        "f1": 14.60422774263231,
+        "precision": 21.521145975443382,
+        "recall": 11.052078468005606
+      },
+      "delta_f1": 14.60422774263231,
+      "macro_baseline": {
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "macro_after": {
+        "f1": 2.145164031956485,
+        "precision": 3.209562563580875,
+        "recall": 1.6109267296400307
+      },
+      "macro_delta": 2.145164031956485,
+      "added_tp": 1893,
+      "added_fp": 3580,
+      "wins": 1,
+      "losses": 0,
+      "ties": 29,
+      "harm_rate": 0.0,
+      "invalid_calls": 0,
+      "tasks_with_invalid": 0,
+      "calls": 34,
+      "vlm_trigger_rate": 0.43333333333333335,
+      "candidate_generation_rate": 1.0,
+      "counterfactual_answer_cost_cny": 0.0078968,
+      "empty_gt_tasks": 23,
+      "empty_gt_fp": 5190,
+      "empty_gt_added_fp": 2865
+    },
+    "levir_any": {
+      "tasks": 30,
+      "baseline": {
+        "tp": 1110832,
+        "fp": 187642,
+        "fn": 163976,
+        "f1": 86.33581550720054,
+        "precision": 85.54903679241941,
+        "recall": 87.13720026858947
+      },
+      "after": {
+        "tp": 1115655,
+        "fp": 194701,
+        "fn": 159153,
+        "f1": 86.31212565237641,
+        "precision": 85.1413661630885,
+        "recall": 87.51553175066363
+      },
+      "delta_f1": -0.02368985482412711,
+      "macro_baseline": {
+        "f1": 66.9055065630359,
+        "precision": 67.69723463618098,
+        "recall": 67.69610999387116
+      },
+      "macro_after": {
+        "f1": 66.76357234371373,
+        "precision": 67.3366556512668,
+        "recall": 67.84543696937081
+      },
+      "macro_delta": -0.14193421932216524,
+      "added_tp": 4823,
+      "added_fp": 7059,
+      "wins": 1,
+      "losses": 6,
+      "ties": 23,
+      "harm_rate": 0.2,
+      "invalid_calls": 0,
+      "tasks_with_invalid": 0,
+      "calls": 50,
+      "vlm_trigger_rate": 0.6333333333333333,
+      "candidate_generation_rate": 1.0,
+      "counterfactual_answer_cost_cny": 0.0124764,
+      "empty_gt_tasks": 5,
+      "empty_gt_fp": 80,
+      "empty_gt_added_fp": 0
+    },
+    "whu_any": {
+      "tasks": 30,
+      "baseline": {
+        "tp": 470086,
+        "fp": 25727,
+        "fn": 232444,
+        "f1": 78.4560013285011,
+        "precision": 94.8111485580249,
+        "recall": 66.91329907619604
+      },
+      "after": {
+        "tp": 473969,
+        "fp": 29384,
+        "fn": 228561,
+        "f1": 78.60945050224608,
+        "precision": 94.16234729901282,
+        "recall": 67.46601568616286
+      },
+      "delta_f1": 0.15344917374497413,
+      "macro_baseline": {
+        "f1": 35.66325598566095,
+        "precision": 40.79897246700398,
+        "recall": 34.38165715471066
+      },
+      "macro_after": {
+        "f1": 36.27072851257858,
+        "precision": 40.29285914261327,
+        "recall": 35.25670077124187
+      },
+      "macro_delta": 0.6074725269176262,
+      "added_tp": 3883,
+      "added_fp": 3657,
+      "wins": 3,
+      "losses": 3,
+      "ties": 24,
+      "harm_rate": 0.1,
+      "invalid_calls": 0,
+      "tasks_with_invalid": 0,
+      "calls": 32,
+      "vlm_trigger_rate": 0.43333333333333335,
+      "candidate_generation_rate": 1.0,
+      "counterfactual_answer_cost_cny": 0.0080768,
+      "empty_gt_tasks": 10,
+      "empty_gt_fp": 4000,
+      "empty_gt_added_fp": 432
+    }
+  },
+  "candidate_diagnostics": {
+    "levir_any": {
+      "missing_gt_pixels": 163976,
+      "pool_recalled_pixels": 63229,
+      "topk_recalled_pixels": 5783,
+      "pool_recall_percent": 38.559911206518024,
+      "topk_recall_percent": 3.5267356198468067,
+      "added_precision_percent": 40.590809628008756,
+      "accepted_all_fp_candidates": 6,
+      "invalid_candidates": 0,
+      "fp_increase_tasks": 7,
+      "pure_fp_addition_tasks": 5,
+      "calls": 50,
+      "invalid_rate": 0.0
+    },
+    "second_appeared": {
+      "missing_gt_pixels": 260585,
+      "pool_recalled_pixels": 156448,
+      "topk_recalled_pixels": 120207,
+      "pool_recall_percent": 60.03722393844619,
+      "topk_recall_percent": 46.129669781453266,
+      "added_precision_percent": 55.22291047470904,
+      "accepted_all_fp_candidates": 42,
+      "invalid_candidates": 0,
+      "fp_increase_tasks": 24,
+      "pure_fp_addition_tasks": 8,
+      "calls": 253,
+      "invalid_rate": 0.0
+    },
+    "second_disappeared": {
+      "missing_gt_pixels": 55157,
+      "pool_recalled_pixels": 27359,
+      "topk_recalled_pixels": 12422,
+      "pool_recall_percent": 49.602045071341806,
+      "topk_recall_percent": 22.521166850988994,
+      "added_precision_percent": 41.448989650073926,
+      "accepted_all_fp_candidates": 10,
+      "invalid_candidates": 0,
+      "fp_increase_tasks": 11,
+      "pure_fp_addition_tasks": 6,
+      "calls": 96,
+      "invalid_rate": 0.0
+    },
+    "whu_any": {
+      "missing_gt_pixels": 232444,
+      "pool_recalled_pixels": 145512,
+      "topk_recalled_pixels": 9233,
+      "pool_recall_percent": 62.60088451411953,
+      "topk_recall_percent": 3.9721395260794,
+      "added_precision_percent": 51.49867374005305,
+      "accepted_all_fp_candidates": 8,
+      "invalid_candidates": 0,
+      "fp_increase_tasks": 8,
+      "pure_fp_addition_tasks": 3,
+      "calls": 32,
+      "invalid_rate": 0.0
+    },
+    "whu_appeared": {
+      "missing_gt_pixels": 196734,
+      "pool_recalled_pixels": 127499,
+      "topk_recalled_pixels": 122281,
+      "pool_recall_percent": 64.80781156282086,
+      "topk_recall_percent": 62.15549930362825,
+      "added_precision_percent": 37.07384545714089,
+      "accepted_all_fp_candidates": 89,
+      "invalid_candidates": 2,
+      "fp_increase_tasks": 24,
+      "pure_fp_addition_tasks": 13,
+      "calls": 203,
+      "invalid_rate": 0.009852216748768473
+    },
+    "whu_disappeared": {
+      "missing_gt_pixels": 17128,
+      "pool_recalled_pixels": 9530,
+      "topk_recalled_pixels": 7550,
+      "pool_recall_percent": 55.63988790284914,
+      "topk_recall_percent": 44.079869219990655,
+      "added_precision_percent": 34.58797734332176,
+      "accepted_all_fp_candidates": 11,
+      "invalid_candidates": 0,
+      "fp_increase_tasks": 7,
+      "pure_fp_addition_tasks": 6,
+      "calls": 34,
+      "invalid_rate": 0.0
+    }
+  },
+  "failures": {
+    "levir_any": [
+      {
+        "stem": "train_54",
+        "delta_f1": -2.915092064030304,
+        "added_tp": 0,
+        "added_fp": 1597,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/levir_any/train_54.json",
+        "accepted_all_fp_candidates": 1
+      },
+      {
+        "stem": "train_121",
+        "delta_f1": -1.8673534068325495,
+        "added_tp": 0,
+        "added_fp": 1987,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/levir_any/train_121.json",
+        "accepted_all_fp_candidates": 1
+      },
+      {
+        "stem": "train_52",
+        "delta_f1": -0.8170908023832197,
+        "added_tp": 0,
+        "added_fp": 448,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/levir_any/train_52.json",
+        "accepted_all_fp_candidates": 1
+      }
+    ],
+    "second_appeared": [
+      {
+        "stem": "train_2227",
+        "delta_f1": -43.21922081545024,
+        "added_tp": 0,
+        "added_fp": 1838,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/second_appeared/train_2227.json",
+        "accepted_all_fp_candidates": 4
+      },
+      {
+        "stem": "train_378",
+        "delta_f1": -23.328744979792447,
+        "added_tp": 0,
+        "added_fp": 4521,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/second_appeared/train_378.json",
+        "accepted_all_fp_candidates": 6
+      },
+      {
+        "stem": "train_1527",
+        "delta_f1": -9.221916103657264,
+        "added_tp": 375,
+        "added_fp": 1773,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/second_appeared/train_1527.json",
+        "accepted_all_fp_candidates": 2
+      }
+    ],
+    "second_disappeared": [
+      {
+        "stem": "train_23",
+        "delta_f1": 0.0,
+        "added_tp": 0,
+        "added_fp": 2953,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/second_disappeared/train_23.json",
+        "accepted_all_fp_candidates": 2
+      },
+      {
+        "stem": "train_2792",
+        "delta_f1": 0.0,
+        "added_tp": 0,
+        "added_fp": 2102,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/second_disappeared/train_2792.json",
+        "accepted_all_fp_candidates": 1
+      },
+      {
+        "stem": "train_615",
+        "delta_f1": 0.0,
+        "added_tp": 0,
+        "added_fp": 712,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/second_disappeared/train_615.json",
+        "accepted_all_fp_candidates": 1
+      }
+    ],
+    "whu_any": [
+      {
+        "stem": "train_1045",
+        "delta_f1": -0.9120945583224653,
+        "added_tp": 0,
+        "added_fp": 963,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_any/train_1045.json",
+        "accepted_all_fp_candidates": 3
+      },
+      {
+        "stem": "train_784",
+        "delta_f1": -0.6179818345557635,
+        "added_tp": 11,
+        "added_fp": 770,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_any/train_784.json",
+        "accepted_all_fp_candidates": 0
+      },
+      {
+        "stem": "train_916",
+        "delta_f1": -0.04081314395943991,
+        "added_tp": 41,
+        "added_fp": 100,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_any/train_916.json",
+        "accepted_all_fp_candidates": 1
+      }
+    ],
+    "whu_appeared": [
+      {
+        "stem": "train_835",
+        "delta_f1": -21.999968471055766,
+        "added_tp": 1,
+        "added_fp": 49372,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_appeared/train_835.json",
+        "accepted_all_fp_candidates": 9
+      },
+      {
+        "stem": "train_707",
+        "delta_f1": -13.49539572655813,
+        "added_tp": 0,
+        "added_fp": 22663,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_appeared/train_707.json",
+        "accepted_all_fp_candidates": 10
+      },
+      {
+        "stem": "train_1045",
+        "delta_f1": -12.330468712320325,
+        "added_tp": 0,
+        "added_fp": 14355,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_appeared/train_1045.json",
+        "accepted_all_fp_candidates": 10
+      }
+    ],
+    "whu_disappeared": [
+      {
+        "stem": "train_246",
+        "delta_f1": 0.0,
+        "added_tp": 0,
+        "added_fp": 1849,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_disappeared/train_246.json",
+        "accepted_all_fp_candidates": 3
+      },
+      {
+        "stem": "train_356",
+        "delta_f1": 0.0,
+        "added_tp": 0,
+        "added_fp": 642,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_disappeared/train_356.json",
+        "accepted_all_fp_candidates": 3
+      },
+      {
+        "stem": "train_219",
+        "delta_f1": 0.0,
+        "added_tp": 0,
+        "added_fp": 294,
+        "case_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_diagnostics/whu_disappeared/train_219.json",
+        "accepted_all_fp_candidates": 1
+      }
+    ]
+  },
+  "cost": {
+    "parent_and_revision_actual_cny": 0.7100567999999996,
+    "revision_new_calls": 1255,
+    "revision_new_actual_cny": 0.29463580000000006,
+    "tune": {
+      "status": "complete",
+      "completed": 2280,
+      "new_requests": 587,
+      "new_cost_cny": 0.1400145999999991,
+      "cost_cny": 0.5554355999999987,
+      "elapsed_seconds": 932.1559418402612,
+      "slurm_job": "187737"
+    },
+    "confirm": {
+      "status": "complete",
+      "completed": 668,
+      "new_requests": 668,
+      "new_cost_cny": 0.15462120000000001,
+      "cost_cny": 0.7100567999999997,
+      "elapsed_seconds": 1068.2701906599104,
+      "slurm_job": "187758"
+    }
+  },
+  "answers": {
+    "counts": {
+      "yes": 1283,
+      "no": 1663,
+      "unknown": 2
+    },
+    "finish_reasons": {
+      "stop": 2946,
+      "length": 2
+    },
+    "transport_errors": {}
+  },
+  "online_agent_runs": 0,
+  "formal_test_used": false,
+  "new_pending_review_data_used": false,
+  "limitation": "Historically exposed development data; frozen tune/confirm membership; no online-Agent efficacy claim",
+  "recommended_next_lines": [],
+  "offline_positive_lines": [
+    "second_appeared",
+    "second_disappeared",
+    "whu_disappeared",
+    "whu_any"
+  ]
+}

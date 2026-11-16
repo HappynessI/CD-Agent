@@ -1,0 +1,160 @@
+{
+  "group": "whu_appeared",
+  "stem": "train_651",
+  "config": {
+    "profile": "build",
+    "semantic": 0.05,
+    "dino": null,
+    "alpha": 0.5,
+    "verifier": "V3",
+    "k": 10,
+    "sources": "all"
+  },
+  "baseline": {
+    "tp": 0,
+    "fp": 853,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "after": {
+    "tp": 0,
+    "fp": 1007,
+    "fn": 0,
+    "f1": 0.0,
+    "precision": 0.0,
+    "recall": 0
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 0,
+  "all_source_recalled_pixels": 0,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 154,
+  "choices": [
+    {
+      "uid": "whu_appeared__train_651__n9_0003",
+      "index": 3,
+      "bbox": [
+        26,
+        226,
+        41,
+        242
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.20924119651317596,
+      "dino": 0.3857090473175049,
+      "area": 154,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 154,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a small structure (likely a shed or outbuilding) present in T1 that is absent in T2, indicating disappearance rather than appearance; since the requested direction is 'appeared', this does not qualify as a building change in the specified direction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_651__n9_0003.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_651__n9_0003/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_651__n9_0001",
+      "index": 1,
+      "bbox": [
+        438,
+        133,
+        475,
+        168
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.2206786721944809,
+      "dino": 0.085956871509552,
+      "area": 312,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 312,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour shows a garden space with vegetation in both T1 and T2; no new building structure has appeared within the candidate area.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_651__n9_0001.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_651__n9_0001/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_651__n9_0006",
+      "index": 6,
+      "bbox": [
+        147,
+        209,
+        166,
+        228
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.1597607433795929,
+      "dino": 0.08399838209152222,
+      "area": 225,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 225,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building is present in both T1 and T2 with consistent shape and position, indicating no new construction (appeared) has occurred within the contour.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_651__n9_0006.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_651__n9_0006/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_651__n9_0004",
+      "index": 4,
+      "bbox": [
+        459,
+        501,
+        482,
+        512
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.11755096912384033,
+      "dino": 0.08669775724411011,
+      "area": 167,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 167,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour highlights the same feature (likely a shadow or small ground object) in both T1 and T2; there is no evidence of a new building appearing inside the contour.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_651__n9_0004.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_651__n9_0004/request.json"
+    },
+    {
+      "uid": "whu_appeared__train_651__n9_0008",
+      "index": 8,
+      "bbox": [
+        459,
+        501,
+        481,
+        512
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.11418282240629196,
+      "dino": 0.0871039628982544,
+      "area": 164,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 164,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour highlights the same building structure in both T1 and T2; there is no evidence of new construction (absent in T1, present in T2) within the specific area marked.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V3/whu_appeared__train_651__n9_0008.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V3/whu_appeared__train_651__n9_0008/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_651.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_651.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/new/train_651.png",
+  "gt_ignore_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/ignore/train_651.png",
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_appeared/train_651.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

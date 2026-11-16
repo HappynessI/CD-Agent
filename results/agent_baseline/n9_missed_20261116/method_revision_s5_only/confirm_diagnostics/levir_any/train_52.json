@@ -1,0 +1,114 @@
+{
+  "group": "levir_any",
+  "stem": "train_52",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 17208,
+    "fp": 3997,
+    "fn": 4803,
+    "f1": 79.63717141799333,
+    "precision": 81.15067201131808,
+    "recall": 78.17909227204579
+  },
+  "after": {
+    "tp": 17208,
+    "fp": 4445,
+    "fn": 4803,
+    "f1": 78.82008061561011,
+    "precision": 79.4716667436383,
+    "recall": 78.17909227204579
+  },
+  "delta_f1": -0.8170908023832197,
+  "missing_gt_pixels": 4803,
+  "all_source_recalled_pixels": 2819,
+  "topk_recalled_pixels": 230,
+  "added_tp": 0,
+  "added_fp": 448,
+  "choices": [
+    {
+      "uid": "levir_any__train_52__n9_0009",
+      "index": 9,
+      "bbox": [
+        493,
+        738,
+        509,
+        767
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.5890806317329407,
+      "dino": 0.6786071062088013,
+      "area": 448,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 448,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The area inside the red contour was covered by vegetation in T1 but shows a new building structure adjacent to a parking lot in T2.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_52__n9_0009.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_52__n9_0009/request.json"
+    },
+    {
+      "uid": "levir_any__train_52__n9_0025",
+      "index": 25,
+      "bbox": [
+        271,
+        928,
+        301,
+        951
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.5857657790184021,
+      "dino": 0.5828276872634888,
+      "area": 319,
+      "new_tp_pixels": 230,
+      "new_fp_pixels": 89,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object inside the red contour maintains the same elongated shape and position relative to the baseball field in both dates, indicating it is the same structure with altered appearance due to lighting or seasonal vegetation changes.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_52__n9_0025.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_52__n9_0025/request.json"
+    },
+    {
+      "uid": "levir_any__train_52__n9_0005",
+      "index": 5,
+      "bbox": [
+        51,
+        682,
+        102,
+        704
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.46386390924453735,
+      "dino": 0.5878950357437134,
+      "area": 1075,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 1075,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The object within the red contour maintains the same rectangular shape and position in both dates, with the tonal difference likely due to lighting or surface conditions rather than structural change.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/levir_any__train_52__n9_0005.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/levir_any__train_52__n9_0005/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 1,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/A/train_52.png",
+  "image_t2": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/B/train_52.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/datasets/LEVIR-CD/train_original/label/train_52.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/levir_any/train_52.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

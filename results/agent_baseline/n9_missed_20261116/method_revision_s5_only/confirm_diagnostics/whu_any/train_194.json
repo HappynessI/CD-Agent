@@ -1,0 +1,114 @@
+{
+  "group": "whu_any",
+  "stem": "train_194",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 30021,
+    "fp": 1857,
+    "fn": 26016,
+    "f1": 68.29551271114144,
+    "precision": 94.17466591379635,
+    "recall": 53.573531773649556
+  },
+  "after": {
+    "tp": 30021,
+    "fp": 1857,
+    "fn": 26016,
+    "f1": 68.29551271114144,
+    "precision": 94.17466591379635,
+    "recall": 53.573531773649556
+  },
+  "delta_f1": 0.0,
+  "missing_gt_pixels": 26016,
+  "all_source_recalled_pixels": 224,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 0,
+  "choices": [
+    {
+      "uid": "whu_any__train_194__n9_0028",
+      "index": 28,
+      "bbox": [
+        146,
+        385,
+        224,
+        397
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.5749170780181885,
+      "dino": 0.6275527477264404,
+      "area": 467,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 467,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The red contour marks a linear ground feature (likely a curb or foundation edge) present in the same position in both dates, with no building structure inside the contour to indicate construction or demolition.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_194__n9_0028.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_194__n9_0028/request.json"
+    },
+    {
+      "uid": "whu_any__train_194__n9_0027",
+      "index": 27,
+      "bbox": [
+        81,
+        356,
+        139,
+        403
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.49032285809516907,
+      "dino": 0.5600007772445679,
+      "area": 467,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 467,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building inside the red contour is present in both dates with the same footprint and structure, but exhibits a significant change in roof color and texture (from smooth blue to patterned grey/white), which indicates a change in appearance rather than demolition or new construction.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_194__n9_0027.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_194__n9_0027/request.json"
+    },
+    {
+      "uid": "whu_any__train_194__n9_0026",
+      "index": 26,
+      "bbox": [
+        69,
+        285,
+        79,
+        345
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.46891626715660095,
+      "dino": 0.5268034934997559,
+      "area": 268,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 268,
+      "answer": "no",
+      "finish_reason": "stop",
+      "reason": "The building within the red contour maintains the same outline, size, and position relative to the road in both T1 and T2, indicating it is the same structure with only minor variations in roof appearance.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_194__n9_0026.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_194__n9_0026/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 0,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_194.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_194.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_194.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_194.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}

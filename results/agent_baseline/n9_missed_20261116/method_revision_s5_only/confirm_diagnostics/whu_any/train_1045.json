@@ -1,0 +1,114 @@
+{
+  "group": "whu_any",
+  "stem": "train_1045",
+  "config": {
+    "profile": "any",
+    "semantic": 0.4,
+    "dino": 0.4,
+    "alpha": 0.0,
+    "verifier": "V2",
+    "k": 3,
+    "sources": "S1_S2_S5"
+  },
+  "baseline": {
+    "tp": 48706,
+    "fp": 2069,
+    "fn": 1453,
+    "f1": 96.51059107931916,
+    "precision": 95.92516001969473,
+    "recall": 97.10321178651887
+  },
+  "after": {
+    "tp": 48706,
+    "fp": 3032,
+    "fn": 1453,
+    "f1": 95.59849652099669,
+    "precision": 94.1397038926901,
+    "recall": 97.10321178651887
+  },
+  "delta_f1": -0.9120945583224653,
+  "missing_gt_pixels": 1453,
+  "all_source_recalled_pixels": 497,
+  "topk_recalled_pixels": 0,
+  "added_tp": 0,
+  "added_fp": 963,
+  "choices": [
+    {
+      "uid": "whu_any__train_1045__n9_0008",
+      "index": 8,
+      "bbox": [
+        209,
+        369,
+        238,
+        396
+      ],
+      "sources": [
+        "S2"
+      ],
+      "semantic_delta": 0.5869969129562378,
+      "dino": 0.6014410853385925,
+      "area": 473,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 473,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object in T1 appears as a small, low-profile structure with a brownish tone, while in T2 it is a larger building with a distinct white/grey roof at the same location, indicating replacement by a different building.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_1045__n9_0008.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_1045__n9_0008/request.json"
+    },
+    {
+      "uid": "whu_any__train_1045__n9_0054",
+      "index": 54,
+      "bbox": [
+        209,
+        368,
+        238,
+        396
+      ],
+      "sources": [
+        "S5"
+      ],
+      "semantic_delta": 0.586337685585022,
+      "dino": 0.5992940664291382,
+      "area": 496,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 496,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object inside the contour has changed from a small, tan-colored structure in T1 to a larger, grey-roofed building in T2 at the same location, indicating it was replaced by a different building.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_1045__n9_0054.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_1045__n9_0054/request.json"
+    },
+    {
+      "uid": "whu_any__train_1045__n9_0002",
+      "index": 2,
+      "bbox": [
+        184,
+        358,
+        238,
+        396
+      ],
+      "sources": [
+        "S1_02"
+      ],
+      "semantic_delta": 0.5052691698074341,
+      "dino": 0.5801968574523926,
+      "area": 956,
+      "new_tp_pixels": 0,
+      "new_fp_pixels": 956,
+      "answer": "yes",
+      "finish_reason": "stop",
+      "reason": "The object in the red contour is a building in both dates, but its roof structure and color have changed significantly (from uniform brownish to distinct white grid and grey sections), indicating it was replaced by a different building at the same location.",
+      "answer_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/answers/V2/whu_any__train_1045__n9_0002.json",
+      "request_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/inputs/V2/whu_any__train_1045__n9_0002/request.json"
+    }
+  ],
+  "accepted_all_fp_candidates": 3,
+  "invalid_candidates": 0,
+  "image_t1": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img1/train_1045.png",
+  "image_t2": "/guisongxia01/pangchao/haoxiangyu/rs_datasets/WHU-CD/img2/train_1045.png",
+  "gt_path": "/guisongxia01/pangchao/wangyihan/wyh/exp6_staging/agent_baseline_run/whu/gt_official_v3/c0/train_1045.png",
+  "gt_ignore_path": null,
+  "prediction_path": "/guisongxia01/pangchao/wangyihan/wyh/CD-Agent/results/agent_baseline/n9_missed_20261116/method_revision_s5_only/confirm_predictions/whu_any/train_1045.png",
+  "labels_role": "offline evaluation and diagnosis only; not sent to verifier"
+}
